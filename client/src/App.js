@@ -1,11 +1,11 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { Container } from "./components/Container.js";
+import { ThreeScene } from "./components/ThreeScene.js";
 
 function App() {
 	return (
 		<div className="App">
-			<Container></Container>
+			<ThreeScene></ThreeScene>
 		</div>
 	);
 }
