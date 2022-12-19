@@ -1,11 +1,12 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { ThreeScene } from "./components/ThreeScene.js";
+import { View } from "./components/View.js";
 
 function App() {
 	return (
+		/* react-router... */
 		<div className="App">
-			<ThreeScene></ThreeScene>
+			<View></View>
 		</div>
 	);
 }

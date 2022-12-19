@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useHelper } from "@react-three/drei";
 import { BoxHelper } from "three";
 import { Text } from "@react-three/drei";
@@ -18,8 +18,9 @@ const BoxText = ({ position, rotation, text }) => {
 	);
 };
 
-export const Box = ({ size, position, color, text }) => {
-	const outlineColor = "#303030";
+export const Box = ({ id, size, position, color, text, edit, setBoxes }) => {
+	const [outlineColor, setOutlineColor] = useState("#303030");
+	const [boxColor, setBoxColor] = useState(color);
 	const eps = 0.0001;
 	const [w, h, l] = size;
 	const [x, y, z] = position;
@@ -29,6 +30,20 @@ export const Box = ({ size, position, color, text }) => {
 		<>
 			{/* mesh - holds geomtry and material to represent a shape */}
 			<mesh
+				onClick={(e) => {
+					if (edit) {
+						e.stopPropagation();
+						boxColor == color
+							? setBoxColor("#FF6C6C")
+							: setBoxColor(color);
+						setBoxes(id, {
+							size: size,
+							position: position,
+							color: color,
+							text: text,
+						});
+					}
+				}}
 				ref={mesh}
 				position={position}
 			>
@@ -36,7 +51,7 @@ export const Box = ({ size, position, color, text }) => {
                 Note that every time the args are changed, the object must be re-constructed!*/}
 				<boxGeometry args={size} />
 				<meshBasicMaterial
-					color={color}
+					color={boxColor}
 					//TODO: When moving we might want to change the opacity
 					opacity={1}
 					transparent={true}
@@ -45,7 +60,7 @@ export const Box = ({ size, position, color, text }) => {
 			<BoxText
 				rotation={[0, Math.PI / 2, 0]}
 				position={[x + w / 2 + eps, y, z]}
-				text={text}
+				text={id}
 			></BoxText>
 			<BoxText
 				rotation={[-Math.PI / 2, 0, Math.PI / 2]}
