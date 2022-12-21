@@ -4,7 +4,7 @@ export const Plane = ({ size, position, rotation }) => {
 			position={position}
 			rotation={rotation}
 		>
-			<planeBufferGeometry args={size} />
+			<planeGeometry args={size} />
 			<meshBasicMaterial />
 			{/* <meshNormalMaterial /> */}
 		</mesh>

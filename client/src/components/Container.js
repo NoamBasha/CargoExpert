@@ -1,5 +1,4 @@
 import { Plane } from "./Plane.js";
-//TODO: give props - width, height, length
 export const Container = ({ size }) => {
 	const [w, h, l] = size;
 	return (
