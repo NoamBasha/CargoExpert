@@ -29,7 +29,6 @@ export const Box = ({
 	setBoxIndices,
 }) => {
 	const { edit } = useContext(EditContext);
-
 	const [outlineColor, setOutlineColor] = useState("#303030");
 	const [boxColor, setBoxColor] = useState(color);
 	const eps = 0.0001;
@@ -78,7 +77,6 @@ export const Box = ({
 							? setBoxColor("#FF6C6C")
 							: setBoxColor(color);
 						setBoxIndices(id);
-
 						changeBoxById(id, {
 							size: size,
 							position: position,
@@ -94,7 +92,7 @@ export const Box = ({
                 Note that every time the args are changed, the object must be re-constructed!*/}
 				<boxGeometry args={size} />
 				<meshBasicMaterial
-					color={boxColor}
+					color={edit ? boxColor : color}
 					//TODO: change the opacity when editing?
 					opacity={edit ? 0.9 : 1}
 					transparent={true}
