@@ -1,4 +1,4 @@
-// Now we need to create the express server
+// Now we need to create the express server.
 
 let PythonShellLibrary = require("python-shell");
 let { PythonShell } = PythonShellLibrary;
