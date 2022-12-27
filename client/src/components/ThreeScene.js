@@ -9,7 +9,7 @@ export const ThreeScene = ({ container, setBoxIndices, boxes, setBoxes }) => {
 	const { edit } = useContext(EditContext);
 
 	/*
-		Canvas - sets up a scene and a camera + renders the scene every frame..
+		Canvas - sets up a scene and a camera + renders the scene every frame...
         fits the parent node - (width and height)
 		ambientLight - light that is all over the scene
 		<ambientLight intensity={0.1} />
