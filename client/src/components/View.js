@@ -1,8 +1,17 @@
 import { ThreeScene } from "./ThreeScene.js";
 import { useState, createContext } from "react";
+import { useBoxes } from "./BoxesProvider.js";
 
-const AxisButton = ({ text, moveBy, setBoxPosition }) => {
-	return <button onClick={() => setBoxPosition(moveBy)}>{text}</button>;
+const ResetButton = ({ text, resetBoxes }) => {
+	return <button onClick={() => resetBoxes()}>{text}</button>;
+};
+
+const AxisButton = ({ text, moveBy, moveBox }) => {
+	return <button onClick={() => moveBox(moveBy)}>{text}</button>;
+};
+
+const RotationButton = ({ text, axis, rotateBox }) => {
+	return <button onClick={() => rotateBox(axis)}>{text}</button>;
 };
 
 const EditButton = ({ setEdit }) => {
@@ -28,72 +37,8 @@ export const EditContext = createContext(null);
 
 export const View = () => {
 	const [edit, setEdit] = useState(false);
-	// Which box is currently selected
-	const [boxIndices, setBoxIndices] = useState([]);
+	const { boxes, moveBox, rotateBox, resetBoxes } = useBoxes();
 	const [container, setContainer] = useState([4, 4, 10]);
-	const [boxes, setBoxes] = useState([
-		{
-			size: [2, 2, 5],
-			position: [1, 1, 2.5],
-			color: "#00BCFF",
-			text: "Box0",
-		},
-		{
-			size: [2, 2, 5],
-			position: [3, 1, 2.5],
-			color: "#00BCFF",
-			text: "Box1",
-		},
-		{
-			size: [2, 2, 5],
-			position: [1, 3, 2.5],
-			color: "#00BCFF",
-			text: "Box2",
-		},
-		{
-			size: [2, 2, 5],
-			position: [1, 1, 7.5],
-			color: "#00BCFF",
-			text: "Box3",
-		},
-		{
-			size: [2, 2, 5],
-			position: [1, 3, 7.5],
-			color: "#00BCFF",
-			text: "Box4",
-		},
-		{
-			size: [2, 2, 5],
-			position: [3, 1, 7.5],
-			color: "#00BCFF",
-			text: "Box5",
-		},
-
-		{
-			size: [1, 1, 2.5],
-			position: [2.5, 2.5, 1.25],
-			color: "#00ffbc",
-			text: "Box6",
-		},
-		{
-			size: [1, 1, 2.5],
-			position: [2.5, 2.5, 3.75],
-			color: "#00ffbc",
-			text: "Box7",
-		},
-		{
-			size: [1, 1, 2.5],
-			position: [2.5, 2.5, 6.25],
-			color: "#00ffbc",
-			text: "Box8",
-		},
-		{
-			size: [1, 1, 2.5],
-			position: [2.5, 2.5, 8.75],
-			color: "#00ffbc",
-			text: "Box9",
-		},
-	]);
 	const axisButtons = [
 		{ text: "-x", moveBy: [-1, 0, 0] },
 		{ text: "x+", moveBy: [1, 0, 0] },
@@ -101,6 +46,12 @@ export const View = () => {
 		{ text: "y+", moveBy: [0, 1, 0] },
 		{ text: "-z", moveBy: [0, 0, -1] },
 		{ text: "z+", moveBy: [0, 0, 1] },
+	];
+
+	const rotationButtons = [
+		{ text: "rotate x", axis: "x" },
+		{ text: "rotate y", axis: "y" },
+		{ text: "rotate z", axis: "z" },
 	];
 
 	// returns true if there is a box that is out of bounds
@@ -181,16 +132,6 @@ export const View = () => {
 		};
 	};
 
-	const changeLocation = ([a, b, c]) => {
-		const newBoxes = boxes.map((item, index) => {
-			if (boxIndices.includes(index)) {
-				const [x, y, z] = item.position;
-				return { ...item, position: [x + a, y + b, z + c] };
-			} else return item;
-		});
-		setBoxes(newBoxes);
-	};
-
 	return (
 		<EditContext.Provider value={{ edit }}>
 			{edit
@@ -200,26 +141,33 @@ export const View = () => {
 								key={index}
 								text={text}
 								moveBy={moveBy}
-								setBoxPosition={changeLocation}
+								moveBox={moveBox}
 							/>
 						);
 				  })
 				: null}
 
-			<ThreeScene
-				container={container}
-				boxes={boxes}
-				setBoxes={setBoxes}
-				setBoxIndices={(id) => {
-					if (boxIndices.includes(id)) {
-						setBoxIndices((boxIndices) => {
-							return boxIndices.filter((item) => item !== id);
-						});
-					} else {
-						setBoxIndices([...boxIndices, id]);
-					}
-				}}
-			/>
+			{edit
+				? rotationButtons.map(({ text, axis }, index) => {
+						return (
+							<RotationButton
+								key={index}
+								text={text}
+								axis={axis}
+								rotateBox={rotateBox}
+							/>
+						);
+				  })
+				: null}
+
+			{edit ? (
+				<ResetButton
+					key={0}
+					text="reset"
+					resetBoxes={resetBoxes}
+				/>
+			) : null}
+			<ThreeScene container={container} />
 
 			<EditButton setEdit={() => setEdit(true)} />
 			<ViewButton

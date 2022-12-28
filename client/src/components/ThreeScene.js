@@ -4,9 +4,11 @@ import { Box } from "./Box.js";
 import { Container } from "./Container.js";
 import { useContext } from "react";
 import { EditContext } from "./View.js";
+import { useBoxes } from "./BoxesProvider.js";
 
-export const ThreeScene = ({ container, setBoxIndices, boxes, setBoxes }) => {
+export const ThreeScene = ({ container }) => {
 	const { edit } = useContext(EditContext);
+	const { boxes } = useBoxes();
 
 	/*
 		Canvas - sets up a scene and a camera + renders the scene every frame.
@@ -37,13 +39,6 @@ export const ThreeScene = ({ container, setBoxIndices, boxes, setBoxes }) => {
 							position={position}
 							color={color}
 							text={text}
-							setBoxIndices={setBoxIndices}
-							changeBoxById={(id, newItem) => {
-								const newBoxes = boxes.map((item, index) =>
-									index === id ? newItem : item
-								);
-								setBoxes(newBoxes);
-							}}
 						/>
 					);
 				})}
