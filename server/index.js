@@ -79,7 +79,7 @@ const boxes = [
 		width: 2,
 		height: 2,
 		length: 5,
-		position:0,
+		position: 0,
 	},
 	{
 		id: 1,
@@ -174,14 +174,18 @@ const container = {
 	width: 3,
 	height: 4,
 	length: 10,
-}
+};
 
 const project = {
 	container: container,
-	boxes: boxes_2
-}
+	boxes: boxes_2,
+};
 app.use(cors());
 app.use(express.json());
+
+app.get("/noam_test", (req, res) => {
+	res.send(project);
+});
 
 app.get("/test", (req, res) => {
 	//res.sendFile(path.join(__dirname, 'uploadFile.html'));
@@ -191,38 +195,35 @@ app.get("/test", (req, res) => {
 	};
 
 	PythonShell.run("algo.py", options, function (err, result) {
-		if (err)
-			console.log(err.message);
+		if (err) console.log(err.message);
 		else {
 			//console.log(JSON.stringify(result));
 			// the result is already an object. not a string!
 			console.log(result);
 		}
 	});
-	console.log('done');
+	console.log("done");
 	res.sendStatus(200);
 });
 
-
-app.post('/test', (req, res) => {
-    //console.log(typeof(req.body));
+app.post("/test", (req, res) => {
+	//console.log(typeof(req.body));
 	options = {
 		args: [JSON.stringify(req.body)],
 		pythonOptions: ["-u"], // The '-u' tells Python to flush every time // get print results in real-time
 	};
 
 	PythonShell.run("algo.py", options, function (err, result) {
-		if (err)
-			res.sendStatus(500)
+		if (err) res.sendStatus(500);
 		else {
 			//console.log(JSON.parse(JSON.stringify(result)));
 			//console.log(JSON.stringify(result));
-			
+
 			// the result is already an object. not a string!
 			res.send(result);
 		}
 	});
-	console.log('done');
+	console.log("done");
 });
 
 app.get("/get_data", (req, res) => {
@@ -230,7 +231,7 @@ app.get("/get_data", (req, res) => {
 		args: [JSON.stringify(project)],
 		pythonOptions: ["-u"], // The '-u' tells Python to flush every time // get print results in real-time
 	};
-	
+
 	let shell = new PythonShell("algo.py", options);
 	shell.on("message", function (message) {
 		res.send(message);
