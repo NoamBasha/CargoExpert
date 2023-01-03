@@ -1,4 +1,5 @@
 import { useState, createContext, useContext, useEffect } from "react";
+import { DataArrayTexture } from "three";
 
 const BoxesContext = createContext("");
 
@@ -81,21 +82,22 @@ export const BoxesProvider = ({ children }) => {
 	// from_server: order, type, size, position, color
 
 	useEffect(() => {
-		async function detchData() {
+		async function fetchData() {
 			// fetch boxes from server
 			// boxes = ()
 			// for each box set color by type
-			let boxes_data = await fetch("http://localhost/test:1337");
-			if (boxes_data) {
-				/*
-				boxes_with_color = boxes.map((box, index) => {
-					return { ...box, color: stc(box.type) };
-				});
-				*/
-				setBoxes(boxes_data);
-			}
+			/*
+			fetch("http://localhost:1337/noam_test")
+				.then((data) => data.json())
+				.then((data) => data.boxes)
+				.then(setBoxes);
+			*/
+
+			let data = await fetch("http://localhost:1337/noam_test");
+			data = await data.json();
+			setBoxes(data.boxes);
 		}
-		detchData();
+		fetchData();
 	}, []);
 
 	const changeBoxIndices = (id) => {
