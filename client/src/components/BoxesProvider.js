@@ -1,9 +1,12 @@
-import { useState, createContext, useContext } from "react";
+import { useState, createContext, useContext, useEffect } from "react";
 
 const BoxesContext = createContext("");
 
 export const BoxesProvider = ({ children }) => {
-	const [boxes, setBoxes] = useState([
+	const [boxes, setBoxes] = useState([]);
+	/*
+
+	[
 		{
 			size: [2, 2, 5],
 			position: [1, 1, 2.5],
@@ -40,7 +43,6 @@ export const BoxesProvider = ({ children }) => {
 			color: "#00BCFF",
 			text: "Box5",
 		},
-
 		{
 			size: [1, 1, 2.5],
 			position: [2.5, 2.5, 1.25],
@@ -65,10 +67,36 @@ export const BoxesProvider = ({ children }) => {
 			color: "#00ffbc",
 			text: "Box9",
 		},
-	]);
+	]
+	 */
 	const [previousBoxes, setPreviousBoxes] = useState(boxes);
 	// Which boxes are currently selected
 	const [boxIndices, setBoxIndices] = useState([]);
+
+	// user: order, type, width, height, length
+	// react: order, type, size, position, color
+	// to_server: order, type, size, position, color
+	// to_algorithm: order, width, height, length
+	// from_algorithm: order, x, y, z, orientation
+	// from_server: order, type, size, position, color
+
+	useEffect(() => {
+		async function detchData() {
+			// fetch boxes from server
+			// boxes = ()
+			// for each box set color by type
+			let boxes_data = await fetch("http://localhost/test:1337");
+			if (boxes_data) {
+				/*
+				boxes_with_color = boxes.map((box, index) => {
+					return { ...box, color: stc(box.type) };
+				});
+				*/
+				setBoxes(boxes_data);
+			}
+		}
+		detchData();
+	}, []);
 
 	const changeBoxIndices = (id) => {
 		if (boxIndices.includes(id)) {
