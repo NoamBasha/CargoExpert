@@ -74,29 +74,21 @@ const boxes_2 = [
 
 const boxes = [
 	{
-		order: 0,
-		type: "Box0",
-		width: 2,
-		height: 2,
-		length: 5,
-		position: 0,
-	},
-	{
-		id: 1,
+		order: 1,
 		type: "Box1",
 		width: 2,
 		height: 2,
 		length: 5,
 	},
 	{
-		id: 2,
+		order: 2,
 		type: "Box2",
 		width: 2,
 		height: 2,
 		length: 5,
 	},
 	{
-		id: 3,
+		order: 3,
 		type: "Box3",
 		width: 2,
 		height: 2,
@@ -105,6 +97,13 @@ const boxes = [
 	{
 		order: 4,
 		type: "Box4",
+		width: 2,
+		height: 2,
+		length: 5,
+	},
+	{
+		order: 0,
+		type: "Box0",
 		width: 2,
 		height: 2,
 		length: 5,
@@ -178,7 +177,7 @@ const container = {
 
 const project = {
 	container: container,
-	boxes: boxes_2,
+	boxes: boxes,
 };
 app.use(cors());
 app.use(express.json());
