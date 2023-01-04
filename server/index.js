@@ -177,7 +177,7 @@ const container = {
 
 const project = {
 	container: container,
-	boxes: boxes,
+	boxes: boxes_2,
 };
 app.use(cors());
 app.use(express.json());
