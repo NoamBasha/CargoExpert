@@ -74,13 +74,6 @@ const boxes_2 = [
 
 const boxes = [
 	{
-		order: 1,
-		type: "Box1",
-		width: 2,
-		height: 2,
-		length: 5,
-	},
-	{
 		order: 2,
 		type: "Box2",
 		width: 2,
@@ -104,6 +97,13 @@ const boxes = [
 	{
 		order: 0,
 		type: "Box0",
+		width: 2,
+		height: 2,
+		length: 5,
+	},
+	{
+		order: 1,
+		type: "Box1",
 		width: 2,
 		height: 2,
 		length: 5,
@@ -177,8 +177,9 @@ const container = {
 
 const project = {
 	container: container,
-	boxes: boxes_2,
+	boxes: boxes,
 };
+
 app.use(cors());
 app.use(express.json());
 
@@ -189,7 +190,7 @@ app.get("/noam_test", (req, res) => {
 app.get("/test", (req, res) => {
 	//res.sendFile(path.join(__dirname, 'uploadFile.html'));
 	options = {
-		args: [JSON.stringify(req.body)],
+		args: [JSON.stringify(project)],
 		pythonOptions: ["-u"], // The '-u' tells Python to flush every time // get print results in real-time
 	};
 

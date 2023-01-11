@@ -6,3 +6,6 @@
 uploadFile.html
 container.txt
 dataSet.csv
+
+#caching
+/__pycache__
