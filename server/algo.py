@@ -1,14 +1,15 @@
 import sys
 import json
-from  box import Box
+import random
+from  box import Box, Rotation
 from  container import Container
+
 
 """
 the structure of the file is:
 contWidth, contHeight, contLength, order, type, width, height, length, priority ,taxabilty
 
-box's width should  be parallel to container's width. the same goes for height and length.
-
+box's width should be parallel to container's width. the same goes for height and length.
 """
 
 """pseudo code:
@@ -89,21 +90,28 @@ updatePP(pp, pointbox, solution_boxes, container):
             and box.FLB.z == point.z
             and box.FLB.y + box.height == point.y:
 
-    
-    
-    
-    
-    
-    
-
-
 comparepoints(point1, point2):
-
-
 """
+
+def rotate_each_box(boxes: list[Box]) -> None:
+    for b in boxes:
+        b.rotation = random.choice(list(Rotation))
+
+def rotate_subset(boxes: list[Box]) -> None:
+    d = {}
+    for b in boxes:
+        if b.size in d.keys():
+            d[b.size].append(b)
+        else:
+            d[b.size] = [b]
+    
+    for k in d.keys():
+        rotation = random.choice(list(Rotation))
+        for b in d[k]:
+            b.rotation = rotation
+
+
 # every key in json is a string in python dict.
-
-
 obj = json.loads(sys.argv[1])
 
 container = Container(obj['container']['width'],\
@@ -120,3 +128,9 @@ for b in obj['boxes']:
 
 
 boxes = sorted(boxes,key=lambda x: x.order)
+
+if random.randint(0, 1) > 0.5:
+    rotate_each_box(boxes)
+else:
+    rotate_subset(boxes)
+

@@ -7,6 +7,8 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const path = require("path");
+const { debug } = require("console");
+const { exit } = require("process");
 
 const boxes_2 = [
 	{
@@ -180,8 +182,11 @@ const project = {
 	boxes: boxes,
 };
 
+
+
 app.use(cors());
 app.use(express.json());
+
 
 app.get("/noam_test", (req, res) => {
 	res.send(project);
@@ -195,12 +200,7 @@ app.get("/test", (req, res) => {
 	};
 
 	PythonShell.run("algo.py", options, function (err, result) {
-		if (err) console.log(err.message);
-		else {
-			//console.log(JSON.stringify(result));
-			// the result is already an object. not a string!
-			console.log(result);
-		}
+    	err ? console.log(err.traceback) : console.log(result);
 	});
 	console.log("done");
 	res.sendStatus(200);
