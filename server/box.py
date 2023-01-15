@@ -18,6 +18,7 @@ class Box:
         self.order = order
         self.box_type = box_type
         self.size = width, height, length
+        self.volume = width*height*length
         self.rotation = Rotation.WHL
         self.priority = priority
         self.taxability = taxability

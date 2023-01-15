@@ -110,27 +110,51 @@ def rotate_subset(boxes: list[Box]) -> None:
         for b in d[k]:
             b.rotation = rotation
 
+def volume_perturb(b1: Box, b2: Box):
+    if 0.7 <= (b1.volume/b2.volume) <= 1.3 and random.randint(0,1) > 0.5:
+        return True
+    return False
 
-# every key in json is a string in python dict.
-obj = json.loads(sys.argv[1])
+def perturbation(boxes: list[Box]):
+    if not boxes:
+        return None
 
-container = Container(obj['container']['width'],\
-                    obj['container']['height'],\
-                    obj['container']['length'])
+    if len(boxes) == 1:
+        return boxes
+    
+    options = [volume_perturb]
+    chosen_perturb = random.choice(options)
+    for i,b1 in enumerate(boxes[:-1]):
+        if chosen_perturb(b1, boxes[i+1]):
+            boxes[i], boxes[i+1] = boxes[i+1], boxes[i]
+        
 
-boxes = []
+def main():    
+    # every key in json is a string in python dict.
+    obj = json.loads(sys.argv[1])
 
-for b in obj['boxes']:
-    p = b['priority'] if b.get('priority', None) else 0
-    t = b['taxability'] if b.get('taxability', None) else 0
-    boxes.append(Box(b['order'], b['type'],b['width'],
-                    b['height'], b['length'],p,t))
+    container = Container(obj['container']['width'],\
+                        obj['container']['height'],\
+                        obj['container']['length'])
+
+    boxes = []
+
+    for b in obj['boxes']:
+        p = b['priority'] if b.get('priority', None) else 0
+        t = b['taxability'] if b.get('taxability', None) else 0
+        boxes.append(Box(b['order'], b['type'],b['width'],
+                        b['height'], b['length'],p,t))
 
 
-boxes = sorted(boxes,key=lambda x: x.order)
+    boxes = sorted(boxes,key=lambda x: x.order)
 
-if random.randint(0, 1) > 0.5:
-    rotate_each_box(boxes)
-else:
-    rotate_subset(boxes)
+    if random.randint(0, 1) > 0.5:
+        rotate_each_box(boxes)
+    else:
+        rotate_subset(boxes)
+    
+    print(boxes)
+    perturbation(boxes)
+    print(boxes)
 
+main()
