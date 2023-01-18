@@ -1,10 +1,11 @@
+import copy
 import sys
 import json
 import random
 from  box import Box, Rotation
 from  container import Container
 
-
+NUMBER_OF_ITERATIONS = 1
 """
 the structure of the file is:
 contWidth, contHeight, contLength, order, type, width, height, length, priority ,taxabilty
@@ -69,7 +70,7 @@ checkfeasable(box, point, solution_boxes, container):
 
     return the surface area of box.
 
-get_best_point(bestP, point, best_surface, cur_surface):
+(bestP, point, best_surface, cur_surface):
     if cur_surface > best_surface:
         return point, cur_surface
     
@@ -110,12 +111,19 @@ def rotate_subset(boxes: list[Box]) -> None:
         for b in d[k]:
             b.rotation = rotation
 
+def rotation(boxes: list[Box]) -> None:
+    if boxes:
+        chosen_rotation = random.choice([rotate_each_box, rotate_subset])
+        chosen_rotation(boxes)
+
 def volume_perturb(b1: Box, b2: Box):
+    """return True if the division gap is less than 0.3 in 50% of cases"""
     if 0.7 <= (b1.volume/b2.volume) <= 1.3 and random.randint(0,1) > 0.5:
         return True
     return False
 
 def perturbation(boxes: list[Box]):
+    """perturb the sorted list using one perturbation option randomly"""
     if not boxes:
         return None
 
@@ -127,9 +135,51 @@ def perturbation(boxes: list[Box]):
     for i,b1 in enumerate(boxes[:-1]):
         if chosen_perturb(b1, boxes[i+1]):
             boxes[i], boxes[i+1] = boxes[i+1], boxes[i]
-        
 
-def main():    
+def constructive_packing(boxes: list[Box], container: Container):
+    pp = [(0,0,0), (0,0,container.size[0])]
+    retry_list = []
+    boxes_in_container = []
+    copy_boxes = copy.deepcopy(boxes)
+    for b in copy_boxes:
+        best_point = None
+        best_score = (0.0 ,0 ,0)
+        for p in pp:
+            score = container.get_score(b, p)
+            if score > best_score:
+                best_point = p
+                best_score = score
+        
+        if best_point:
+            container.place(b, best_point)
+            container.update(pp, best_point, b)
+            boxes_in_container.append(b)
+        else:
+            retry_list.append(b)
+    
+    for b in retry_list:
+        best_point = None
+        best_score = 0
+        for p in pp:
+            score = container.get_score(b, p)
+            if score > best_score:
+                best_point = p
+                best_score = score
+        if best_point:
+            container.place(b, best_point)
+            container.update(pp, p, b)
+            boxes_in_container.append(b)
+        
+        # if we know all boxes must be in container, then we can stop here
+        # else:
+        #    return None
+    
+    return boxes_in_container
+
+
+
+
+def algo():    
     # every key in json is a string in python dict.
     obj = json.loads(sys.argv[1])
 
@@ -145,16 +195,15 @@ def main():
         boxes.append(Box(b['order'], b['type'],b['width'],
                         b['height'], b['length'],p,t))
 
-
     boxes = sorted(boxes,key=lambda x: x.order)
 
-    if random.randint(0, 1) > 0.5:
-        rotate_each_box(boxes)
-    else:
-        rotate_subset(boxes)
-    
-    print(boxes)
-    perturbation(boxes)
-    print(boxes)
+    for _ in range(NUMBER_OF_ITERATIONS):
+        container.start_packing()
 
-main()
+        rotation(boxes)
+        
+        perturbation(boxes)
+
+        constructive_packing(boxes, container)
+
+algo()

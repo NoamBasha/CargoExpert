@@ -14,6 +14,7 @@ class Rotation(Enum):
 
 
 class Box:
+    
     def __init__(self, order=0, box_type='' ,width=0, height=0, length=0, priority=0, taxability=0, weigth=0):
         self.order = order
         self.box_type = box_type
@@ -23,8 +24,19 @@ class Box:
         self.priority = priority
         self.taxability = taxability
         self.weight = weigth
-        self.position = (0,0,0)
+        self.position = None
     
+    def get_size(self) -> tuple[int,int, int]:
+        """
+            gives the right size after considering the  rotation.
+            since the box may be rotated in either direction, we need to a method
+            to get the correct size of"""
+        
+        pass
+    
+    def set_position(self, p: tuple[int,int,int]):
+        self.position = p
+
     def __repr__(self) -> str:
         return self.order.__str__() + ' ' + self.box_type + ' ' + self.rotation.__str__()
 
