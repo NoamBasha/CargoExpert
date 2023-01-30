@@ -1,10 +1,12 @@
 from enum import Enum
 
 class Rotation(Enum):
-    # according to article page 3 figure 2
-    # The first letter is parallel to container's width
-    # The second letter is parallel to container's height
-    # The third letter is parallel to container's length
+    """
+    according to article page 3 figure 2. Each letter stands for the box axe - Width, Heigth and Length.
+    The first letter is parallel to container's width
+    The second letter is parallel to container's height
+    The third letter is parallel to container's length
+    """
     WHL = 0
     LHW = 1
     HLW = 2
@@ -12,30 +14,99 @@ class Rotation(Enum):
     WLH = 4
     HWL = 5
 
+"""
+class Vector:
+    def __init__(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
+    
+    def __repr__(self)-> str:
+        return f"Vector: x-{self.x}, y-{self.y}, z-{self.z}"
+    
+    
+    def __add__(self, other):
+        return Point(self.x + other.x,\
+                self.y + other.y,\
+                self.z + other.z)
+    
+    def __gt__(self, other):
+        #return True if any of the  other's values is greater than its corresponding value.
+        if self.x > other.x or\
+            self.y > other.y or\
+            self.z > other.z:
+            return True
+        return False
+    
+    def __lt__(self, other):
+        #return True if any of the  other's values is less than its corresponding value.
+        if self.x < other.x or\
+            self.y < other.y or\
+            self.z < other.z:
+            return True
+        return False
+    
+class Point:
+    def __init__(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
+    
+    def __repr__(self)-> str:
+        return f"Point: x-{self.x}, y-{self.y}, z-{self.z}"
+    
+    def __add__(self, other: Vector):
+        return Vector(self.x + other.x,\
+                self.y + other.y,\
+                self.z + other.z)
+    """
+
 
 class Box:
-    
-    def __init__(self, order=0, box_type='' ,width=0, height=0, length=0, priority=0, taxability=0, weigth=0):
+    def __init__(self, order='0', box_type='' ,width='0', height='0', length='0',\
+                 priority='0', taxability='0', weigth='0'):
+        
+        # casting for convenient
+        order, width, height, length = int(order), int(width), int(height), int(length)
+        priority, taxability, weigth = int(priority), int(taxability), int(weigth)
+
         self.order = order
         self.box_type = box_type
         self.size = width, height, length
         self.volume = width*height*length
         self.rotation = Rotation.WHL
+        
         self.priority = priority
         self.taxability = taxability
         self.weight = weigth
-        self.position = None
-    
-    def get_size(self) -> tuple[int,int, int]:
+        self.FLB = None
+        self.center = None
+
+    def get_size(self) -> tuple[int,int, int] | Exception:
         """
             gives the right size after considering the  rotation.
             since the box may be rotated in either direction, we need to a method
-            to get the correct size of"""
-        
-        pass
+            to get the correct size of the box after rotation was applied.
+        """
+        match self.rotation:
+            case Rotation.WHL:
+                return self.size
+            case Rotation.LHW:
+                return self.size[2], self.size[1], self.size[0]
+            case Rotation.HLW:
+                return self.size[1], self.size[2], self.size[0]
+            case Rotation.LWH:
+                return self.size[2], self.size[0], self.size[1]
+            case Rotation.WLH:
+                return self.size[0], self.size[2], self.size[1]
+            case Rotation.HWL:
+                return self.size[1], self.size[0], self.size[2]
+            case __:
+                raise Exception("error! Box.get_size: no rotation was found!!")
     
     def set_position(self, p: tuple[int,int,int]):
-        self.position = p
+        self.FLB = p
+        self.center = p[0] + self.size[0]/2, p[1] + self.size[1]/2 , p[2] + self.size[2]/2
 
     def __repr__(self) -> str:
         return self.order.__str__() + ' ' + self.box_type + ' ' + self.rotation.__str__()

@@ -5,12 +5,13 @@ import random
 from  box import Box, Rotation
 from  container import Container
 
-NUMBER_OF_ITERATIONS = 1
+NUMBER_OF_ITERATIONS = 10
 """
 the structure of the file is:
 contWidth, contHeight, contLength, order, type, width, height, length, priority ,taxabilty
 
-box's width should be parallel to container's width. the same goes for height and length.
+box's width should be parallel to container's width before we apply any rotation.
+the same goes for height and length.
 """
 
 """pseudo code:
@@ -43,7 +44,7 @@ constructivePacking(boxes, container, pp):
         if bestP is not None:
             box.position = bestP
             solution_boxes.append(box)
-            remove bestP from pp.
+            remove bestP from pp
             updatePP(pp, bestP, box, solution_boxes, container)
         else:
             add box to rerty.
@@ -136,14 +137,18 @@ def perturbation(boxes: list[Box]):
         if chosen_perturb(b1, boxes[i+1]):
             boxes[i], boxes[i+1] = boxes[i+1], boxes[i]
 
-def constructive_packing(boxes: list[Box], container: Container):
-    pp = [(0,0,0), (0,0,container.size[0])]
+def constructive_packing(boxes: list[Box], container: Container) -> list[Box]:
+    # each point has x,y,z values, in addition it holds the direction it came from
+    pp = set([(0,0,0, 1), (container.size[0] - 1,0,0, -1)])
     retry_list = []
-    boxes_in_container = []
+    boxes_in_solution = []
+    solution_data = {"number_of_items": 0, "capacity": 0, }
     copy_boxes = copy.deepcopy(boxes)
+    
     for b in copy_boxes:
         best_point = None
-        best_score = (0.0 ,0 ,0)
+        best_score = (0 ,0)
+        # to find the best point we need to know what corner of the box is placed there
         for p in pp:
             score = container.get_score(b, p)
             if score > best_score:
@@ -152,14 +157,16 @@ def constructive_packing(boxes: list[Box], container: Container):
         
         if best_point:
             container.place(b, best_point)
-            container.update(pp, best_point, b)
-            boxes_in_container.append(b)
+            container.update(b, best_point, pp)
+            boxes_in_solution.append(b)
+            solution_data['number_of_items'] += 1
+            solution_data['capacity'] += b.volume
         else:
             retry_list.append(b)
     
     for b in retry_list:
         best_point = None
-        best_score = 0
+        best_score = (0 ,0)
         for p in pp:
             score = container.get_score(b, p)
             if score > best_score:
@@ -167,17 +174,15 @@ def constructive_packing(boxes: list[Box], container: Container):
                 best_score = score
         if best_point:
             container.place(b, best_point)
-            container.update(pp, p, b)
-            boxes_in_container.append(b)
-        
+            container.update(b, best_point, pp)
+            boxes_in_solution.append(b)
+            solution_data['number_of_items'] += 1
+            solution_data['capacity'] += b.volume
         # if we know all boxes must be in container, then we can stop here
-        # else:
-        #    return None
+        else:
+            return None
     
-    return boxes_in_container
-
-
-
+    return boxes_in_solution ,solution_data
 
 def algo():    
     # every key in json is a string in python dict.
@@ -197,13 +202,13 @@ def algo():
 
     boxes = sorted(boxes,key=lambda x: x.order)
 
+    solution_list = []
     for _ in range(NUMBER_OF_ITERATIONS):
         container.start_packing()
-
         rotation(boxes)
-        
         perturbation(boxes)
+        solution_list.append(constructive_packing(boxes, container))
 
-        constructive_packing(boxes, container)
+    return solution_list
 
-algo()
+print(algo())

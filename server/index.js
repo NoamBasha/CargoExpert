@@ -172,9 +172,9 @@ const boxes = [
  */
 
 const container = {
-	width: 3,
-	height: 4,
-	length: 10,
+	width: 30,
+	height: 40,
+	length: 100,
 };
 
 const project = {
