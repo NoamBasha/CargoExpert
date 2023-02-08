@@ -109,7 +109,7 @@ class Box:
         self.center = p[0] + self.size[0]/2, p[1] + self.size[1]/2 , p[2] + self.size[2]/2
 
     def __repr__(self) -> str:
-        return self.order.__str__() + ' ' + self.box_type + ' ' + self.rotation.__str__()
+        return self.order.__str__() + ' ' + self.FLB.__str__()
 
     
 

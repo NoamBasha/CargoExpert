@@ -5,7 +5,7 @@ import random
 from  box import Box, Rotation
 from  container import Container
 
-NUMBER_OF_ITERATIONS = 10
+NUMBER_OF_ITERATIONS = 1
 """
 the structure of the file is:
 contWidth, contHeight, contLength, order, type, width, height, length, priority ,taxabilty
@@ -138,11 +138,13 @@ def perturbation(boxes: list[Box]):
             boxes[i], boxes[i+1] = boxes[i+1], boxes[i]
 
 def constructive_packing(boxes: list[Box], container: Container) -> list[Box]:
-    # each point has x,y,z values, in addition it holds the direction it came from
+    # each point has x,y,z values. In addition, it holds the direction it came from - 1 for left and -1 for right.
     pp = set([(0,0,0, 1), (container.size[0] - 1,0,0, -1)])
     retry_list = []
     boxes_in_solution = []
     solution_data = {"number_of_items": 0, "capacity": 0, }
+    
+    
     copy_boxes = copy.deepcopy(boxes)
     
     for b in copy_boxes:
@@ -154,7 +156,6 @@ def constructive_packing(boxes: list[Box], container: Container) -> list[Box]:
             if score > best_score:
                 best_point = p
                 best_score = score
-        
         if best_point:
             container.place(b, best_point)
             container.update(b, best_point, pp)
@@ -180,8 +181,12 @@ def constructive_packing(boxes: list[Box], container: Container) -> list[Box]:
             solution_data['capacity'] += b.volume
         # if we know all boxes must be in container, then we can stop here
         else:
+            print(b, pp)
             return None
     
+    #print('sadfg' +  boxes_in_solution)
+    #print( 'בפשל' + solution_data)
+
     return boxes_in_solution ,solution_data
 
 def algo():    
@@ -204,11 +209,13 @@ def algo():
 
     solution_list = []
     for _ in range(NUMBER_OF_ITERATIONS):
+        copy_boxes = copy.deepcopy(boxes)
         container.start_packing()
-        rotation(boxes)
-        perturbation(boxes)
-        solution_list.append(constructive_packing(boxes, container))
-
+        
+        #rotation(copy_boxes)
+        #perturbation(copy_boxes)
+        solution_list.append(constructive_packing(copy_boxes, container))
+        
     return solution_list
 
 print(algo())
