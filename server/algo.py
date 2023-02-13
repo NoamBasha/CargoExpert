@@ -5,7 +5,7 @@ import random
 from  box import Box, Rotation
 from  container import Container
 
-NUMBER_OF_ITERATIONS = 1
+NUMBER_OF_ITERATIONS = 500
 """
 the structure of the file is:
 contWidth, contHeight, contLength, order, type, width, height, length, priority ,taxabilty
@@ -145,9 +145,8 @@ def constructive_packing(boxes: list[Box], container: Container) -> list[Box]:
     solution_data = {"number_of_items": 0, "capacity": 0, }
     
     
-    copy_boxes = copy.deepcopy(boxes)
     
-    for b in copy_boxes:
+    for b in boxes:
         best_point = None
         best_score = (0 ,0)
         # to find the best point we need to know what corner of the box is placed there
@@ -160,6 +159,7 @@ def constructive_packing(boxes: list[Box], container: Container) -> list[Box]:
             container.place(b, best_point)
             container.update(b, best_point, pp)
             boxes_in_solution.append(b)
+            #print(f"{b} insreted")
             solution_data['number_of_items'] += 1
             solution_data['capacity'] += b.volume
         else:
@@ -177,22 +177,22 @@ def constructive_packing(boxes: list[Box], container: Container) -> list[Box]:
             container.place(b, best_point)
             container.update(b, best_point, pp)
             boxes_in_solution.append(b)
+            #print(f"{b} insreted")
             solution_data['number_of_items'] += 1
             solution_data['capacity'] += b.volume
+        
         # if we know all boxes must be in container, then we can stop here
         else:
-            print(b, pp)
+            #print(b, pp)
             return None
     
-    #print('sadfg' +  boxes_in_solution)
-    #print( 'בפשל' + solution_data)
-
     return boxes_in_solution ,solution_data
 
 def algo():    
     # every key in json is a string in python dict.
     obj = json.loads(sys.argv[1])
-
+    # obj = json.loads('{"container":{"width":6,"height":1,"length":2},"boxes":[{"order":1,"type":"Box1","width":2,"height":1,"length":2},{"order":2,"type":"Box2","width":2,"height":1,"length":2},{"order":3,"type":"Box3","width":2,"height":1,"length":2}]}')
+    
     container = Container(obj['container']['width'],\
                         obj['container']['height'],\
                         obj['container']['length'])
@@ -212,9 +212,12 @@ def algo():
         copy_boxes = copy.deepcopy(boxes)
         container.start_packing()
         
-        #rotation(copy_boxes)
-        #perturbation(copy_boxes)
-        solution_list.append(constructive_packing(copy_boxes, container))
+        rotation(copy_boxes)
+        perturbation(copy_boxes)
+
+        temp = constructive_packing(copy_boxes, container)
+        if temp:
+            solution_list.append(temp)
         
     return solution_list
 

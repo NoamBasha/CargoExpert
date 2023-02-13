@@ -87,16 +87,6 @@ class Container:
             return self.score_FLB(b_size, p)
         return self.score_FRB(b_size, p)
         
-        """
-        corners_score = [self.score_FLB(b_size, p), self.score_FRB(b_size, p)]
-        
-        # if support factor is 100% the RLB and RRB corners are irrelevant.
-        if self.min_support_vector < 1.0:
-            corners_score.append(self.score_RLB(b_size, p))
-            corners_score.append(self.score_RRB(b_size, p))
-        
-        return max(corners_score, key=lambda x: x[0])
-        """
 
     def place(self, b: Box, p: tuple[int,int,int,int]):
         b_size = b.get_size()
@@ -134,19 +124,16 @@ class Container:
 
         for corner in [p1, p2]:
             projection = self.get_vertical_projection(corner)
-            if projection:
+            if projection != None:
                 pp.add(projection)
-    
+
     def get_vertical_projection(self, p: tuple[int, int, int, int]):
         """
         rlb should be adde only if differennt lengths
         rrb should be adde only if (differennt widths or different widths)
         frb should be adde only if differennt widths
         """
-        # if the box lies direclty on container's floor.
-        if p[1] == 0:
-            return (p[0], p[1] , p[2], p[3])
-
+        
         # check boundries.
         if  p[0] < 0 or p[0] >= self.size[0] or\
             p[1] < 0 or p[1] >= self.size[1] or\
@@ -156,6 +143,10 @@ class Container:
         # check if the point is occupied by another box:
         if self.space[p[0],p[1],p[2]] == 1:
             return None
+
+        # if the box lies direclty on container's floor.
+        if p[1] == 0:
+            return (p[0], p[1] , p[2], p[3])
 
         first_one_index = np.argmax(np.flip(self.space[p[0],0:p[1],p[2]]))
         return (p[0], p[1] - first_one_index, p[2], p[3])
