@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class Rotation(Enum):
     """
     according to article page 3 figure 2. Each letter stands for the box axe - Width, Heigth and Length.
@@ -13,6 +14,7 @@ class Rotation(Enum):
     LWH = 3
     WLH = 4
     HWL = 5
+
 
 """
 class Vector:
@@ -63,9 +65,9 @@ class Point:
 
 
 class Box:
-    def __init__(self, order='0', box_type='' ,width='0', height='0', length='0',\
-                 priority='0', taxability='0', weigth='0'):
-        
+    def __init__(self, order='0', box_type='', width='0', height='0', length='0',
+                 priority='0', taxability='0', weigth='0', color='gray'):
+
         # casting for convenient
         order, width, height, length = int(order), int(width), int(height), int(length)
         priority, taxability, weigth = int(priority), int(taxability), int(weigth)
@@ -75,14 +77,15 @@ class Box:
         self.size = width, height, length
         self.volume = width*height*length
         self.rotation = Rotation.WHL
-        
+
         self.priority = priority
         self.taxability = taxability
         self.weight = weigth
         self.FLB = None
         self.center = None
+        self.color = color
 
-    def get_size(self) -> tuple[int,int, int] | Exception:
+    def get_size(self) -> tuple[int, int, int] | Exception:
         """
             gives the right size after considering the  rotation.
             since the box may be rotated in either direction, we need to a method
@@ -103,13 +106,12 @@ class Box:
                 return self.size[1], self.size[0], self.size[2]
             case __:
                 raise Exception("error! Box.get_size: no rotation was found!!")
-    
-    def set_position(self, p: tuple[int,int,int]):
+
+    def set_position(self, p: tuple[int, int, int]):
         self.FLB = p
-        self.center = p[0] + self.size[0]/2, p[1] + self.size[1]/2 , p[2] + self.size[2]/2
+        self.center = p[0] + self.size[0]/2, p[1] + \
+            self.size[1]/2, p[2] + self.size[2]/2
 
     def __repr__(self) -> str:
-        return self.order.__str__() + ' ' + self.FLB.__str__() + ' ' + self.rotation.__str__()
-
-    
-
+        return f'"order": {self.order.__str__()}, "size": {self.get_size().__str__()},"position": {self.center.__str__()}, "color": {self.color},"text": {self.box_type}'
+          

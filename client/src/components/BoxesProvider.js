@@ -93,8 +93,10 @@ export const BoxesProvider = ({ children }) => {
 				.then(setBoxes);
 			*/
 
-			let data = await fetch("http://localhost:1337/noam_test");
+			let data = await fetch("http://localhost:1337/noam1302");
 			data = await data.json();
+			console.log(data);
+			// change fields names :)
 			setBoxes(data.boxes);
 		}
 		fetchData();
