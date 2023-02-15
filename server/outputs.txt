@@ -1,0 +1,123 @@
+{
+    "container":{"width":3,"height":1,"length":1},
+    "boxes":
+    [
+        {"order":1,"type":"Box1","width":1,"height":1,"length":1,"color":"gray","size":[1,1,1],"position":[1,1,1]},
+        {"order":2,"type":"Box2","width":1,"height":1,"length":1,"color":"gray","size":[1,1,1],"position":[1,2,1]},
+        {"order":3,"type":"Box3","width":1,"height":1,"length":1,"color":"gray","size":[1,1,1],"position":[2,1,1]}
+    ]
+}
+
+WITHOUT ANYTHING
+["
+{
+    'container': {'width': 3, 'height': 1, 'length': 1},
+    'boxes': [
+        {'order': 1, 'type': 'Box1', 'width': 1, 'height': 1, 'length': 1, 'color': 'gray', 'size': [1, 1, 1], 'position': [1, 1, 1]},
+        {'order': 2, 'type': 'Box2', 'width': 1, 'height': 1, 'length': 1, 'color': 'gray', 'size': [1, 1, 1], 'position': [1, 2, 1]},
+        {'order': 3, 'type': 'Box3', 'width': 1, 'height': 1, 'length': 1, 'color': 'gray', 'size': [1, 1, 1], 'position': [2, 1, 1]}
+    ]
+}
+"]
+
+TAKING RESULT[0] + REMOVING SPACES + CHANGING QUOTES
+{
+    "container":{"width":3,"height":1,"length":1},
+    "boxes":[
+        {"order":1,"type":"Box1","width":1,"height":1,"length":1,"color":"gray","size":[1,1,1],"position":[1,1,1]},
+        {"order":2,"type":"Box2","width":1,"height":1,"length":1,"color":"gray","size":[1,1,1],"position":[1,2,1]},
+        {"order":3,"type":"Box3","width":1,"height":1,"length":1,"color":"gray","size":[1,1,1],"position":[2,1,1]}
+    ]
+}
+
+ALGO1 - ORIGINAL
+[
+(
+    [
+    {"order": 1, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box1},
+    {"order": 3, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box3},
+    {"order": 2, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box2}
+    ],
+    {'number_of_items': 3, 'capacity': 3}
+)
+]
+
+
+
+
+
+
+
+[
+    (
+        [
+            {"order": 2, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box2},
+            {"order": 3, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box3},
+            {"order": 1, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box1}
+        ],
+            {'number_of_items': 3, 'capacity': 3}
+    ),
+    (
+        [{"order": 2, "size": (1, 1, 1),"position": 
+(0.5, 0.5, 0.5), "color": gray,"text": Box2}, {"order": 1, "size": (1, 1, 1),"position": 
+(2.5, 0.5, 0.5), "color": gray,"text": Box1}, {"order": 3, "size": (1, 1, 1),"position": 
+(1.5, 0.5, 0.5), "color": gray,"text": Box3}], {'number_of_items': 3, 'capacity': 3}), ([{"order": 2, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box2}, 
+{"order": 1, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box1}, 
+{"order": 3, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box3}], {'number_of_items': 3, 'capacity': 3}), ([{"order": 2, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box2}, {"order": 1, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box1}, {"order": 3, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box3}], {'number_of_items': 3, 'capacity': 3}), ([{"order": 1, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box1}, {"order": 3, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box3}, {"order": 2, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box2}], {'number_of_items': 3, 'capacity': 3})]
+
+
+
+
+
+{
+    0:
+    ([{"order": 2, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box2},
+    {"order": 3, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box3},
+    {"order": 1, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box1}],
+    {'number_of_items': 3, 'capacity': 3}),
+    1: ([{"order": 2, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box2}, {"order": 3, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box3}, {"order": 1, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box1}], {'number_of_items': 3, 'capacity': 3}), 2: ([{"order": 1, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box1}, {"order": 3, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box3}, {"order": 2, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box2}], {'number_of_items': 3, 'capacity': 3}), 3: ([{"order": 2, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box2}, {"order": 1, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box1}, {"order": 3, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box3}], {'number_of_items': 3, 'capacity': 3}), 4: ([{"order": 1, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box1}, {"order": 3, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box3}, {"order": 2, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box2}], {'number_of_items': 3, 'capacity': 3})}
+
+
+{
+    0:
+    {
+        'boxes':
+        [
+            {"order": 1, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box1},
+            {"order": 3, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box3},
+            {"order": 2, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box2}
+        ],
+        'solution_data': {'number_of_items': 3, 'capacity': 3}
+    },
+    1: {'boxes': [{"order": 1, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box1}, {"order": 2, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box2}, {"order": 3, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box3}], 'solution_data': {'number_of_items': 3, 'capacity': 3}}, 2: {'boxes': [{"order": 2, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box2}, {"order": 1, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box1}, {"order": 3, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box3}], 'solution_data': {'number_of_items': 3, 'capacity': 3}}, 3: {'boxes': [{"order": 2, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box2}, {"order": 3, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box3}, {"order": 1, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box1}], 'solution_data': {'number_of_items': 3, 'capacity': 3}}, 4: {'boxes': [{"order": 1, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box1}, {"order": 2, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box2}, {"order": 3, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box3}], 'solution_data': {'number_of_items': 3, 'capacity': 3}}}
+
+
+
+    {'"0"': {'"boxes"': [{"order": 2, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box2}, {"order": 1, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box1}, {"order": 3, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box3}], '"solution_data"': {'number_of_items': 3, 'capacity': 3}}, '"1"': {'"boxes"': [{"order": 1, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": 
+Box1}, {"order": 3, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box3}, {"order": 2, "size": (1, 1, 1),"position": (1.5, 0.5, 
+0.5), "color": gray,"text": Box2}], '"solution_data"': {'number_of_items': 3, 'capacity': 3}}, '"2"': {'"boxes"': [{"order": 1, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box1}, {"order": 3, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box3}, {"order": 2, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box2}], '"solution_data"': {'number_of_items': 3, 'capacity': 3}}, '"3"': {'"boxes"': [{"order": 1, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box1}, {"order": 2, "size": (1, 1, 1),"position": (2.5, 
+0.5, 0.5), "color": gray,"text": Box2}, {"order": 3, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box3}], '"solution_data"': {'number_of_items': 3, 'capacity': 3}}, '"4"': {'"boxes"': [{"order": 2, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box2}, {"order": 1, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box1}, {"order": 3, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box3}], '"solution_data"': {'number_of_items': 3, 'capacity': 3}}}
+
+
+{'0':
+    {'boxes':
+        [
+            {"order": 2, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box2},
+            {"order": 3, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box3},
+            {"order": 1, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box1}
+        ],
+    'solution_data': {'number_of_items': 3, 'capacity': 3}
+    },
+    '1': {'boxes': [{"order": 1, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box1}, {"order": 2, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box2}, {"order": 3, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box3}], 'solution_data': {'number_of_items': 3, 'capacity': 3}}, '2': {'boxes': [{"order": 1, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box1}, {"order": 3, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box3}, {"order": 2, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box2}], 'solution_data': {'number_of_items': 3, 'capacity': 3}}, '3': {'boxes': [{"order": 
+    1, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box1}, {"order": 2, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box2}, {"order": 3, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box3}], 'solution_data': {'number_of_items': 3, 'capacity': 3}}, '4': {'boxes': [{"order": 2, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": gray,"text": Box2}, {"order": 3, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": gray,"text": Box3}, {"order": 1, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": gray,"text": Box1}], 'solution_data': {'number_of_items': 3, 'capacity': 3}}}
+
+
+    {'0': {'boxes': [{"order": 1, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": "gray","text": "Box1"}, {"order": 3, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": "gray","text": "Box3"}, {"order": 2, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": "gray","text": "Box2"}], 'solution_data': {'number_of_items': 3, 'capacity': 3}}, '1': {'boxes': [{"order": 1, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": "gray","text": "Box1"}, {"order": 2, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": "gray","text": "Box2"}, {"order": 3, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": "gray","text": "Box3"}], 'solution_data': {'number_of_items': 3, 'capacity': 3}}, '2': {'boxes': [{"order": 1, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": "gray","text": "Box1"}, {"order": 2, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": "gray","text": 
+"Box2"}, {"order": 3, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": "gray","text": "Box3"}], 'solution_data': {'number_of_items': 3, 'capacity': 3}}, '3': {'boxes': [{"order": 2, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": "gray","text": "Box2"}, {"order": 1, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": "gray","text": "Box1"}, {"order": 3, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": "gray","text": "Box3"}], 'solution_data': {'number_of_items': 3, 'capacity': 3}}, '4': {'boxes': [{"order": 2, "size": (1, 1, 1),"position": (0.5, 0.5, 0.5), "color": "gray","text": "Box2"}, {"order": 3, "size": (1, 1, 1),"position": (2.5, 0.5, 0.5), "color": "gray","text": "Box3"}, {"order": 1, "size": (1, 1, 1),"position": (1.5, 0.5, 0.5), "color": "gray","text": "Box1"}], 'solution_data': {'number_of_items': 3, 'capacity': 3}}}
+
+
+
+{'0':
+{'boxes':
+[{"order": 1, "size": [1, 1, 1],"position": [0.5, 0.5, 0.5], "color": "gray","text": "Box1"}, {"order": 2, "size": [1, 1, 1],"position": [2.5, 0.5, 0.5], "color": "gray","text": "Box2"}, {"order": 3, "size": [1, 1, 1],"position": [1.5, 0.5, 0.5], "color": "gray","text": "Box3"}], 'solution_data': {'number_of_items': 3, 'capacity': 3}}, '1': {'boxes': [{"order": 2, "size": [1, 1, 1],"position": [0.5, 0.5, 0.5], "color": "gray","text": "Box2"}, {"order": 1, "size": [1, 1, 1],"position": [2.5, 0.5, 0.5], "color": "gray","text": "Box1"}, {"order": 3, "size": [1, 1, 1],"position": [1.5, 0.5, 0.5], "color": "gray","text": "Box3"}], 'solution_data': {'number_of_items': 3, 'capacity': 3}}, '2': {'boxes': [{"order": 1, "size": [1, 1, 1],"position": [0.5, 0.5, 0.5], "color": "gray","text": "Box1"}, {"order": 3, "size": [1, 1, 1],"position": [2.5, 0.5, 0.5], "color": "gray","text": 
+"Box3"}, {"order": 2, "size": [1, 1, 1],"position": [1.5, 0.5, 0.5], "color": "gray","text": "Box2"}], 'solution_data': {'number_of_items': 3, 'capacity': 3}}, '3': {'boxes': [{"order": 2, "size": [1, 1, 1],"position": [0.5, 0.5, 0.5], "color": "gray","text": "Box2"}, {"order": 1, "size": [1, 1, 1],"position": [2.5, 0.5, 0.5], "color": "gray","text": "Box1"}, {"order": 3, "size": [1, 1, 1],"position": [1.5, 0.5, 0.5], "color": "gray","text": "Box3"}], 'solution_data': {'number_of_items': 3, 'capacity': 3}}, '4': {'boxes': [{"order": 2, "size": [1, 1, 1],"position": [0.5, 0.5, 0.5], "color": "gray","text": "Box2"}, {"order": 3, "size": [1, 1, 1],"position": [2.5, 0.5, 0.5], "color": "gray","text": "Box3"}, {"order": 1, "size": [1, 1, 1],"position": [1.5, 0.5, 0.5], "color": "gray","text": "Box1"}], 'solution_data': {'number_of_items': 3, 'capacity': 3}}}

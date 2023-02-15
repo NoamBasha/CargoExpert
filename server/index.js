@@ -194,44 +194,6 @@ const noam1303 = {
 	],
 };
 
-const test_noam1302algo = {
-	container: { width: 3, height: 1, length: 1 },
-	boxes: [
-		{
-			order: 1,
-			type: "Box1",
-			width: 1,
-			height: 1,
-			length: 1,
-			color: "gray",
-			size: [1, 1, 1],
-			position: [1, 1, 1],
-		},
-
-		{
-			order: 2,
-			type: "Box2",
-			width: 1,
-			height: 1,
-			length: 1,
-			color: "gray",
-			size: [1, 1, 1],
-			position: [1, 2, 1],
-		},
-
-		{
-			order: 3,
-			type: "Box3",
-			width: 1,
-			height: 1,
-			length: 1,
-			color: "gray",
-			size: [1, 1, 1],
-			position: [2, 1, 1],
-		},
-	],
-};
-
 const test_noam1302 = {
 	container: { width: 3, height: 1, length: 1 },
 	boxes: [
@@ -509,12 +471,83 @@ const answers = [
 	"[([1 (0, 0, 0), 2 (4, 0, 0), 3 (2, 0, 0), 4 (0, 0, 2), 5 (4, 0, 2), 6 (2, 0, 2), 7 (4, 0, 4), 8 (0, 0, 4), 9 (2, 0, 4)], {'number_of_items': 9, 'capacity': 36})]",
 	"[([1 (0, 0, 0), 2 (2, 0, 0), 3 (2, 2, 0), 4 (0, 2, 0), 5 (0, 0, 2), 6 (2, 0, 2), 7 (0, 2, 2), 8 (2, 2, 2)], {'number_of_items': 8, 'capacity': 64})]",
 ];
+
 app.use(cors());
 app.use(express.json());
 
 app.get("/noam_test", (req, res) => {
 	console.log(res);
-	res.send(test_noam1302algo);
+	res.send(c);
+});
+
+const test_noam1302algo = {
+	container: { width: 3, height: 1, length: 1 },
+	boxes: [
+		{
+			order: 1,
+			type: "Box1",
+			width: 1,
+			height: 1,
+			length: 1,
+			color: "gray",
+			size: [1, 1, 1],
+			position: [1, 1, 1],
+		},
+
+		{
+			order: 2,
+			type: "Box2",
+			width: 1,
+			height: 1,
+			length: 1,
+			color: "gray",
+			size: [1, 1, 1],
+			position: [1, 2, 1],
+		},
+
+		{
+			order: 3,
+			type: "Box3",
+			width: 1,
+			height: 1,
+			length: 1,
+			color: "gray",
+			size: [1, 1, 1],
+			position: [2, 1, 1],
+		},
+	],
+};
+
+function parse_response_from_algo2(result) {
+	result_string = result[0];
+	result_string = result_string.replace(/ /g, "");
+	result_string = result_string.replace(/'/g, '"');
+	console.log(result_string);
+	return result_string;
+}
+
+function parse_response_from_algo(result) {
+	result_string = result[0];
+	result_string = result_string.replace(/ /g, "");
+	result_string = result_string.replace(/'/g, '"');
+	result_json = JSON.parse(result_string);
+	return result_json;
+}
+
+app.post("/noam1502", (req, res) => {
+	//res.sendFile(path.join(__dirname, 'uploadFile.html'));
+	options = {
+		args: [JSON.stringify(req.body)],
+		pythonOptions: ["-u"], // The '-u' tells Python to flush every time // get print results in real-time
+	};
+	PythonShell.run("algo.py", options, function (err, result) {
+		if (err) {
+			console.log(err.traceback);
+		} else {
+			result = parse_response_from_algo(result);
+			res.send(result);
+		}
+	});
 });
 
 app.get("/noam1302", (req, res) => {
@@ -523,12 +556,12 @@ app.get("/noam1302", (req, res) => {
 		args: [JSON.stringify(test_noam1302algo)],
 		pythonOptions: ["-u"], // The '-u' tells Python to flush every time // get print results in real-time
 	};
-	PythonShell.run("algo2.py", options, function (err, result) {
+	PythonShell.run("algo.py", options, function (err, result) {
 		if (err) {
 			console.log(err.traceback);
 		} else {
+			result = parse_response_from_algo(result);
 			res.send(result);
-			console.log(result);
 		}
 	});
 });

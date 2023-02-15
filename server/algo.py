@@ -5,7 +5,7 @@ import random
 from box import Box, Rotation
 from container import Container
 
-NUMBER_OF_ITERATIONS = 1
+NUMBER_OF_ITERATIONS = 5
 """
 the structure of the file is:
 contWidth, contHeight, contLength, order, type, width, height, length, priority ,taxabilty
@@ -212,7 +212,8 @@ def algo():
 
     boxes = sorted(boxes, key=lambda x: x.order)
 
-    solution_list = []
+    solution_list = {}
+    counter = 0
     for _ in range(NUMBER_OF_ITERATIONS):
         copy_boxes = copy.deepcopy(boxes)
         container.start_packing()
@@ -220,9 +221,11 @@ def algo():
         rotation(copy_boxes)
         perturbation(copy_boxes)
 
-        temp = constructive_packing(copy_boxes, container)
-        if temp:
-            solution_list.append(temp)
+        boxes_in_solution, solution_data = constructive_packing(copy_boxes, container)
+        if boxes_in_solution is not None and solution_data is not None :
+            counter_string = f'{counter}'
+            solution_list[counter_string] = {"boxes": boxes_in_solution, "solution_data": solution_data}
+            counter += 1
 
     return solution_list
 

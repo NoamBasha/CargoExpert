@@ -113,5 +113,6 @@ class Box:
             self.size[1]/2, p[2] + self.size[2]/2
 
     def __repr__(self) -> str:
-        return f'"order": {self.order.__str__()}, "size": {self.get_size().__str__()},"position": {self.center.__str__()}, "color": {self.color},"text": {self.box_type}'
+        initial = f'"order": {self.order.__str__()}, "size": {list(self.get_size()).__str__()},"position": {list(self.center).__str__()}, "color": \"{self.color}\","text": \"{self.box_type}\"'
+        return '{' + initial + '}'
           

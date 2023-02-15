@@ -81,23 +81,73 @@ export const BoxesProvider = ({ children }) => {
 	// from_algorithm: order, x, y, z, orientation
 	// from_server: order, type, size, position, color
 
+	/*
 	useEffect(() => {
 		async function fetchData() {
-			// fetch boxes from server
-			// boxes = ()
-			// for each box set color by type
-			/*
-			fetch("http://localhost:1337/noam_test")
-				.then((data) => data.json())
-				.then((data) => data.boxes)
-				.then(setBoxes);
-			*/
-
 			let data = await fetch("http://localhost:1337/noam1302");
 			data = await data.json();
-			console.log(data);
+			let first_solution = data["1"];
 			// change fields names :)
-			setBoxes(data.boxes);
+			setBoxes(first_solution.boxes);
+		}
+		fetchData();
+	}, []);
+	*/
+
+	useEffect(() => {
+		async function fetchData() {
+			const react_boxes_container_test = {
+				container: { width: 3, height: 1, length: 1 },
+				boxes: [
+					{
+						order: 1,
+						type: "Box1",
+						width: 1,
+						height: 1,
+						length: 1,
+						color: "gray",
+						size: [1, 1, 1],
+						position: [1, 1, 1],
+					},
+
+					{
+						order: 2,
+						type: "Box2",
+						width: 1,
+						height: 1,
+						length: 1,
+						color: "gray",
+						size: [1, 1, 1],
+						position: [1, 2, 1],
+					},
+
+					{
+						order: 3,
+						type: "Box3",
+						width: 1,
+						height: 1,
+						length: 1,
+						color: "gray",
+						size: [1, 1, 1],
+						position: [2, 1, 1],
+					},
+				],
+			};
+
+			const requestOptions = {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(react_boxes_container_test),
+			};
+
+			let data = await fetch(
+				"http://localhost:1337/noam1502",
+				requestOptions
+			);
+
+			data = await data.json();
+			let first_solution = data["1"];
+			setBoxes(first_solution.boxes);
 		}
 		fetchData();
 	}, []);
