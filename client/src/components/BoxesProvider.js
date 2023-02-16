@@ -1,5 +1,4 @@
 import { useState, createContext, useContext, useEffect } from "react";
-import { DataArrayTexture } from "three";
 
 const BoxesContext = createContext("");
 
@@ -94,6 +93,54 @@ export const BoxesProvider = ({ children }) => {
 	}, []);
 	*/
 
+	/*
+	TODO:
+	 - remove color, write a function that gives a color according to type. hashing the type to get the color.
+	 - removed "size": [1,1,1] - from the boxes. its is generated automatically by the algorithm
+
+	 - add scale provider?
+	 */
+
+	const stringToColour = function (str) {
+		let hash = 0;
+		for (let i = 0; i < str.length; i++) {
+			hash = str.charCodeAt(i) + ((hash << 5) - hash);
+		}
+		let colour = "#";
+		for (let i = 0; i < 3; i++) {
+			let value = (hash >> (i * 8)) & 0xff;
+			colour += ("00" + value.toString(16)).substr(-2);
+		}
+		return colour;
+	};
+
+	const setDataFromUser = async (user_boxes) => {
+		console.log(user_boxes);
+		const requestOptions = {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(user_boxes),
+		};
+
+		let data = await fetch(
+			"http://localhost:1337/noam1502",
+			requestOptions
+		);
+
+		data = await data.json();
+		let first_solution = data["1"];
+		let solution_boxes = first_solution.boxes;
+		solution_boxes = solution_boxes.map((box) => {
+			return { ...box, color: stringToColour(box.text) };
+		});
+		console.log(
+			solution_boxes.map((box) => {
+				return box.color;
+			})
+		);
+		setBoxes(solution_boxes);
+	};
+	/*
 	useEffect(() => {
 		async function fetchData() {
 			const react_boxes_container_test = {
@@ -106,8 +153,6 @@ export const BoxesProvider = ({ children }) => {
 						height: 1,
 						length: 1,
 						color: "gray",
-						size: [1, 1, 1],
-						position: [1, 1, 1],
 					},
 
 					{
@@ -117,8 +162,6 @@ export const BoxesProvider = ({ children }) => {
 						height: 1,
 						length: 1,
 						color: "gray",
-						size: [1, 1, 1],
-						position: [1, 2, 1],
 					},
 
 					{
@@ -128,8 +171,6 @@ export const BoxesProvider = ({ children }) => {
 						height: 1,
 						length: 1,
 						color: "gray",
-						size: [1, 1, 1],
-						position: [2, 1, 1],
 					},
 				],
 			};
@@ -147,10 +188,20 @@ export const BoxesProvider = ({ children }) => {
 
 			data = await data.json();
 			let first_solution = data["1"];
-			setBoxes(first_solution.boxes);
+			let solution_boxes = first_solution.boxes;
+			solution_boxes = solution_boxes.map((box) => {
+				return { ...box, color: stringToColour(box.text) };
+			});
+			console.log(
+				solution_boxes.map((box) => {
+					return box.color;
+				})
+			);
+			setBoxes(solution_boxes);
 		}
 		fetchData();
-	}, []);
+	}, [boxes]);
+	*/
 
 	const changeBoxIndices = (id) => {
 		if (boxIndices.includes(id)) {
@@ -212,6 +263,7 @@ export const BoxesProvider = ({ children }) => {
 				changeBoxById,
 				rotateBox,
 				resetBoxes,
+				setDataFromUser,
 			}}
 		>
 			{children}

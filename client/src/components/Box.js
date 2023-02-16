@@ -35,7 +35,7 @@ export const Box = ({ id, size, position, color, text }) => {
 		{
 			rotation: [0, Math.PI / 2, 0],
 			position: [x + w / 2 + eps, y, z],
-			text: id,
+			text: text,
 		},
 		{
 			rotation: [-Math.PI / 2, 0, Math.PI / 2],
