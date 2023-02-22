@@ -109,8 +109,8 @@ class Box:
 
     def set_position(self, p: tuple[int, int, int]):
         self.FLB = p
-        self.center = p[0] + self.size[0]/2, p[1] + \
-            self.size[1]/2, p[2] + self.size[2]/2
+        self.center = p[0] + self.get_size()[0]/2, p[1] + \
+            self.get_size()[1]/2, p[2] + self.get_size()[2]/2
 
     def __repr__(self) -> str:
         initial = f'"order": {self.order.__str__()}, "size": {list(self.get_size()).__str__()},"position": {list(self.center).__str__()}, "color": \"{self.color}\","text": \"{self.box_type}\"'

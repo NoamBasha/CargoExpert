@@ -1,105 +1,31 @@
 import { useState, createContext, useContext, useEffect } from "react";
 
+/*
+user: order, type, width, height, length
+react: order, type, size, position, color
+to_server: order, type, size, position, color
+to_algorithm: order, width, height, length
+from_algorithm: order, x, y, z, orientation
+from_server: order, type, size, position, color
+*/
+
 const BoxesContext = createContext("");
 
 export const BoxesProvider = ({ children }) => {
 	const [boxes, setBoxes] = useState([]);
-	/*
-
-	[
-		{
-			size: [2, 2, 5],
-			position: [1, 1, 2.5],
-			color: "#00BCFF",
-			text: "Box0",
-		},
-		{
-			size: [2, 2, 5],
-			position: [3, 1, 2.5],
-			color: "#00BCFF",
-			text: "Box1",
-		},
-		{
-			size: [2, 2, 5],
-			position: [1, 3, 2.5],
-			color: "#00BCFF",
-			text: "Box2",
-		},
-		{
-			size: [2, 2, 5],
-			position: [1, 1, 7.5],
-			color: "#00BCFF",
-			text: "Box3",
-		},
-		{
-			size: [2, 2, 5],
-			position: [1, 3, 7.5],
-			color: "#00BCFF",
-			text: "Box4",
-		},
-		{
-			size: [2, 2, 5],
-			position: [3, 1, 7.5],
-			color: "#00BCFF",
-			text: "Box5",
-		},
-		{
-			size: [1, 1, 2.5],
-			position: [2.5, 2.5, 1.25],
-			color: "#00ffbc",
-			text: "Box6",
-		},
-		{
-			size: [1, 1, 2.5],
-			position: [2.5, 2.5, 3.75],
-			color: "#00ffbc",
-			text: "Box7",
-		},
-		{
-			size: [1, 1, 2.5],
-			position: [2.5, 2.5, 6.25],
-			color: "#00ffbc",
-			text: "Box8",
-		},
-		{
-			size: [1, 1, 2.5],
-			position: [2.5, 2.5, 8.75],
-			color: "#00ffbc",
-			text: "Box9",
-		},
-	]
-	 */
+	const [solutions, setSolutions] = useState({});
+	const [solutionId, setSolutionId] = useState(0);
 	const [previousBoxes, setPreviousBoxes] = useState(boxes);
-	// Which boxes are currently selected
 	const [boxIndices, setBoxIndices] = useState([]);
 
-	// user: order, type, width, height, length
-	// react: order, type, size, position, color
-	// to_server: order, type, size, position, color
-	// to_algorithm: order, width, height, length
-	// from_algorithm: order, x, y, z, orientation
-	// from_server: order, type, size, position, color
+	const getPreviousSolution = () => {
+		let len = Object.keys(solutions).length;
+		setSolutionId((((solutionId - 1) % len) + len) % len);
+	};
 
-	/*
-	useEffect(() => {
-		async function fetchData() {
-			let data = await fetch("http://localhost:1337/noam1302");
-			data = await data.json();
-			let first_solution = data["1"];
-			// change fields names :)
-			setBoxes(first_solution.boxes);
-		}
-		fetchData();
-	}, []);
-	*/
-
-	/*
-	TODO:
-	 - remove color, write a function that gives a color according to type. hashing the type to get the color.
-	 - removed "size": [1,1,1] - from the boxes. its is generated automatically by the algorithm
-
-	 - add scale provider?
-	 */
+	const getNextSolution = () => {
+		setSolutionId((solutionId + 1) % Object.keys(solutions).length);
+	};
 
 	const stringToColour = function (str) {
 		let hash = 0;
@@ -114,8 +40,23 @@ export const BoxesProvider = ({ children }) => {
 		return colour;
 	};
 
+	useEffect(() => {
+		const showCurrentSolution = function () {
+			if (Object.keys(solutions).length != 0) {
+				let solution = solutions[solutionId];
+				let solution_boxes = solution.boxes;
+
+				solution_boxes = solution_boxes.map((box) => {
+					return { ...box, color: stringToColour(box.text) };
+				});
+				setBoxes(solution_boxes);
+			}
+		};
+		showCurrentSolution();
+	}, [solutions, solutionId]);
+
 	const setDataFromUser = async (user_boxes) => {
-		console.log(user_boxes);
+		//console.log(user_boxes);
 		const requestOptions = {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
@@ -128,80 +69,11 @@ export const BoxesProvider = ({ children }) => {
 		);
 
 		data = await data.json();
-		let first_solution = data["1"];
-		let solution_boxes = first_solution.boxes;
-		solution_boxes = solution_boxes.map((box) => {
-			return { ...box, color: stringToColour(box.text) };
-		});
-		console.log(
-			solution_boxes.map((box) => {
-				return box.color;
-			})
-		);
-		setBoxes(solution_boxes);
+		setSolutions(data);
+		setSolutionId(0);
+		console.log(data);
+		console.log(solutions);
 	};
-	/*
-	useEffect(() => {
-		async function fetchData() {
-			const react_boxes_container_test = {
-				container: { width: 3, height: 1, length: 1 },
-				boxes: [
-					{
-						order: 1,
-						type: "Box1",
-						width: 1,
-						height: 1,
-						length: 1,
-						color: "gray",
-					},
-
-					{
-						order: 2,
-						type: "Box2",
-						width: 1,
-						height: 1,
-						length: 1,
-						color: "gray",
-					},
-
-					{
-						order: 3,
-						type: "Box3",
-						width: 1,
-						height: 1,
-						length: 1,
-						color: "gray",
-					},
-				],
-			};
-
-			const requestOptions = {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(react_boxes_container_test),
-			};
-
-			let data = await fetch(
-				"http://localhost:1337/noam1502",
-				requestOptions
-			);
-
-			data = await data.json();
-			let first_solution = data["1"];
-			let solution_boxes = first_solution.boxes;
-			solution_boxes = solution_boxes.map((box) => {
-				return { ...box, color: stringToColour(box.text) };
-			});
-			console.log(
-				solution_boxes.map((box) => {
-					return box.color;
-				})
-			);
-			setBoxes(solution_boxes);
-		}
-		fetchData();
-	}, [boxes]);
-	*/
 
 	const changeBoxIndices = (id) => {
 		if (boxIndices.includes(id)) {
@@ -264,6 +136,8 @@ export const BoxesProvider = ({ children }) => {
 				rotateBox,
 				resetBoxes,
 				setDataFromUser,
+				getNextSolution,
+				getPreviousSolution,
 			}}
 		>
 			{children}

@@ -1,17 +1,17 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { View } from "./components/View.js";
-import { BoxesProvider } from "./components/BoxesProvider";
-import { FileUpload } from "./components/FileUpload";
+import { Routes, Route } from "react-router-dom";
+import { Project } from "./components/Project";
 
 function App() {
 	return (
-		/* react-router... */
 		<div className="App">
-			<BoxesProvider>
-				<FileUpload></FileUpload>
-				<View></View>
-			</BoxesProvider>
+			<Routes>
+				<Route
+					path="/"
+					element={<Project />}
+				/>
+			</Routes>
 		</div>
 	);
 }

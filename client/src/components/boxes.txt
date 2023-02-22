@@ -1,2 +1,0 @@
-w,h,l,x,y,z,color,text
-2,2,5,1,1,2.5,"#00BCFF","Box1"

@@ -2,6 +2,14 @@ import { ThreeScene } from "./ThreeScene.js";
 import { useState, createContext } from "react";
 import { useBoxes } from "./BoxesProvider.js";
 
+const NextSolutionButton = ({ text, getNextSolution }) => {
+	return <button onClick={() => getNextSolution()}>{text}</button>;
+};
+
+const PreviousSolutionButton = ({ text, getPreviousSolution }) => {
+	return <button onClick={() => getPreviousSolution()}>{text}</button>;
+};
+
 const ResetButton = ({ text, resetBoxes }) => {
 	return <button onClick={() => resetBoxes()}>{text}</button>;
 };
@@ -18,13 +26,12 @@ const EditButton = ({ setEdit }) => {
 	return <button onClick={() => setEdit()}>Edit</button>;
 };
 
-const ViewButton = ({ setEdit, validateBoxesLocation, colorBoxes }) => {
+const ViewButton = ({ setEdit, validateBoxesLocation }) => {
 	return (
 		<button
 			onClick={() => {
 				if (validateBoxesLocation()) {
 					setEdit();
-					//colorBoxes();
 				}
 			}}
 		>
@@ -37,8 +44,15 @@ export const EditContext = createContext(null);
 
 export const View = () => {
 	const [edit, setEdit] = useState(false);
-	const { boxes, moveBox, rotateBox, resetBoxes } = useBoxes();
-	const [container, setContainer] = useState([4, 4, 10]);
+	const {
+		boxes,
+		moveBox,
+		rotateBox,
+		resetBoxes,
+		getNextSolution,
+		getPreviousSolution,
+	} = useBoxes();
+	const [container, setContainer] = useState([8, 6, 16]);
 	const axisButtons = [
 		{ text: "-x", moveBy: [-1, 0, 0] },
 		{ text: "x+", moveBy: [1, 0, 0] },
@@ -134,6 +148,14 @@ export const View = () => {
 
 	return (
 		<EditContext.Provider value={{ edit }}>
+			<NextSolutionButton
+				text="Previous Solution"
+				getNextSolution={getPreviousSolution}
+			/>
+			<NextSolutionButton
+				text="Next Solution"
+				getNextSolution={getNextSolution}
+			/>
 			{edit
 				? axisButtons.map(({ text, moveBy }, index) => {
 						return (
@@ -173,7 +195,6 @@ export const View = () => {
 			<ViewButton
 				setEdit={() => setEdit(false)}
 				validateBoxesLocation={validateBoxesLocation(boxes, container)}
-				//colorBoxes={colorBoxes(boxes)}
 			/>
 		</EditContext.Provider>
 	);

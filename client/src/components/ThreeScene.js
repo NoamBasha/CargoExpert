@@ -10,6 +10,8 @@ export const ThreeScene = ({ container }) => {
 	const { edit } = useContext(EditContext);
 	const { boxes } = useBoxes();
 
+	const camera_position = container.map((n) => n * 2);
+
 	/*
 		Canvas - sets up a scene and a camera + renders the scene every frame.
         fits the parent node - (width and height)
@@ -24,11 +26,11 @@ export const ThreeScene = ({ container }) => {
 			style={{
 				display: "flex",
 				position: "relative",
-				width: 1000,
+				width: "auto",
 				height: 800,
 			}}
 		>
-			<Canvas camera={{ fov: 75, position: [8, 8, 15] }}>
+			<Canvas camera={{ fov: 75, position: camera_position }}>
 				<Container size={container} />
 				{boxes.map(({ size, position, color, text }, index) => {
 					return (
