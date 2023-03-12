@@ -10,21 +10,20 @@ class Container:
         self.size = width, height, length
         self.volume = width*height*length
         self.max_weight = int(max_weight)
-        self.i = 0
 
     def start_packing(self,):
         # for sreamlining the process we can do:
         # if self. space:
         #   del self.space
 
-        # maybe change to dtype into bool
+        # maybe change to dtype into bool to accelrate algo
         self.space = np.zeros(self.size, np.int32)
 
     def score_FLB(self, b_size: tuple[int, int, int], p: tuple[int, int, int]) -> tuple[tuple[int, int, int], str]:
         # calculate the other corners of the box if its FLB corner is placed in p.
         FRB, FLT, RLB = p[0] + b_size[0] - 1, p[1] + \
             b_size[1] - 1, p[2] + b_size[2] - 1
-        self.i += 1
+
         # check boundaries irregularities
         if FRB >= self.size[0] or FLT >= self.size[1] or RLB >= self.size[2]:
             return (0, 0)
@@ -74,7 +73,8 @@ class Container:
         raise Exception('unimplimented method score_RRB')
 
     def get_score(self, b: Box, p: tuple[int]) -> tuple[float, int, int] | Exception:
-        """the score is a tuple containing 3 numbers:
+        """
+        the score is a tuple containing 3 numbers:
             1. the support factor the box has underneath.
             2. the distance from the rear to the point.
             3. the distance from the top to the point.
@@ -106,8 +106,8 @@ class Container:
 
     def update(self, b: Box, p: tuple[int, int, int, int], pp: set[tuple[int]]):
         """
-            update the list of potential points according the given box 
-            and the point where he was placed.
+        update the list of potential points according the given box 
+        and the point where he was placed.
         """
 
         pp.remove(p)
@@ -131,12 +131,6 @@ class Container:
                 pp.add(projection)
 
     def get_vertical_projection(self, p: tuple[int, int, int, int]):
-        """
-        rlb should be adde only if differennt lengths
-        rrb should be adde only if (differennt widths or different widths)
-        frb should be adde only if differennt widths
-        """
-
         # check boundries.
         if p[0] < 0 or p[0] >= self.size[0] or\
                 p[1] < 0 or p[1] >= self.size[1] or\

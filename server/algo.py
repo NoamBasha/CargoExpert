@@ -14,88 +14,6 @@ box's width should be parallel to container's width before we apply any rotation
 the same goes for height and length.
 """
 
-"""pseudo code:
-RCH(N, boxes, container, pp):
-    for itertaion 1 to N:
-        sort boxes by decreasing order (i.e., by the value order).
-        
-        choose perturbation randomly by these options:
-        1a. for each box choose randomly orientation.
-        1b. for a subset of boxes with similar dimensions choose randomly a feasable orientation
-
-        choose perturbation randomly by these options:
-        2a. for each 2 boxes (b1,b2) in a row if (volume b1) / (volume b2) in [0.7,1.3]
-            then switch the boxes in 50 %.
-        2b. for each 2 boxes (b1,b2) in a row if (prop b1) / (prop b2) in [start, end]
-            then switch the boxes in 50 %.
-
-       constructivePacking(boxes, container, pp)
-
-
-constructivePacking(boxes, container, pp):
-     retry, solution_boxes = [] , []
-     for each box:
-        bestP = none
-        best_surface = -1
-        for each point in pp:
-            cur_surface = checkfeasable(box, point, solution_boxes, container).
-            bestP, best_surface = get_best_point(bestP, point, best_surface, cur_surface)
-            
-        if bestP is not None:
-            box.position = bestP
-            solution_boxes.append(box)
-            remove bestP from pp
-            updatePP(pp, bestP, box, solution_boxes, container)
-        else:
-            add box to rerty.
-        
-    for each box in retry:
-        bestP = none
-        for each point in pp:
-            if point is feasable and better than bestP:
-                bestP = point
-        
-        if bestP is not None:
-            place box in position bestP.
-            remove bestP from pp.
-            remove box from retry.
-            generate new points and add to pp.
-
-checkfeasable(box, point, solution_boxes, container):
-    need to check 3 things:
-        1. out of bounds.
-        2. overlapping with other boxes
-        3. surface area of box.
-    
-    
-
-    return the surface area of box.
-
-(bestP, point, best_surface, cur_surface):
-    if cur_surface > best_surface:
-        return point, cur_surface
-    
-    if cur_surface == best_surface:
-        if bestP.z > point.z:
-            return point, cur_surface
-    return bestP, best_surface
-
-updatePP(pp, pointbox, solution_boxes, container):
-    "need to check if box.x or box.z are smaller than the box below"
-
-    # the y coordinate can always be added if lower then y of container
-    if box.y + box.height < container.y:
-        pp.append([box.z, box.x, box.y + box.height])
-
-    for each box in boxes:
-        if box.FLB.x == point.x
-            and box.FLB.z == point.z
-            and box.FLB.y + box.height == point.y:
-
-comparepoints(point1, point2):
-"""
-
-
 def rotate_each_box(boxes: list[Box]) -> None:
     for b in boxes:
         b.rotation = random.choice(list(Rotation))
@@ -122,18 +40,15 @@ def rotation(boxes: list[Box]) -> None:
 
 
 def volume_perturb(b1: Box, b2: Box):
-    """return True if the division gap is less than 0.3 in 50% of cases"""
+    # return True if the division gap is less than 0.3 in 50% of cases
     if 0.7 <= (b1.volume/b2.volume) <= 1.3 and random.randint(0, 1) > 0.5:
         return True
     return False
 
 
 def perturbation(boxes: list[Box]):
-    """perturb the sorted list using one perturbation option randomly"""
-    if not boxes:
-        return None
-
-    if len(boxes) == 1:
+    # perturb the sorted list using one perturbation option randomly
+    if len(boxes) <= 1:
         return boxes
 
     options = [volume_perturb]
@@ -163,7 +78,6 @@ def constructive_packing(boxes: list[Box], container: Container) -> list[Box]:
             container.place(b, best_point)
             container.update(b, best_point, pp)
             boxes_in_solution.append(b)
-            #print(f"{b} insreted")
             solution_data['number_of_items'] += 1
             solution_data['capacity'] += b.volume
         else:
@@ -181,13 +95,11 @@ def constructive_packing(boxes: list[Box], container: Container) -> list[Box]:
             container.place(b, best_point)
             container.update(b, best_point, pp)
             boxes_in_solution.append(b)
-            #print(f"{b} insreted")
             solution_data['number_of_items'] += 1
             solution_data['capacity'] += b.volume
 
         # if we know all boxes must be in container, then we can stop here
         else:
-            #print(b, pp)
             return None
 
     return boxes_in_solution, solution_data
@@ -196,7 +108,6 @@ def constructive_packing(boxes: list[Box], container: Container) -> list[Box]:
 def algo():
     # every key in json is a string in python dict.
     obj = json.loads(sys.argv[1])
-    # obj = json.loads('{"container":{"width":6,"height":1,"length":2},"boxes":[{"order":1,"type":"Box1","width":2,"height":1,"length":2},{"order":2,"type":"Box2","width":2,"height":1,"length":2},{"order":3,"type":"Box3","width":2,"height":1,"length":2}]}')
 
     container = Container(obj['container']['width'],
                           obj['container']['height'],
@@ -210,7 +121,7 @@ def algo():
         boxes.append(Box(b['order'], b['type'], b['width'],
                          b['height'], b['length'], p, t,weigth='0', color=b['color']))
 
-    boxes = sorted(boxes, key=lambda x: x.order)
+    boxes = sorted(boxes, key=lambda x: x.order, reverse=True)
 
     solution_list = {}
     counter = 0

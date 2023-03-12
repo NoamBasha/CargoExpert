@@ -67,10 +67,11 @@ class Point:
 class Box:
     def __init__(self, order='0', box_type='', width='0', height='0', length='0',
                  priority='0', taxability='0', weigth='0', color='gray'):
-
         # casting for convenient
-        order, width, height, length = int(order), int(width), int(height), int(length)
-        priority, taxability, weigth = int(priority), int(taxability), int(weigth)
+        order, width, height, length = int(order), int(
+            width), int(height), int(length)
+        priority, taxability, weigth = int(
+            priority), int(taxability), int(weigth)
 
         self.order = order
         self.box_type = box_type
@@ -87,9 +88,9 @@ class Box:
 
     def get_size(self) -> tuple[int, int, int] | Exception:
         """
-            gives the right size after considering the  rotation.
-            since the box may be rotated in either direction, we need to a method
-            to get the correct size of the box after rotation was applied.
+        gives the right size after considering the rotation.
+        since the box may be rotated in either direction, we need to a method
+        to get the correct size of the box after rotation was applied.
         """
         match self.rotation:
             case Rotation.WHL:
@@ -115,4 +116,3 @@ class Box:
     def __repr__(self) -> str:
         initial = f'"order": {self.order.__str__()}, "size": {list(self.get_size()).__str__()},"position": {list(self.center).__str__()}, "color": \"{self.color}\","text": \"{self.box_type}\"'
         return '{' + initial + '}'
-          
