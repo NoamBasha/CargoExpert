@@ -4,6 +4,8 @@ import { Routes, Route } from "react-router-dom";
 import { Login } from "./components/Login";
 import { Projects } from "./components/Projects";
 import { Project } from "./components/Project";
+import { NewProject } from "./components/NewProject";
+import { FileUpload } from "./components/FileUpload";
 
 function App() {
 	return (
@@ -20,6 +22,15 @@ function App() {
 				<Route
 					path="/project"
 					element={<Project />}
+				/>
+				<Route
+					path="/new_project"
+					element={<NewProject />}
+				/>
+
+				<Route
+					path="/file_upload"
+					element={<FileUpload />}
 				/>
 			</Routes>
 		</div>

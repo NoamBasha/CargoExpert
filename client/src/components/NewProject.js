@@ -3,13 +3,10 @@ import { BoxesProvider } from "./BoxesProvider";
 import { FileUpload } from "./FileUpload";
 import { DragAndDrop } from "./DragAndDrop.js";
 
-export const Project = () => {
+export const NewProject = () => {
 	return (
 		<div>
-			<BoxesProvider>
-				<FileUpload></FileUpload>
-				<View></View>
-			</BoxesProvider>
+			<FileUpload></FileUpload>
 		</div>
 	);
 };
