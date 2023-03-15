@@ -133,12 +133,114 @@ export const View = () => {
 		return false;
 	};
 
+	const isBoxesHovering = (boxes) => {
+		const getXs = (box, otherBox, i) => {
+			const boxMin = box.flb.x;
+			const boxMax = box.flb.x + box.size[i];
+			const otherBoxMin = otherBox.flb.x;
+			const otherBoxMax = otherBox.flb.x + otherBox.size[i];
+
+			// Check if boxes are separated along x axis
+			if (boxMax <= otherBoxMin || otherBoxMax <= boxMin) {
+				return 0;
+			}
+
+			console.log(otherBox.order);
+			let min;
+			if (boxMin <= otherBoxMin) {
+				min = otherBoxMin;
+			} else {
+				min = boxMin;
+			}
+
+			let max;
+			if (boxMax >= otherBoxMax) {
+				max = otherBoxMax;
+			} else {
+				max = boxMax;
+			}
+			return max - min;
+		};
+
+		const getZs = (box, otherBox, i) => {
+			const boxMin = box.flb.z;
+			const boxMax = box.flb.z + box.size[i];
+			const otherBoxMin = otherBox.flb.z;
+			const otherBoxMax = otherBox.flb.z + otherBox.size[i];
+
+			// Check if boxes are separated along x axis
+			if (boxMax <= otherBoxMin || otherBoxMax <= boxMin) {
+				return 0;
+			}
+
+			console.log(otherBox.order);
+			let min;
+			if (boxMin <= otherBoxMin) {
+				min = otherBoxMin;
+			} else {
+				min = boxMin;
+			}
+
+			let max;
+			if (boxMax >= otherBoxMax) {
+				max = otherBoxMax;
+			} else {
+				max = boxMax;
+			}
+			return max - min;
+		};
+
+		const getCoverage = (box, otherBox) => {
+			if (box.flb.y !== otherBox.flb.y + otherBox.size[1]) {
+				return 0;
+			}
+
+			let x_intersection = getXs(box, otherBox, 0);
+			let z_intersection = getZs(box, otherBox, 2);
+
+			return x_intersection * z_intersection;
+		};
+
+		const boxes_with_flb = boxes.map((box) => {
+			let flb = {
+				x: box.position[0] - box.size[0] / 2,
+				y: box.position[1] - box.size[1] / 2,
+				z: box.position[2] - box.size[2] / 2,
+			};
+			return { ...box, flb: flb };
+		});
+
+		for (let i = 0; i < boxes_with_flb.length; i++) {
+			const box = boxes_with_flb[i];
+			if (box.flb.y == 0) {
+				continue;
+			}
+			let overall_coverage = 0;
+			const area = box.size[0] * box.size[2];
+			for (let j = 0; j < boxes_with_flb.length; j++) {
+				if (j == i) {
+					continue;
+				}
+				const otherBox = boxes_with_flb[j];
+				let current_coverage = getCoverage(box, otherBox);
+				overall_coverage += current_coverage;
+			}
+			if (overall_coverage != area) {
+				console.log(box.order, area, overall_coverage);
+				return true;
+			}
+		}
+		return false;
+	};
+
 	const validateBoxesLocation = (boxes, container) => {
 		return () => {
 			if (isBoxesOutOfBounds(boxes, container)) {
 				alert("Not all of the boxes are inside the container");
 			} else if (isBoxesOverlapping(boxes, container)) {
 				alert("There are boxes overlapping");
+			} else if (isBoxesHovering(boxes)) {
+				alert("There are boxes hovering");
 			} else {
 				return true;
 			}
