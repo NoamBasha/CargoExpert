@@ -1,10 +1,19 @@
 
 let PythonShellLibrary = require("python-shell");
 let { PythonShell } = PythonShellLibrary;
+let {mongoose} = require("mongoose");
+const bodyParser=require('body-parser');
+
 
 const express = require("express");
 const app = express();
 const cors = require("cors");
+
+// Parses the text as url encoded data
+app.use(bodyParser.urlencoded({extended: true}));
+
+// Parses the text as json
+app.use(bodyParser.json());
 
 app.use(cors());
 app.use(express.json());
@@ -88,6 +97,22 @@ app.get("/noam1302", (req, res) => {
 	});
 });
 
+app.get('user_input_example', function (req, res,) {
+    let filePath = "C:/Users/WIN10/source/repos/final project/code/CSV files/user_input_example.csv"; // Or format the path using the id rest param
+    let fileName = "user_input_example.csv"; // The default name the browser will use
+
+    res.download(filePath, fileName);    
+});
+
 app.listen(1337, () => {
 	console.log("listening on port 1337");
 });
+
+const CONNECTION_URL = 'mongodb+srv://yonipini:Yonipini96@cluster0.jq9nixx.mongodb.net/?retryWrites=true&w=majority';
+const PORT = 5000;
+
+mongoose.connect(CONNECTION_URL, {useNewUrlParser: true, useUnifiedTopology: true})
+	.then(() => console.log("connected  to database"))
+	.catch((error) => console.log("error loggin to db\n" + error.message));
+
+// mongoose.set('useFindAndModify', false);
