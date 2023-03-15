@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useBoxes } from "./BoxesProvider.js";
+import { FileUploadButton } from "./FileUploadButton.js";
+import { DragAndDrop } from "./DragAndDrop.js";
 import Papa from "papaparse";
+import "./FileUpload.css";
 
 export const FileUpload = () => {
+	const [file, setFile] = useState(null);
 	const [fileContainer, setFileContainer] = useState([]);
 	const { setDataFromUser } = useBoxes();
 
@@ -39,24 +43,25 @@ export const FileUpload = () => {
 		setDataFromUser(container_and_boxes);
 	};
 
-	const fileHandler = (event) => {
-		Papa.parse(event.target.files[0], {
+	useEffect(() => {
+		if (file == null) {
+			return;
+		}
+		console.log(file);
+		Papa.parse(file, {
 			header: true,
 			skipEmptyLines: true,
 			complete: function (results) {
 				parseData(results.data);
 			},
 		});
-	};
+	}, [file]);
 
 	return (
-		<div>
-			<input
-				type="file"
-				name="user_input"
-				accept=".csv"
-				onChange={fileHandler}
-			/>
+		<div className="file-upload">
+			<DragAndDrop setFile={setFile}></DragAndDrop>
+			Or
+			<FileUploadButton setFile={setFile}></FileUploadButton>
 		</div>
 	);
 };
