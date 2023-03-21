@@ -1,8 +1,7 @@
-import { View } from "./View.js";
 import { FileUpload } from "./FileUpload";
-import { DragAndDrop } from "./DragAndDrop.js";
-import { Link } from "react-router-dom";
 import { DownloadFile } from "./DownloadFile";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export const NewProject = () => {
 	return (
@@ -10,7 +9,9 @@ export const NewProject = () => {
 			<FileUpload></FileUpload>
 			<DownloadFile></DownloadFile>
 			<br></br>
-			<Link to="/project">Go To Project</Link>
+			<Link to="/edit_container">Continue</Link>
+			<br />
+			<Link to="/projects">Return to projects list</Link>
 		</div>
 	);
 };

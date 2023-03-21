@@ -55,12 +55,12 @@ export const BoxesProvider = ({ children }) => {
 		showCurrentSolution();
 	}, [solutions, solutionId]);
 
-	const setDataFromUser = async (user_boxes) => {
-		//console.log(user_boxes);
+	const setDataFromUser = async (container_and_boxes) => {
+		//console.log(container_and_boxes);
 		const requestOptions = {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(user_boxes),
+			body: JSON.stringify(container_and_boxes),
 		};
 
 		let data = await fetch(
