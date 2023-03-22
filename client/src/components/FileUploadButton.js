@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useBoxes } from "./BoxesProvider.js";
+import { useProject } from "./ProjectProvider.js";
 import Papa from "papaparse";
 
 export const FileUploadButton = ({ setFile }) => {

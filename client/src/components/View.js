@@ -1,6 +1,7 @@
 import { ThreeScene } from "./ThreeScene.js";
 import { useState, createContext } from "react";
-import { useBoxes } from "./BoxesProvider.js";
+import { useProject } from "./ProjectProvider.js";
+import { useUserData } from "./UserDataProvider";
 
 const NextSolutionButton = ({ text, getNextSolution }) => {
 	return <button onClick={() => getNextSolution()}>{text}</button>;
@@ -51,8 +52,14 @@ export const View = () => {
 		resetBoxes,
 		getNextSolution,
 		getPreviousSolution,
-	} = useBoxes();
-	const [container, setContainer] = useState([8, 6, 16]);
+		projectId,
+		container,
+		solutions,
+		solutionId,
+	} = useProject();
+
+	const { updateSolution, getUserData } = useUserData();
+
 	const axisButtons = [
 		{ text: "-x", moveBy: [-1, 0, 0] },
 		{ text: "x+", moveBy: [1, 0, 0] },
@@ -248,6 +255,12 @@ export const View = () => {
 		};
 	};
 
+	const handleSaveSolution = (e) => {
+		e.preventDefault();
+		updateSolution(projectId, solutionId, boxes);
+		console.log("Saving solution");
+	};
+
 	return (
 		<EditContext.Provider value={{ edit }}>
 			<NextSolutionButton
@@ -298,6 +311,10 @@ export const View = () => {
 				setEdit={() => setEdit(false)}
 				validateBoxesLocation={validateBoxesLocation(boxes, container)}
 			/>
+			<br />
+			<button onClick={(e) => handleSaveSolution(e)}>
+				Save Solution
+			</button>
 		</EditContext.Provider>
 	);
 };

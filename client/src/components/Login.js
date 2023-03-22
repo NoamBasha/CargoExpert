@@ -2,27 +2,11 @@ import { Link } from "react-router-dom";
 import { useUserData } from "./UserDataProvider.js";
 
 export const Login = () => {
-	const { email, setEmail, password, setPassword, setProjects } =
+	const { email, setEmail, password, setPassword, setProjects, getUserData } =
 		useUserData();
 
 	const handleLogin = async (e) => {
-		// TODO: remove e.preventDefault()
-		//e.preventDefault();
-		const requestOptions = {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({
-				email: email,
-				password: password,
-			}),
-		};
-		let projects = await fetch(
-			"http://localhost:1337/getUser",
-			requestOptions
-		);
-		projects = await projects.json();
-		console.log(projects);
-		setProjects(projects);
+		getUserData();
 	};
 
 	return (

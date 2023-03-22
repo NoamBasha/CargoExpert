@@ -138,7 +138,7 @@ def algo():
         boxes_in_solution, solution_data = temp
         if boxes_in_solution is not None and solution_data is not None :
             counter_string = f'{counter}'
-            solution_list[counter_string] = {"boxes": boxes_in_solution, "solution_data": solution_data}
+            solution_list[counter_string] = {"id": counter, "boxes": boxes_in_solution, "solution_data": solution_data}
             counter += 1
 
     return solution_list

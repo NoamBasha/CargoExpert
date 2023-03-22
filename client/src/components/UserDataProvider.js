@@ -7,6 +7,24 @@ export const UserDataProvider = ({ children }) => {
 	const [password, setPassword] = useState("");
 	const [projects, setProjects] = useState([]);
 
+	const getUserData = async () => {
+		const requestOptions = {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				email: email,
+				password: password,
+			}),
+		};
+		let projects = await fetch(
+			"http://localhost:1337/getUser",
+			requestOptions
+		);
+		projects = await projects.json();
+		console.log(projects);
+		setProjects(projects);
+	};
+
 	const getSolutionsFromServer = async (container_and_boxes) => {
 		//console.log(container_and_boxes);
 		const requestOptions = {
@@ -60,12 +78,16 @@ export const UserDataProvider = ({ children }) => {
 
 		console.log(project.boxes[0]);
 
+		let current_id = 0;
+		if (projects.length !== 0) {
+			current_id = projects[projects.length - 1].id + 1;
+		}
+
 		let new_projects = [
 			...projects,
 			{
-				id: projects[projects.length - 1].id + 1,
+				id: current_id,
 				container: project.container,
-				boxes: [],
 				boxes: project.boxes,
 				solutions: Object.values(solutions),
 			},
@@ -95,6 +117,30 @@ export const UserDataProvider = ({ children }) => {
 				return current_project;
 			}
 		});
+		setProjects(new_projects);
+		updateProjectsOnServer(new_projects);
+	};
+
+	const updateSolution = (project_id, solution_id, boxes) => {
+		console.log(project_id, solution_id);
+		let new_projects = projects.map((current_project) => {
+			if (current_project.id === project_id) {
+				let new_project = {
+					...current_project,
+					solutions: current_project.solutions.map(
+						(current_solution) =>
+							current_solution.id === solution_id
+								? { ...current_solution, boxes: boxes }
+								: current_solution
+					),
+				};
+				return new_project;
+			} else {
+				return current_project;
+			}
+		});
+		setProjects(new_projects);
+		updateProjectsOnServer(new_projects);
 	};
 
 	return (
@@ -109,6 +155,8 @@ export const UserDataProvider = ({ children }) => {
 				addProject,
 				removeProject,
 				updateProject,
+				updateSolution,
+				getUserData,
 			}}
 		>
 			{children}

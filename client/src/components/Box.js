@@ -3,7 +3,7 @@ import { useHelper } from "@react-three/drei";
 import { BoxHelper } from "three";
 import { Text } from "@react-three/drei";
 import { EditContext } from "./View.js";
-import { useBoxes } from "./BoxesProvider.js";
+import { useProject } from "./ProjectProvider.js";
 
 const BoxText = ({ position, rotation, text }) => {
 	const textColor = "black";
@@ -21,7 +21,7 @@ const BoxText = ({ position, rotation, text }) => {
 };
 
 export const Box = ({ id, size, position, color, text }) => {
-	const { changeBoxById, changeBoxIndices } = useBoxes();
+	const { changeBoxById, changeBoxIndices } = useProject();
 	const { edit } = useContext(EditContext);
 	const [outlineColor, setOutlineColor] = useState("#303030");
 	const [boxColor, setBoxColor] = useState(color);

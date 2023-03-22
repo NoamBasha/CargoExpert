@@ -1,5 +1,5 @@
 import { useState, createContext, useContext, useEffect } from "react";
-
+import { useUserData } from "./UserDataProvider";
 /*
 user: order, type, width, height, length
 react: order, type, size, position, color
@@ -9,14 +9,70 @@ from_algorithm: order, x, y, z, orientation
 from_server: order, type, size, position, color
 */
 
-const BoxesContext = createContext("");
+const ProjectContext = createContext("");
 
-export const BoxesProvider = ({ children }) => {
+export const ProjectProvider = ({ children }) => {
+	const [projectId, setProjectId] = useState(null);
+	const [solutions, setSolutions] = useState(null);
+	const [solution, setSolution] = useState(null);
+	const [solutionId, setSolutionId] = useState(null);
+	const [container, setContainer] = useState(null);
 	const [boxes, setBoxes] = useState([]);
-	const [solutions, setSolutions] = useState({});
-	const [solutionId, setSolutionId] = useState(0);
 	const [previousBoxes, setPreviousBoxes] = useState(boxes);
 	const [boxIndices, setBoxIndices] = useState([]);
+
+	const { projects } = useUserData();
+
+	useEffect(() => {
+		if (projectId !== null) {
+			let index = projects.findIndex(
+				(project) => project.id === projectId
+			);
+			setSolutions(projects[index].solutions);
+			setContainer(projects[index].container);
+			console.log(projects[index].solutions);
+		}
+
+		// return function (projectId = null)?
+	}, [projectId, projects]);
+
+	/*
+	useEffect(() => {
+		if (solutions !== null && solutionId !== null) {
+
+			let index = solutions.findIndex(
+				(solution) => solution.id === solutionId
+			);
+			setSolutions(solutions[index]);
+			console.log(solutions[index]);
+			//setBoxes(solutions[index].boxes);
+		}
+
+		// return function (solutionId = null)?
+	}, [solutionId]);
+	*/
+
+	useEffect(() => {
+		if (
+			solutions !== null &&
+			Object.keys(solutions).length != 0 &&
+			solutionId !== null
+		) {
+			console.log(solutions);
+			let index = solutions.findIndex(
+				(solution) => solution.id === solutionId
+			);
+			setSolutionId(index);
+			let solution = solutions[index];
+			setSolution(solution);
+			let solution_boxes = solution.boxes;
+
+			solution_boxes = solution_boxes.map((box) => {
+				return { ...box, color: stringToColour(box.text) };
+			});
+			setBoxes(solution_boxes);
+		}
+	}, [solutions, solutionId, projects]);
 
 	const getPreviousSolution = () => {
 		let len = Object.keys(solutions).length;
@@ -39,21 +95,6 @@ export const BoxesProvider = ({ children }) => {
 		}
 		return colour;
 	};
-
-	useEffect(() => {
-		const showCurrentSolution = function () {
-			if (Object.keys(solutions).length != 0) {
-				let solution = solutions[solutionId];
-				let solution_boxes = solution.boxes;
-
-				solution_boxes = solution_boxes.map((box) => {
-					return { ...box, color: stringToColour(box.text) };
-				});
-				setBoxes(solution_boxes);
-			}
-		};
-		showCurrentSolution();
-	}, [solutions, solutionId]);
 
 	const setDataFromUser = async (container_and_boxes) => {
 		//console.log(container_and_boxes);
@@ -126,7 +167,7 @@ export const BoxesProvider = ({ children }) => {
 	};
 
 	return (
-		<BoxesContext.Provider
+		<ProjectContext.Provider
 			value={{
 				boxes,
 				boxIndices,
@@ -138,11 +179,17 @@ export const BoxesProvider = ({ children }) => {
 				setDataFromUser,
 				getNextSolution,
 				getPreviousSolution,
+				setProjectId,
+				solutions,
+				setSolutionId,
+				container,
+				solutionId,
+				projectId,
 			}}
 		>
 			{children}
-		</BoxesContext.Provider>
+		</ProjectContext.Provider>
 	);
 };
 
-export const useBoxes = () => useContext(BoxesContext);
+export const useProject = () => useContext(ProjectContext);
