@@ -59,8 +59,7 @@ function parse_response_from_algo(result) {
 	return result_json;
 }
 
-// TO DO: change this api name to "/getSolutions"
-app.post("/noam1502", (req, res) => {
+app.post("/getSolutions", (req, res) => {
 	console.log(req.body);
 	//res.sendFile(path.join(__dirname, 'uploadFile.html'));
 	options = {
@@ -116,20 +115,7 @@ mongoose
 	.catch((err) => console.log(err));
 
 
-// למשוך את כל הנתונים  על  כל הפרוייקטים של המשתמש בהינתן מייל וסיסמה
-app.post("/getUser", (req, res) => {
-  sha = crypto.createHash('sha256');
-	User.findOne({ email: req.body.email, password: sha.update(req.body.password).digest('hex') }, (err, data) => {
-		if (err) res.send(err);
-		else {
-      if (data)
-        res.send(data)
-      else
-        res.send('cannot find user data');
-    };
-	});
-});
-
+// register user
 app.post("/register", async (req, res) => {
   sha = crypto.createHash('sha256');
   try{
@@ -144,7 +130,7 @@ app.post("/register", async (req, res) => {
   }
 });
 
-
+// login user
 app.post("/login", (req, res) => {
   sha = crypto.createHash('sha256');
 	User.findOne({ email: req.body.email, password: sha.update(req.body.password).digest('hex') },
@@ -152,14 +138,12 @@ app.post("/login", (req, res) => {
 		if (err) res.send(err);
 		else {
       if (data)
-        res.send(data)
+        res.send(data.projects)
       else
         res.send('cannot find user data');
     };
 	});
 });
-
-
 
 app.post("/deleteUser", (req, res) => {
   sha = crypto.createHash('sha256');
@@ -196,34 +180,32 @@ app.post("/createUser", (req, res) => {
 
 // בהינתן מייל וסיסמה ופרוייקטים לעדכן את הפרוייקטים
 app.post("/updateProjects", (req, res) => {
-	const bodySize = Buffer.byteLength(JSON.stringify(req.body));
-	console.log(`Request body size: ${bodySize} bytes`);
-
-	let uEmail = req.body.email;
-	let uPassword = req.body.password;
-	let updatedProjects = req.body.newProjects;
-	User.findOne({ email: uEmail, password: uPassword }, (err, data) => {
+	// const bodySize = Buffer.byteLength(JSON.stringify(req.body));
+	// console.log(`Request body size: ${bodySize} bytes`);
+  sha = crypto.createHash('sha256');
+	User.findOne({ email: req.body.email, password: sha.update(req.body.password).digest('hex') }, (err, data) => {
 		if (err) res.send(err);
 		else {
-			data.projects = updatedProjects;
-			data.populate({
-				path: "projects",
-				populate: {
-					path: "boxes",
-					model: "Box",
-					path: "solutions",
-					populate: {
-						path: "boxes",
-						model: "Box",
-					},
-				},
-			});
-
-			data.save((err, data) => {
-				if (err) res.send(err);
-				else res.sendStatus(200);
-			});
-			console.log("updated projects successfully!!");
+			if (data) {
+        data.projects = req.body.newProjects;
+        data.populate({
+          path: "projects",
+          populate: {
+            path: "boxes",
+            model: "Box",
+            path: "solutions",
+            populate: {
+              path: "boxes",
+              model: "Box",
+            },
+          },
+        });
+        data.save();
+	  		console.log("updated projects successfully!!");
+        res.sendStatus(200);
+      }
+      else
+        res.send('cannot find user data');
 		}
 	});
 });
