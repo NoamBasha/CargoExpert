@@ -59,7 +59,7 @@ function parse_response_from_algo(result) {
 	return result_json;
 }
 
-app.post("/getSolutions", (req, res) => {
+app.post("/get_solutions", (req, res) => {
 	console.log(req.body);
 	//res.sendFile(path.join(__dirname, 'uploadFile.html'));
 	options = {
@@ -145,36 +145,12 @@ app.post("/login", (req, res) => {
 	});
 });
 
-app.post("/deleteUser", (req, res) => {
+
+app.post("/delete_user", (req, res) => {
   sha = crypto.createHash('sha256');
   User.deleteOne({ email: req.body.email, password: sha.update(req.body.password).digest('hex') }, (err, data) => {
 		if (err) res.send(err);
 		else res.send(data);
-	});
-});
-
-// להכניס משתמש חדש - נותן פרטים עבור משתמש חדש
-app.post("/createUser", (req, res) => {
-	let userData = req.body;
-	let user = new User(userData);
-
-	user.populate({
-		path: "projects",
-		populate: {
-			path: "boxes",
-			model: "Box",
-			path: "solutions",
-			populate: {
-				path: "boxes",
-				model: "Box",
-			},
-		},
-	});
-
-	console.log(user);
-	user.save((err, data) => {
-		if (err) res.send(err);
-		else res.sendStatus(200);
 	});
 });
 
@@ -211,34 +187,34 @@ app.post("/updateProjects", (req, res) => {
 });
 
 // בהינתן מייל וסיסמה ומזהה של פרוייקט ופרוייקט לעדכן את הפרוייקט
-app.post("/updateProject", (req, res) => {
-	User.findOneAndUpdate(
-		{ email: req.body.email, password: req.body.password },
-		{ $pull: { projects: { id: req.body.projectID } } },
-		(err, data) => {
-			if (err) res.send(err);
-			else {
-				data.save((err, data) => {
-					if (err) res.send(err);
-					else res.send(data);
-				});
-			}
-		}
-	);
+// app.post("/updateProject", (req, res) => {
+// 	User.findOneAndUpdate(
+// 		{ email: req.body.email, password: req.body.password },
+// 		{ $pull: { projects: { id: req.body.projectID } } },
+// 		(err, data) => {
+// 			if (err) res.send(err);
+// 			else {
+// 				data.save((err, data) => {
+// 					if (err) res.send(err);
+// 					else res.send(data);
+// 				});
+// 			}
+// 		}
+// 	);
 
-});
+// });
 
 // בהינתן מייל וססיהמ ומזהה של פרוייקט  ומזהה של פתרון ופתרון רוצה לעדכן את הפתרון
-app.post("/updateSolution", (req, res) => {
-	User.findOne({ email: req.body.email, password: req.body.password }, (err, data) => {
-		if (err) res.send(err);
-		else {
-			data.projects.update({ id: req.body.projectID }, { $set: req.body.newProject });
-			data.save((err, data) => {
-				if (err) res.send(err);
-				else res.send(data);
-			});
-			console.log("updated project " + req.body.projectID + " successfully!!");
-		}
-	});
-});
+// app.post("/updateSolution", (req, res) => {
+// 	User.findOne({ email: req.body.email, password: req.body.password }, (err, data) => {
+// 		if (err) res.send(err);
+// 		else {
+// 			data.projects.update({ id: req.body.projectID }, { $set: req.body.newProject });
+// 			data.save((err, data) => {
+// 				if (err) res.send(err);
+// 				else res.send(data);
+// 			});
+// 			console.log("updated project " + req.body.projectID + " successfully!!");
+// 		}
+// 	});
+// });
