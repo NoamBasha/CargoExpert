@@ -105,7 +105,7 @@ export const ProjectProvider = ({ children }) => {
 		};
 
 		let data = await fetch(
-			"http://localhost:1337/noam1502",
+			"http://localhost:1337/get_solutions",
 			requestOptions
 		);
 
