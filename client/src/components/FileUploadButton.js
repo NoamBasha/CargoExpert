@@ -1,7 +1,3 @@
-import { useState } from "react";
-import { useProject } from "./ProjectProvider.js";
-import Papa from "papaparse";
-
 export const FileUploadButton = ({ setFile }) => {
 	const fileHandler = (event) => {
 		let uploaded_files = event.target.files;

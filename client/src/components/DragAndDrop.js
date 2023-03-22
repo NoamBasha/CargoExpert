@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export const DragAndDrop = ({ setFile }) => {
 	const handleDragOver = (event) => {
 		event.preventDefault();
@@ -9,7 +7,7 @@ export const DragAndDrop = ({ setFile }) => {
 		event.preventDefault();
 		let uploaded_files = event.dataTransfer.files;
 		if (uploaded_files.length != 1) {
-			alert("Uploaded a single file");
+			alert("Upload a single file");
 			return;
 		}
 		setFile(uploaded_files[0]);
