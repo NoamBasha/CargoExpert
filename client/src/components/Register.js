@@ -42,7 +42,7 @@ export const Register = () => {
 				<br />
 
 				<Link
-					to="/login"
+					to="/"
 					onClick={handleRegister}
 				>
 					<button>Register</button>
