@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-//import { useProject } from "./ProjectProvider.js";
 import { FileUploadButton } from "./FileUploadButton.js";
 import { DragAndDrop } from "./DragAndDrop.js";
 import Papa from "papaparse";
@@ -9,7 +8,6 @@ import { useFileData } from "./FileDataProvider";
 export const FileUpload = () => {
 	const [file, setFile] = useState(null);
 	const { setContainer, setBoxes } = useFileData();
-	//const { setDataFromUser } = useProject();
 
 	const parseData = (data) => {
 		let numeric_data = [];
@@ -39,11 +37,6 @@ export const FileUpload = () => {
 
 		setContainer(container_data);
 		setBoxes(boxes);
-		let container_and_boxes = {
-			container: container_data,
-			boxes: boxes,
-		};
-		//setDataFromUser(container_and_boxes);
 	};
 
 	useEffect(() => {

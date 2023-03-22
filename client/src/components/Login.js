@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useUserData } from "./UserDataProvider.js";
 
 export const Login = () => {
-	const { email, setEmail, password, setPassword, setProjects, getUserData } =
+	const { email, setEmail, password, setPassword, getUserData } =
 		useUserData();
 
 	const handleLogin = async (e) => {
@@ -36,6 +36,9 @@ export const Login = () => {
 					<button>Login</button>
 				</Link>
 			</form>
+			<Link to="/register">
+				<button>To Register</button>
+			</Link>
 		</div>
 	);
 };

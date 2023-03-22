@@ -6,6 +6,7 @@ export const UserDataProvider = ({ children }) => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [projects, setProjects] = useState([]);
+	//const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 	const getUserData = async () => {
 		const requestOptions = {
@@ -21,6 +22,7 @@ export const UserDataProvider = ({ children }) => {
 			requestOptions
 		);
 		projects = await projects.json();
+		//setIsLoggedIn(true);
 		console.log(projects);
 		setProjects(projects);
 	};
