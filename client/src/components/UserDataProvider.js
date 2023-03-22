@@ -18,7 +18,7 @@ export const UserDataProvider = ({ children }) => {
 			}),
 		};
 		let projects = await fetch(
-			"http://localhost:1337/getUser",
+			"http://localhost:1337/login",
 			requestOptions
 		);
 		projects = await projects.json();
@@ -36,7 +36,7 @@ export const UserDataProvider = ({ children }) => {
 		};
 
 		let data = await fetch(
-			"http://localhost:1337/noam1502",
+			"http://localhost:1337/get_solutions",
 			requestOptions
 		);
 
