@@ -54,7 +54,7 @@ export const Login = () => {
 			<br />
 			<Button
 				variant="outlined"
-				onClick={() => navigate("/projects")}
+				onClick={() => navigate("/register")}
 			>
 				Register
 			</Button>

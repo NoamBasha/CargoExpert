@@ -5,12 +5,25 @@ import { Container } from "./Container.js";
 import { useContext } from "react";
 import { EditContext } from "./View.js";
 import { useProject } from "./ProjectProvider.js";
+import { useRef } from "react";
 
 export const ThreeScene = ({ container }) => {
 	const { edit } = useContext(EditContext);
 	const { boxes } = useProject();
+	const axesHelper = useRef(null);
 
 	const camera_position = container.map((n) => n * 2);
+
+	// Set the size of each axis of the AxesHelper manually
+	if (axesHelper.current) {
+		let axes_addition = Math.min(...container);
+
+		axesHelper.current.scale.set(
+			container[0] + axes_addition,
+			container[1] + axes_addition,
+			container[2] + axes_addition
+		);
+	}
 
 	/*
 		Canvas - sets up a scene and a camera + renders the scene every frame.
@@ -45,7 +58,7 @@ export const ThreeScene = ({ container }) => {
 					);
 				})}
 				<OrbitControls />
-				{edit ? <axesHelper args={[15]} /> : null}
+				{edit ? <axesHelper ref={axesHelper} /> : null}
 			</Canvas>
 		</div>
 	);
