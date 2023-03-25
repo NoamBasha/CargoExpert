@@ -6,7 +6,7 @@ export const DragAndDrop = ({ setFile }) => {
 	const handleDrop = (event) => {
 		event.preventDefault();
 		let uploaded_files = event.dataTransfer.files;
-		if (uploaded_files.length != 1) {
+		if (uploaded_files.length !== 1) {
 			alert("Upload a single file");
 			return;
 		}

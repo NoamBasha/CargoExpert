@@ -1,7 +1,7 @@
 export const FileUploadButton = ({ setFile }) => {
 	const fileHandler = (event) => {
 		let uploaded_files = event.target.files;
-		if (uploaded_files.length != 1) {
+		if (uploaded_files.length !== 1) {
 			alert("Upload a single file");
 			return;
 		}

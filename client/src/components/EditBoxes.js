@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { useFileData } from "./FileDataProvider";
-import { Link } from "react-router-dom";
 import { BoxesTable } from "./BoxesTable.js";
 import { BoxForm } from "./BoxForm";
 import { useUserData } from "./UserDataProvider";
+import { useNavigate } from "react-router-dom";
 
 export const EditBoxes = () => {
 	const { boxes, setBoxes, container } = useFileData();
 	const [boxId, setBoxId] = useState(0);
 	const { addProject } = useUserData();
+	const navigate = useNavigate();
 
 	const editBoxById = (id) => {
 		return (newBox) => {
@@ -25,6 +26,7 @@ export const EditBoxes = () => {
 			boxes: boxes,
 			solutions: [],
 		});
+		navigate("/projects");
 	};
 
 	return (
@@ -43,12 +45,7 @@ export const EditBoxes = () => {
 
 			<br />
 
-			<Link
-				to="/projects"
-				onClick={handleAddProject}
-			>
-				<button>Create Project!</button>
-			</Link>
+			<button onClick={handleAddProject}>Create Project!</button>
 		</div>
 	);
 };

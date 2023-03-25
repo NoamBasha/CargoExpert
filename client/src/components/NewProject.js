@@ -1,17 +1,22 @@
 import { FileUpload } from "./FileUpload";
 import { DownloadFile } from "./DownloadFile";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const NewProject = () => {
+	const navigate = useNavigate();
+
 	return (
 		<div>
 			<FileUpload></FileUpload>
 			<DownloadFile></DownloadFile>
 			<br></br>
-			<Link to="/edit_container">Continue</Link>
+			<button onClick={() => navigate("/edit_container")}>
+				Continue
+			</button>
 			<br />
-			<Link to="/projects">Return to projects list</Link>
+			<button onClick={() => navigate("/projects")}>
+				Return to projects list
+			</button>
 		</div>
 	);
 };

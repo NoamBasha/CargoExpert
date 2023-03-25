@@ -1,9 +1,10 @@
-import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const Register = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const navigate = useNavigate();
 
 	const handleRegister = async (e) => {
 		const requestOptions = {
@@ -19,6 +20,7 @@ export const Register = () => {
 			requestOptions
 		);
 		console.log(data);
+		navigate("/");
 	};
 
 	return (
@@ -41,12 +43,7 @@ export const Register = () => {
 				/>
 				<br />
 
-				<Link
-					to="/"
-					onClick={handleRegister}
-				>
-					<button>Register</button>
-				</Link>
+				<button onClick={handleRegister}>Register</button>
 			</form>
 		</div>
 	);

@@ -7,9 +7,11 @@ const NextSolutionButton = ({ text, getNextSolution }) => {
 	return <button onClick={() => getNextSolution()}>{text}</button>;
 };
 
+/*
 const PreviousSolutionButton = ({ text, getPreviousSolution }) => {
 	return <button onClick={() => getPreviousSolution()}>{text}</button>;
 };
+*/
 
 const ResetButton = ({ text, resetBoxes }) => {
 	return <button onClick={() => resetBoxes()}>{text}</button>;
@@ -54,11 +56,10 @@ export const View = () => {
 		getPreviousSolution,
 		projectId,
 		container,
-		solutions,
 		solutionId,
 	} = useProject();
 
-	const { updateSolution, getUserData } = useUserData();
+	const { updateSolution } = useUserData();
 
 	const axisButtons = [
 		{ text: "-x", moveBy: [-1, 0, 0] },
@@ -219,20 +220,20 @@ export const View = () => {
 
 		for (let i = 0; i < boxes_with_flb.length; i++) {
 			const box = boxes_with_flb[i];
-			if (box.flb.y == 0) {
+			if (box.flb.y === 0) {
 				continue;
 			}
 			let overall_coverage = 0;
 			const area = box.size[0] * box.size[2];
 			for (let j = 0; j < boxes_with_flb.length; j++) {
-				if (j == i) {
+				if (j === i) {
 					continue;
 				}
 				const otherBox = boxes_with_flb[j];
 				let current_coverage = getCoverage(box, otherBox);
 				overall_coverage += current_coverage;
 			}
-			if (overall_coverage != area) {
+			if (overall_coverage !== area) {
 				console.log(box.order, area, overall_coverage);
 				return true;
 			}

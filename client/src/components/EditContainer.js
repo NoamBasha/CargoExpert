@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useFileData } from "./FileDataProvider";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const EditContainer = () => {
 	const { container, setContainer } = useFileData();
@@ -10,12 +10,16 @@ export const EditContainer = () => {
 	const [formHeight, setFormHeight] = useState(height);
 	const [formLength, setFormLength] = useState(length);
 
+	const navigate = useNavigate();
+
 	const handleEditContainer = (event) => {
 		setContainer([
 			parseInt(formWidth),
 			parseInt(formHeight),
 			parseInt(formLength),
 		]);
+
+		navigate("/edit_boxes");
 	};
 
 	return (
@@ -51,12 +55,8 @@ export const EditContainer = () => {
 					}}
 				/>
 				<br />
-				<Link
-					to="/edit_boxes"
-					onClick={handleEditContainer}
-				>
-					<button>Continue</button>
-				</Link>
+
+				<button onClick={handleEditContainer}>Continue</button>
 			</form>
 		</div>
 	);

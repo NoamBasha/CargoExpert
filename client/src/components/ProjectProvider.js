@@ -55,7 +55,7 @@ export const ProjectProvider = ({ children }) => {
 	useEffect(() => {
 		if (
 			solutions !== null &&
-			Object.keys(solutions).length != 0 &&
+			Object.keys(solutions).length !== 0 &&
 			solutionId !== null
 		) {
 			console.log(solutions);
