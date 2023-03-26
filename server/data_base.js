@@ -32,9 +32,13 @@ const ProjectSchema = new mongoose.Schema({
 
 const UserSchema = new mongoose.Schema({
 	email: { type: String, required: false , unique: true },
-	password: { type: String, required: false },
+	password: { type: String, validate: [notEmpty, 'Password is required.'], required: false },
 	projects: { type: [ProjectSchema], required: false },
 });
+
+function notEmpty(val) {
+	return val.trim().length > 0;
+}
 
 const User = mongoose.model("User", UserSchema);
 const Project = mongoose.model("Project", ProjectSchema);

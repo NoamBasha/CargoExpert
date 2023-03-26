@@ -69,15 +69,17 @@ app.get("/userInputExample", function (req, res) {
 app.post("/createUser", async (req, res) => {
   sha = crypto.createHash('sha256');
   try{
-    let newUser = await User.create({
+    await User.create({
       email: req.body.email,
       password: sha.update(req.body.password).digest('hex')
     })
-    newUser.save();
     res.sendStatus(200);
-  } catch (err) {
-      res.sendStatus(400).json({error:err.message});
-  }
+	} catch (err) {
+		if (err.message.includes('duplicate key error collection'))
+			res.status(400).json({error:'The email you provided already exists. Please try again.'});
+		else
+			res.status(400).json({error:err.message});
+	}
 });
 
 // read User
@@ -85,13 +87,13 @@ app.post("/readUser", (req, res) => {
   sha = crypto.createHash('sha256');
 	User.findOne({ email: req.body.email, password: sha.update(req.body.password).digest('hex') },
               (err, data) => {
-		if (err) res.sendStatus(400).json({error: err.message});
+		if (err) res.status(400).json({error: err.message});
 		else {
 			if (data)
-				res.sendStatus(200).json(data.projects);
+				res.status(200).json(data.projects);
 			else
-				res.sendStatus(400).json({error: 'Invalid login credentials. Please try again.'});
-    };
+				res.status(400).json({error: 'Invalid login credentials. Please try again.'});
+   		};
 	});
 });
 
@@ -131,7 +133,7 @@ app.post("/updateUser", (req, res) => {
 				res.sendStatus(200);
       		}
 			else
-				res.sendStatus(400).json({error: 'Invalid user'});
+				res.status(400).json({error: 'Invalid user'});
 		}
 	});
 });
