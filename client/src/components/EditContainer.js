@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useFileData } from "./FileDataProvider";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Button, TextField } from "@mui/material";
 
 export const EditContainer = () => {
 	const { container, setContainer } = useFileData();
@@ -10,19 +11,23 @@ export const EditContainer = () => {
 	const [formHeight, setFormHeight] = useState(height);
 	const [formLength, setFormLength] = useState(length);
 
+	const navigate = useNavigate();
+
 	const handleEditContainer = (event) => {
 		setContainer([
 			parseInt(formWidth),
 			parseInt(formHeight),
 			parseInt(formLength),
 		]);
+
+		navigate("/edit_boxes");
 	};
 
 	return (
 		<div>
 			<form>
 				<label>Width</label>
-				<input
+				<TextField
 					type="number"
 					id="width"
 					value={formWidth}
@@ -32,7 +37,7 @@ export const EditContainer = () => {
 				/>
 				<br />
 				<label>Height</label>
-				<input
+				<TextField
 					type="number"
 					id="height"
 					value={formHeight}
@@ -42,7 +47,7 @@ export const EditContainer = () => {
 				/>
 				<br />
 				<label>Length</label>
-				<input
+				<TextField
 					type="number"
 					id="length"
 					value={formLength}
@@ -51,12 +56,8 @@ export const EditContainer = () => {
 					}}
 				/>
 				<br />
-				<Link
-					to="/edit_boxes"
-					onClick={handleEditContainer}
-				>
-					<button>Continue</button>
-				</Link>
+
+				<Button onClick={handleEditContainer}>Continue</Button>
 			</form>
 		</div>
 	);

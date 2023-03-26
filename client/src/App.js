@@ -2,7 +2,6 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { Login } from "./components/Login";
 import { Register } from "./components/Register";
-
 import { Projects } from "./components/Projects";
 import { Solutions } from "./components/Solutions";
 import { Project } from "./components/Project";
@@ -14,6 +13,7 @@ import { EditContainer } from "./components/EditContainer";
 import { EditBoxes } from "./components/EditBoxes";
 import { FileDataProvider } from "./components/FileDataProvider";
 import { View } from "./components/View";
+import { Header } from "./components/Header";
 
 function App() {
 	return (
@@ -21,6 +21,7 @@ function App() {
 			<UserDataProvider>
 				<FileDataProvider>
 					<ProjectProvider>
+						<Header />
 						<Routes>
 							<Route
 								path="/"
@@ -62,7 +63,6 @@ function App() {
 								path="/edit_boxes"
 								element={<EditBoxes />}
 							/>
-
 							<Route
 								path="/file_upload"
 								element={<FileUpload />}

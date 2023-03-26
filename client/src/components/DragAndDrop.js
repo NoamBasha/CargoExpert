@@ -1,4 +1,4 @@
-export const DragAndDrop = ({ setFile }) => {
+export const DragAndDrop = ({ setFile, children }) => {
 	const handleDragOver = (event) => {
 		event.preventDefault();
 	};
@@ -6,7 +6,7 @@ export const DragAndDrop = ({ setFile }) => {
 	const handleDrop = (event) => {
 		event.preventDefault();
 		let uploaded_files = event.dataTransfer.files;
-		if (uploaded_files.length != 1) {
+		if (uploaded_files.length !== 1) {
 			alert("Upload a single file");
 			return;
 		}
@@ -19,6 +19,7 @@ export const DragAndDrop = ({ setFile }) => {
 			onDrop={handleDrop}
 		>
 			<h1>Drag and Drop Your File here</h1>
+			{children}
 		</div>
 	);
 };

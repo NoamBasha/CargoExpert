@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export const BoxesTable = ({ boxes, setBoxId }) => {
 	const handleClick = (index) => {
 		console.log(index);

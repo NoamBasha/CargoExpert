@@ -1,0 +1,10 @@
+.register {
+	background: rgb(237, 228, 224);
+	/* vh = height */
+	min-height: 100vh;
+	text-align: center;
+}
+
+.form-register {
+	width: 300px;
+}

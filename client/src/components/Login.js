@@ -1,44 +1,85 @@
-import { Link } from "react-router-dom";
 import { useUserData } from "./UserDataProvider.js";
+import "./Login.css";
+import { Button, TextField, Alert, CircularProgress } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export const Login = () => {
-	const { email, setEmail, password, setPassword, getUserData } =
-		useUserData();
+	const navigate = useNavigate();
+	const {
+		email,
+		setEmail,
+		password,
+		setPassword,
+		getUserData,
+		isLoading,
+		error,
+	} = useUserData();
 
 	const handleLogin = async (e) => {
-		getUserData();
+		let res = await getUserData();
+		if (res) {
+			navigate("/projects");
+		}
 	};
 
 	return (
-		<div>
-			<form>
-				<input
+		<div className="login">
+			<h1 className="m-0 p-5 display-1">Cargo Expert</h1>
+			<form className="form-login w-20 mx-auto">
+				<TextField
+					className="my-3"
+					id="email"
+					label="Email"
+					variant="outlined"
 					value={email}
 					type="text"
 					placeholder="Email..."
 					required
 					onChange={(e) => setEmail(e.target.value)}
+					fullWidth
 				/>
 				<br />
-				<input
+				<TextField
+					className="my-3"
+					id="password"
+					label="Password"
+					variant="outlined"
 					value={password}
 					type="password"
 					placeholder="Password..."
 					required
 					onChange={(e) => setPassword(e.target.value)}
+					fullWidth
 				/>
-				<br />
-
-				<Link
-					to="/projects"
-					onClick={handleLogin}
-				>
-					<button>Login</button>
-				</Link>
+				{error && (
+					<Alert
+						severity="error"
+						className="mt-3"
+					>
+						{error}
+					</Alert>
+				)}
+				{isLoading ? (
+					<CircularProgress />
+				) : (
+					<Button
+						variant="outlined"
+						onClick={handleLogin}
+					>
+						Login
+					</Button>
+				)}
 			</form>
-			<Link to="/register">
-				<button>To Register</button>
-			</Link>
+			<br />
+			{isLoading ? null : (
+				<Button
+					variant="outlined"
+					onClick={() => navigate("/register")}
+				>
+					Register
+				</Button>
+			)}
 		</div>
 	);
 };

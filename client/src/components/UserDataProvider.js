@@ -1,14 +1,54 @@
 import { useState, createContext, useContext } from "react";
+import { useApi } from "./useApi";
 
 const UserDataContext = createContext("");
 
 export const UserDataProvider = ({ children }) => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+
 	const [projects, setProjects] = useState([]);
-	//const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState(null);
+	const [data, setData] = useState([]);
+
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+	const { createUser, readUser, updateUser, deleteUser, getSolutions } =
+		useApi({ setData, setIsLoading, setError });
+
+	const addUser = async ({ email, password }) => {
+		setError("");
+		setIsLoading(true);
+		try {
+			const requestOptions = {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					email: email,
+					password: password,
+				}),
+			};
+			let data = await fetch(
+				"http://localhost:1337/register",
+				requestOptions
+			);
+			console.log(data);
+			return true;
+		} catch (error) {
+			setError(
+				"The email you provided already exists. Please try again."
+			);
+			return false;
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
 	const getUserData = async () => {
+		setError("");
+		setIsLoading(true);
 		const requestOptions = {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
@@ -17,14 +57,24 @@ export const UserDataProvider = ({ children }) => {
 				password: password,
 			}),
 		};
-		let projects = await fetch(
-			"http://localhost:1337/login",
-			requestOptions
-		);
-		projects = await projects.json();
-		//setIsLoggedIn(true);
-		console.log(projects);
-		setProjects(projects);
+		try {
+			let projects = await fetch(
+				"http://localhost:1337/login",
+				requestOptions
+			);
+			projects = await projects.json();
+			//setIsLoggedIn(true);
+			console.log(projects);
+			setProjects(projects);
+			setIsLoggedIn(true);
+
+			return true;
+		} catch (error) {
+			setError("Invalid login credentials. Please try again.");
+			return false;
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	const getSolutionsFromServer = async (container_and_boxes) => {
@@ -159,6 +209,11 @@ export const UserDataProvider = ({ children }) => {
 				updateProject,
 				updateSolution,
 				getUserData,
+				isLoading,
+				error,
+				addUser,
+				isLoggedIn,
+				setIsLoggedIn,
 			}}
 		>
 			{children}

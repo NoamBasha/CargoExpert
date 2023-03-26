@@ -55,9 +55,11 @@ export const FileUpload = () => {
 
 	return (
 		<div className="file-upload">
-			<DragAndDrop setFile={setFile}></DragAndDrop>
-			Or
-			<FileUploadButton setFile={setFile}></FileUploadButton>
+			<DragAndDrop setFile={setFile}>
+				Or
+				<FileUploadButton setFile={setFile}></FileUploadButton>
+				<br />
+			</DragAndDrop>
 		</div>
 	);
 };

@@ -2,34 +2,37 @@ import { ThreeScene } from "./ThreeScene.js";
 import { useState, createContext } from "react";
 import { useProject } from "./ProjectProvider.js";
 import { useUserData } from "./UserDataProvider";
+import { Button } from "@mui/material";
 
 const NextSolutionButton = ({ text, getNextSolution }) => {
-	return <button onClick={() => getNextSolution()}>{text}</button>;
+	return <Button onClick={() => getNextSolution()}>{text}</Button>;
 };
 
+/*
 const PreviousSolutionButton = ({ text, getPreviousSolution }) => {
-	return <button onClick={() => getPreviousSolution()}>{text}</button>;
+	return <Button onClick={() => getPreviousSolution()}>{text}</Button>;
 };
+*/
 
 const ResetButton = ({ text, resetBoxes }) => {
-	return <button onClick={() => resetBoxes()}>{text}</button>;
+	return <Button onClick={() => resetBoxes()}>{text}</Button>;
 };
 
 const AxisButton = ({ text, moveBy, moveBox }) => {
-	return <button onClick={() => moveBox(moveBy)}>{text}</button>;
+	return <Button onClick={() => moveBox(moveBy)}>{text}</Button>;
 };
 
 const RotationButton = ({ text, axis, rotateBox }) => {
-	return <button onClick={() => rotateBox(axis)}>{text}</button>;
+	return <Button onClick={() => rotateBox(axis)}>{text}</Button>;
 };
 
 const EditButton = ({ setEdit }) => {
-	return <button onClick={() => setEdit()}>Edit</button>;
+	return <Button onClick={() => setEdit()}>Edit</Button>;
 };
 
 const ViewButton = ({ setEdit, validateBoxesLocation }) => {
 	return (
-		<button
+		<Button
 			onClick={() => {
 				if (validateBoxesLocation()) {
 					setEdit();
@@ -37,7 +40,7 @@ const ViewButton = ({ setEdit, validateBoxesLocation }) => {
 			}}
 		>
 			View
-		</button>
+		</Button>
 	);
 };
 
@@ -54,11 +57,10 @@ export const View = () => {
 		getPreviousSolution,
 		projectId,
 		container,
-		solutions,
 		solutionId,
 	} = useProject();
 
-	const { updateSolution, getUserData } = useUserData();
+	const { updateSolution } = useUserData();
 
 	const axisButtons = [
 		{ text: "-x", moveBy: [-1, 0, 0] },
@@ -219,20 +221,20 @@ export const View = () => {
 
 		for (let i = 0; i < boxes_with_flb.length; i++) {
 			const box = boxes_with_flb[i];
-			if (box.flb.y == 0) {
+			if (box.flb.y === 0) {
 				continue;
 			}
 			let overall_coverage = 0;
 			const area = box.size[0] * box.size[2];
 			for (let j = 0; j < boxes_with_flb.length; j++) {
-				if (j == i) {
+				if (j === i) {
 					continue;
 				}
 				const otherBox = boxes_with_flb[j];
 				let current_coverage = getCoverage(box, otherBox);
 				overall_coverage += current_coverage;
 			}
-			if (overall_coverage != area) {
+			if (overall_coverage !== area) {
 				console.log(box.order, area, overall_coverage);
 				return true;
 			}
@@ -312,9 +314,9 @@ export const View = () => {
 				validateBoxesLocation={validateBoxesLocation(boxes, container)}
 			/>
 			<br />
-			<button onClick={(e) => handleSaveSolution(e)}>
+			<Button onClick={(e) => handleSaveSolution(e)}>
 				Save Solution
-			</button>
+			</Button>
 		</EditContext.Provider>
 	);
 };
