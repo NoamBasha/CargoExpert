@@ -69,18 +69,17 @@ app.get("/userInputExample", function (req, res) {
 app.post("/createUser", async (req, res) => {
   sha = crypto.createHash('sha256');
   try{
-	if (!re.body.password)
-		throw 'password cannot be empty!!!';
-    let newUser = await User.create({
+    await User.create({
       email: req.body.email,
       password: sha.update(req.body.password).digest('hex')
     })
-    newUser.save();
-    res.status(200);
-  } catch (err) {
-
-      res.status(400).json({error:err.message});
-  }
+    res.sendStatus(200);
+	} catch (err) {
+		if (err.message.includes('duplicate key error collection'))
+			res.status(400).json({error:'The email you provided already exists. Please try again.'});
+		else
+			res.status(400).json({error:err.message});
+	}
 });
 
 // read User
