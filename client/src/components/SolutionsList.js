@@ -1,5 +1,6 @@
 import { useProject } from "./ProjectProvider.js";
 import { useNavigate } from "react-router-dom";
+import { List, ListItem, ListItemText, Button } from "@mui/material";
 
 export const SolutionsList = () => {
 	const { solutions, setSolutionId } = useProject();
@@ -16,17 +17,17 @@ export const SolutionsList = () => {
 
 	return (
 		<div>
-			<ol>
+			<List>
 				{solutions.map((solution, index) => {
 					return (
-						<li key={index}>
-							<button onClick={() => handleClick(solution.id)}>
+						<ListItem key={index}>
+							<Button onClick={() => handleClick(solution.id)}>
 								Solution {index + 1}
-							</button>
-						</li>
+							</Button>
+						</ListItem>
 					);
 				})}
-			</ol>
+			</List>
 		</div>
 	);
 };

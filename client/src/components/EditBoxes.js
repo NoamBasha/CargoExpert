@@ -4,6 +4,7 @@ import { BoxesTable } from "./BoxesTable.js";
 import { BoxForm } from "./BoxForm";
 import { useUserData } from "./UserDataProvider";
 import { useNavigate } from "react-router-dom";
+import { Button, TextField } from "@mui/material";
 
 export const EditBoxes = () => {
 	const { boxes, setBoxes, container } = useFileData();
@@ -45,7 +46,7 @@ export const EditBoxes = () => {
 
 			<br />
 
-			<button onClick={handleAddProject}>Create Project!</button>
+			<Button onClick={handleAddProject}>Create Project!</Button>
 		</div>
 	);
 };

@@ -1,4 +1,4 @@
-export const DragAndDrop = ({ setFile }) => {
+export const DragAndDrop = ({ setFile, children }) => {
 	const handleDragOver = (event) => {
 		event.preventDefault();
 	};
@@ -19,6 +19,7 @@ export const DragAndDrop = ({ setFile }) => {
 			onDrop={handleDrop}
 		>
 			<h1>Drag and Drop Your File here</h1>
+			{children}
 		</div>
 	);
 };

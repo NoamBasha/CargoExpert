@@ -1,5 +1,6 @@
 import { ProjectsList } from "./ProjectsList.js";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
 
 export const Projects = () => {
 	const navigate = useNavigate();
@@ -8,9 +9,9 @@ export const Projects = () => {
 		<div>
 			<ProjectsList />
 			<br></br>
-			<button onClick={() => navigate("/new_project")}>
+			<Button onClick={() => navigate("/new_project")}>
 				Create a New Project
-			</button>
+			</Button>
 		</div>
 	);
 };

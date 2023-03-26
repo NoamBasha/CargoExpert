@@ -2,36 +2,37 @@ import { ThreeScene } from "./ThreeScene.js";
 import { useState, createContext } from "react";
 import { useProject } from "./ProjectProvider.js";
 import { useUserData } from "./UserDataProvider";
+import { Button } from "@mui/material";
 
 const NextSolutionButton = ({ text, getNextSolution }) => {
-	return <button onClick={() => getNextSolution()}>{text}</button>;
+	return <Button onClick={() => getNextSolution()}>{text}</Button>;
 };
 
 /*
 const PreviousSolutionButton = ({ text, getPreviousSolution }) => {
-	return <button onClick={() => getPreviousSolution()}>{text}</button>;
+	return <Button onClick={() => getPreviousSolution()}>{text}</Button>;
 };
 */
 
 const ResetButton = ({ text, resetBoxes }) => {
-	return <button onClick={() => resetBoxes()}>{text}</button>;
+	return <Button onClick={() => resetBoxes()}>{text}</Button>;
 };
 
 const AxisButton = ({ text, moveBy, moveBox }) => {
-	return <button onClick={() => moveBox(moveBy)}>{text}</button>;
+	return <Button onClick={() => moveBox(moveBy)}>{text}</Button>;
 };
 
 const RotationButton = ({ text, axis, rotateBox }) => {
-	return <button onClick={() => rotateBox(axis)}>{text}</button>;
+	return <Button onClick={() => rotateBox(axis)}>{text}</Button>;
 };
 
 const EditButton = ({ setEdit }) => {
-	return <button onClick={() => setEdit()}>Edit</button>;
+	return <Button onClick={() => setEdit()}>Edit</Button>;
 };
 
 const ViewButton = ({ setEdit, validateBoxesLocation }) => {
 	return (
-		<button
+		<Button
 			onClick={() => {
 				if (validateBoxesLocation()) {
 					setEdit();
@@ -39,7 +40,7 @@ const ViewButton = ({ setEdit, validateBoxesLocation }) => {
 			}}
 		>
 			View
-		</button>
+		</Button>
 	);
 };
 
@@ -313,9 +314,9 @@ export const View = () => {
 				validateBoxesLocation={validateBoxesLocation(boxes, container)}
 			/>
 			<br />
-			<button onClick={(e) => handleSaveSolution(e)}>
+			<Button onClick={(e) => handleSaveSolution(e)}>
 				Save Solution
-			</button>
+			</Button>
 		</EditContext.Provider>
 	);
 };

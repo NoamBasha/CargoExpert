@@ -1,6 +1,7 @@
 import { useUserData } from "./UserDataProvider.js";
 import { useProject } from "./ProjectProvider.js";
 import { useNavigate } from "react-router-dom";
+import { List, ListItem, ListItemText, Button } from "@mui/material";
 
 export const ProjectsList = () => {
 	const { projects } = useUserData();
@@ -18,17 +19,17 @@ export const ProjectsList = () => {
 
 	return (
 		<div>
-			<ol>
+			<List>
 				{projects.map((project, index) => {
 					return (
-						<li key={index}>
-							<button onClick={() => handleClick(project.id)}>
+						<ListItem key={index}>
+							<Button onClick={() => handleClick(project.id)}>
 								Project {index + 1}
-							</button>
-						</li>
+							</Button>
+						</ListItem>
 					);
 				})}
-			</ol>
+			</List>
 		</div>
 	);
 };

@@ -1,3 +1,5 @@
+import { Button, TextField } from "@mui/material";
+
 export const FileUploadButton = ({ setFile }) => {
 	const fileHandler = (event) => {
 		let uploaded_files = event.target.files;
@@ -10,7 +12,7 @@ export const FileUploadButton = ({ setFile }) => {
 
 	return (
 		<div>
-			<input
+			<TextField
 				type="file"
 				name="user_input"
 				accept=".csv"

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useFileData } from "./FileDataProvider";
 import { useNavigate } from "react-router-dom";
+import { Button, TextField } from "@mui/material";
 
 export const EditContainer = () => {
 	const { container, setContainer } = useFileData();
@@ -26,7 +27,7 @@ export const EditContainer = () => {
 		<div>
 			<form>
 				<label>Width</label>
-				<input
+				<TextField
 					type="number"
 					id="width"
 					value={formWidth}
@@ -36,7 +37,7 @@ export const EditContainer = () => {
 				/>
 				<br />
 				<label>Height</label>
-				<input
+				<TextField
 					type="number"
 					id="height"
 					value={formHeight}
@@ -46,7 +47,7 @@ export const EditContainer = () => {
 				/>
 				<br />
 				<label>Length</label>
-				<input
+				<TextField
 					type="number"
 					id="length"
 					value={formLength}
@@ -56,7 +57,7 @@ export const EditContainer = () => {
 				/>
 				<br />
 
-				<button onClick={handleEditContainer}>Continue</button>
+				<Button onClick={handleEditContainer}>Continue</Button>
 			</form>
 		</div>
 	);

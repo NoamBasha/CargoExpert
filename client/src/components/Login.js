@@ -1,17 +1,26 @@
 import { useUserData } from "./UserDataProvider.js";
 import "./Login.css";
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Alert, CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export const Login = () => {
 	const navigate = useNavigate();
-
-	const { email, setEmail, password, setPassword, getUserData } =
-		useUserData();
+	const {
+		email,
+		setEmail,
+		password,
+		setPassword,
+		getUserData,
+		isLoading,
+		error,
+	} = useUserData();
 
 	const handleLogin = async (e) => {
-		getUserData();
-		navigate("/projects");
+		let res = await getUserData();
+		if (res) {
+			navigate("/projects");
+		}
 	};
 
 	return (
@@ -43,21 +52,34 @@ export const Login = () => {
 					onChange={(e) => setPassword(e.target.value)}
 					fullWidth
 				/>
-
-				<Button
-					variant="outlined"
-					onClick={handleLogin}
-				>
-					Login
-				</Button>
+				{error && (
+					<Alert
+						severity="error"
+						className="mt-3"
+					>
+						{error}
+					</Alert>
+				)}
+				{isLoading ? (
+					<CircularProgress />
+				) : (
+					<Button
+						variant="outlined"
+						onClick={handleLogin}
+					>
+						Login
+					</Button>
+				)}
 			</form>
 			<br />
-			<Button
-				variant="outlined"
-				onClick={() => navigate("/register")}
-			>
-				Register
-			</Button>
+			{isLoading ? null : (
+				<Button
+					variant="outlined"
+					onClick={() => navigate("/register")}
+				>
+					Register
+				</Button>
+			)}
 		</div>
 	);
 };

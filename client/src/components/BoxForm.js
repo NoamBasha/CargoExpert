@@ -1,26 +1,40 @@
 import { useState } from "react";
+import { Button, TextField } from "@mui/material";
 
 export const BoxForm = ({ box, editBox }) => {
-	const { width, height, length } = box;
+	const { order, width, height, length, type } = box;
+	const [formOrder, setFormOrder] = useState(order);
 	const [formWidth, setFormWidth] = useState(width);
 	const [formHeight, setFormHeight] = useState(height);
 	const [formLength, setFormLength] = useState(length);
+	const [formType, setFormType] = useState(type);
 
 	const handleEditBox = (e) => {
 		e.preventDefault();
 		editBox({
-			...box,
+			order: formOrder,
 			width: formWidth,
 			height: formHeight,
 			length: formLength,
+			type: formType,
 		});
 	};
 
 	return (
 		<div>
 			<form>
+				<label>Order</label>
+				<TextField
+					type="number"
+					id="order"
+					value={formOrder}
+					onChange={(e) => {
+						setFormOrder(e.target.value);
+					}}
+				/>
+				<br />
 				<label>Width</label>
-				<input
+				<TextField
 					type="number"
 					id="width"
 					value={formWidth}
@@ -30,7 +44,7 @@ export const BoxForm = ({ box, editBox }) => {
 				/>
 				<br />
 				<label>Height</label>
-				<input
+				<TextField
 					type="number"
 					id="height"
 					value={formHeight}
@@ -40,7 +54,7 @@ export const BoxForm = ({ box, editBox }) => {
 				/>
 				<br />
 				<label>Length</label>
-				<input
+				<TextField
 					type="number"
 					id="length"
 					value={formLength}
@@ -49,8 +63,18 @@ export const BoxForm = ({ box, editBox }) => {
 					}}
 				/>
 				<br />
+				<label>Type</label>
+				<TextField
+					type="text"
+					id="type"
+					value={formType}
+					onChange={(e) => {
+						setFormType(e.target.value);
+					}}
+				/>
+				<br />
 
-				<button onClick={handleEditBox}>Edit Box!</button>
+				<Button onClick={handleEditBox}>Edit Box!</Button>
 			</form>
 		</div>
 	);

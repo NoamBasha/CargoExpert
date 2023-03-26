@@ -1,5 +1,6 @@
 import { useState, createContext, useContext, useEffect } from "react";
 import { useUserData } from "./UserDataProvider";
+
 /*
 user: order, type, width, height, length
 react: order, type, size, position, color
@@ -35,22 +36,6 @@ export const ProjectProvider = ({ children }) => {
 
 		// return function (projectId = null)?
 	}, [projectId, projects]);
-
-	/*
-	useEffect(() => {
-		if (solutions !== null && solutionId !== null) {
-
-			let index = solutions.findIndex(
-				(solution) => solution.id === solutionId
-			);
-			setSolutions(solutions[index]);
-			console.log(solutions[index]);
-			//setBoxes(solutions[index].boxes);
-		}
-
-		// return function (solutionId = null)?
-	}, [solutionId]);
-	*/
 
 	useEffect(() => {
 		if (
@@ -94,26 +79,6 @@ export const ProjectProvider = ({ children }) => {
 			colour += ("00" + value.toString(16)).substr(-2);
 		}
 		return colour;
-	};
-
-	const setDataFromUser = async (container_and_boxes) => {
-		//console.log(container_and_boxes);
-		const requestOptions = {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(container_and_boxes),
-		};
-
-		let data = await fetch(
-			"http://localhost:1337/get_solutions",
-			requestOptions
-		);
-
-		data = await data.json();
-		setSolutions(data);
-		setSolutionId(0);
-		console.log(data);
-		console.log(solutions);
 	};
 
 	const changeBoxIndices = (id) => {
@@ -176,7 +141,6 @@ export const ProjectProvider = ({ children }) => {
 				changeBoxById,
 				rotateBox,
 				resetBoxes,
-				setDataFromUser,
 				getNextSolution,
 				getPreviousSolution,
 				setProjectId,

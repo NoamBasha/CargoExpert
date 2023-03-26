@@ -1,6 +1,7 @@
 import { FileUpload } from "./FileUpload";
 import { DownloadFile } from "./DownloadFile";
 import { useNavigate } from "react-router-dom";
+import { Button, TextField } from "@mui/material";
 
 export const NewProject = () => {
 	const navigate = useNavigate();
@@ -10,13 +11,13 @@ export const NewProject = () => {
 			<FileUpload></FileUpload>
 			<DownloadFile></DownloadFile>
 			<br></br>
-			<button onClick={() => navigate("/edit_container")}>
+			<Button onClick={() => navigate("/edit_container")}>
 				Continue
-			</button>
+			</Button>
 			<br />
-			<button onClick={() => navigate("/projects")}>
+			<Button onClick={() => navigate("/projects")}>
 				Return to projects list
-			</button>
+			</Button>
 		</div>
 	);
 };
