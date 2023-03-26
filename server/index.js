@@ -69,14 +69,17 @@ app.get("/userInputExample", function (req, res) {
 app.post("/createUser", async (req, res) => {
   sha = crypto.createHash('sha256');
   try{
+	if (!re.body.password)
+		throw 'password cannot be empty!!!';
     let newUser = await User.create({
       email: req.body.email,
       password: sha.update(req.body.password).digest('hex')
     })
     newUser.save();
-    res.sendStatus(200);
+    res.status(200);
   } catch (err) {
-      res.sendStatus(400).json({error:err.message});
+
+      res.status(400).json({error:err.message});
   }
 });
 
@@ -85,13 +88,13 @@ app.post("/readUser", (req, res) => {
   sha = crypto.createHash('sha256');
 	User.findOne({ email: req.body.email, password: sha.update(req.body.password).digest('hex') },
               (err, data) => {
-		if (err) res.sendStatus(400).json({error: err.message});
+		if (err) res.status(400).json({error: err.message});
 		else {
 			if (data)
-				res.sendStatus(200).json(data.projects);
+				res.status(200).json(data.projects);
 			else
-				res.sendStatus(400).json({error: 'Invalid login credentials. Please try again.'});
-    };
+				res.status(400).json({error: 'Invalid login credentials. Please try again.'});
+   		};
 	});
 });
 
@@ -131,7 +134,7 @@ app.post("/updateUser", (req, res) => {
 				res.sendStatus(200);
       		}
 			else
-				res.sendStatus(400).json({error: 'Invalid user'});
+				res.status(400).json({error: 'Invalid user'});
 		}
 	});
 });
