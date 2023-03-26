@@ -42,3 +42,17 @@ const Box = mongoose.model("Box", BoxSchema);
 const Solution = mongoose.model("Solution", SolutionSchema);
 
 module.exports = { User, Project, Box, Solution };
+
+/**
+ * 1. set true to some fields
+ * 2. add name to project and solution schemas
+ * 
+ * algo:
+ * 1. evaluate each solution by metrica
+ * 2. to accept solutions with less than 100% success
+ * 3. need to add this functionality:
+ *      given a list of boxes where each box is signed
+ *      with bit if it is in the container or not, load
+ *      the container as much as possible to get the best
+ *      results
+ */
