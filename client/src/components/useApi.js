@@ -11,8 +11,7 @@ export const useApi = ({ setData, setIsLoading, setError }) => {
 					password: password,
 				}),
 			};
-			await fetch("http://localhost:1337/register", requestOptions);
-			//await fetch("http://localhost:1337/createUser", requestOptions);
+			await fetch("http://localhost:1337/createUser", requestOptions);
 		} catch (error) {
 			setError(error);
 		} finally {
@@ -33,15 +32,9 @@ export const useApi = ({ setData, setIsLoading, setError }) => {
 				}),
 			};
 			let data = await fetch(
-				"http://localhost:1337/getUser",
-				requestOptions
-			);
-			/*
-			let data = await fetch(
 				"http://localhost:1337/readUser",
 				requestOptions
 			);
-            */
 			data = await data.json();
 			setData(data);
 		} catch (error) {
@@ -64,8 +57,7 @@ export const useApi = ({ setData, setIsLoading, setError }) => {
 					newProjects: new_projects,
 				}),
 			};
-			await fetch("http://localhost:1337/updateProjects", requestOptions);
-			//await fetch("http://localhost:1337/updateUser", requestOptions);
+			await fetch("http://localhost:1337/updateUser", requestOptions);
 		} catch (error) {
 			setError(error);
 		} finally {
@@ -107,12 +99,6 @@ export const useApi = ({ setData, setIsLoading, setError }) => {
 				"http://localhost:1337/getSolutions",
 				requestOptions
 			);
-			/*
-			let data = await fetch(
-				"http://localhost:1337/get_solutions",
-				requestOptions
-			);
-            */
 			data = await data.json();
 			setData(data);
 		} catch (error) {

@@ -13,7 +13,7 @@ export const Register = () => {
 	const handleRegister = async (e) => {
 		let res = await addUser({ email, password });
 		console.log(res);
-		if (res) {
+		if (res.status != 400) {
 			navigate("/");
 		}
 	};

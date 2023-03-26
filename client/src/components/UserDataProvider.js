@@ -31,7 +31,7 @@ export const UserDataProvider = ({ children }) => {
 				}),
 			};
 			let data = await fetch(
-				"http://localhost:1337/register",
+				"http://localhost:1337/createUser",
 				requestOptions
 			);
 			console.log(data);
@@ -59,7 +59,7 @@ export const UserDataProvider = ({ children }) => {
 		};
 		try {
 			let projects = await fetch(
-				"http://localhost:1337/login",
+				"http://localhost:1337/readUser",
 				requestOptions
 			);
 			projects = await projects.json();
@@ -86,7 +86,7 @@ export const UserDataProvider = ({ children }) => {
 		};
 
 		let data = await fetch(
-			"http://localhost:1337/get_solutions",
+			"http://localhost:1337/getSolutions",
 			requestOptions
 		);
 
@@ -107,7 +107,7 @@ export const UserDataProvider = ({ children }) => {
 				newProjects: new_projects,
 			}),
 		};
-		await fetch("http://localhost:1337/updateProjects", requestOptions);
+		await fetch("http://localhost:1337/updateUser", requestOptions);
 		console.log(new_projects);
 	};
 
