@@ -2,7 +2,7 @@ import { useUserData } from "./UserDataProvider.js";
 import "./Login.css";
 import { Button, TextField, Alert, CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect } from "react";
 
 export const Login = () => {
 	const navigate = useNavigate();
@@ -11,16 +11,20 @@ export const Login = () => {
 		setEmail,
 		password,
 		setPassword,
-		getUserData,
+		readUser,
 		isLoading,
 		error,
+		isLoggedIn,
 	} = useUserData();
 
-	const handleLogin = async (e) => {
-		let res = await getUserData();
-		if (res) {
+	useEffect(() => {
+		if (isLoggedIn) {
 			navigate("/projects");
 		}
+	}, [isLoggedIn]);
+
+	const handleLogin = async (e) => {
+		await readUser();
 	};
 
 	return (

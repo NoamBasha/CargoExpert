@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserData } from "./UserDataProvider.js";
 import "./Register.css";
@@ -8,14 +8,18 @@ export const Register = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const navigate = useNavigate();
-	const { addUser, isLoading, error } = useUserData();
+	const [isRegistered, setIsRegistered] = useState(false);
+	const { createUser, isLoading, error } = useUserData();
 
-	const handleRegister = async (e) => {
-		let res = await addUser({ email, password });
-		console.log(res);
-		if (res.status != 400) {
+	useEffect(() => {
+		if (isRegistered) {
 			navigate("/");
 		}
+	}, [isRegistered]);
+
+	const handleRegister = async (e) => {
+		setIsRegistered(false);
+		await createUser({ email, password, setIsRegistered });
 	};
 
 	return (

@@ -4,12 +4,12 @@ import { BoxesTable } from "./BoxesTable.js";
 import { BoxForm } from "./BoxForm";
 import { useUserData } from "./UserDataProvider";
 import { useNavigate } from "react-router-dom";
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Alert, CircularProgress } from "@mui/material";
 
 export const EditBoxes = () => {
 	const { boxes, setBoxes, container } = useFileData();
 	const [boxId, setBoxId] = useState(0);
-	const { addProject } = useUserData();
+	const { addProject, isLoading, error } = useUserData();
 	const navigate = useNavigate();
 
 	const editBoxById = (id) => {
@@ -21,8 +21,8 @@ export const EditBoxes = () => {
 		};
 	};
 
-	const handleAddProject = (e) => {
-		addProject({
+	const handleAddProject = async (e) => {
+		await addProject({
 			container: container,
 			boxes: boxes,
 			solutions: [],
@@ -44,9 +44,22 @@ export const EditBoxes = () => {
 				editBox={editBoxById(boxId)}
 			/>
 
+			{error && (
+				<Alert
+					severity="error"
+					className="mt-3"
+				>
+					{error}
+				</Alert>
+			)}
+
 			<br />
 
-			<Button onClick={handleAddProject}>Create Project!</Button>
+			{isLoading ? (
+				<CircularProgress />
+			) : (
+				<Button onClick={handleAddProject}>Create Project!</Button>
+			)}
 		</div>
 	);
 };

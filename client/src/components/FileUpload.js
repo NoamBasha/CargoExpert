@@ -4,6 +4,7 @@ import { DragAndDrop } from "./DragAndDrop.js";
 import Papa from "papaparse";
 import "./FileUpload.css";
 import { useFileData } from "./FileDataProvider";
+import { Button, TextField } from "@mui/material";
 
 export const FileUpload = () => {
 	const [file, setFile] = useState(null);
@@ -53,6 +54,12 @@ export const FileUpload = () => {
 		});
 	}, [file]);
 
+	const handleClear = () => {
+		setFile(null);
+		setContainer([]);
+		setBoxes([]);
+	};
+
 	return (
 		<div className="file-upload">
 			<DragAndDrop setFile={setFile}>
@@ -60,6 +67,13 @@ export const FileUpload = () => {
 				<FileUploadButton setFile={setFile}></FileUploadButton>
 				<br />
 			</DragAndDrop>
+
+			{file && (
+				<>
+					Your selected file is: {file.name}
+					<Button onClick={handleClear}>Remove selected file</Button>
+				</>
+			)}
 		</div>
 	);
 };

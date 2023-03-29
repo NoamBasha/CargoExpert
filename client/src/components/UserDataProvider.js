@@ -1,5 +1,4 @@
 import { useState, createContext, useContext } from "react";
-import { useApi } from "./useApi";
 
 const UserDataContext = createContext("");
 
@@ -11,14 +10,10 @@ export const UserDataProvider = ({ children }) => {
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
-	const [data, setData] = useState([]);
 
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-	const { createUser, readUser, updateUser, deleteUser, getSolutions } =
-		useApi({ setData, setIsLoading, setError });
-
-	const addUser = async ({ email, password }) => {
+	const createUser = async ({ email, password, setIsRegistered }) => {
 		setError("");
 		setIsLoading(true);
 		try {
@@ -30,85 +25,111 @@ export const UserDataProvider = ({ children }) => {
 					password: password,
 				}),
 			};
-			let data = await fetch(
+			const response = await fetch(
 				"http://localhost:1337/createUser",
 				requestOptions
 			);
-			console.log(data);
-			return true;
+			console.log(response);
+			if (response.status === 200) {
+				setIsRegistered(true);
+			} else {
+				throw new Error(`${response.status} ${response.statusText}`);
+			}
 		} catch (error) {
-			setError(
-				"The email you provided already exists. Please try again."
-			);
-			return false;
+			setError(error.message);
 		} finally {
 			setIsLoading(false);
 		}
 	};
 
-	const getUserData = async () => {
+	const readUser = async () => {
 		setError("");
 		setIsLoading(true);
-		const requestOptions = {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({
-				email: email,
-				password: password,
-			}),
-		};
+		setIsLoggedIn(false);
 		try {
-			let projects = await fetch(
+			const requestOptions = {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					email: email,
+					password: password,
+				}),
+			};
+			const response = await fetch(
 				"http://localhost:1337/readUser",
 				requestOptions
 			);
-			projects = await projects.json();
-			//setIsLoggedIn(true);
-			console.log(projects);
-			setProjects(projects);
-			setIsLoggedIn(true);
-
-			return true;
+			if (response.status === 200) {
+				const data = await response.json();
+				setProjects(data);
+				console.log(data);
+				setIsLoggedIn(true);
+			} else {
+				throw new Error(`${response.status} ${response.statusText}`);
+			}
 		} catch (error) {
-			setError("Invalid login credentials. Please try again.");
-			return false;
+			//TODO: fix error message
+			setError(error.message);
 		} finally {
 			setIsLoading(false);
 		}
 	};
 
-	const getSolutionsFromServer = async (container_and_boxes) => {
-		//console.log(container_and_boxes);
-		const requestOptions = {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(container_and_boxes),
-		};
-
-		let data = await fetch(
-			"http://localhost:1337/getSolutions",
-			requestOptions
-		);
-
-		data = await data.json();
-		return data;
+	const updateUser = async (new_projects) => {
+		setError("");
+		setIsLoading(true);
+		try {
+			const requestOptions = {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					email: email,
+					password: password,
+					newProjects: new_projects,
+				}),
+			};
+			const response = await fetch(
+				"http://localhost:1337/updateUser",
+				requestOptions
+			);
+			if (response.status === 200) {
+				console.log("User updated successfully");
+			} else {
+				throw new Error(`${response.status} ${response.statusText}`);
+			}
+		} catch (error) {
+			setError(error.message);
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
-	const updateProjectsOnServer = async (new_projects) => {
-		// TODO: remove e.preventDefault()
-		//e.preventDefault();
-		console.log(new_projects);
-		const requestOptions = {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({
-				email: email,
-				password: password,
-				newProjects: new_projects,
-			}),
-		};
-		await fetch("http://localhost:1337/updateUser", requestOptions);
-		console.log(new_projects);
+	const deleteUser = async ({ email, password }) => {
+		setError("");
+		setIsLoading(true);
+		try {
+			const requestOptions = {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					email: email,
+					password: password,
+				}),
+			};
+			const response = await fetch(
+				"http://localhost:1337/deleteUser",
+				requestOptions
+			);
+			if (response.status === 200) {
+				console.log("User deleted successfully");
+			} else {
+				throw new Error(`${response.status} ${response.statusText}`);
+			}
+		} catch (error) {
+			setError(error);
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	const addProject = async (project) => {
@@ -118,40 +139,50 @@ export const UserDataProvider = ({ children }) => {
 			length: project.container[2],
 		};
 
-		console.log("1111111111");
-		let solutions = await getSolutionsFromServer({
+		const container_and_boxes = {
 			boxes: project.boxes,
 			container: container_data,
-		});
-		console.log("2222222222");
+		};
 
-		//console.log(typeof Object.values(solutions));
-		//console.log(Object.values(solutions));
+		setError("");
+		setIsLoading(true);
+		try {
+			const requestOptions = {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(container_and_boxes),
+			};
 
-		console.log(project.boxes[0]);
+			const response = await fetch(
+				"http://localhost:1337/getSolutions",
+				requestOptions
+			);
+			if (response.status === 200) {
+				const solutions = await response.json();
+				let current_id = 0;
+				if (projects.length !== 0) {
+					current_id = projects[projects.length - 1].id + 1;
+				}
 
-		let current_id = 0;
-		if (projects.length !== 0) {
-			current_id = projects[projects.length - 1].id + 1;
+				const new_projects = [
+					...projects,
+					{
+						id: current_id,
+						container: project.container,
+						boxes: project.boxes,
+						solutions: Object.values(solutions),
+					},
+				];
+				setProjects(new_projects);
+				updateUser(new_projects);
+			} else {
+				throw new Error(`${response.status} ${response.statusText}`);
+			}
+		} catch (error) {
+			setError(error);
+		} finally {
+			setIsLoading(false);
 		}
-
-		let new_projects = [
-			...projects,
-			{
-				id: current_id,
-				container: project.container,
-				boxes: project.boxes,
-				solutions: Object.values(solutions),
-			},
-		];
-		console.log("0000000000000000000000000000000000000000000000000000000");
-
-		console.log(new_projects);
-
-		console.log("0000000000000000000000000000000000000000000000000000000");
-
-		setProjects(new_projects);
-		updateProjectsOnServer(new_projects);
 	};
 
 	const removeProject = (project) => {
@@ -159,6 +190,7 @@ export const UserDataProvider = ({ children }) => {
 			return current_project.id !== project.id;
 		});
 		setProjects(new_projects);
+		updateUser(new_projects);
 	};
 
 	const updateProject = (project) => {
@@ -170,7 +202,7 @@ export const UserDataProvider = ({ children }) => {
 			}
 		});
 		setProjects(new_projects);
-		updateProjectsOnServer(new_projects);
+		updateUser(new_projects);
 	};
 
 	const updateSolution = (project_id, solution_id, boxes) => {
@@ -191,8 +223,9 @@ export const UserDataProvider = ({ children }) => {
 				return current_project;
 			}
 		});
+		console.log(new_projects);
 		setProjects(new_projects);
-		updateProjectsOnServer(new_projects);
+		updateUser(new_projects);
 	};
 
 	return (
@@ -208,10 +241,10 @@ export const UserDataProvider = ({ children }) => {
 				removeProject,
 				updateProject,
 				updateSolution,
-				getUserData,
+				readUser,
 				isLoading,
 				error,
-				addUser,
+				createUser,
 				isLoggedIn,
 				setIsLoggedIn,
 			}}
