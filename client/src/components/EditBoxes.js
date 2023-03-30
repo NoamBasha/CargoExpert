@@ -12,19 +12,36 @@ export const EditBoxes = () => {
 	const { addProject, isLoading, error } = useUserData();
 	const navigate = useNavigate();
 
-	const editBoxById = (id) => {
+	const stringToColour = function (str) {
+		let hash = 0;
+		for (let i = 0; i < str.length; i++) {
+			hash = str.charCodeAt(i) + ((hash << 5) - hash);
+		}
+		let colour = "#";
+		for (let i = 0; i < 3; i++) {
+			let value = (hash >> (i * 8)) & 0xff;
+			colour += ("00" + value.toString(16)).substr(-2);
+		}
+		return colour;
+	};
+
+	const editBoxById = (order) => {
 		return (newBox) => {
-			const newBoxes = boxes.map((box, index) =>
-				index === id ? newBox : box
+			const newBoxes = boxes.map((box) =>
+				box.order === order ? newBox : box
 			);
 			setBoxes(newBoxes);
 		};
 	};
 
 	const handleAddProject = async (e) => {
+		let project_boxes = boxes.map((box) => {
+			return { ...box, color: stringToColour(box.type) };
+		});
+
 		await addProject({
 			container: container,
-			boxes: boxes,
+			boxes: project_boxes,
 			solutions: [],
 		});
 		navigate("/projects");

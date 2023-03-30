@@ -9,6 +9,7 @@ import { useProject } from "./ProjectProvider.js";
 export const ThreeScene = ({ container }) => {
 	const { edit } = useContext(EditContext);
 	const { boxes } = useProject();
+	console.log(boxes);
 
 	const camera_position = container.map((n) => n * 2);
 	const axes_length = Math.max(...container) * 1.5;
@@ -24,11 +25,11 @@ export const ThreeScene = ({ container }) => {
 		>
 			<Canvas camera={{ fov: 75, position: camera_position }}>
 				<Container size={container} />
-				{boxes.map(({ size, position, color, text }, index) => {
+				{boxes.map(({ order, size, position, color, text }) => {
 					return (
 						<Box
-							key={index}
-							id={index}
+							key={order}
+							order={order}
 							size={size}
 							position={position}
 							color={color}
