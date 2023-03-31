@@ -10,6 +10,7 @@ export const DragAndDrop = ({ setFile, children }) => {
 			alert("Upload a single file");
 			return;
 		}
+		console.log(uploaded_files[0]);
 		setFile(uploaded_files[0]);
 	};
 

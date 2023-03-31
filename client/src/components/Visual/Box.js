@@ -2,7 +2,7 @@ import { useRef, useState, useEffect, useContext } from "react";
 import { useHelper } from "@react-three/drei";
 import { BoxHelper } from "three";
 import { EditContext } from "./View.js";
-import { useProject } from "./ProjectProvider.js";
+import { useProject } from "../ProjectProvider.js";
 import { BoxText } from "./BoxText.js";
 
 export const Box = ({ order, size, position, color, text }) => {

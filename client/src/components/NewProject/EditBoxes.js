@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useFileData } from "./FileDataProvider";
+import { useFileData } from "../FileDataProvider";
 import { BoxesTable } from "./BoxesTable.js";
 import { BoxForm } from "./BoxForm";
-import { useUserData } from "./UserDataProvider";
+import { useUserData } from "../UserDataProvider";
 import { useNavigate } from "react-router-dom";
 import { Button, TextField, Alert, CircularProgress } from "@mui/material";
 

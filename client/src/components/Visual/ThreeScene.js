@@ -4,7 +4,7 @@ import { Box } from "./Box.js";
 import { Container } from "./Container.js";
 import { useContext } from "react";
 import { EditContext } from "./View.js";
-import { useProject } from "./ProjectProvider.js";
+import { useProject } from "../ProjectProvider.js";
 
 export const ThreeScene = ({ container }) => {
 	const { edit } = useContext(EditContext);

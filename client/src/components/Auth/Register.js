@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUserData } from "./UserDataProvider.js";
+import { useUserData } from "../UserDataProvider.js";
 import "./Register.css";
 import { Button, TextField, Alert, CircularProgress } from "@mui/material";
 

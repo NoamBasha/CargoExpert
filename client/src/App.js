@@ -1,18 +1,18 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import { Login } from "./components/Login";
-import { Register } from "./components/Register";
-import { Projects } from "./components/Projects";
-import { Solutions } from "./components/Solutions";
-import { Project } from "./components/Project";
-import { NewProject } from "./components/NewProject";
-import { FileUpload } from "./components/FileUpload";
+import { Login } from "./components/Auth/Login";
+import { Register } from "./components/Auth/Register";
+import { Projects } from "./components/Projects/Projects";
+import { Solutions } from "./components/Projects/Solutions";
+import { Project } from "./components/Projects/Project";
+import { NewProject } from "./components/NewProject/NewProject";
+import { FileUpload } from "./components/NewProject/FileUpload/FileUpload";
 import { ProjectProvider } from "./components/ProjectProvider";
 import { UserDataProvider } from "./components/UserDataProvider";
-import { EditContainer } from "./components/EditContainer";
-import { EditBoxes } from "./components/EditBoxes";
+import { EditContainer } from "./components/NewProject/EditContainer";
+import { EditBoxes } from "./components/NewProject/EditBoxes";
 import { FileDataProvider } from "./components/FileDataProvider";
-import { View } from "./components/View";
+import { View } from "./components/Visual/View";
 import { Header } from "./components/Header";
 
 function App() {
