@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { useFileData } from "../FileDataProvider";
+// import { useFileData } from "../FileDataProvider";
 import { BoxesTable } from "./BoxesTable.js";
 import { BoxForm } from "./BoxForm";
-import { useUserData } from "../UserDataProvider";
+import { useUserData } from "../../UserDataProvider";
 import { useNavigate } from "react-router-dom";
 import { Button, TextField, Alert, CircularProgress } from "@mui/material";
 
-export const EditBoxes = () => {
-	const { boxes, setBoxes, container } = useFileData();
+export const EditBoxes = ({ setStage, boxes, setBoxes, container }) => {
+	//const { boxes, setBoxes, container } = useFileData();
 	const [boxId, setBoxId] = useState(0);
 	const { addProject, isLoading, error } = useUserData();
 	const navigate = useNavigate();
@@ -39,6 +39,7 @@ export const EditBoxes = () => {
 			return { ...box, color: stringToColour(box.type) };
 		});
 
+		//TODO: no container
 		await addProject({
 			container: container,
 			boxes: project_boxes,

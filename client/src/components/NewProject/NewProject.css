@@ -5,14 +5,3 @@
 	align-items: center;
 	height: 100%;
 }
-
-.middle-1 {
-}
-
-.middle-2 {
-	align-self: flex-start;
-}
-
-.bottom-right {
-	align-self: flex-end;
-}

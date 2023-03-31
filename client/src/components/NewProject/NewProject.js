@@ -1,23 +1,38 @@
 import { FileUpload } from "./FileUpload/FileUpload";
-import { DownloadFile } from "./FileUpload/DownloadFile";
-import { useNavigate } from "react-router-dom";
-import { Button, TextField } from "@mui/material";
+import { EditContainer } from "./Container/EditContainer";
+import { EditBoxes } from "./Boxes/EditBoxes";
+import { useState } from "react";
 import "./NewProject.css";
 
 export const NewProject = () => {
-	const navigate = useNavigate();
+	const [container, setContainer] = useState([]);
+	const [boxes, setBoxes] = useState([]);
+	const [stage, setStage] = useState(0);
 
 	return (
-		<div className="new-project">
-			<h1>Upload File</h1>
-			<FileUpload className="middle-1" />
-			<DownloadFile className="middle-2" />
-			<Button
-				className="bottom-right"
-				onClick={() => navigate("/edit_container")}
-			>
-				Continue
-			</Button>
+		<div className="stage">
+			{stage == 0 ? (
+				<FileUpload
+					setStage={setStage}
+					setContainer={setContainer}
+					setBoxes={setBoxes}
+				/>
+			) : null}
+			{stage == 1 ? (
+				<EditContainer
+					setStage={setStage}
+					container={container}
+					setContainer={setContainer}
+				/>
+			) : null}
+			{stage == 2 ? (
+				<EditBoxes
+					setStage={setStage}
+					boxes={boxes}
+					setBoxes={setBoxes}
+					container={container}
+				/>
+			) : null}
 		</div>
 	);
 };

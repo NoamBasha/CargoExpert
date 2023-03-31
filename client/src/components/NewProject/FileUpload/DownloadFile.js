@@ -9,7 +9,7 @@ export const DownloadFile = () => {
 			const res_blob = await res.blob();
 			FileDownload(res_blob, "user_input_example_from_server.csv");
 		} catch (err) {
-			alert("Could not download file, server disconnected");
+			alert("Can't download file at this time. Please try again later.");
 		}
 	};
 

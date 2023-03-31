@@ -1,16 +1,10 @@
-import { useState, useEffect } from "react";
-import { FileUploadButton } from "./FileUploadButton";
-import { DragAndDrop } from "./DragAndDrop.js";
 import Papa from "papaparse";
-import "./FileUpload.css";
-import { useFileData } from "../../FileDataProvider";
-import { Button, TextField } from "@mui/material";
-import { CsvDropzone } from "./CsvDropzone.js";
+import { Button } from "@mui/material";
 import { DropzoneArea } from "material-ui-dropzone";
+import { DownloadFile } from "./DownloadFile";
+import "./FileUpload.css";
 
-export const FileUpload = () => {
-	const { setContainer, setBoxes } = useFileData();
-
+export const FileUpload = ({ setStage, setContainer, setBoxes }) => {
 	const parseData = (data) => {
 		let numeric_data = [];
 		for (let i = 0; i < data.length; i++) {
@@ -76,22 +70,29 @@ export const FileUpload = () => {
 	};
 
 	return (
-		<DropzoneArea
-			acceptedFiles={["text/csv"]}
-			dropzoneText={
-				"Drag and drop a CSV file here or click to upload your file!"
-			}
-			filesLimit={1}
-			maxFileSize={5000000}
-			showAlerts={true}
-			showPreviews={false}
-			showFileNamesInPreview={false}
-			showPreviewsInDropzone={true}
-			showFileNames={true}
-			getFileAddedMessage={(fileName) => `CSV file ${fileName} added`}
-			getFileRemovedMessage={(fileName) => `CSV file ${fileName} removed`}
-			onDrop={(files) => handleDrop(files)}
-			onDelete={handleDelete}
-		/>
+		<div>
+			<h1>Upload File</h1>
+			<DropzoneArea
+				acceptedFiles={["text/csv"]}
+				dropzoneText={
+					"Drag and drop a CSV file here or click to upload your file!"
+				}
+				filesLimit={1}
+				maxFileSize={5000000}
+				showAlerts={true}
+				showPreviews={false}
+				showFileNamesInPreview={false}
+				showPreviewsInDropzone={true}
+				showFileNames={true}
+				getFileAddedMessage={(fileName) => `CSV file ${fileName} added`}
+				getFileRemovedMessage={(fileName) =>
+					`CSV file ${fileName} removed`
+				}
+				onDrop={(files) => handleDrop(files)}
+				onDelete={handleDelete}
+			/>
+			<DownloadFile />
+			<Button onClick={() => setStage(1)}>Continue</Button>
+		</div>
 	);
 };
