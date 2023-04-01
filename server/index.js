@@ -61,11 +61,7 @@ app.get("/userInputExample", function (req, res) {
 });
 
 // create User
-/**
- * check password not empty
- * check uniqueness for email
- * check email validity
- */
+
 app.post("/createUser", async (req, res) => {
   sha = crypto.createHash('sha256');
   try{

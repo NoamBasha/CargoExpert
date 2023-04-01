@@ -14,6 +14,7 @@ box's width should be parallel to container's width before we apply any rotation
 the same goes for height and length.
 """
 
+
 def rotate_each_box(boxes: list[Box]) -> None:
     for b in boxes:
         b.rotation = random.choice(list(Rotation))
@@ -118,8 +119,8 @@ def algo():
     for b in obj['boxes']:
         p = b['priority'] if b.get('priority', None) else 0
         t = b['taxability'] if b.get('taxability', None) else 0
-        boxes.append(Box(b['order'], b['type'], b['width'],
-                         b['height'], b['length'], p, t,weigth='0', color=b['color']))
+        boxes.append(Box(b['id'], b['order'], b['type'], b['width'],
+                         b['height'], b['length'], p, t, weigth='0', color=b['color']))
 
     boxes = sorted(boxes, key=lambda x: x.order, reverse=True)
 
@@ -136,9 +137,10 @@ def algo():
             continue
 
         boxes_in_solution, solution_data = temp
-        if boxes_in_solution is not None and solution_data is not None :
+        if boxes_in_solution is not None and solution_data is not None:
             counter_string = f'{counter}'
-            solution_list[counter_string] = {"id": counter, "boxes": boxes_in_solution, "solution_data": solution_data}
+            solution_list[counter_string] = {
+                "name": "solution " + counter_string ,"id": counter, "boxes": boxes_in_solution, "solution_data": solution_data}
             counter += 1
 
     return solution_list
