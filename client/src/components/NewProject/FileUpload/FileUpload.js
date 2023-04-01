@@ -71,7 +71,6 @@ export const FileUpload = ({ setStage, setContainer, setBoxes }) => {
 
 	return (
 		<div>
-			<h1>Upload File</h1>
 			<DropzoneArea
 				acceptedFiles={["text/csv"]}
 				dropzoneText={

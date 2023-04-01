@@ -1,7 +1,6 @@
-export const BoxesTable = ({ boxes, setBoxId }) => {
-	const handleClick = (order) => {
-		console.log(order);
-		setBoxId(order);
+export const BoxesTable = ({ boxes, setCurrentBox }) => {
+	const handleClick = (box) => {
+		setCurrentBox(box);
 	};
 
 	return (
@@ -21,7 +20,7 @@ export const BoxesTable = ({ boxes, setBoxId }) => {
 						return (
 							<tr
 								key={box.order}
-								onClick={() => handleClick(box.order)}
+								onClick={() => handleClick(box)}
 							>
 								<td>{box.order}</td>
 								<td>{box.width}</td>

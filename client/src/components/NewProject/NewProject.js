@@ -2,6 +2,7 @@ import { FileUpload } from "./FileUpload/FileUpload";
 import { EditContainer } from "./Container/EditContainer";
 import { EditBoxes } from "./Boxes/EditBoxes";
 import { useState } from "react";
+import { Wizard } from "./Wizard";
 import "./NewProject.css";
 
 export const NewProject = () => {
@@ -11,6 +12,7 @@ export const NewProject = () => {
 
 	return (
 		<div className="stage">
+			<Wizard stage={stage} />
 			{stage == 0 ? (
 				<FileUpload
 					setStage={setStage}

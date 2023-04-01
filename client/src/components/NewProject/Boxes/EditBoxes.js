@@ -1,14 +1,13 @@
 import { useState } from "react";
-// import { useFileData } from "../FileDataProvider";
 import { BoxesTable } from "./BoxesTable.js";
+import { BoxesTableImproved } from "./BoxesTableImproved.js";
 import { BoxForm } from "./BoxForm";
 import { useUserData } from "../../UserDataProvider";
 import { useNavigate } from "react-router-dom";
-import { Button, TextField, Alert, CircularProgress } from "@mui/material";
+import { Button, Alert, CircularProgress } from "@mui/material";
 
 export const EditBoxes = ({ setStage, boxes, setBoxes, container }) => {
-	//const { boxes, setBoxes, container } = useFileData();
-	const [boxId, setBoxId] = useState(0);
+	const [selectedOrders, setSelecetedOrders] = useState([]);
 	const { addProject, isLoading, error } = useUserData();
 	const navigate = useNavigate();
 
@@ -25,13 +24,11 @@ export const EditBoxes = ({ setStage, boxes, setBoxes, container }) => {
 		return colour;
 	};
 
-	const editBoxById = (order) => {
-		return (newBox) => {
-			const newBoxes = boxes.map((box) =>
-				box.order === order ? newBox : box
-			);
-			setBoxes(newBoxes);
-		};
+	const editSelectedOrders = (newBox) => {
+		const newBoxes = boxes.map((box) =>
+			selectedOrders.includes(box.order) ? newBox : box
+		);
+		setBoxes(newBoxes);
 	};
 
 	const handleAddProject = async (e) => {
@@ -39,7 +36,6 @@ export const EditBoxes = ({ setStage, boxes, setBoxes, container }) => {
 			return { ...box, color: stringToColour(box.type) };
 		});
 
-		//TODO: no container
 		await addProject({
 			container: container,
 			boxes: project_boxes,
@@ -50,17 +46,21 @@ export const EditBoxes = ({ setStage, boxes, setBoxes, container }) => {
 
 	return (
 		<div>
-			<BoxesTable
+			<BoxesTableImproved
 				boxes={boxes}
-				setBoxId={setBoxId}
+				selectedOrders={selectedOrders}
+				setSelecetedOrders={setSelecetedOrders}
 			/>
 
 			<br />
 
-			<BoxForm
-				box={boxes[boxId]}
-				editBox={editBoxById(boxId)}
-			/>
+			{selectedOrders.length == 0 ? null : (
+				<BoxForm
+					boxes={boxes}
+					selectedOrders={selectedOrders}
+					editBox={editSelectedOrders}
+				/>
+			)}
 
 			{error && (
 				<Alert
