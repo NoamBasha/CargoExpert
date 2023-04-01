@@ -1,27 +1,36 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useUserData } from "./UserDataProvider.js";
-import "./Register.css";
+import { useUserData } from "../UserDataProvider.js";
+import "./Login.css";
 import { Button, TextField, Alert, CircularProgress } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
-export const Register = () => {
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+export const Login = () => {
 	const navigate = useNavigate();
-	const { addUser, isLoading, error } = useUserData();
+	const {
+		email,
+		setEmail,
+		password,
+		setPassword,
+		readUser,
+		isLoading,
+		error,
+		isLoggedIn,
+	} = useUserData();
 
-	const handleRegister = async (e) => {
-		let res = await addUser({ email, password });
-		console.log(res);
-		if (res.status != 400) {
-			navigate("/");
+	useEffect(() => {
+		if (isLoggedIn) {
+			navigate("/projects");
 		}
+	}, [isLoggedIn]);
+
+	const handleLogin = async (e) => {
+		await readUser();
 	};
 
 	return (
-		<div className="register">
+		<div className="login">
 			<h1 className="m-0 p-5 display-1">Cargo Expert</h1>
-			<form className="form-register w-20 mx-auto">
+			<form className="form-login w-20 mx-auto">
 				<TextField
 					className="my-3"
 					id="email"
@@ -47,7 +56,6 @@ export const Register = () => {
 					onChange={(e) => setPassword(e.target.value)}
 					fullWidth
 				/>
-				<br />
 				{error && (
 					<Alert
 						severity="error"
@@ -61,12 +69,21 @@ export const Register = () => {
 				) : (
 					<Button
 						variant="outlined"
-						onClick={handleRegister}
+						onClick={handleLogin}
 					>
-						Register
+						Login
 					</Button>
 				)}
 			</form>
+			<br />
+			{isLoading ? null : (
+				<Button
+					variant="outlined"
+					onClick={() => navigate("/register")}
+				>
+					Register
+				</Button>
+			)}
 		</div>
 	);
 };

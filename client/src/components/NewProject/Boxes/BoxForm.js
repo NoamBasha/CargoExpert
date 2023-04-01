@@ -1,13 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, TextField } from "@mui/material";
 
-export const BoxForm = ({ box, editBox }) => {
-	const { order, width, height, length, type } = box;
-	const [formOrder, setFormOrder] = useState(order);
-	const [formWidth, setFormWidth] = useState(width);
-	const [formHeight, setFormHeight] = useState(height);
-	const [formLength, setFormLength] = useState(length);
-	const [formType, setFormType] = useState(type);
+export const BoxForm = ({ boxes, selectedOrders, editBox }) => {
+	const [formOrder, setFormOrder] = useState("");
+	const [formWidth, setFormWidth] = useState("");
+	const [formHeight, setFormHeight] = useState("");
+	const [formLength, setFormLength] = useState("");
+	const [formType, setFormType] = useState("");
+
+	useEffect(() => {
+		if (selectedOrders.length == 1) {
+			const box = boxes[selectedOrders[0] - 1];
+			setFormOrder(box.order);
+			setFormWidth(box.width);
+			setFormHeight(box.height);
+			setFormLength(box.length);
+			setFormType(box.type);
+		}
+	}, [selectedOrders]);
 
 	const handleEditBox = (e) => {
 		e.preventDefault();

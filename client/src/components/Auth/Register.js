@@ -1,32 +1,31 @@
-import { useUserData } from "./UserDataProvider.js";
-import "./Login.css";
-import { Button, TextField, Alert, CircularProgress } from "@mui/material";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useUserData } from "../UserDataProvider.js";
+import "./Register.css";
+import { Button, TextField, Alert, CircularProgress } from "@mui/material";
 
-export const Login = () => {
+export const Register = () => {
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
 	const navigate = useNavigate();
-	const {
-		email,
-		setEmail,
-		password,
-		setPassword,
-		getUserData,
-		isLoading,
-		error,
-	} = useUserData();
+	const [isRegistered, setIsRegistered] = useState(false);
+	const { createUser, isLoading, error } = useUserData();
 
-	const handleLogin = async (e) => {
-		let res = await getUserData();
-		if (res) {
-			navigate("/projects");
+	useEffect(() => {
+		if (isRegistered) {
+			navigate("/");
 		}
+	}, [isRegistered]);
+
+	const handleRegister = async (e) => {
+		setIsRegistered(false);
+		await createUser({ email, password, setIsRegistered });
 	};
 
 	return (
-		<div className="login">
+		<div className="register">
 			<h1 className="m-0 p-5 display-1">Cargo Expert</h1>
-			<form className="form-login w-20 mx-auto">
+			<form className="form-register w-20 mx-auto">
 				<TextField
 					className="my-3"
 					id="email"
@@ -52,6 +51,7 @@ export const Login = () => {
 					onChange={(e) => setPassword(e.target.value)}
 					fullWidth
 				/>
+				<br />
 				{error && (
 					<Alert
 						severity="error"
@@ -65,21 +65,12 @@ export const Login = () => {
 				) : (
 					<Button
 						variant="outlined"
-						onClick={handleLogin}
+						onClick={handleRegister}
 					>
-						Login
+						Register
 					</Button>
 				)}
 			</form>
-			<br />
-			{isLoading ? null : (
-				<Button
-					variant="outlined"
-					onClick={() => navigate("/register")}
-				>
-					Register
-				</Button>
-			)}
 		</div>
 	);
 };

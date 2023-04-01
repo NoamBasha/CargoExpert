@@ -1,7 +1,7 @@
 import { ThreeScene } from "./ThreeScene.js";
 import { useState, createContext } from "react";
-import { useProject } from "./ProjectProvider.js";
-import { useUserData } from "./UserDataProvider";
+import { useProject } from "../ProjectProvider.js";
+import { useUserData } from "../UserDataProvider";
 import { Button } from "@mui/material";
 
 const NextSolutionButton = ({ text, getNextSolution }) => {

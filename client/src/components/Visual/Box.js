@@ -1,12 +1,12 @@
-import { useRef, useState, useContext } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import { useHelper } from "@react-three/drei";
 import { BoxHelper } from "three";
 import { EditContext } from "./View.js";
-import { useProject } from "./ProjectProvider.js";
+import { useProject } from "../ProjectProvider.js";
 import { BoxText } from "./BoxText.js";
 
-export const Box = ({ id, size, position, color, text }) => {
-	const { changeBoxById, changeBoxIndices } = useProject();
+export const Box = ({ order, size, position, color, text }) => {
+	const { changeBoxById, changeBoxIndices, solutionId } = useProject();
 	const { edit } = useContext(EditContext);
 	const [outlineColor, setOutlineColor] = useState("#303030");
 	const [boxColor, setBoxColor] = useState(color);
@@ -15,6 +15,10 @@ export const Box = ({ id, size, position, color, text }) => {
 	const [x, y, z] = position;
 	const mesh = useRef();
 	useHelper(mesh, BoxHelper, outlineColor);
+
+	useEffect(() => {
+		setBoxColor(color);
+	}, [solutionId]);
 
 	const boxTexts = [
 		{
@@ -45,21 +49,26 @@ export const Box = ({ id, size, position, color, text }) => {
 		},
 	];
 
+	const toggleColor = () => {
+		console.log(boxColor, color);
+		boxColor === color ? setBoxColor("#FF6C6C") : setBoxColor(color);
+	};
+
 	return (
 		<>
 			<mesh
 				onClick={(e) => {
 					if (edit) {
 						e.stopPropagation();
-						boxColor === color
-							? setBoxColor("#FF6C6C")
-							: setBoxColor(color);
-						changeBoxIndices(id);
-						changeBoxById(id, {
-							size: size,
+						console.log(order, size, position, color, text);
+						toggleColor();
+						changeBoxIndices(order);
+						changeBoxById(order, {
+							order: order,
 							position: position,
-							color: color,
 							text: text,
+							color: color,
+							size: size,
 						});
 					}
 				}}
@@ -74,10 +83,10 @@ export const Box = ({ id, size, position, color, text }) => {
 				/>
 			</mesh>
 
-			{boxTexts.map(({ rotation, position, text }, index) => {
+			{boxTexts.map(({ rotation, position, text }, order) => {
 				return (
 					<BoxText
-						key={index}
+						key={order}
 						rotation={rotation}
 						position={position}
 						text={text}

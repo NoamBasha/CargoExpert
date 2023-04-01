@@ -1,17 +1,14 @@
 import { useState } from "react";
-import { useFileData } from "./FileDataProvider";
-import { useNavigate } from "react-router-dom";
+// import { useFileData } from "../FileDataProvider";
 import { Button, TextField } from "@mui/material";
 
-export const EditContainer = () => {
-	const { container, setContainer } = useFileData();
+export const EditContainer = ({ setStage, container, setContainer }) => {
+	//const { container, setContainer } = useFileData();
 	const { width, height, length } = container;
 
 	const [formWidth, setFormWidth] = useState(width);
 	const [formHeight, setFormHeight] = useState(height);
 	const [formLength, setFormLength] = useState(length);
-
-	const navigate = useNavigate();
 
 	const handleEditContainer = (event) => {
 		setContainer([
@@ -19,8 +16,7 @@ export const EditContainer = () => {
 			parseInt(formHeight),
 			parseInt(formLength),
 		]);
-
-		navigate("/edit_boxes");
+		setStage(2);
 	};
 
 	return (

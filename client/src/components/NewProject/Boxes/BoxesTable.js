@@ -1,7 +1,6 @@
-export const BoxesTable = ({ boxes, setBoxId }) => {
-	const handleClick = (index) => {
-		console.log(index);
-		setBoxId(index);
+export const BoxesTable = ({ boxes, setCurrentBox }) => {
+	const handleClick = (box) => {
+		setCurrentBox(box);
 	};
 
 	return (
@@ -17,11 +16,11 @@ export const BoxesTable = ({ boxes, setBoxId }) => {
 					</tr>
 				</thead>
 				<tbody>
-					{boxes.map((box, index) => {
+					{boxes.map((box) => {
 						return (
 							<tr
-								key={index}
-								onClick={() => handleClick(index)}
+								key={box.order}
+								onClick={() => handleClick(box)}
 							>
 								<td>{box.order}</td>
 								<td>{box.width}</td>

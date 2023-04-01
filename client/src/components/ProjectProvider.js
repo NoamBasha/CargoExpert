@@ -15,7 +15,7 @@ const ProjectContext = createContext("");
 export const ProjectProvider = ({ children }) => {
 	const [projectId, setProjectId] = useState(null);
 	const [solutions, setSolutions] = useState(null);
-	const [solution, setSolution] = useState(null);
+	//const [solution, setSolution] = useState(null);
 	const [solutionId, setSolutionId] = useState(null);
 	const [container, setContainer] = useState(null);
 	const [boxes, setBoxes] = useState([]);
@@ -49,13 +49,10 @@ export const ProjectProvider = ({ children }) => {
 			);
 			setSolutionId(index);
 			let solution = solutions[index];
-			setSolution(solution);
-			let solution_boxes = solution.boxes;
-
-			solution_boxes = solution_boxes.map((box) => {
-				return { ...box, color: stringToColour(box.text) };
-			});
-			setBoxes(solution_boxes);
+			//setSolution(solution);
+			setBoxes(solution.boxes);
+			setPreviousBoxes(solution.boxes);
+			setBoxIndices([]);
 		}
 	}, [solutions, solutionId, projects]);
 
@@ -66,19 +63,6 @@ export const ProjectProvider = ({ children }) => {
 
 	const getNextSolution = () => {
 		setSolutionId((solutionId + 1) % Object.keys(solutions).length);
-	};
-
-	const stringToColour = function (str) {
-		let hash = 0;
-		for (let i = 0; i < str.length; i++) {
-			hash = str.charCodeAt(i) + ((hash << 5) - hash);
-		}
-		let colour = "#";
-		for (let i = 0; i < 3; i++) {
-			let value = (hash >> (i * 8)) & 0xff;
-			colour += ("00" + value.toString(16)).substr(-2);
-		}
-		return colour;
 	};
 
 	const changeBoxIndices = (id) => {
@@ -92,8 +76,9 @@ export const ProjectProvider = ({ children }) => {
 	};
 
 	const moveBox = ([a, b, c]) => {
-		const newBoxes = boxes.map((item, index) => {
-			if (boxIndices.includes(index)) {
+		const newBoxes = boxes.map((item) => {
+			console.log(boxIndices);
+			if (boxIndices.includes(item.order)) {
 				const [x, y, z] = item.position;
 				return { ...item, position: [x + a, y + b, z + c] };
 			} else return item;
@@ -102,8 +87,8 @@ export const ProjectProvider = ({ children }) => {
 	};
 
 	const rotateBox = (axis) => {
-		const newBoxes = boxes.map((item, index) => {
-			if (boxIndices.includes(index)) {
+		const newBoxes = boxes.map((item) => {
+			if (boxIndices.includes(item.order)) {
 				const [w, h, l] = item.size;
 				if (axis === "x") {
 					return { ...item, size: [w, l, h] };
@@ -124,10 +109,15 @@ export const ProjectProvider = ({ children }) => {
 		setBoxes(previousBoxes);
 	};
 
-	const changeBoxById = (id, newItem) => {
-		const newBoxes = boxes.map((item, index) =>
-			index === id ? newItem : item
-		);
+	const changeBoxById = (order, newItem) => {
+		const newBoxes = boxes.map((item) => {
+			if (item.order === order) {
+				console.log(item, newItem);
+				return newItem;
+			} else {
+				return item;
+			}
+		});
 		setBoxes(newBoxes);
 	};
 
