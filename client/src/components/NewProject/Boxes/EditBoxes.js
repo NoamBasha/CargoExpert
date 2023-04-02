@@ -4,6 +4,7 @@ import { BoxForm } from "./BoxForm";
 import { useUserData } from "../../UserDataProvider";
 import { useNavigate } from "react-router-dom";
 import { Button, Alert, CircularProgress } from "@mui/material";
+import "./EditBoxes.css";
 
 export const EditBoxes = ({ setStage, boxes, setBoxes, container, name }) => {
 	const [selectedIds, setSelecetedIds] = useState([]);
@@ -50,22 +51,23 @@ export const EditBoxes = ({ setStage, boxes, setBoxes, container, name }) => {
 	};
 
 	return (
-		<div>
-			<BoxesTable
-				boxes={boxes}
-				selectedIds={selectedIds}
-				setSelecetedIds={setSelecetedIds}
-			/>
+		<>
+			<div className="edit-boxes">
+				<BoxesTable
+					boxes={boxes}
+					selectedIds={selectedIds}
+					setSelecetedIds={setSelecetedIds}
+				/>
 
-			<br />
+				<br />
 
-			{selectedIds.length == 0 ? null : (
 				<BoxForm
+					setBoxes={setBoxes}
 					boxes={boxes}
 					selectedIds={selectedIds}
 					editBox={editSelectedIds}
 				/>
-			)}
+			</div>
 
 			{error && (
 				<Alert
@@ -86,6 +88,6 @@ export const EditBoxes = ({ setStage, boxes, setBoxes, container, name }) => {
 			<Button onClick={() => setStage((prevStage) => prevStage - 1)}>
 				Back
 			</Button>
-		</div>
+		</>
 	);
 };

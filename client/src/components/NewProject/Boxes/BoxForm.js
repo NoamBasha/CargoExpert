@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button, TextField } from "@mui/material";
 
-export const BoxForm = ({ boxes, selectedIds, editBox }) => {
+export const BoxForm = ({ setBoxes, boxes, selectedIds, editBox }) => {
 	const [formOrder, setFormOrder] = useState("");
 	const [formWidth, setFormWidth] = useState("");
 	const [formHeight, setFormHeight] = useState("");
@@ -9,6 +9,13 @@ export const BoxForm = ({ boxes, selectedIds, editBox }) => {
 	const [formType, setFormType] = useState("");
 
 	useEffect(() => {
+		if (selectedIds.length == 0) {
+			setFormOrder("");
+			setFormWidth("");
+			setFormHeight("");
+			setFormLength("");
+			setFormType("");
+		}
 		if (selectedIds.length == 1) {
 			const box = boxes[selectedIds[0] - 1];
 			setFormOrder(box.order);
@@ -28,6 +35,32 @@ export const BoxForm = ({ boxes, selectedIds, editBox }) => {
 			length: formLength,
 			type: formType,
 		});
+	};
+
+	const deleteBoxes = () => {
+		const newBoxes = boxes.filter((box) => {
+			return !selectedIds.includes(box.id);
+		});
+		setBoxes(newBoxes);
+	};
+
+	const addBox = () => {
+		const existingIds = new Set(boxes.map((box) => box.id));
+		let missingId = 0;
+		while (existingIds.has(missingId)) {
+			missingId++;
+		}
+		const newBox = {
+			id: missingId,
+			order: formOrder,
+			width: formWidth,
+			height: formHeight,
+			length: formLength,
+			type: formType,
+		};
+		const newBoxes = [...boxes, newBox];
+		setBoxes(newBoxes);
+		console.log(newBoxes);
 	};
 
 	return (
@@ -84,7 +117,9 @@ export const BoxForm = ({ boxes, selectedIds, editBox }) => {
 				/>
 				<br />
 
-				<Button onClick={handleEditBox}>Edit Box!</Button>
+				<Button onClick={handleEditBox}>Edit</Button>
+				<Button onClick={deleteBoxes}>Delete</Button>
+				<Button onClick={addBox}>Add</Button>
 			</form>
 		</div>
 	);

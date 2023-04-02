@@ -1,4 +1,5 @@
 import { DataGrid } from "@mui/x-data-grid";
+import "./BoxesTable.css";
 
 export const BoxesTable = ({ boxes, selectedIds, setSelecetedIds }) => {
 	console.log(selectedIds);
@@ -23,7 +24,7 @@ export const BoxesTable = ({ boxes, selectedIds, setSelecetedIds }) => {
 	});
 
 	return (
-		<div style={{ height: 500, width: "100%" }}>
+		<div className="boxes-table">
 			<DataGrid
 				rows={rows}
 				columns={columns}

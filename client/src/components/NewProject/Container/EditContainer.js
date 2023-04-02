@@ -1,6 +1,7 @@
 import { useState } from "react";
 // import { useFileData } from "../FileDataProvider";
 import { Button, TextField } from "@mui/material";
+import { StandardContainers } from "./StandardContainers";
 
 export const EditContainer = ({ setStage, container, setContainer }) => {
 	//const { container, setContainer } = useFileData();
@@ -19,8 +20,16 @@ export const EditContainer = ({ setStage, container, setContainer }) => {
 		setStage((prevStage) => prevStage + 1);
 	};
 
+	const setStandardContainer = (w, h, l) => {
+		setFormWidth(w);
+		setFormHeight(h);
+		setFormLength(l);
+	};
+
 	return (
 		<div>
+			<StandardContainers setStandardContainer={setStandardContainer} />
+
 			<form>
 				<label>Width</label>
 				<TextField
