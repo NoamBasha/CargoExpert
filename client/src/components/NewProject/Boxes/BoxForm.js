@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button, TextField } from "@mui/material";
 
-export const BoxForm = ({ boxes, selectedOrders, editBox }) => {
+export const BoxForm = ({ boxes, selectedIds, editBox }) => {
 	const [formOrder, setFormOrder] = useState("");
 	const [formWidth, setFormWidth] = useState("");
 	const [formHeight, setFormHeight] = useState("");
@@ -9,15 +9,15 @@ export const BoxForm = ({ boxes, selectedOrders, editBox }) => {
 	const [formType, setFormType] = useState("");
 
 	useEffect(() => {
-		if (selectedOrders.length == 1) {
-			const box = boxes[selectedOrders[0] - 1];
+		if (selectedIds.length == 1) {
+			const box = boxes[selectedIds[0] - 1];
 			setFormOrder(box.order);
 			setFormWidth(box.width);
 			setFormHeight(box.height);
 			setFormLength(box.length);
 			setFormType(box.type);
 		}
-	}, [selectedOrders]);
+	}, [selectedIds]);
 
 	const handleEditBox = (e) => {
 		e.preventDefault();
@@ -39,7 +39,7 @@ export const BoxForm = ({ boxes, selectedOrders, editBox }) => {
 					id="order"
 					value={formOrder}
 					onChange={(e) => {
-						setFormOrder(e.target.value);
+						setFormOrder(parseFloat(e.target.value));
 					}}
 				/>
 				<br />
@@ -49,7 +49,7 @@ export const BoxForm = ({ boxes, selectedOrders, editBox }) => {
 					id="width"
 					value={formWidth}
 					onChange={(e) => {
-						setFormWidth(e.target.value);
+						setFormWidth(parseFloat(e.target.value));
 					}}
 				/>
 				<br />
@@ -59,7 +59,7 @@ export const BoxForm = ({ boxes, selectedOrders, editBox }) => {
 					id="height"
 					value={formHeight}
 					onChange={(e) => {
-						setFormHeight(e.target.value);
+						setFormHeight(parseFloat(e.target.value));
 					}}
 				/>
 				<br />
@@ -69,7 +69,7 @@ export const BoxForm = ({ boxes, selectedOrders, editBox }) => {
 					id="length"
 					value={formLength}
 					onChange={(e) => {
-						setFormLength(e.target.value);
+						setFormLength(parseFloat(e.target.value));
 					}}
 				/>
 				<br />

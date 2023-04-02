@@ -25,10 +25,13 @@ export const ThreeScene = ({ container }) => {
 		>
 			<Canvas camera={{ fov: 75, position: camera_position }}>
 				<Container size={container} />
-				{boxes.map(({ order, size, position, color, text }) => {
+				{console.log(boxes)}
+				{boxes.map(({ id, order, size, position, color, text }) => {
+					console.log("@3154234rjkitl2f34npo56t2hn34tof");
 					return (
 						<Box
-							key={order}
+							key={id}
+							id={id}
 							order={order}
 							size={size}
 							position={position}

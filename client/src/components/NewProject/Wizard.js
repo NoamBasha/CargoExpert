@@ -9,6 +9,9 @@ export const Wizard = ({ stage }) => {
 				alternativeLabel
 			>
 				<Step>
+					<StepLabel>Project Settings</StepLabel>
+				</Step>
+				<Step>
 					<StepLabel>Upload File</StepLabel>
 				</Step>
 				<Step>

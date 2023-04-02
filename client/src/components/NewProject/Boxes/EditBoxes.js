@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { BoxesTable } from "./BoxesTable.js";
-import { BoxesTableImproved } from "./BoxesTableImproved.js";
 import { BoxForm } from "./BoxForm";
 import { useUserData } from "../../UserDataProvider";
 import { useNavigate } from "react-router-dom";
 import { Button, Alert, CircularProgress } from "@mui/material";
 
-export const EditBoxes = ({ setStage, boxes, setBoxes, container }) => {
-	const [selectedOrders, setSelecetedOrders] = useState([]);
+export const EditBoxes = ({ setStage, boxes, setBoxes, container, name }) => {
+	const [selectedIds, setSelecetedIds] = useState([]);
 	const { addProject, isLoading, error } = useUserData();
 	const navigate = useNavigate();
 
@@ -24,10 +23,14 @@ export const EditBoxes = ({ setStage, boxes, setBoxes, container }) => {
 		return colour;
 	};
 
-	const editSelectedOrders = (newBox) => {
-		const newBoxes = boxes.map((box) =>
-			selectedOrders.includes(box.order) ? newBox : box
-		);
+	const editSelectedIds = (newBox) => {
+		const newBoxes = boxes.map((box) => {
+			if (selectedIds.includes(box.id)) {
+				return { id: box.id, ...newBox };
+			} else {
+				return box;
+			}
+		});
 		setBoxes(newBoxes);
 	};
 
@@ -36,7 +39,9 @@ export const EditBoxes = ({ setStage, boxes, setBoxes, container }) => {
 			return { ...box, color: stringToColour(box.type) };
 		});
 
+		console.log(project_boxes);
 		await addProject({
+			name: name,
 			container: container,
 			boxes: project_boxes,
 			solutions: [],
@@ -46,19 +51,19 @@ export const EditBoxes = ({ setStage, boxes, setBoxes, container }) => {
 
 	return (
 		<div>
-			<BoxesTableImproved
+			<BoxesTable
 				boxes={boxes}
-				selectedOrders={selectedOrders}
-				setSelecetedOrders={setSelecetedOrders}
+				selectedIds={selectedIds}
+				setSelecetedIds={setSelecetedIds}
 			/>
 
 			<br />
 
-			{selectedOrders.length == 0 ? null : (
+			{selectedIds.length == 0 ? null : (
 				<BoxForm
 					boxes={boxes}
-					selectedOrders={selectedOrders}
-					editBox={editSelectedOrders}
+					selectedIds={selectedIds}
+					editBox={editSelectedIds}
 				/>
 			)}
 
@@ -78,6 +83,9 @@ export const EditBoxes = ({ setStage, boxes, setBoxes, container }) => {
 			) : (
 				<Button onClick={handleAddProject}>Create Project!</Button>
 			)}
+			<Button onClick={() => setStage((prevStage) => prevStage - 1)}>
+				Back
+			</Button>
 		</div>
 	);
 };

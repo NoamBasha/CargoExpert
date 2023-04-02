@@ -6,6 +6,7 @@ import "./FileUpload.css";
 
 export const FileUpload = ({ setStage, setContainer, setBoxes }) => {
 	const parseData = (data) => {
+		console.log(data);
 		let numeric_data = [];
 		for (let i = 0; i < data.length; i++) {
 			let numberic_object = {};
@@ -16,7 +17,7 @@ export const FileUpload = ({ setStage, setContainer, setBoxes }) => {
 					numberic_object[property] = data[i][property];
 				}
 			}
-			numberic_object = { ...numberic_object, color: "" };
+			numberic_object = { id: i, ...numberic_object, color: "" };
 			if (
 				Object.values(numberic_object).includes(null) ||
 				Object.values(numberic_object).includes(undefined)
@@ -48,6 +49,7 @@ export const FileUpload = ({ setStage, setContainer, setBoxes }) => {
 		}
 		setContainer(container_data);
 		setBoxes(boxes);
+		console.log(boxes);
 	};
 
 	const handleDrop = (files) => {
@@ -91,7 +93,12 @@ export const FileUpload = ({ setStage, setContainer, setBoxes }) => {
 				onDelete={handleDelete}
 			/>
 			<DownloadFile />
-			<Button onClick={() => setStage(1)}>Continue</Button>
+			<Button onClick={() => setStage((prevStage) => prevStage + 1)}>
+				Continue
+			</Button>
+			<Button onClick={() => setStage((prevStage) => prevStage - 1)}>
+				Back
+			</Button>
 		</div>
 	);
 };

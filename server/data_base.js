@@ -21,21 +21,31 @@ const SolutionDataSchema = new mongoose.Schema({
 const SolutionSchema = new mongoose.Schema({
 	id: { type: Number, required: false },
 	boxes: { type: [BoxSchema], required: false },
-	name: {type: String, required: false},
+	name: { type: String, required: false },
 	solution_data: { type: SolutionDataSchema, required: false },
 });
 
 const ProjectSchema = new mongoose.Schema({
 	id: { type: Number, required: false },
 	container: { type: [Number], required: false },
-	name: {type: String, required: false},
+	name: { type: String, required: false },
 	boxes: { type: [BoxSchema], required: false },
 	solutions: { type: [SolutionSchema], required: false },
 });
 
 const UserSchema = new mongoose.Schema({
-	email: { type: String, required: false , unique: true, lowercase: true , validate: [emailSyntax, 'Invalid email!'] },
-	password: { type: String, validate: [notEmpty, 'Password is required.'], required: false },
+	email: {
+		type: String,
+		required: false,
+		//unique: true,
+		//lowercase: true,
+		//validate: [emailSyntax, "Invalid email!"],
+	},
+	password: {
+		type: String,
+		//validate: [notEmpty, "Password is required."],
+		required: false,
+	},
 	projects: { type: [ProjectSchema], required: false },
 });
 
@@ -44,9 +54,9 @@ function notEmpty(password) {
 }
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function emailSyntax(email){
+function emailSyntax(email) {
 	console.log(email);
-    return emailRegex.test(email)
+	return emailRegex.test(email);
 }
 
 const User = mongoose.model("User", UserSchema);
@@ -64,7 +74,7 @@ module.exports = { User, Project, Box, Solution };
  * 		check uniqueness for email
  * 		check email validity
  * 4. lowercase email - add field to UserSchema.email 'lowercase: true'.
- * 
+ *
  * algo:
  * 1. evaluate each solution by metrica
  * 2. to accept solutions with less than 100% success

@@ -22,6 +22,7 @@ export const SolutionsList = () => {
 					return (
 						<ListItem key={index}>
 							<Button onClick={() => handleClick(solution.id)}>
+								{/* TODO: change to solution.name */}
 								Solution {index + 1}
 							</Button>
 						</ListItem>

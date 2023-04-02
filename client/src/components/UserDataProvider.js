@@ -168,6 +168,7 @@ export const UserDataProvider = ({ children }) => {
 					...projects,
 					{
 						id: current_id,
+						name: project.name,
 						container: project.container,
 						boxes: project.boxes,
 						solutions: Object.values(solutions),

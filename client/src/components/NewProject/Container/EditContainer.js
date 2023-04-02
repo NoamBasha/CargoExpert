@@ -16,7 +16,7 @@ export const EditContainer = ({ setStage, container, setContainer }) => {
 			parseInt(formHeight),
 			parseInt(formLength),
 		]);
-		setStage(2);
+		setStage((prevStage) => prevStage + 1);
 	};
 
 	return (
@@ -54,6 +54,9 @@ export const EditContainer = ({ setStage, container, setContainer }) => {
 				<br />
 
 				<Button onClick={handleEditContainer}>Continue</Button>
+				<Button onClick={() => setStage((prevStage) => prevStage - 1)}>
+					Back
+				</Button>
 			</form>
 		</div>
 	);

@@ -5,7 +5,7 @@ import { EditContext } from "./View.js";
 import { useProject } from "../ProjectProvider.js";
 import { BoxText } from "./BoxText.js";
 
-export const Box = ({ order, size, position, color, text }) => {
+export const Box = ({ id, order, size, position, color, text }) => {
 	const { changeBoxById, changeBoxIndices, solutionId } = useProject();
 	const { edit } = useContext(EditContext);
 	const [outlineColor, setOutlineColor] = useState("#303030");
@@ -60,10 +60,11 @@ export const Box = ({ order, size, position, color, text }) => {
 				onClick={(e) => {
 					if (edit) {
 						e.stopPropagation();
-						console.log(order, size, position, color, text);
+						console.log(id, order, size, position, color, text);
 						toggleColor();
-						changeBoxIndices(order);
-						changeBoxById(order, {
+						changeBoxIndices(id);
+						changeBoxById(id, {
+							id: id,
 							order: order,
 							position: position,
 							text: text,
@@ -83,10 +84,10 @@ export const Box = ({ order, size, position, color, text }) => {
 				/>
 			</mesh>
 
-			{boxTexts.map(({ rotation, position, text }, order) => {
+			{boxTexts.map(({ rotation, position, text }, id) => {
 				return (
 					<BoxText
-						key={order}
+						key={id}
 						rotation={rotation}
 						position={position}
 						text={text}

@@ -24,7 +24,7 @@ export const ProjectsList = () => {
 					return (
 						<ListItem key={index}>
 							<Button onClick={() => handleClick(project.id)}>
-								Project {index + 1}
+								{project.name}
 							</Button>
 						</ListItem>
 					);

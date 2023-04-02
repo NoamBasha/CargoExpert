@@ -65,42 +65,42 @@ export const ProjectProvider = ({ children }) => {
 		setSolutionId((solutionId + 1) % Object.keys(solutions).length);
 	};
 
-	const changeBoxIndices = (id) => {
-		if (boxIndices.includes(id)) {
+	const changeBoxIndices = (newId) => {
+		if (boxIndices.includes(newId)) {
 			setBoxIndices((boxIndices) => {
-				return boxIndices.filter((item) => item !== id);
+				return boxIndices.filter((id) => id !== newId);
 			});
 		} else {
-			setBoxIndices([...boxIndices, id]);
+			setBoxIndices([...boxIndices, newId]);
 		}
 	};
 
 	const moveBox = ([a, b, c]) => {
-		const newBoxes = boxes.map((item) => {
+		const newBoxes = boxes.map((box) => {
 			console.log(boxIndices);
-			if (boxIndices.includes(item.order)) {
-				const [x, y, z] = item.position;
-				return { ...item, position: [x + a, y + b, z + c] };
-			} else return item;
+			if (boxIndices.includes(box.id)) {
+				const [x, y, z] = box.position;
+				return { ...box, position: [x + a, y + b, z + c] };
+			} else return box;
 		});
 		setBoxes(newBoxes);
 	};
 
 	const rotateBox = (axis) => {
-		const newBoxes = boxes.map((item) => {
-			if (boxIndices.includes(item.order)) {
-				const [w, h, l] = item.size;
+		const newBoxes = boxes.map((box) => {
+			if (boxIndices.includes(box.id)) {
+				const [w, h, l] = box.size;
 				if (axis === "x") {
-					return { ...item, size: [w, l, h] };
+					return { ...box, size: [w, l, h] };
 				}
 				if (axis === "y") {
-					return { ...item, size: [l, h, w] };
+					return { ...box, size: [l, h, w] };
 				}
 				if (axis === "z") {
-					return { ...item, size: [h, w, l] };
+					return { ...box, size: [h, w, l] };
 				}
-				return item;
-			} else return item;
+				return box;
+			} else return box;
 		});
 		setBoxes(newBoxes);
 	};
@@ -109,13 +109,13 @@ export const ProjectProvider = ({ children }) => {
 		setBoxes(previousBoxes);
 	};
 
-	const changeBoxById = (order, newItem) => {
-		const newBoxes = boxes.map((item) => {
-			if (item.order === order) {
-				console.log(item, newItem);
-				return newItem;
+	const changeBoxById = (id, newBox) => {
+		const newBoxes = boxes.map((box) => {
+			if (box.id === id) {
+				console.log(box, newBox);
+				return newBox;
 			} else {
-				return item;
+				return box;
 			}
 		});
 		setBoxes(newBoxes);

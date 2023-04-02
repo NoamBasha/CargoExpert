@@ -65,14 +65,15 @@ class Point:
 
 
 class Box:
-    def __init__(self, order='0', box_type='', width='0', height='0', length='0',
+    def __init__(self, id='0', order='0', box_type='', width='0', height='0', length='0',
                  priority='0', taxability='0', weigth='0', color='gray'):
         # casting for convenient
-        order, width, height, length = int(order), int(
+        id, order, width, height, length = int(id), int(order), int(
             width), int(height), int(length)
         priority, taxability, weigth = int(
             priority), int(taxability), int(weigth)
 
+        self.id = id
         self.order = order
         self.box_type = box_type
         self.size = width, height, length
@@ -114,5 +115,5 @@ class Box:
             self.get_size()[1]/2, p[2] + self.get_size()[2]/2
 
     def __repr__(self) -> str:
-        initial = f'"order": {self.order.__str__()}, "size": {list(self.get_size()).__str__()},"position": {list(self.center).__str__()}, "color": \"{self.color}\","text": \"{self.box_type}\"'
+        initial = f'"id": {self.id.__str__()}, "order": {self.order.__str__()}, "size": {list(self.get_size()).__str__()},"position": {list(self.center).__str__()}, "color": \"{self.color}\","text": \"{self.box_type}\"'
         return '{' + initial + '}'
