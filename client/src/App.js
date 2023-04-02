@@ -4,7 +4,6 @@ import { Login } from "./components/Auth/Login";
 import { Register } from "./components/Auth/Register";
 import { Projects } from "./components/Projects/Projects";
 import { Solutions } from "./components/Projects/Solutions";
-import { Project } from "./components/Projects/Project";
 import { NewProject } from "./components/NewProject/NewProject";
 import { ProjectProvider } from "./components/ProjectProvider";
 import { UserDataProvider } from "./components/UserDataProvider";
@@ -33,10 +32,6 @@ function App() {
 						<Route
 							path="/solutions"
 							element={<Solutions />}
-						/>
-						<Route
-							path="/project"
-							element={<Project />}
 						/>
 						<Route
 							path="/view"

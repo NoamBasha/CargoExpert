@@ -11,13 +11,27 @@ export const EditContainer = ({ setStage, container, setContainer }) => {
 	const [formHeight, setFormHeight] = useState(height);
 	const [formLength, setFormLength] = useState(length);
 
+	const validateContainer = () => {
+		if (isNaN(formWidth) || isNaN(formHeight) || isNaN(formLength)) {
+			return false;
+		}
+		if (formWidth <= 0 || formHeight <= 0 || formLength <= 0) {
+			return false;
+		}
+		return true;
+	};
+
 	const handleEditContainer = (event) => {
-		setContainer([
-			parseInt(formWidth),
-			parseInt(formHeight),
-			parseInt(formLength),
-		]);
-		setStage((prevStage) => prevStage + 1);
+		if (validateContainer()) {
+			setContainer([
+				parseInt(formWidth),
+				parseInt(formHeight),
+				parseInt(formLength),
+			]);
+			setStage((prevStage) => prevStage + 1);
+		} else {
+			alert("Problem with container");
+		}
 	};
 
 	const setStandardContainer = (w, h, l) => {

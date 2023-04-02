@@ -5,12 +5,9 @@ const UserDataContext = createContext("");
 export const UserDataProvider = ({ children }) => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-
 	const [projects, setProjects] = useState([]);
-
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
-
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 	const createUser = async ({ email, password, setIsRegistered }) => {

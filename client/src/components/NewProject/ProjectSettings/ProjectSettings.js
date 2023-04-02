@@ -1,6 +1,13 @@
 import { Button, TextField } from "@mui/material";
 
 export const ProjectSettings = ({ name, setName, setStage }) => {
+	const validateName = () => {
+		if (name.trim().length === 0) {
+			return false;
+		}
+		return true;
+	};
+
 	return (
 		<div>
 			<form>
@@ -14,7 +21,15 @@ export const ProjectSettings = ({ name, setName, setStage }) => {
 					}}
 				/>
 				<br />
-				<Button onClick={() => setStage((prevStage) => prevStage + 1)}>
+				<Button
+					onClick={() => {
+						if (validateName()) {
+							setStage((prevStage) => prevStage + 1);
+						} else {
+							alert("Problem with the name");
+						}
+					}}
+				>
 					Continue
 				</Button>
 			</form>
