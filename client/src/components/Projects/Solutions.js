@@ -4,7 +4,6 @@ export const Solutions = () => {
 	return (
 		<div>
 			<SolutionsList />
-			<br></br>
 		</div>
 	);
 };

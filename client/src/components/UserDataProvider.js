@@ -26,7 +26,6 @@ export const UserDataProvider = ({ children }) => {
 				"http://localhost:1337/createUser",
 				requestOptions
 			);
-			console.log(response);
 			if (response.status === 200) {
 				setIsRegistered(true);
 			} else {
@@ -158,6 +157,7 @@ export const UserDataProvider = ({ children }) => {
 				const solutions = await response.json();
 				let current_id = 0;
 				if (projects.length !== 0) {
+					//TODO: set id by first unused id?
 					current_id = projects[projects.length - 1].id + 1;
 				}
 
@@ -193,18 +193,15 @@ export const UserDataProvider = ({ children }) => {
 
 	const updateProject = (project) => {
 		let new_projects = projects.map((current_project) => {
-			if (current_project.id === project.id) {
-				return project;
-			} else {
-				return current_project;
-			}
+			return current_project.id === project.id
+				? project
+				: current_project;
 		});
 		setProjects(new_projects);
 		updateUser(new_projects);
 	};
 
 	const updateSolution = (project_id, solution_id, boxes) => {
-		console.log(project_id, solution_id);
 		let new_projects = projects.map((current_project) => {
 			if (current_project.id === project_id) {
 				let new_project = {

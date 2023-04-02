@@ -44,9 +44,10 @@ export const EditContainer = ({ setStage, container, setContainer }) => {
 		<div>
 			<StandardContainers setStandardContainer={setStandardContainer} />
 
-			<form>
-				<label>Width</label>
+			<form className="d-flex flex-column">
+				<label>Width: </label>
 				<TextField
+					className="mb-3"
 					type="number"
 					id="width"
 					value={formWidth}
@@ -54,9 +55,9 @@ export const EditContainer = ({ setStage, container, setContainer }) => {
 						setFormWidth(e.target.value);
 					}}
 				/>
-				<br />
-				<label>Height</label>
+				<label>Height:</label>
 				<TextField
+					className="mb-3"
 					type="number"
 					id="height"
 					value={formHeight}
@@ -64,9 +65,9 @@ export const EditContainer = ({ setStage, container, setContainer }) => {
 						setFormHeight(e.target.value);
 					}}
 				/>
-				<br />
 				<label>Length</label>
 				<TextField
+					className="mb-3"
 					type="number"
 					id="length"
 					value={formLength}
@@ -74,12 +75,15 @@ export const EditContainer = ({ setStage, container, setContainer }) => {
 						setFormLength(e.target.value);
 					}}
 				/>
-				<br />
 
-				<Button onClick={handleEditContainer}>Continue</Button>
-				<Button onClick={() => setStage((prevStage) => prevStage - 1)}>
-					Back
-				</Button>
+				<div className="d-flex justify-content-between">
+					<Button
+						onClick={() => setStage((prevStage) => prevStage - 1)}
+					>
+						Back
+					</Button>
+					<Button onClick={handleEditContainer}>Continue</Button>
+				</div>
 			</form>
 		</div>
 	);

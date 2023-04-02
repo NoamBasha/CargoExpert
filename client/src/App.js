@@ -9,6 +9,7 @@ import { ProjectProvider } from "./components/ProjectProvider";
 import { UserDataProvider } from "./components/UserDataProvider";
 import { View } from "./components/Visual/View";
 import { Header } from "./components/Header";
+import { ProtectedRoutes } from "./components/ProtectedRoutes";
 
 function App() {
 	return (
@@ -25,21 +26,27 @@ function App() {
 							path="/register"
 							element={<Register />}
 						/>
+						<Route element={<ProtectedRoutes />}>
+							<Route
+								path="/projects"
+								element={<Projects />}
+							/>
+							<Route
+								path="/solutions"
+								element={<Solutions />}
+							/>
+							<Route
+								path="/view"
+								element={<View />}
+							/>
+							<Route
+								path="/new_project"
+								element={<NewProject />}
+							/>
+						</Route>
 						<Route
-							path="/projects"
-							element={<Projects />}
-						/>
-						<Route
-							path="/solutions"
-							element={<Solutions />}
-						/>
-						<Route
-							path="/view"
-							element={<View />}
-						/>
-						<Route
-							path="/new_project"
-							element={<NewProject />}
+							path="*"
+							element={<Login />}
 						/>
 					</Routes>
 				</ProjectProvider>

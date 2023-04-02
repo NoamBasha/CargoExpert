@@ -72,12 +72,11 @@ export const FileUpload = ({ setStage, setContainer, setBoxes }) => {
 	};
 
 	return (
-		<div>
+		<div className="d-flex flex-column align-items-center">
 			<DropzoneArea
+				dropzoneClass={"px-4 text-secondary d-flex align-items-center"}
 				acceptedFiles={["text/csv"]}
-				dropzoneText={
-					"Drag and drop a CSV file here or click to upload your file!"
-				}
+				dropzoneText={"Drop a CSV file or click to upload your file!"}
 				filesLimit={1}
 				maxFileSize={5000000}
 				showAlerts={true}
@@ -93,12 +92,14 @@ export const FileUpload = ({ setStage, setContainer, setBoxes }) => {
 				onDelete={handleDelete}
 			/>
 			<DownloadFile />
-			<Button onClick={() => setStage((prevStage) => prevStage + 1)}>
-				Continue
-			</Button>
-			<Button onClick={() => setStage((prevStage) => prevStage - 1)}>
-				Back
-			</Button>
+			<div className="w-50 d-flex justify-content-between">
+				<Button onClick={() => setStage((prevStage) => prevStage - 1)}>
+					Back
+				</Button>
+				<Button onClick={() => setStage((prevStage) => prevStage + 1)}>
+					Continue
+				</Button>
+			</div>
 		</div>
 	);
 };

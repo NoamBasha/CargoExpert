@@ -90,56 +90,51 @@ export const NewProject = () => {
 	};
 
 	return (
-		<div className="stage">
+		<>
 			<Wizard stage={stage} />
-			{stage == 0 ? (
-				<ProjectSettings
-					name={name}
-					setName={setName}
-					setStage={setStage}
-				/>
-			) : null}
+			<div className="w-100 d-flex justify-content-center mt-5">
+				{stage == 0 ? (
+					<ProjectSettings
+						name={name}
+						setName={setName}
+						setStage={setStage}
+					/>
+				) : null}
 
-			{stage == 1 ? (
-				<FileUpload
-					setStage={setStage}
-					setContainer={setContainer}
-					setBoxes={setBoxes}
-				/>
-			) : null}
-			{stage == 2 ? (
-				<EditContainer
-					setStage={setStage}
-					container={container}
-					setContainer={setContainer}
-				/>
-			) : null}
-			{stage == 3 ? (
-				<EditBoxes
-					setStage={setStage}
-					boxes={boxes}
-					setBoxes={setBoxes}
-					addProject={addProject}
-				/>
-			) : null}
-			{error && (
-				<Alert
-					severity="error"
-					className="mt-3"
-				>
-					{error}
-				</Alert>
-			)}
+				{stage == 1 ? (
+					<FileUpload
+						setStage={setStage}
+						setContainer={setContainer}
+						setBoxes={setBoxes}
+					/>
+				) : null}
+				{stage == 2 ? (
+					<EditContainer
+						setStage={setStage}
+						container={container}
+						setContainer={setContainer}
+					/>
+				) : null}
+				{stage == 3 ? (
+					<EditBoxes
+						setStage={setStage}
+						boxes={boxes}
+						setBoxes={setBoxes}
+						handleAddProject={handleAddProject}
+						isLoading={isLoading}
+					/>
+				) : null}
+				{error && (
+					<Alert
+						severity="error"
+						className="mt-3"
+					>
+						{error}
+					</Alert>
+				)}
 
-			<br />
-
-			{stage == 3 ? (
-				isLoading ? (
-					<CircularProgress />
-				) : (
-					<Button onClick={handleAddProject}>Create Project!</Button>
-				)
-			) : null}
-		</div>
+				<br />
+			</div>
+		</>
 	);
 };

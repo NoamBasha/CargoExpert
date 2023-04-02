@@ -33,7 +33,6 @@ export const ProjectProvider = ({ children }) => {
 			setContainer(projects[index].container);
 			console.log(projects[index].solutions);
 		}
-
 		// return function (projectId = null)?
 	}, [projectId, projects]);
 
@@ -56,11 +55,13 @@ export const ProjectProvider = ({ children }) => {
 		}
 	}, [solutions, solutionId, projects]);
 
+	// Change id access
 	const getPreviousSolution = () => {
 		let len = Object.keys(solutions).length;
 		setSolutionId((((solutionId - 1) % len) + len) % len);
 	};
 
+	// Change id access
 	const getNextSolution = () => {
 		setSolutionId((solutionId + 1) % Object.keys(solutions).length);
 	};

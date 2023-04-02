@@ -1,7 +1,7 @@
 import { useUserData } from "../UserDataProvider.js";
 import { useProject } from "../ProjectProvider.js";
 import { useNavigate } from "react-router-dom";
-import { List, ListItem, ListItemText, Button } from "@mui/material";
+import { List, ListItem, Button } from "@mui/material";
 
 export const ProjectsList = () => {
 	const { projects } = useUserData();

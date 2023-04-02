@@ -64,63 +64,63 @@ export const BoxForm = ({ setBoxes, boxes, selectedIds, editBox }) => {
 	};
 
 	return (
-		<div>
-			<form>
-				<label>Order</label>
-				<TextField
-					type="number"
-					id="order"
-					value={formOrder}
-					onChange={(e) => {
-						setFormOrder(parseFloat(e.target.value));
-					}}
-				/>
-				<br />
-				<label>Width</label>
-				<TextField
-					type="number"
-					id="width"
-					value={formWidth}
-					onChange={(e) => {
-						setFormWidth(parseFloat(e.target.value));
-					}}
-				/>
-				<br />
-				<label>Height</label>
-				<TextField
-					type="number"
-					id="height"
-					value={formHeight}
-					onChange={(e) => {
-						setFormHeight(parseFloat(e.target.value));
-					}}
-				/>
-				<br />
-				<label>Length</label>
-				<TextField
-					type="number"
-					id="length"
-					value={formLength}
-					onChange={(e) => {
-						setFormLength(parseFloat(e.target.value));
-					}}
-				/>
-				<br />
-				<label>Type</label>
-				<TextField
-					type="text"
-					id="type"
-					value={formType}
-					onChange={(e) => {
-						setFormType(e.target.value);
-					}}
-				/>
-				<br />
+		<form className="d-flex flex-column">
+			<label>Order:</label>
+			<TextField
+				className="mb-2"
+				type="number"
+				id="order"
+				value={formOrder}
+				onChange={(e) => {
+					setFormOrder(parseFloat(e.target.value));
+				}}
+			/>
+			<label>Width:</label>
+			<TextField
+				className="mb-2"
+				type="number"
+				id="width"
+				value={formWidth}
+				onChange={(e) => {
+					setFormWidth(parseFloat(e.target.value));
+				}}
+			/>
+			<label>Height:</label>
+			<TextField
+				className="mb-2"
+				type="number"
+				id="height"
+				value={formHeight}
+				onChange={(e) => {
+					setFormHeight(parseFloat(e.target.value));
+				}}
+			/>
+			<label>Length:</label>
+			<TextField
+				className="mb-2"
+				type="number"
+				id="length"
+				value={formLength}
+				onChange={(e) => {
+					setFormLength(parseFloat(e.target.value));
+				}}
+			/>
+			<label>Type:</label>
+			<TextField
+				className="mb-2"
+				type="text"
+				id="type"
+				value={formType}
+				onChange={(e) => {
+					setFormType(e.target.value);
+				}}
+			/>
 
+			<div className="d-flex justify-content-between">
 				<Button onClick={handleEditBox}>Edit</Button>
 				<Button onClick={deleteBoxes}>Delete</Button>
 				<Button onClick={addBox}>Add</Button>
-			</form>
-		</div>
+			</div>
+		</form>
 	);
 };

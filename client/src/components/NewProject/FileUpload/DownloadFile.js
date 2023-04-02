@@ -14,10 +14,8 @@ export const DownloadFile = () => {
 	};
 
 	return (
-		<div>
-			<Button onClick={handleClick}>
-				Click Here To Download Example File
-			</Button>
+		<div className="mt-3 mb-2">
+			<Button onClick={handleClick}>Click here for example file</Button>
 		</div>
 	);
 };
