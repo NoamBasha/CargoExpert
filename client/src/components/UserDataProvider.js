@@ -183,9 +183,9 @@ export const UserDataProvider = ({ children }) => {
 		}
 	};
 
-	const removeProject = (project) => {
-		let new_projects = projects.filter((current_project) => {
-			return current_project.id !== project.id;
+	const deleteProject = (id) => {
+		let new_projects = projects.filter((project) => {
+			return project.id !== id;
 		});
 		setProjects(new_projects);
 		updateUser(new_projects);
@@ -199,6 +199,78 @@ export const UserDataProvider = ({ children }) => {
 		});
 		setProjects(new_projects);
 		updateUser(new_projects);
+	};
+
+	const duplicateSolution = (projectId, solutionId) => {
+		let project;
+		for (let i = 0; i < projects.length; i++) {
+			if (projects[i].id === projectId) {
+				project = projects[i];
+				break;
+			}
+		}
+
+		console.log(project);
+		const existingIds = new Set(
+			project.solutions.map((solution) => solution.id)
+		);
+		let missingId = 0;
+		while (existingIds.has(missingId)) {
+			missingId++;
+		}
+
+		let originalSolution;
+		for (let i = 0; i < project.solutions.length; i++) {
+			if (project.solutions[i].id === solutionId) {
+				originalSolution = project.solutions[i];
+				break;
+			}
+		}
+
+		const newSolution = {
+			...originalSolution,
+			id: missingId,
+		};
+
+		addSolution(projectId, newSolution);
+	};
+
+	const addSolution = (projectId, solution) => {
+		let project;
+		for (let i = 0; i < projects.length; i++) {
+			if (projects[i].id === projectId) {
+				project = projects[i];
+				break;
+			}
+		}
+		const newSolutions = [...project.solutions, solution];
+
+		const newProject = {
+			...project,
+			solutions: newSolutions,
+		};
+
+		updateProject(newProject);
+	};
+
+	const updateSolutionName = (projectId, newSolution) => {
+		let project;
+		for (let i = 0; i < projects.length; i++) {
+			if (projects[i].id === projectId) {
+				project = projects[i];
+				break;
+			}
+		}
+		const newSolutions = project.solutions.filter(
+			(solution) => solution.id !== newSolution.id
+		);
+
+		const newProject = {
+			...project,
+			solutions: [...newSolutions, newSolution],
+		};
+
+		updateProject(newProject);
 	};
 
 	const updateSolution = (project_id, solution_id, boxes) => {
@@ -223,6 +295,27 @@ export const UserDataProvider = ({ children }) => {
 		updateUser(new_projects);
 	};
 
+	const deleteSolution = (projectId) => {
+		return (solutionId) => {
+			let project;
+			for (let i = 0; i < projects.length; i++) {
+				if (projects[i].id === projectId) {
+					project = projects[i];
+					break;
+				}
+			}
+			const newSolutions = project.solutions.filter(
+				(solution) => solution.id !== solutionId
+			);
+			const newProject = {
+				...project,
+				solutions: newSolutions,
+			};
+
+			updateProject(newProject);
+		};
+	};
+
 	return (
 		<UserDataContext.Provider
 			value={{
@@ -233,8 +326,7 @@ export const UserDataProvider = ({ children }) => {
 				projects,
 				setProjects,
 				addProject,
-				removeProject,
-				updateProject,
+				deleteProject,
 				updateSolution,
 				readUser,
 				isLoading,
@@ -242,6 +334,10 @@ export const UserDataProvider = ({ children }) => {
 				createUser,
 				isLoggedIn,
 				setIsLoggedIn,
+				updateProject,
+				deleteSolution,
+				duplicateSolution,
+				updateSolutionName,
 			}}
 		>
 			{children}

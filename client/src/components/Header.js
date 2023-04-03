@@ -21,9 +21,7 @@ export const Header = () => {
 				<>
 					<h3>Cargo Expert</h3>
 					<Button onClick={logout}>Logout</Button>
-					<Button onClick={() => navigate("/projects")}>
-						Projects
-					</Button>
+					<Button onClick={() => navigate("/home")}>Home</Button>
 				</>
 			)}
 		</div>

@@ -1,7 +1,6 @@
 import { ThreeScene } from "./ThreeScene.js";
 import { useState, createContext } from "react";
 import { useProject } from "../ProjectProvider.js";
-import { useUserData } from "../UserDataProvider";
 import { Button } from "@mui/material";
 
 const NextSolutionButton = ({ text, getNextSolution }) => {
@@ -55,12 +54,9 @@ export const View = () => {
 		resetBoxes,
 		getNextSolution,
 		getPreviousSolution,
-		projectId,
 		container,
-		solutionId,
+		saveSolution,
 	} = useProject();
-
-	const { updateSolution } = useUserData();
 
 	const axisButtons = [
 		{ text: "-x", moveBy: [-1, 0, 0] },
@@ -259,7 +255,7 @@ export const View = () => {
 
 	const handleSaveSolution = (e) => {
 		e.preventDefault();
-		updateSolution(projectId, solutionId, boxes);
+		saveSolution();
 		console.log("Saving solution");
 	};
 

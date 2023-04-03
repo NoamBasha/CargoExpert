@@ -19,7 +19,7 @@ export const Login = () => {
 
 	useEffect(() => {
 		if (isLoggedIn) {
-			navigate("/projects");
+			navigate("/home");
 		}
 	}, [isLoggedIn]);
 

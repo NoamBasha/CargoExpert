@@ -1,5 +1,5 @@
 import { useState, createContext, useContext, useEffect } from "react";
-import { useUserData } from "./UserDataProvider";
+import { useUserData } from "../UserDataProvider";
 
 /*
 user: order, type, width, height, length
@@ -22,7 +22,7 @@ export const ProjectProvider = ({ children }) => {
 	const [previousBoxes, setPreviousBoxes] = useState(boxes);
 	const [boxIndices, setBoxIndices] = useState([]);
 
-	const { projects } = useUserData();
+	const { projects, updateSolution } = useUserData();
 
 	useEffect(() => {
 		if (projectId !== null) {
@@ -122,6 +122,10 @@ export const ProjectProvider = ({ children }) => {
 		setBoxes(newBoxes);
 	};
 
+	const saveSolution = () => {
+		updateSolution(projectId, solutionId, boxes);
+	};
+
 	return (
 		<ProjectContext.Provider
 			value={{
@@ -140,6 +144,7 @@ export const ProjectProvider = ({ children }) => {
 				container,
 				solutionId,
 				projectId,
+				saveSolution,
 			}}
 		>
 			{children}

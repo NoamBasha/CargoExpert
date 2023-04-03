@@ -83,7 +83,7 @@ export const NewProject = () => {
 				boxes: project_boxes,
 				solutions: [],
 			});
-			navigate("/projects");
+			navigate("/home");
 		} else {
 			alert("Problem with boxes");
 		}
