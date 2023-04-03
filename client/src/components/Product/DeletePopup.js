@@ -1,6 +1,6 @@
 import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
 
-export const DeletePopup = ({ id, onSubmit, onClose }) => {
+export const DeletePopup = ({ text, id, onSubmit, onClose }) => {
 	const handleSubmit = () => {
 		onSubmit(id);
 		onClose();
@@ -11,7 +11,7 @@ export const DeletePopup = ({ id, onSubmit, onClose }) => {
 			open={true}
 			onClose={onClose}
 		>
-			<DialogTitle>Delete Project?</DialogTitle>
+			<DialogTitle>{text}</DialogTitle>
 			<DialogActions className="d-flex justify-content-center">
 				<Button onClick={onClose}>Cancel</Button>
 				<Button

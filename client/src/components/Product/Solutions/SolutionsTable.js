@@ -126,6 +126,7 @@ export const SolutionsTable = () => {
 			</TableContainer>
 			{showChangeNamePopup ? (
 				<ChangeNamePopup
+					text="Change Solution Name"
 					id={tableSolutionId}
 					onSubmit={handleChangeName}
 					onClose={() => setShowChangeNamePopup(false)}
@@ -133,6 +134,7 @@ export const SolutionsTable = () => {
 			) : null}
 			{showDeletePopup ? (
 				<DeletePopup
+					text="Delete Solution?"
 					id={tableSolutionId}
 					onSubmit={deleteSolution(projectId)}
 					onClose={() => setShowDeletePopup(false)}

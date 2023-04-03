@@ -108,6 +108,7 @@ export const ProjectsTable = () => {
 			</TableContainer>
 			{showChangeNamePopup ? (
 				<ChangeNamePopup
+					text="Change Project Name"
 					id={tableProjectId}
 					onSubmit={handleChangeName}
 					onClose={() => setShowChangeNamePopup(false)}
@@ -115,6 +116,7 @@ export const ProjectsTable = () => {
 			) : null}
 			{showDeletePopup ? (
 				<DeletePopup
+					text="Delete Project?"
 					id={tableProjectId}
 					onSubmit={deleteProject}
 					onClose={() => setShowDeletePopup(false)}

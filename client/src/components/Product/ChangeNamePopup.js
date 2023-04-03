@@ -8,7 +8,7 @@ import {
 	Button,
 } from "@mui/material";
 
-export const ChangeNamePopup = ({ id, onSubmit, onClose }) => {
+export const ChangeNamePopup = ({ text, id, onSubmit, onClose }) => {
 	const [name, setName] = useState("");
 
 	const handleSubmit = () => {
@@ -21,7 +21,7 @@ export const ChangeNamePopup = ({ id, onSubmit, onClose }) => {
 			open={true}
 			onClose={onClose}
 		>
-			<DialogTitle>Change Project Name</DialogTitle>
+			<DialogTitle>{text}</DialogTitle>
 			<DialogContent>
 				<TextField
 					className="mt-2"
