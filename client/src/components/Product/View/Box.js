@@ -7,7 +7,8 @@ import { BoxText } from "./BoxText.js";
 import { useEdit } from "./EditProvider.js";
 
 export const Box = ({ id, order, size, position, color, text }) => {
-	const { changeBoxById, changeBoxIndices, solutionId } = useProject();
+	const { changeBoxById, changeBoxIndices, solutionId, boxIndices } =
+		useProject();
 	const { edit } = useEdit();
 	const [outlineColor, setOutlineColor] = useState("#303030");
 	const [boxColor, setBoxColor] = useState(color);
@@ -20,6 +21,12 @@ export const Box = ({ id, order, size, position, color, text }) => {
 	useEffect(() => {
 		setBoxColor(color);
 	}, [solutionId]);
+
+	useEffect(() => {
+		if (!boxIndices.includes(id)) {
+			setBoxColor(color);
+		}
+	}, [boxIndices]);
 
 	const boxTexts = [
 		{

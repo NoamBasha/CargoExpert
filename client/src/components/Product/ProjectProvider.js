@@ -107,6 +107,7 @@ export const ProjectProvider = ({ children }) => {
 	};
 
 	const resetBoxes = () => {
+		deselectBoxes();
 		setBoxes(previousBoxes);
 	};
 
@@ -124,6 +125,10 @@ export const ProjectProvider = ({ children }) => {
 
 	const saveSolution = () => {
 		updateSolution(projectId, solutionId, boxes);
+	};
+
+	const deselectBoxes = () => {
+		setBoxIndices([]);
 	};
 
 	return (
@@ -145,6 +150,7 @@ export const ProjectProvider = ({ children }) => {
 				solutionId,
 				projectId,
 				saveSolution,
+				deselectBoxes,
 			}}
 		>
 			{children}

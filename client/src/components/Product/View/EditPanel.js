@@ -1,20 +1,16 @@
 import { Button } from "@mui/material";
 import { useProject } from "../ProjectProvider.js";
 
-const AxisButton = ({ text, moveBy, moveBox }) => {
-	return <Button onClick={() => moveBox(moveBy)}>{text}</Button>;
+const MovementButton = ({ text, arg, onClick }) => {
+	return <Button onClick={() => onClick(arg)}>{text}</Button>;
 };
 
-const RotationButton = ({ text, axis, rotateBox }) => {
-	return <Button onClick={() => rotateBox(axis)}>{text}</Button>;
-};
-
-const ResetButton = ({ text, resetBoxes }) => {
-	return <Button onClick={() => resetBoxes()}>{text}</Button>;
+const BoxesButton = ({ text, onClick }) => {
+	return <Button onClick={() => onClick()}>{text}</Button>;
 };
 
 export const EditPanel = () => {
-	const { moveBox, rotateBox, resetBoxes } = useProject();
+	const { moveBox, rotateBox, resetBoxes, deselectBoxes } = useProject();
 
 	const axisButtons = [
 		{ text: "-x", moveBy: [-1, 0, 0] },
@@ -35,30 +31,34 @@ export const EditPanel = () => {
 		<div>
 			{axisButtons.map(({ text, moveBy }, index) => {
 				return (
-					<AxisButton
+					<MovementButton
 						key={index}
 						text={text}
-						moveBy={moveBy}
-						moveBox={moveBox}
+						arg={moveBy}
+						onClick={moveBox}
 					/>
 				);
 			})}
 
 			{rotationButtons.map(({ text, axis }, index) => {
 				return (
-					<RotationButton
+					<MovementButton
 						key={index}
 						text={text}
-						axis={axis}
-						rotateBox={rotateBox}
+						arg={axis}
+						onClick={rotateBox}
 					/>
 				);
 			})}
 
-			<ResetButton
-				key={0}
+			<BoxesButton
 				text="reset"
-				resetBoxes={resetBoxes}
+				onClick={resetBoxes}
+			/>
+
+			<BoxesButton
+				text="deselect all boxes"
+				onClick={deselectBoxes}
 			/>
 		</div>
 	);

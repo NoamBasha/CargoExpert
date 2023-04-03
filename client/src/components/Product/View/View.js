@@ -12,11 +12,12 @@ const EditButton = ({ setEdit }) => {
 	return <Button onClick={() => setEdit()}>Edit</Button>;
 };
 
-const ViewButton = ({ setEdit, validateBoxesLocation }) => {
+const ViewButton = ({ deselectBoxes, setEdit, validateBoxesLocation }) => {
 	return (
 		<Button
 			onClick={() => {
 				if (validateBoxesLocation()) {
+					deselectBoxes();
 					setEdit();
 				}
 			}}
@@ -34,6 +35,7 @@ export const View = () => {
 		getPreviousSolution,
 		container,
 		saveSolution,
+		deselectBoxes,
 	} = useProject();
 
 	// returns true if there is a box that is out of bounds
@@ -247,6 +249,7 @@ export const View = () => {
 			{edit ? null : <EditButton setEdit={() => setEdit(true)} />}
 			{edit ? (
 				<ViewButton
+					deselectBoxes={() => deselectBoxes()}
 					setEdit={() => setEdit(false)}
 					validateBoxesLocation={validateBoxesLocation(
 						boxes,
