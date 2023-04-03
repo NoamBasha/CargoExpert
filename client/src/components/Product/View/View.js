@@ -1,28 +1,11 @@
 import { ThreeScene } from "./ThreeScene.js";
-import { useState, createContext } from "react";
 import { useProject } from "../ProjectProvider.js";
 import { Button } from "@mui/material";
+import { EditPanel } from "./EditPanel.js";
+import { useEdit } from "./EditProvider.js";
 
-const NextSolutionButton = ({ text, getNextSolution }) => {
-	return <Button onClick={() => getNextSolution()}>{text}</Button>;
-};
-
-/*
-const PreviousSolutionButton = ({ text, getPreviousSolution }) => {
-	return <Button onClick={() => getPreviousSolution()}>{text}</Button>;
-};
-*/
-
-const ResetButton = ({ text, resetBoxes }) => {
-	return <Button onClick={() => resetBoxes()}>{text}</Button>;
-};
-
-const AxisButton = ({ text, moveBy, moveBox }) => {
-	return <Button onClick={() => moveBox(moveBy)}>{text}</Button>;
-};
-
-const RotationButton = ({ text, axis, rotateBox }) => {
-	return <Button onClick={() => rotateBox(axis)}>{text}</Button>;
+const SolutionButton = ({ text, getSolution }) => {
+	return <Button onClick={() => getSolution()}>{text}</Button>;
 };
 
 const EditButton = ({ setEdit }) => {
@@ -43,35 +26,15 @@ const ViewButton = ({ setEdit, validateBoxesLocation }) => {
 	);
 };
 
-export const EditContext = createContext(null);
-
 export const View = () => {
-	const [edit, setEdit] = useState(false);
+	const { edit, setEdit } = useEdit();
 	const {
 		boxes,
-		moveBox,
-		rotateBox,
-		resetBoxes,
 		getNextSolution,
 		getPreviousSolution,
 		container,
 		saveSolution,
 	} = useProject();
-
-	const axisButtons = [
-		{ text: "-x", moveBy: [-1, 0, 0] },
-		{ text: "x+", moveBy: [1, 0, 0] },
-		{ text: "-y", moveBy: [0, -1, 0] },
-		{ text: "y+", moveBy: [0, 1, 0] },
-		{ text: "-z", moveBy: [0, 0, -1] },
-		{ text: "z+", moveBy: [0, 0, 1] },
-	];
-
-	const rotationButtons = [
-		{ text: "rotate x", axis: "x" },
-		{ text: "rotate y", axis: "y" },
-		{ text: "rotate z", axis: "z" },
-	];
 
 	// returns true if there is a box that is out of bounds
 	// return false if everything is ok
@@ -260,59 +223,44 @@ export const View = () => {
 	};
 
 	return (
-		<EditContext.Provider value={{ edit }}>
-			<NextSolutionButton
-				text="Previous Solution"
-				getNextSolution={getPreviousSolution}
-			/>
-			<NextSolutionButton
-				text="Next Solution"
-				getNextSolution={getNextSolution}
-			/>
-			{edit
-				? axisButtons.map(({ text, moveBy }, index) => {
-						return (
-							<AxisButton
-								key={index}
-								text={text}
-								moveBy={moveBy}
-								moveBox={moveBox}
-							/>
-						);
-				  })
-				: null}
+		<div className="d-flex flex-column">
+			{edit ? <EditPanel /> : null}
 
-			{edit
-				? rotationButtons.map(({ text, axis }, index) => {
-						return (
-							<RotationButton
-								key={index}
-								text={text}
-								axis={axis}
-								rotateBox={rotateBox}
-							/>
-						);
-				  })
-				: null}
+			<div className="d-flex flex-row justify-content-center">
+				{edit ? null : (
+					<SolutionButton
+						text="Prev"
+						getSolution={getPreviousSolution}
+					/>
+				)}
 
+				<ThreeScene container={container} />
+
+				{edit ? null : (
+					<SolutionButton
+						text="Next"
+						getSolution={getNextSolution}
+					/>
+				)}
+			</div>
+
+			{edit ? null : <EditButton setEdit={() => setEdit(true)} />}
 			{edit ? (
-				<ResetButton
-					key={0}
-					text="reset"
-					resetBoxes={resetBoxes}
+				<ViewButton
+					setEdit={() => setEdit(false)}
+					validateBoxesLocation={validateBoxesLocation(
+						boxes,
+						container
+					)}
 				/>
 			) : null}
-			<ThreeScene container={container} />
 
-			<EditButton setEdit={() => setEdit(true)} />
-			<ViewButton
-				setEdit={() => setEdit(false)}
-				validateBoxesLocation={validateBoxesLocation(boxes, container)}
-			/>
 			<br />
-			<Button onClick={(e) => handleSaveSolution(e)}>
-				Save Solution
-			</Button>
-		</EditContext.Provider>
+			{edit ? null : (
+				<Button onClick={(e) => handleSaveSolution(e)}>
+					Save Solution
+				</Button>
+			)}
+		</div>
 	);
 };

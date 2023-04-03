@@ -4,10 +4,11 @@ import { BoxHelper } from "three";
 import { EditContext } from "./View.js";
 import { useProject } from "../ProjectProvider.js";
 import { BoxText } from "./BoxText.js";
+import { useEdit } from "./EditProvider.js";
 
 export const Box = ({ id, order, size, position, color, text }) => {
 	const { changeBoxById, changeBoxIndices, solutionId } = useProject();
-	const { edit } = useContext(EditContext);
+	const { edit } = useEdit();
 	const [outlineColor, setOutlineColor] = useState("#303030");
 	const [boxColor, setBoxColor] = useState(color);
 	const eps = 0.0001;

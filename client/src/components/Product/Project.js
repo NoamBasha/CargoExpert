@@ -1,6 +1,6 @@
 import { ProjectsTable } from "./Projects/ProjectsTable";
 import { SolutionsTable } from "./Solutions/SolutionsTable";
-import { View } from "./View/View";
+import { SolutionView } from "./View/SolutionView";
 import { useProject } from "./ProjectProvider";
 
 export const Project = () => {
@@ -12,7 +12,7 @@ export const Project = () => {
 			{projectId != null && solutionId == null ? (
 				<SolutionsTable />
 			) : null}
-			{projectId != null && solutionId != null ? <View /> : null}
+			{projectId != null && solutionId != null ? <SolutionView /> : null}
 		</div>
 	);
 };
