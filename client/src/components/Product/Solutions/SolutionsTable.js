@@ -1,4 +1,4 @@
-import { List, ListItem, Button } from "@mui/material";
+import { Button, Snackbar } from "@mui/material";
 import { useProject } from "../ProjectProvider";
 import { useUserData } from "../../UserDataProvider.js";
 
@@ -14,7 +14,6 @@ import {
 import { useState } from "react";
 import { ChangeNamePopup } from "../ChangeNamePopup";
 import { DeletePopup } from "../DeletePopup";
-import { Project } from "../Project";
 
 export const SolutionsTable = () => {
 	const { solutions, setSolutionId, projectId } = useProject();
@@ -24,6 +23,7 @@ export const SolutionsTable = () => {
 	const [tableSolutionId, setTableSolutionId] = useState(null);
 	const [showChangeNamePopup, setShowChangeNamePopup] = useState(false);
 	const [showDeletePopup, setShowDeletePopup] = useState(false);
+	const [snackbarMessage, setSnackbarMessage] = useState("");
 
 	if (solutions == null || solutions.length === 0) {
 		return <h3>There are no solutions, please create a new project</h3>;
@@ -58,13 +58,20 @@ export const SolutionsTable = () => {
 				name: name,
 			};
 			updateSolutionName(projectId, newSolution);
+			setSnackbarMessage(`Changed name to ${name}`);
 		}
 	};
 
 	return (
 		<div>
-			<TableContainer component={Paper}>
-				<Table aria-label="projects table">
+			<TableContainer
+				component={Paper}
+				sx={{ maxHeight: "800px" }}
+			>
+				<Table
+					aria-label="projects table"
+					stickyHeader
+				>
 					<TableHead>
 						<TableRow>
 							<TableCell>Name</TableCell>
@@ -113,6 +120,9 @@ export const SolutionsTable = () => {
 													projectId,
 													row.id
 												);
+												setSnackbarMessage(
+													`Duplicated solution`
+												);
 											}}
 										>
 											Duplicate
@@ -137,9 +147,18 @@ export const SolutionsTable = () => {
 					text="Delete Solution?"
 					id={tableSolutionId}
 					onSubmit={deleteSolution(projectId)}
-					onClose={() => setShowDeletePopup(false)}
+					onClose={() => {
+						setShowDeletePopup(false);
+						setSnackbarMessage("Deleted solution");
+					}}
 				/>
 			) : null}
+			<Snackbar
+				open={snackbarMessage !== ""}
+				message={snackbarMessage}
+				onClose={() => setSnackbarMessage("")}
+				autoHideDuration={4000}
+			/>
 		</div>
 	);
 };

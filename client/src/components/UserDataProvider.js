@@ -202,6 +202,25 @@ export const UserDataProvider = ({ children }) => {
 	};
 
 	const duplicateSolution = (projectId, solutionId) => {
+		const removeIds = (obj) => {
+			if (Array.isArray(obj)) {
+				// if the object is an array, recursively remove ids from each element
+				return obj.map((elem) => removeIds(elem));
+			} else if (typeof obj === "object" && obj !== null) {
+				// if the object is a non-null object, recursively remove ids from each key-value pair
+				const newObj = {};
+				Object.entries(obj).forEach(([key, value]) => {
+					if (key !== "_id") {
+						newObj[key] = removeIds(value);
+					}
+				});
+				return newObj;
+			} else {
+				// otherwise, return the original value
+				return obj;
+			}
+		};
+
 		let project;
 		for (let i = 0; i < projects.length; i++) {
 			if (projects[i].id === projectId) {
@@ -227,9 +246,12 @@ export const UserDataProvider = ({ children }) => {
 			}
 		}
 
+		const originalSolutionNoIds = removeIds(originalSolution);
+
 		const newSolution = {
-			...originalSolution,
+			...originalSolutionNoIds,
 			id: missingId,
+			name: `${originalSolution.name} duplicated`,
 		};
 
 		addSolution(projectId, newSolution);

@@ -1,5 +1,5 @@
 import { useUserData } from "../../UserDataProvider.js";
-import { Button } from "@mui/material";
+import { Button, Snackbar } from "@mui/material";
 import {
 	TableContainer,
 	Table,
@@ -20,6 +20,7 @@ export const ProjectsTable = () => {
 	const [tableProjectId, setTableProjectId] = useState(null);
 	const [showChangeNamePopup, setShowChangeNamePopup] = useState(false);
 	const [showDeletePopup, setShowDeletePopup] = useState(false);
+	const [snackbarMessage, setSnackbarMessage] = useState("");
 
 	if (projects == null || projects.length === 0) {
 		return <h3>There are no projects, please create a new project</h3>;
@@ -53,13 +54,20 @@ export const ProjectsTable = () => {
 				name: name,
 			};
 			updateProject(newProject);
+			setSnackbarMessage(`Changed name to ${name}`);
 		}
 	};
 
 	return (
 		<div>
-			<TableContainer component={Paper}>
-				<Table aria-label="projects table">
+			<TableContainer
+				component={Paper}
+				sx={{ maxHeight: "300px" }}
+			>
+				<Table
+					aria-label="projects table"
+					stickyHeader
+				>
 					<TableHead>
 						<TableRow>
 							<TableCell>Name</TableCell>
@@ -122,6 +130,12 @@ export const ProjectsTable = () => {
 					onClose={() => setShowDeletePopup(false)}
 				/>
 			) : null}
+			<Snackbar
+				open={snackbarMessage !== ""}
+				message={snackbarMessage}
+				onClose={() => setSnackbarMessage("")}
+				autoHideDuration={4000}
+			/>
 		</div>
 	);
 };

@@ -226,6 +226,8 @@ export const View = () => {
 
 	return (
 		<div className="d-flex flex-column">
+			{console.log(boxes)}
+
 			{edit ? <EditPanel /> : null}
 
 			<div className="d-flex flex-row justify-content-center">

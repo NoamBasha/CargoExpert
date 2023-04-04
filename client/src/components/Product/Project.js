@@ -1,5 +1,5 @@
-import { ProjectsTable } from "./Projects/ProjectsTable";
-import { SolutionsTable } from "./Solutions/SolutionsTable";
+import { Projects } from "./Projects/Projects";
+import { Solutions } from "./Solutions/Solutions";
 import { SolutionView } from "./View/SolutionView";
 import { useProject } from "./ProjectProvider";
 
@@ -8,10 +8,8 @@ export const Project = () => {
 
 	return (
 		<div>
-			{projectId == null && solutionId == null ? <ProjectsTable /> : null}
-			{projectId != null && solutionId == null ? (
-				<SolutionsTable />
-			) : null}
+			{projectId == null && solutionId == null ? <Projects /> : null}
+			{projectId != null && solutionId == null ? <Solutions /> : null}
 			{projectId != null && solutionId != null ? <SolutionView /> : null}
 		</div>
 	);

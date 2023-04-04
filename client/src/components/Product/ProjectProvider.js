@@ -42,12 +42,9 @@ export const ProjectProvider = ({ children }) => {
 			Object.keys(solutions).length !== 0 &&
 			solutionId !== null
 		) {
-			console.log(solutions);
-			let index = solutions.findIndex(
+			const solution = solutions.find(
 				(solution) => solution.id === solutionId
 			);
-			setSolutionId(index);
-			let solution = solutions[index];
 			//setSolution(solution);
 			setBoxes(solution.boxes);
 			setPreviousBoxes(solution.boxes);
