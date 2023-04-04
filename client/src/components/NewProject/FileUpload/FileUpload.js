@@ -2,9 +2,13 @@ import Papa from "papaparse";
 import { Button } from "@mui/material";
 import { DropzoneArea } from "material-ui-dropzone";
 import { DownloadFile } from "./DownloadFile";
+import { useState } from "react";
+import { FileIndicator } from "./FileIndicator";
 import "./FileUpload.css";
 
 export const FileUpload = ({ setStage, setContainer, setBoxes }) => {
+	const [fileName, setFileName] = useState(null);
+
 	const parseData = (data) => {
 		console.log(data);
 		let numeric_data = [];
@@ -69,6 +73,7 @@ export const FileUpload = ({ setStage, setContainer, setBoxes }) => {
 	const handleDelete = () => {
 		setContainer([]);
 		setBoxes([]);
+		setFileName(null);
 	};
 
 	return (
@@ -82,15 +87,26 @@ export const FileUpload = ({ setStage, setContainer, setBoxes }) => {
 				showAlerts={true}
 				showPreviews={false}
 				showFileNamesInPreview={false}
-				showPreviewsInDropzone={true}
-				showFileNames={true}
-				getFileAddedMessage={(fileName) => `CSV file ${fileName} added`}
-				getFileRemovedMessage={(fileName) =>
-					`CSV file ${fileName} removed`
-				}
+				showPreviewsInDropzone={false} // true?
+				showFileNames={false} // true?
+				getFileAddedMessage={(fileName) => {
+					setFileName(fileName);
+					return `CSV file ${fileName} added`;
+				}}
+				getFileRemovedMessage={(fileName) => {
+					setFileName(null);
+					return `CSV file ${fileName} removed`;
+				}}
 				onDrop={(files) => handleDrop(files)}
 				onDelete={handleDelete}
+				// alertSnackbarProps={{
+				// 	anchorOrigin: { vertical: "center", horizontal: "center" },
+				// }}
 			/>
+			<br />
+			{fileName
+				? `${fileName} is uploaded successfully`
+				: "No file is uploaded"}
 			<DownloadFile />
 			<div className="w-50 d-flex justify-content-between">
 				<Button onClick={() => setStage((prevStage) => prevStage - 1)}>

@@ -17,7 +17,10 @@ export const BoxForm = ({ setBoxes, boxes, selectedIds, editBox }) => {
 			setFormType("");
 		}
 		if (selectedIds.length == 1) {
-			const box = boxes[selectedIds[0] - 1];
+			const filteredBoxes = boxes.filter((box) => {
+				return box.id === selectedIds[0];
+			});
+			const box = filteredBoxes[0];
 			setFormOrder(box.order);
 			setFormWidth(box.width);
 			setFormHeight(box.height);
@@ -53,10 +56,10 @@ export const BoxForm = ({ setBoxes, boxes, selectedIds, editBox }) => {
 		const newBox = {
 			id: missingId,
 			order: formOrder,
+			type: formType,
 			width: formWidth,
 			height: formHeight,
 			length: formLength,
-			type: formType,
 		};
 		const newBoxes = [...boxes, newBox];
 		setBoxes(newBoxes);

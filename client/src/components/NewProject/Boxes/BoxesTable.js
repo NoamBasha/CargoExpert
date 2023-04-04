@@ -32,8 +32,8 @@ export const BoxesTable = ({ boxes, selectedIds, setSelecetedIds }) => {
 				rowsPerPageOptions={10}
 				checkboxSelection
 				disableRowSelectionOnClick
-				onRowSelectionModelChange={(newRow) => {
-					setSelecetedIds(newRow);
+				onRowSelectionModelChange={(rows) => {
+					setSelecetedIds(rows);
 				}}
 				rowSelectionModel={selectedIds}
 			/>

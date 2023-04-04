@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BoxesTable } from "./BoxesTable.js";
 import { BoxForm } from "./BoxForm";
 import { Button } from "@mui/material";
-import { Alert, CircularProgress } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import "./EditBoxes.css";
 
 export const EditBoxes = ({
@@ -13,6 +13,8 @@ export const EditBoxes = ({
 	isLoading,
 }) => {
 	const [selectedIds, setSelecetedIds] = useState([]);
+
+	console.log(`ids: ${selectedIds}`);
 
 	const editSelectedIds = (newBox) => {
 		const newBoxes = boxes.map((box) => {
