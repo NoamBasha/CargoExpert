@@ -4,10 +4,13 @@ import { DropzoneArea } from "material-ui-dropzone";
 import { DownloadFile } from "./DownloadFile";
 import { useState } from "react";
 import { FileIndicator } from "./FileIndicator";
+import { Snackbar, Alert } from "@mui/material";
+
 import "./FileUpload.css";
 
 export const FileUpload = ({ setStage, setContainer, setBoxes }) => {
 	const [fileName, setFileName] = useState(null);
+	const [snackbarMessage, setSnackbarMessage] = useState("");
 
 	const parseData = (data) => {
 		console.log(data);
@@ -84,24 +87,24 @@ export const FileUpload = ({ setStage, setContainer, setBoxes }) => {
 				dropzoneText={"Drop a CSV file or click to upload your file!"}
 				filesLimit={1}
 				maxFileSize={5000000}
-				showAlerts={true}
+				showAlerts={true} // false?
 				showPreviews={false}
 				showFileNamesInPreview={false}
 				showPreviewsInDropzone={false} // true?
 				showFileNames={false} // true?
 				getFileAddedMessage={(fileName) => {
 					setFileName(fileName);
+					setSnackbarMessage(`CSV file ${fileName} added`);
 					return `CSV file ${fileName} added`;
 				}}
 				getFileRemovedMessage={(fileName) => {
 					setFileName(null);
+					setSnackbarMessage(`CSV file ${fileName} removed`);
 					return `CSV file ${fileName} removed`;
 				}}
 				onDrop={(files) => handleDrop(files)}
 				onDelete={handleDelete}
-				// alertSnackbarProps={{
-				// 	anchorOrigin: { vertical: "center", horizontal: "center" },
-				// }}
+				alertSnackbarProps={{}}
 			/>
 			<br />
 			{fileName
