@@ -5,7 +5,7 @@ import random
 from box import Box, Rotation
 from container import Container
 
-NUMBER_OF_ITERATIONS = 500
+NUMBER_OF_ITERATIONS = 1000
 """
 the structure of the file is:
 contWidth, contHeight, contLength, order, type, width, height, length, priority ,taxabilty
@@ -58,6 +58,34 @@ def perturbation(boxes: list[Box]):
         if chosen_perturb(b1, boxes[i+1]):
             boxes[i], boxes[i+1] = boxes[i+1], boxes[i]
 
+def num_of_items_metric(solution_boxes: list[Box]):
+    return len(solution_boxes)
+
+def volume_metric(solution_boxes: list[Box]):
+    volume = 0
+    for v in normalize([box.volume for box in solution_boxes]):
+        volume += v
+    return volume
+
+def order_metric(solution_boxes: list[Box]):
+    order_list = normalize([box.order for box in solution_boxes])
+    z_list = normalize([box.FLB[2] for box in solution_boxes])
+    
+    score = 0
+    for order,z in zip(order_list,z_list):
+        # maybe we should multiply by 2 the score
+        score += (abs(order - z)) ** 0.5
+    return score
+
+def normalize(numbers):
+    max_number = max(numbers)
+    min_number = min(numbers)
+    normalized = [(number - min_number) / (max_number - min_number) for number in numbers]
+    return normalized
+
+def overall_metric(solution_boxes: list[Box], project_boxes: list[Box], container: Container):
+    num, volume, score = num_of_items_metric(solution_boxes), volume_metric(solution_boxes), order_metric(solution_boxes)
+    return num / len(project_boxes) + 20*volume/container.volume - score
 
 def constructive_packing(boxes: list[Box], container: Container) -> list[Box]:
     # each point has x,y,z values. In addition, it holds the direction it came from - 1 for left and -1 for right.
@@ -100,8 +128,8 @@ def constructive_packing(boxes: list[Box], container: Container) -> list[Box]:
             solution_data['capacity'] += b.volume
 
         # if we know all boxes must be in container, then we can stop here
-        else:
-            return None
+        # else:
+        #     return None
 
     return boxes_in_solution, solution_data
 
@@ -143,7 +171,12 @@ def algo():
                 "name": "solution " + counter_string ,"id": counter, "boxes": boxes_in_solution, "solution_data": solution_data}
             counter += 1
 
-    return solution_list
+    solution_list = sorted(solution_list.values(), key = lambda x: overall_metric(x["boxes"], boxes, container), reverse=True)
+    solution_dict = dict()
+    for index, val in enumerate(solution_list):
+        index_string = f'{index}'
+        solution_dict[index_string] = val
+    return solution_dict
 
 
 print(algo())
