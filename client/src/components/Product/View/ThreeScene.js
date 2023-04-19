@@ -21,19 +21,21 @@ export const ThreeScene = ({ container }) => {
 		>
 			<Canvas camera={{ fov: 75, position: camera_position }}>
 				<Container size={container} />
-				{boxes.map(({ id, order, size, position, color, text }) => {
-					return (
-						<Box
-							key={id}
-							id={id}
-							order={order}
-							size={size}
-							position={position}
-							color={color}
-							text={text}
-						/>
-					);
-				})}
+				{boxes.map(
+					({ id, order, size, position, color, text, isIn }) => {
+						return isIn == 1 ? (
+							<Box
+								key={id}
+								id={id}
+								order={order}
+								size={size}
+								position={position}
+								color={color}
+								text={text}
+							/>
+						) : null;
+					}
+				)}
 				<OrbitControls />
 				{edit ? <axesHelper args={[axes_length]} /> : null}
 			</Canvas>

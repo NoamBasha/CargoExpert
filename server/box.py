@@ -66,7 +66,7 @@ class Point:
 
 class Box:
     def __init__(self, id='0', order='0', box_type='', width='0', height='0', length='0',
-                 priority='0', taxability='0', weigth='0', color='gray'):
+                 priority='0', taxability='0', weigth='0', color='gray', isIn=0):
         # casting for convenient
         id, order, width, height, length = int(id), int(order), int(
             width), int(height), int(length)
@@ -84,8 +84,9 @@ class Box:
         self.taxability = taxability
         self.weight = weigth
         self.FLB = None
-        self.center = None
+        self.center = [width /2 ,height /2,-length /2]
         self.color = color
+        self.isIn = isIn
 
     def get_size(self) -> tuple[int, int, int] | Exception:
         """
@@ -113,7 +114,8 @@ class Box:
         self.FLB = p
         self.center = p[0] + self.get_size()[0]/2, p[1] + \
             self.get_size()[1]/2, p[2] + self.get_size()[2]/2
+        self.isIn = 1
 
     def __repr__(self) -> str:
-        initial = f'"id": {self.id.__str__()}, "order": {self.order.__str__()}, "size": {list(self.get_size()).__str__()},"position": {list(self.center).__str__()}, "color": \"{self.color}\","text": \"{self.box_type}\"'
+        initial = f'"id": {self.id.__str__()}, "order": {self.order.__str__()}, "size": {list(self.get_size()).__str__()},"position": {list(self.center).__str__()}, "color": \"{self.color}\","text": \"{self.box_type}\","isIn": \"{self.isIn.__str__()}\"'
         return '{' + initial + '}'

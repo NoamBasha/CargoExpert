@@ -11,6 +11,7 @@ const BoxSchema = new mongoose.Schema({
 	width: { type: Number, required: false },
 	height: { type: Number, required: false },
 	length: { type: Number, required: false },
+	isIn: { type: Number, required: false },
 });
 
 const SolutionDataSchema = new mongoose.Schema({

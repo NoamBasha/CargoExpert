@@ -23,7 +23,12 @@ export const FileUpload = ({ setStage, setContainer, setBoxes }) => {
 					numberic_object[property] = data[i][property];
 				}
 			}
-			numberic_object = { id: i, ...numberic_object, color: "" };
+			numberic_object = {
+				id: i,
+				...numberic_object,
+				color: "",
+				isIn: 0,
+			};
 			if (
 				Object.values(numberic_object).includes(null) ||
 				Object.values(numberic_object).includes(undefined)

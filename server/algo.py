@@ -59,18 +59,21 @@ def perturbation(boxes: list[Box]):
             boxes[i], boxes[i+1] = boxes[i+1], boxes[i]
 
 def num_of_items_metric(solution_boxes: list[Box]):
-    return len(solution_boxes)
+    in_boxes = [box for box in solution_boxes if box.isIn]
+    return len(in_boxes)
 
 def volume_metric(solution_boxes: list[Box]):
     volume = 0
-    for v in normalize([box.volume for box in solution_boxes]):
+    in_boxes = [box for box in solution_boxes if box.isIn]
+    for v in normalize([box.volume for box in in_boxes]):
         volume += v
     return volume
 
 def order_metric(solution_boxes: list[Box], project_boxes: list[Box], container: Container):
-    order_list = normalize([box.order for box in solution_boxes])
+    in_boxes = [box for box in solution_boxes if box.isIn]
+    order_list = normalize([box.order for box in in_boxes])
     # z_list = normalize([(box.FLB[2] + box.get_size()[2]) / 2 for box in solution_boxes])
-    z_list = normalize([container.size[2] - box.FLB[2] for box in solution_boxes])
+    z_list = normalize([container.size[2] - box.FLB[2] for box in in_boxes])
     # z_list = normalize([container.size[2] - ((box.FLB[2] + box.get_size()[2]) / 2) for box in solution_boxes])
 
     score = 0
@@ -80,7 +83,7 @@ def order_metric(solution_boxes: list[Box], project_boxes: list[Box], container:
             score += 1000 * (abs(order - z))
         else:
             score += 10 * (abs(order - z))
-    return round(score / len(solution_boxes), 2)
+    return round(score / len(in_boxes), 2)
 
 def normalize(numbers):
     max_number = max(numbers)
@@ -103,7 +106,7 @@ def constructive_packing(boxes: list[Box], container: Container) -> list[Box]:
     # each point has x,y,z values. In addition, it holds the direction it came from - 1 for left and -1 for right.
     pp = set([(0, 0, 0, 1), (container.size[0] - 1, 0, 0, -1)])
     retry_list = []
-    boxes_in_solution = []
+    solution_boxes = []
     solution_data = {"number_of_items": 0, "capacity": 0, "order_score": 0, "overall_score": 0}
 
     for b in boxes:
@@ -118,7 +121,7 @@ def constructive_packing(boxes: list[Box], container: Container) -> list[Box]:
         if best_point:
             container.place(b, best_point)
             container.update(b, best_point, pp)
-            boxes_in_solution.append(b)
+            solution_boxes.append(b)
             solution_data['number_of_items'] += 1
             solution_data['capacity'] += b.volume
         else:
@@ -135,17 +138,21 @@ def constructive_packing(boxes: list[Box], container: Container) -> list[Box]:
         if best_point:
             container.place(b, best_point)
             container.update(b, best_point, pp)
-            boxes_in_solution.append(b)
+            solution_boxes.append(b)
             solution_data['number_of_items'] += 1
             solution_data['capacity'] += b.volume
-
+        # Adding it to the list without adding it to the container
+        solution_boxes.append(b)
         # if we know all boxes must be in container, then we can stop here
         # else:
         #     return None
 
-    solution_data['order_score'] = order_metric(boxes_in_solution, boxes, container)
-    solution_data['overall_score'] = overall_metric(boxes_in_solution, boxes, container, solution_data, False)
-    return boxes_in_solution, solution_data
+    solution_data['order_score'] = order_metric(solution_boxes, boxes, container)
+    solution_data['overall_score'] = overall_metric(solution_boxes, boxes, container, solution_data, False)
+    return solution_boxes, solution_data
+
+# TODO:
+#def improve_packing(constants: list[Box], out: list[Box], container: Container) -> list[Box]:
 
 
 def algo():
@@ -162,7 +169,7 @@ def algo():
         p = b['priority'] if b.get('priority', None) else 0
         t = b['taxability'] if b.get('taxability', None) else 0
         boxes.append(Box(b['id'], b['order'], b['type'], b['width'],
-                         b['height'], b['length'], p, t, weigth='0', color=b['color']))
+                         b['height'], b['length'], p, t, weigth='0', color=b['color'], isIn=b['isIn']))
 
     boxes = sorted(boxes, key=lambda x: x.order, reverse=True)
 
@@ -193,10 +200,7 @@ def algo():
         solution_list = sorted(solution_list.values(), key = lambda x: x["solution_data"]["order_score"], reverse=False)[0:20]
         solution_list = sorted(solution_list, key = lambda x: x["solution_data"]["number_of_items"], reverse=True)[0:15]
         solution_list = sorted(solution_list, key = lambda x: x["solution_data"]["capacity"], reverse=True)[0:10]
-    
     solution_list = sorted(solution_list, key = lambda x: x["solution_data"]["overall_score"], reverse=True)
-
-
 
     solution_dict = dict()
     for index, val in enumerate(solution_list):
