@@ -13,7 +13,6 @@ export const FileUpload = ({ setStage, setContainer, setBoxes }) => {
 	const [snackbarMessage, setSnackbarMessage] = useState("");
 
 	const parseData = (data) => {
-		console.log(data);
 		let numeric_data = [];
 		for (let i = 0; i < data.length; i++) {
 			let numberic_object = {};
@@ -56,7 +55,6 @@ export const FileUpload = ({ setStage, setContainer, setBoxes }) => {
 		}
 		setContainer(container_data);
 		setBoxes(boxes);
-		console.log(boxes);
 	};
 
 	const handleDrop = (files) => {

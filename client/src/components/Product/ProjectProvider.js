@@ -29,9 +29,9 @@ export const ProjectProvider = ({ children }) => {
 			let index = projects.findIndex(
 				(project) => project.id === projectId
 			);
+			console.log(projects[index].solutions);
 			setSolutions(projects[index].solutions);
 			setContainer(projects[index].container);
-			console.log(projects[index].solutions);
 		}
 		// return function (projectId = null)?
 	}, [projectId, projects]);
@@ -45,6 +45,7 @@ export const ProjectProvider = ({ children }) => {
 			const solution = solutions.find(
 				(solution) => solution.id === solutionId
 			);
+			console.log(solution);
 			//setSolution(solution);
 			setBoxes(solution.boxes);
 			setPreviousBoxes(solution.boxes);

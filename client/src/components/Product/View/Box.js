@@ -58,7 +58,6 @@ export const Box = ({ id, order, size, position, color, text }) => {
 	];
 
 	const toggleColor = () => {
-		console.log(boxColor, color);
 		boxColor === color ? setBoxColor("#FF6C6C") : setBoxColor(color);
 	};
 
@@ -68,7 +67,6 @@ export const Box = ({ id, order, size, position, color, text }) => {
 				onClick={(e) => {
 					if (edit) {
 						e.stopPropagation();
-						console.log(id, order, size, position, color, text);
 						toggleColor();
 						changeBoxIndices(id);
 						changeBoxById(id, {

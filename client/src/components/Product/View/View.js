@@ -3,10 +3,8 @@ import { useProject } from "../ProjectProvider.js";
 import { Button } from "@mui/material";
 import { EditPanel } from "./EditPanel.js";
 import { useEdit } from "./EditProvider.js";
-
-const SolutionButton = ({ text, getSolution }) => {
-	return <Button onClick={() => getSolution()}>{text}</Button>;
-};
+import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
+import ArrowBackIosOutlinedIcon from "@mui/icons-material/ArrowBackIosOutlined";
 
 const EditButton = ({ setEdit }) => {
 	return <Button onClick={() => setEdit()}>Edit</Button>;
@@ -36,6 +34,7 @@ export const View = () => {
 		container,
 		saveSolution,
 		deselectBoxes,
+		setSolutionId,
 	} = useProject();
 
 	// returns true if there is a box that is out of bounds
@@ -226,25 +225,27 @@ export const View = () => {
 
 	return (
 		<div className="d-flex flex-column">
-			{console.log(boxes)}
-
 			{edit ? <EditPanel /> : null}
 
 			<div className="d-flex flex-row justify-content-center">
 				{edit ? null : (
-					<SolutionButton
-						text="Prev"
-						getSolution={getPreviousSolution}
-					/>
+					<Button onClick={getPreviousSolution}>
+						<ArrowBackIosOutlinedIcon
+							color="primary"
+							size="small"
+						></ArrowBackIosOutlinedIcon>
+					</Button>
 				)}
 
 				<ThreeScene container={container} />
 
 				{edit ? null : (
-					<SolutionButton
-						text="Next"
-						getSolution={getNextSolution}
-					/>
+					<Button onClick={getNextSolution}>
+						<ArrowForwardIosOutlinedIcon
+							color="primary"
+							size="small"
+						></ArrowForwardIosOutlinedIcon>
+					</Button>
 				)}
 			</div>
 
@@ -264,6 +265,12 @@ export const View = () => {
 			{edit ? null : (
 				<Button onClick={(e) => handleSaveSolution(e)}>
 					Save Solution
+				</Button>
+			)}
+
+			{edit ? null : (
+				<Button onClick={(e) => setSolutionId(null)}>
+					Back To Solutions
 				</Button>
 			)}
 		</div>

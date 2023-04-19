@@ -58,7 +58,6 @@ export const UserDataProvider = ({ children }) => {
 			if (response.status === 200) {
 				const data = await response.json();
 				setProjects(data);
-				console.log(data);
 				setIsLoggedIn(true);
 			} else {
 				throw new Error(`${response.status} ${response.statusText}`);
@@ -168,7 +167,7 @@ export const UserDataProvider = ({ children }) => {
 						name: project.name,
 						container: project.container,
 						boxes: project.boxes,
-						solutions: Object.values(solutions),
+						solutions: resetIds(Object.values(solutions)),
 					},
 				];
 				setProjects(new_projects);
@@ -201,6 +200,12 @@ export const UserDataProvider = ({ children }) => {
 		updateUser(new_projects);
 	};
 
+	const resetIds = (list) => {
+		return list.map((item, index) => {
+			return { ...item, id: index };
+		});
+	};
+
 	const duplicateSolution = (projectId, solutionId) => {
 		const removeIds = (obj) => {
 			if (Array.isArray(obj)) {
@@ -229,14 +234,13 @@ export const UserDataProvider = ({ children }) => {
 			}
 		}
 
-		console.log(project);
-		const existingIds = new Set(
-			project.solutions.map((solution) => solution.id)
-		);
-		let missingId = 0;
-		while (existingIds.has(missingId)) {
-			missingId++;
-		}
+		// const existingIds = new Set(
+		// 	project.solutions.map((solution) => solution.id)
+		// );
+		// let missingId = 0;
+		// while (existingIds.has(missingId)) {
+		// 	missingId++;
+		// }
 
 		let originalSolution;
 		for (let i = 0; i < project.solutions.length; i++) {
@@ -248,9 +252,15 @@ export const UserDataProvider = ({ children }) => {
 
 		const originalSolutionNoIds = removeIds(originalSolution);
 
+		// const newSolution = {
+		// 	...originalSolutionNoIds,
+		// 	id: missingId,
+		// 	name: `${originalSolution.name} duplicated`,
+		// };
+
 		const newSolution = {
 			...originalSolutionNoIds,
-			id: missingId,
+			id: project.solutions.length,
 			name: `${originalSolution.name} duplicated`,
 		};
 
@@ -265,7 +275,8 @@ export const UserDataProvider = ({ children }) => {
 				break;
 			}
 		}
-		const newSolutions = [...project.solutions, solution];
+		let newSolutions = [...project.solutions, solution];
+		newSolutions = resetIds(newSolutions);
 
 		const newProject = {
 			...project,
@@ -312,7 +323,6 @@ export const UserDataProvider = ({ children }) => {
 				return current_project;
 			}
 		});
-		console.log(new_projects);
 		setProjects(new_projects);
 		updateUser(new_projects);
 	};
@@ -326,9 +336,11 @@ export const UserDataProvider = ({ children }) => {
 					break;
 				}
 			}
-			const newSolutions = project.solutions.filter(
+			let newSolutions = project.solutions.filter(
 				(solution) => solution.id !== solutionId
 			);
+			newSolutions = resetIds(newSolutions);
+
 			const newProject = {
 				...project,
 				solutions: newSolutions,

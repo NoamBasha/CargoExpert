@@ -14,8 +14,6 @@ export const EditBoxes = ({
 }) => {
 	const [selectedIds, setSelecetedIds] = useState([]);
 
-	console.log(`ids: ${selectedIds}`);
-
 	const editSelectedIds = (newBox) => {
 		const newBoxes = boxes.map((box) => {
 			if (selectedIds.includes(box.id)) {

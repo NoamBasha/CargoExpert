@@ -1,6 +1,9 @@
 import { Button, Snackbar } from "@mui/material";
 import { useProject } from "../ProjectProvider";
 import { useUserData } from "../../UserDataProvider.js";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 
 import {
 	TableContainer,
@@ -37,6 +40,7 @@ export const SolutionsTable = () => {
 		return {
 			id: solution.id,
 			name: solution.name,
+			solution_data: solution.solution_data,
 		};
 	});
 
@@ -51,7 +55,6 @@ export const SolutionsTable = () => {
 
 	const handleChangeName = (id, name) => {
 		const solution = getSolutionById(id);
-		console.log(solution);
 		if (solution != null) {
 			const newSolution = {
 				...solution,
@@ -74,8 +77,11 @@ export const SolutionsTable = () => {
 				>
 					<TableHead>
 						<TableRow>
-							<TableCell>Name</TableCell>
-							<TableCell>Enter</TableCell>
+							<TableCell>Solution</TableCell>
+							<TableCell>Number Of Items</TableCell>
+							<TableCell>Capacity</TableCell>
+							<TableCell>Order Score</TableCell>
+							<TableCell>Overall Score</TableCell>
 							<TableCell>Delete</TableCell>
 							<TableCell>Change Name</TableCell>
 							<TableCell>Duplicate</TableCell>
@@ -85,13 +91,26 @@ export const SolutionsTable = () => {
 						{tableData.map((row) => {
 							return (
 								<TableRow key={row.id}>
-									<TableCell>{row.name}</TableCell>
 									<TableCell>
 										<Button
-											onClick={() => handleClick(row.id)}
+											onClick={() => {
+												handleClick(row.id);
+											}}
 										>
-											Go To Solution
+											{row.name}
 										</Button>
+									</TableCell>
+									<TableCell>
+										{row.solution_data.number_of_items}
+									</TableCell>
+									<TableCell>
+										{row.solution_data.capacity}
+									</TableCell>
+									<TableCell>
+										{row.solution_data.order_score}
+									</TableCell>
+									<TableCell>
+										{row.solution_data.overall_score}
 									</TableCell>
 									<TableCell>
 										<Button
@@ -100,7 +119,10 @@ export const SolutionsTable = () => {
 												setTableSolutionId(row.id);
 											}}
 										>
-											Delete Solution
+											<DeleteOutlineIcon
+												color="primary"
+												size="small"
+											></DeleteOutlineIcon>
 										</Button>
 									</TableCell>
 									<TableCell>
@@ -110,7 +132,10 @@ export const SolutionsTable = () => {
 												setTableSolutionId(row.id);
 											}}
 										>
-											Change Name
+											<EditOutlinedIcon
+												color="primary"
+												size="small"
+											></EditOutlinedIcon>
 										</Button>
 									</TableCell>
 									<TableCell>
@@ -125,7 +150,10 @@ export const SolutionsTable = () => {
 												);
 											}}
 										>
-											Duplicate
+											<ContentCopyOutlinedIcon
+												color="primary"
+												size="small"
+											></ContentCopyOutlinedIcon>
 										</Button>
 									</TableCell>
 								</TableRow>

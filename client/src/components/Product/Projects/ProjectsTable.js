@@ -13,6 +13,8 @@ import { useState } from "react";
 import { useProject } from "../ProjectProvider.js";
 import { ChangeNamePopup } from "../ChangeNamePopup.js";
 import { DeletePopup } from "../DeletePopup";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 export const ProjectsTable = () => {
 	const { projects, deleteProject, updateProject } = useUserData();
@@ -70,8 +72,7 @@ export const ProjectsTable = () => {
 				>
 					<TableHead>
 						<TableRow>
-							<TableCell>Name</TableCell>
-							<TableCell>Enter</TableCell>
+							<TableCell>Project</TableCell>
 							<TableCell>Delete</TableCell>
 							<TableCell>Change Name</TableCell>
 						</TableRow>
@@ -80,12 +81,11 @@ export const ProjectsTable = () => {
 						{tableData.map((row) => {
 							return (
 								<TableRow key={row.id}>
-									<TableCell>{row.name}</TableCell>
 									<TableCell>
 										<Button
 											onClick={() => handleClick(row.id)}
 										>
-											Go To Project
+											{row.name}
 										</Button>
 									</TableCell>
 									<TableCell>
@@ -95,7 +95,10 @@ export const ProjectsTable = () => {
 												setTableProjectId(row.id);
 											}}
 										>
-											Delete Project
+											<DeleteOutlineIcon
+												color="primary"
+												size="small"
+											></DeleteOutlineIcon>
 										</Button>
 									</TableCell>
 									<TableCell>
@@ -105,7 +108,10 @@ export const ProjectsTable = () => {
 												setTableProjectId(row.id);
 											}}
 										>
-											Change Name
+											<EditOutlinedIcon
+												color="primary"
+												size="small"
+											></EditOutlinedIcon>
 										</Button>
 									</TableCell>
 								</TableRow>

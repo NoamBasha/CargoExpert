@@ -63,7 +63,6 @@ export const BoxForm = ({ setBoxes, boxes, selectedIds, editBox }) => {
 		};
 		const newBoxes = [...boxes, newBox];
 		setBoxes(newBoxes);
-		console.log(newBoxes);
 	};
 
 	return (

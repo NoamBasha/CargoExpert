@@ -10,7 +10,6 @@ import { useEdit } from "./EditProvider.js";
 export const ThreeScene = ({ container }) => {
 	const { edit } = useEdit();
 	const { boxes } = useProject();
-	console.log(boxes);
 
 	const camera_position = container.map((n) => n * 2);
 	const axes_length = Math.max(...container) * 1.5;
@@ -22,7 +21,6 @@ export const ThreeScene = ({ container }) => {
 		>
 			<Canvas camera={{ fov: 75, position: camera_position }}>
 				<Container size={container} />
-				{console.log(boxes)}
 				{boxes.map(({ id, order, size, position, color, text }) => {
 					return (
 						<Box

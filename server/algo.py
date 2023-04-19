@@ -67,15 +67,20 @@ def volume_metric(solution_boxes: list[Box]):
         volume += v
     return volume
 
-def order_metric(solution_boxes: list[Box]):
+def order_metric(solution_boxes: list[Box], project_boxes: list[Box], container: Container):
     order_list = normalize([box.order for box in solution_boxes])
-    z_list = normalize([box.FLB[2] for box in solution_boxes])
-    
+    # z_list = normalize([(box.FLB[2] + box.get_size()[2]) / 2 for box in solution_boxes])
+    z_list = normalize([container.size[2] - box.FLB[2] for box in solution_boxes])
+    # z_list = normalize([container.size[2] - ((box.FLB[2] + box.get_size()[2]) / 2) for box in solution_boxes])
+
     score = 0
     for order,z in zip(order_list,z_list):
-        # maybe we should multiply by 2 the score
-        score += (abs(order - z)) ** 0.5
-    return score
+        # maybe we should multiply by the score by a factor of something?
+        if order < 0.5:
+            score += 1000 * (abs(order - z))
+        else:
+            score += 10 * (abs(order - z))
+    return round(score / len(solution_boxes), 2)
 
 def normalize(numbers):
     max_number = max(numbers)
@@ -83,16 +88,23 @@ def normalize(numbers):
     normalized = [(number - min_number) / (max_number - min_number) for number in numbers]
     return normalized
 
-def overall_metric(solution_boxes: list[Box], project_boxes: list[Box], container: Container):
-    num, volume, score = num_of_items_metric(solution_boxes), volume_metric(solution_boxes), order_metric(solution_boxes)
-    return num / len(project_boxes) + 20*volume/container.volume - score
+def overall_metric(solution_boxes: list[Box], project_boxes: list[Box], container: Container, solution_data, isOrder=False):
+    num_score = solution_data["number_of_items"] / len(project_boxes)
+    cap_score = solution_data["capacity"] / container.volume
+    ord_score = solution_data["order_score"] / 100
+    score = 0
+    if isOrder:
+        score = 0.3 * num_score + 0.2 * cap_score + 0.5 * (1 - ord_score)
+    else:
+        score = 0.5 * num_score + 0.2 * cap_score + 0.3 * (1 - ord_score)
+    return round(score * 100, 2)
 
 def constructive_packing(boxes: list[Box], container: Container) -> list[Box]:
     # each point has x,y,z values. In addition, it holds the direction it came from - 1 for left and -1 for right.
     pp = set([(0, 0, 0, 1), (container.size[0] - 1, 0, 0, -1)])
     retry_list = []
     boxes_in_solution = []
-    solution_data = {"number_of_items": 0, "capacity": 0, }
+    solution_data = {"number_of_items": 0, "capacity": 0, "order_score": 0, "overall_score": 0}
 
     for b in boxes:
         best_point = None
@@ -131,6 +143,8 @@ def constructive_packing(boxes: list[Box], container: Container) -> list[Box]:
         # else:
         #     return None
 
+    solution_data['order_score'] = order_metric(boxes_in_solution, boxes, container)
+    solution_data['overall_score'] = overall_metric(boxes_in_solution, boxes, container, solution_data, False)
     return boxes_in_solution, solution_data
 
 
@@ -171,7 +185,19 @@ def algo():
                 "name": "solution " + counter_string ,"id": counter, "boxes": boxes_in_solution, "solution_data": solution_data}
             counter += 1
 
-    solution_list = sorted(solution_list.values(), key = lambda x: overall_metric(x["boxes"], boxes, container), reverse=True)
+    if True:
+        solution_list = sorted(solution_list.values(), key = lambda x: x["solution_data"]["number_of_items"], reverse=True)[0:50]
+        solution_list = sorted(solution_list, key = lambda x: x["solution_data"]["capacity"], reverse=True)[0:25]
+        solution_list = sorted(solution_list, key = lambda x: x["solution_data"]["order_score"], reverse=False)[0:10]
+    else:
+        solution_list = sorted(solution_list.values(), key = lambda x: x["solution_data"]["order_score"], reverse=False)[0:20]
+        solution_list = sorted(solution_list, key = lambda x: x["solution_data"]["number_of_items"], reverse=True)[0:15]
+        solution_list = sorted(solution_list, key = lambda x: x["solution_data"]["capacity"], reverse=True)[0:10]
+    
+    solution_list = sorted(solution_list, key = lambda x: x["solution_data"]["overall_score"], reverse=True)
+
+
+
     solution_dict = dict()
     for index, val in enumerate(solution_list):
         index_string = f'{index}'

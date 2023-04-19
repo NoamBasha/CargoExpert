@@ -76,7 +76,6 @@ export const NewProject = () => {
 				return { ...box, color: stringToColour(box.type) };
 			});
 
-			console.log(project_boxes);
 			await addProject({
 				name: name,
 				container: container,
