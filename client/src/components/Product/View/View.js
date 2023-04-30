@@ -40,6 +40,7 @@ export const View = () => {
 		deselectBoxes,
 		setSolutionId,
 		improveSolutionInView,
+		toggleIsIn,
 	} = useProject();
 
 	// returns true if there is a box that is out of bounds
@@ -260,11 +261,13 @@ export const View = () => {
 					>
 						<BoxesViewTableImproved
 							boxes={inBoxes}
+							toggleIsIn={toggleIsIn}
 							isIn={true}
 						/>
 						<br />
 						<BoxesViewTableImproved
 							boxes={outBoxes}
+							toggleIsIn={toggleIsIn}
 							isIn={false}
 						/>
 					</div>

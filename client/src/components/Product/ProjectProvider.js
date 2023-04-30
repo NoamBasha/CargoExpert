@@ -150,6 +150,32 @@ export const ProjectProvider = ({ children }) => {
 		setBoxIndices([]);
 	};
 
+	const toggleIsIn = (id) => {
+		let allBoxes = inBoxes.concat(outBoxes);
+		console.log(allBoxes);
+		allBoxes = allBoxes.map((box) => {
+			if (box.id === id) {
+				return { ...box, isIn: box.isIn == 1 ? 0 : 1 };
+			} else {
+				return box;
+			}
+		});
+
+		const { newInBoxes, newOutBoxes } = allBoxes.reduce(
+			(acc, box) => {
+				if (box.isIn == 1) {
+					acc.newInBoxes.push(box);
+				} else {
+					acc.newOutBoxes.push(box);
+				}
+				return acc;
+			},
+			{ newInBoxes: [], newOutBoxes: [] }
+		);
+		setInBoxes(newInBoxes);
+		setOutBoxes(newOutBoxes);
+	};
+
 	return (
 		<ProjectContext.Provider
 			value={{
@@ -173,6 +199,7 @@ export const ProjectProvider = ({ children }) => {
 				saveSolution,
 				deselectBoxes,
 				improveSolutionInView,
+				toggleIsIn,
 			}}
 		>
 			{children}

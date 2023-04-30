@@ -13,7 +13,7 @@ import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 import { Button, Snackbar } from "@mui/material";
 
-export const BoxesViewTableImproved = ({ boxes, isIn }) => {
+export const BoxesViewTableImproved = ({ boxes, toggleIsIn, isIn }) => {
 	const rows = boxes.map((box) => {
 		return {
 			id: box.id,
@@ -78,6 +78,7 @@ export const BoxesViewTableImproved = ({ boxes, isIn }) => {
 										<Button
 											onClick={() => {
 												console.log(row.id);
+												toggleIsIn(row.id);
 											}}
 										>
 											{isIn ? (
