@@ -127,6 +127,63 @@ export const UserDataProvider = ({ children }) => {
 		}
 	};
 
+	const improveSolution = async (projectId, solutionId) => {
+		const project = projects[projectId];
+		let container_data = {
+			width: project.container[0],
+			height: project.container[1],
+			length: project.container[2],
+		};
+
+		console.log(project);
+		const container_and_boxes = {
+			boxes: project.solutions[solutionId.toString()].boxes,
+			container: container_data,
+		};
+
+		console.log(container_and_boxes);
+
+		setError("");
+		setIsLoading(true);
+		try {
+			const requestOptions = {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(container_and_boxes),
+			};
+
+			const response = await fetch(
+				"http://localhost:1337/improveSolution",
+				requestOptions
+			);
+			if (response.status === 200) {
+				const improvedSolution = await response.json();
+
+				console.log(improvedSolution);
+
+				updateImprovedSolution(
+					project.id,
+					solutionId,
+					improvedSolution.boxes,
+					improvedSolution.solution_data
+				);
+
+				// updateImprovedSolution(
+				// 	project.id,
+				// 	solutionId,
+				// 	project.boxes,
+				// 	projects[project.id]["0"].solution_data
+				// );
+			} else {
+				throw new Error(`${response.status} ${response.statusText}`);
+			}
+		} catch (error) {
+			setError(error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
 	const addProject = async (project) => {
 		let container_data = {
 			width: project.container[0],
@@ -306,6 +363,36 @@ export const UserDataProvider = ({ children }) => {
 		updateProject(newProject);
 	};
 
+	const updateImprovedSolution = (
+		project_id,
+		solution_id,
+		boxes,
+		solution_data
+	) => {
+		let new_projects = projects.map((current_project) => {
+			if (current_project.id === project_id) {
+				let new_project = {
+					...current_project,
+					solutions: current_project.solutions.map(
+						(current_solution) =>
+							current_solution.id === solution_id
+								? {
+										...current_solution,
+										solution_data: solution_data,
+										boxes: boxes,
+								  }
+								: current_solution
+					),
+				};
+				return new_project;
+			} else {
+				return current_project;
+			}
+		});
+		setProjects(new_projects);
+		updateUser(new_projects);
+	};
+
 	const updateSolution = (project_id, solution_id, boxes) => {
 		let new_projects = projects.map((current_project) => {
 			if (current_project.id === project_id) {
@@ -372,6 +459,7 @@ export const UserDataProvider = ({ children }) => {
 				deleteSolution,
 				duplicateSolution,
 				updateSolutionName,
+				improveSolution,
 			}}
 		>
 			{children}

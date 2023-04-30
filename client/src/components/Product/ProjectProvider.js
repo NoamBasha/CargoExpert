@@ -26,7 +26,7 @@ export const ProjectProvider = ({ children }) => {
 	const [previousOutBoxes, setPreviousOutBoxes] = useState(outBoxes);
 	const [boxIndices, setBoxIndices] = useState([]);
 
-	const { projects, updateSolution } = useUserData();
+	const { projects, updateSolution, improveSolution } = useUserData();
 
 	useEffect(() => {
 		if (projectId !== null) {
@@ -92,7 +92,6 @@ export const ProjectProvider = ({ children }) => {
 
 	const moveBox = ([a, b, c]) => {
 		const newBoxes = inBoxes.map((box) => {
-			console.log(boxIndices);
 			if (boxIndices.includes(box.id)) {
 				const [x, y, z] = box.position;
 				return { ...box, position: [x + a, y + b, z + c] };
@@ -143,6 +142,10 @@ export const ProjectProvider = ({ children }) => {
 		updateSolution(projectId, solutionId, inBoxes.concat(outBoxes));
 	};
 
+	const improveSolutionInView = () => {
+		improveSolution(projectId, solutionId);
+	};
+
 	const deselectBoxes = () => {
 		setBoxIndices([]);
 	};
@@ -169,6 +172,7 @@ export const ProjectProvider = ({ children }) => {
 				projectId,
 				saveSolution,
 				deselectBoxes,
+				improveSolutionInView,
 			}}
 		>
 			{children}

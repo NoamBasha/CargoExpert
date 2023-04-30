@@ -52,6 +52,23 @@ app.post("/getSolutions", (req, res) => {
 	});
 });
 
+app.post("/improveSolution", (req, res) => {
+	console.log(req.body);
+	//res.sendFile(path.join(__dirname, 'uploadFile.html'));
+	options = {
+		args: [JSON.stringify(req.body)],
+		pythonOptions: ["-u"], // The '-u' tells Python to flush every time // get print results in real-time
+	};
+	PythonShell.run("improve.py", options, function (err, result) {
+		if (err) {
+			console.log(err.traceback);
+		} else {
+			result = parse_response_from_algo(result);
+			res.send(result);
+		}
+	});
+});
+
 app.get("/userInputExample", function (req, res) {
 	let fileName = "./user_input_example.csv"; // The default name the browser will use
 	res.download(fileName);

@@ -104,6 +104,7 @@ class Container:
                 raise Exception(
                     'unimplimented case - default (container.place)')
 
+
     def update(self, b: Box, p: tuple[int, int, int, int], pp: set[tuple[int]]):
         """
         update the list of potential points according the given box 

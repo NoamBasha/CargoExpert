@@ -63,30 +63,24 @@ class Point:
                 self.z + other.z)
     """
 
-#TODO:add: , center=[0,0,0]
 class Box:
     def __init__(self, id='0', order='0', box_type='', width='0', height='0', length='0',
-                 priority='0', taxability='0', weigth='0', color='gray', isIn=0):
+                 color='gray', isIn=0, center=[0,0,0]):
         # casting for convenient
-        id, order, width, height, length = int(id), int(order), int(
-            width), int(height), int(length)
-        priority, taxability, weigth = int(
-            priority), int(taxability), int(weigth)
+        width, height, length =  int(width), int(height), int(length)
 
-        self.id = id
-        self.order = order
+        self.id = int(id)
+        self.order =  int(order)
         self.box_type = box_type
         self.size = width, height, length
         self.volume = width*height*length
         self.rotation = Rotation.WHL
 
-        self.priority = priority
-        self.taxability = taxability
-        self.weight = weigth
-        self.FLB = None
-        self.center = [width /2 ,height /2,-length /2] #TODO: change to: center
+        self.center = [float(axis) for axis in center]
+        self.FLB = (self.center[0] - self.get_size()[0]/2, self.center[1] - \
+                self.get_size()[1]/2, self.center[2] - self.get_size()[2]/2)
         self.color = color
-        self.isIn = isIn
+        self.isIn = int(isIn)
 
     def get_size(self) -> tuple[int, int, int] | Exception:
         """

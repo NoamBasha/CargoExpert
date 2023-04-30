@@ -39,6 +39,7 @@ export const View = () => {
 		saveSolution,
 		deselectBoxes,
 		setSolutionId,
+		improveSolutionInView,
 	} = useProject();
 
 	// returns true if there is a box that is out of bounds
@@ -118,7 +119,6 @@ export const View = () => {
 				return 0;
 			}
 
-			console.log(otherBox.order);
 			let min;
 			if (boxMin <= otherBoxMin) {
 				min = otherBoxMin;
@@ -146,7 +146,6 @@ export const View = () => {
 				return 0;
 			}
 
-			console.log(otherBox.order);
 			let min;
 			if (boxMin <= otherBoxMin) {
 				min = otherBoxMin;
@@ -229,6 +228,9 @@ export const View = () => {
 
 	return (
 		<div className="d-flex flex-column">
+			<Button onClick={(e) => improveSolutionInView()}>
+				Improve Solution
+			</Button>
 			<div className="position-relative mt-5 d-flex flex-row justify-content-between align-items-center">
 				{edit ? null : (
 					<Button

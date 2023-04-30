@@ -2,7 +2,7 @@ import copy
 import sys
 import json
 import random
-import algo
+from util import order_metric, overall_metric, rotation, perturbation
 from box import Box, Rotation
 from container import Container
 
@@ -23,53 +23,63 @@ def improve_packing(in_boxes: list[Box], out_boxes: list[Box], container: Contai
     solution_boxes = []
     solution_data = {"number_of_items": 0, "capacity": 0, "order_score": 0, "overall_score": 0}
 
+    # Finding pps from in_boxes.
     for box in in_boxes:
-        p = (box.FLB[0], box.FLB[1], box.FLB[2], 1)
-        container.update(box, p, pp)
+        # Placing the box in it right position
+        p_left = (int(box.FLB[0]), int(box.FLB[1]), int(box.FLB[2]), 1)
+        container.place(box, p_left)
+        p_right = (box.FLB[0], box.FLB[1], box.FLB[2], -1)
+        # Updating all possible pps from this box
+        pp.add(p_left)
+        container.update(box, p_left, pp)
+        pp.add(p_right)
+        container.update(box, p_right, pp)
+        solution_boxes.append(box)
+        solution_data['number_of_items'] += 1
+        solution_data['capacity'] += box.volume
+    
+    # Adding each boxes in out_boxes to the container
+    for box in out_boxes:
         best_point = None
         best_score = (0, 0)
         # to find the best point we need to know what corner of the box is placed there
         for p in pp:
-            score = container.get_score(b, p)
+            score = container.get_score(box, p)
             if score > best_score:
                 best_point = p
                 best_score = score
         if best_point:
-            container.place(b, best_point)
-            container.update(b, best_point, pp)
-            solution_boxes.append(b)
+            container.place(box, best_point)
+            container.update(box, best_point, pp)
+            solution_boxes.append(box)
             solution_data['number_of_items'] += 1
-            solution_data['capacity'] += b.volume
+            solution_data['capacity'] += box.volume
         else:
-            retry_list.append(b)
+            retry_list.append(box)
 
-    for b in retry_list:
+    for box in retry_list:
         best_point = None
         best_score = (0, 0)
         for p in pp:
-            score = container.get_score(b, p)
+            score = container.get_score(box, p)
             if score > best_score:
                 best_point = p
                 best_score = score
         if best_point:
-            container.place(b, best_point)
-            container.update(b, best_point, pp)
-            solution_boxes.append(b)
+            container.place(box, best_point)
+            container.update(box, best_point, pp)
+            solution_boxes.append(box)
             solution_data['number_of_items'] += 1
-            solution_data['capacity'] += b.volume
+            solution_data['capacity'] += box.volume
         else:
             # Adding it to the list without adding it to the container
-            solution_boxes.append(b)
-        # if we know all boxes must be in container, then we can stop here
-        # else:
-        #     return None
+            solution_boxes.append(box)
 
+    boxes = in_boxes + out_boxes
     solution_data['order_score'] = order_metric(solution_boxes, boxes, container)
     solution_data['overall_score'] = overall_metric(solution_boxes, boxes, container, solution_data, False)
     return solution_boxes, solution_data
 
-    improved_boxes = in_boxes + out_boxes
-    return improved_boxes
 
 def improve():
     # every key in json is a string in python dict.
@@ -82,25 +92,26 @@ def improve():
     boxes = []
 
     for b in obj['boxes']:
-        p = b['priority'] if b.get('priority', None) else 0
-        t = b['taxability'] if b.get('taxability', None) else 0
-        boxes.append(Box(b['id'], b['order'], b['type'], b['width'],
-                         b['height'], b['length'], p, t, weigth='0', color=b['color'], isIn=b['isIn'], center=b['center']))
+        boxes.append(Box(b['id'], b['order'], b['text'], b['size'][0],
+                         b['size'][1], b['size'][2], color=b['color'], isIn=b['isIn'], center=b['position']))
 
      # Splitting to two lists
     in_boxes, out_boxes = [box for box in boxes if box.isIn == 1], [box for box in boxes if box.isIn == 0]
-    # Sort isIn's by y coordinate - TODO: use .size?
-    in_boxes = sorted(in_boxes, key=lambda box: ((box.center[1] - box.get_size()[1] / 2),(box.center[2] - box.get_size()[2] / 2)))
+    # Sort isIn's by y coordinate and z coordinate
+    in_boxes = sorted(in_boxes, key=lambda box: (box.FLB[1],box.FLB[2]))
 
     solution_list = {}
     counter = 0
     for _ in range(NUMBER_OF_ITERATIONS):
-        copy_boxes = copy.deepcopy(boxes)
+        copy_in_boxes = copy.deepcopy(in_boxes)
+        copy_out_boxes = copy.deepcopy(out_boxes)
         container.start_packing()
 
-        algo.rotation(copy_boxes)
-        algo.perturbation(copy_boxes)
-        temp = improve_packing(in_boxes, out_boxes, container)
+        # For non-deterministic algorithm
+        rotation(copy_out_boxes)
+        perturbation(copy_out_boxes)
+
+        temp = improve_packing(copy_in_boxes, copy_out_boxes, container)
         if temp is None:
             continue
 
@@ -111,13 +122,17 @@ def improve():
                 "name": "solution " + counter_string ,"id": counter, "boxes": boxes_in_solution, "solution_data": solution_data}
             counter += 1
 
-    solution_list = sorted(solution_list, key = lambda x: x["solution_data"]["overall_score"], reverse=True)[0]
+    
+    
 
-    solution_dict = dict()
-    for index, val in enumerate(solution_list):
-        index_string = f'{index}'
-        solution_dict[index_string] = val
-    return solution_dict
+    solution_list = sorted(solution_list.values(), key = lambda x: x["solution_data"]["overall_score"], reverse=True)[0]
+        
+    # TODO: remove!
+    with open('file.txt', 'w') as file:
+        print(f'{solution_list}', file=file)
+
+    return solution_list
+
 
 
 print(improve())
