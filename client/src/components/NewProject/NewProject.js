@@ -78,8 +78,14 @@ export const NewProject = () => {
 				return { ...box, color: stringToColour(box.type) };
 			});
 
-			await addProject({
+			const project_data = {
 				name: name,
+				isQuantity: orderQuantity == "Quantity" ? 1 : 0,
+				isQuality: timeQuality == "Quality" ? 1 : 0,
+			};
+
+			await addProject({
+				project_data: project_data,
 				container: container,
 				boxes: project_boxes,
 				solutions: [],

@@ -35,7 +35,7 @@ export const ProjectsTable = () => {
 	const tableData = projects.map((project) => {
 		return {
 			id: project.id,
-			name: project.name,
+			name: project.project_data.name,
 		};
 	});
 
@@ -53,7 +53,7 @@ export const ProjectsTable = () => {
 		if (project != null) {
 			const newProject = {
 				...project,
-				name: name,
+				project_data: { ...project.project_data, name: name },
 			};
 			updateProject(newProject);
 			setSnackbarMessage(`Changed name to ${name}`);

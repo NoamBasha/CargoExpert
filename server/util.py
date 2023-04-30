@@ -91,8 +91,4 @@ def overall_metric(solution_boxes: list[Box], project_boxes: list[Box], containe
     else:
         score = 0.5 * num_score + 0.2 * cap_score + 0.3 * (1 - ord_score)
 
-    # TODO: remove!
-    with open('file.txt', 'w') as file:
-        print(f'{type(round(score * 100, 2))}', file=file)
-
     return round(score * 100, 2)

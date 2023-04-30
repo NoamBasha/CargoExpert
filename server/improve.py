@@ -127,10 +127,7 @@ def improve():
 
     solution_list = sorted(solution_list.values(), key = lambda x: x["solution_data"]["overall_score"], reverse=True)[0]
         
-    # TODO: remove!
-    with open('file.txt', 'w') as file:
-        print(f'{solution_list}', file=file)
-
+    
     return solution_list
 
 

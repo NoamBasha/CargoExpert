@@ -194,6 +194,7 @@ export const UserDataProvider = ({ children }) => {
 		const container_and_boxes = {
 			boxes: project.boxes,
 			container: container_data,
+			project_data: project.project_data,
 		};
 
 		setError("");
@@ -221,7 +222,7 @@ export const UserDataProvider = ({ children }) => {
 					...projects,
 					{
 						id: current_id,
-						name: project.name,
+						project_data: project.project_data,
 						container: project.container,
 						boxes: project.boxes,
 						solutions: resetIds(Object.values(solutions)),

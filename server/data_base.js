@@ -17,6 +17,8 @@ const BoxSchema = new mongoose.Schema({
 const SolutionDataSchema = new mongoose.Schema({
 	capacity: { type: Number, required: false },
 	number_of_items: { type: Number, required: false },
+	order_score: { type: Number, required: false },
+	overall_score: { type: Number, required: false },
 });
 
 const SolutionSchema = new mongoose.Schema({
@@ -26,10 +28,16 @@ const SolutionSchema = new mongoose.Schema({
 	solution_data: { type: SolutionDataSchema, required: false },
 });
 
+const ProjectDataSchema = new mongoose.Schema({
+	name: { type: String, required: false },
+	isQuantity: { type: Number, required: false },
+	isQuality: { type: Number, required: false },
+});
+
 const ProjectSchema = new mongoose.Schema({
 	id: { type: Number, required: false },
 	container: { type: [Number], required: false },
-	name: { type: String, required: false },
+	project_data: { type: ProjectDataSchema, required: false },
 	boxes: { type: [BoxSchema], required: false },
 	solutions: { type: [SolutionSchema], required: false },
 });

@@ -71,6 +71,15 @@ def algo():
     # every key in json is a string in python dict.
     obj = json.loads(sys.argv[1])
 
+    is_quality = int(obj['project_data']['isQuality'])
+    is_quantity = int(obj['project_data']['isQuantity'])
+
+    # TODO: remove!
+    with open('file.txt', 'w') as file:
+        print(f'{is_quality}, {is_quantity}', file=file)
+
+
+
     container = Container(obj['container']['width'],
                           obj['container']['height'],
                           obj['container']['length'])

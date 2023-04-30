@@ -33,7 +33,7 @@ export const ProjectProvider = ({ children }) => {
 			let index = projects.findIndex(
 				(project) => project.id === projectId
 			);
-			console.log(projects[index].solutions);
+			console.log(projects[index]);
 			setSolutions(projects[index].solutions);
 			setContainer(projects[index].container);
 		}
