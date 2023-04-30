@@ -14,6 +14,8 @@ export const NewProject = () => {
 	const [boxes, setBoxes] = useState([]);
 	const [name, setName] = useState("Project");
 	const [stage, setStage] = useState(0);
+	const [orderQuantity, setOrderQuantity] = useState("Quantity");
+	const [timeQuality, setTimeQuality] = useState("Time");
 	const { addProject, isLoading, error } = useUserData();
 	const navigate = useNavigate();
 
@@ -97,6 +99,10 @@ export const NewProject = () => {
 						name={name}
 						setName={setName}
 						setStage={setStage}
+						orderQuantity={orderQuantity}
+						setOrderQuantity={setOrderQuantity}
+						timeQuality={timeQuality}
+						setTimeQuality={setTimeQuality}
 					/>
 				) : null}
 

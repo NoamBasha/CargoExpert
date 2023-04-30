@@ -6,7 +6,7 @@ import { useProject } from "../ProjectProvider.js";
 import { BoxText } from "./BoxText.js";
 import { useEdit } from "./EditProvider.js";
 
-export const Box = ({ id, order, size, position, color, text }) => {
+export const Box = ({ id, order, size, position, color, text, isIn }) => {
 	const { changeBoxById, changeBoxIndices, solutionId, boxIndices } =
 		useProject();
 	const { edit } = useEdit();
@@ -76,6 +76,7 @@ export const Box = ({ id, order, size, position, color, text }) => {
 							text: text,
 							color: color,
 							size: size,
+							isIn: isIn,
 						});
 					}
 				}}

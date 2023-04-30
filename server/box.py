@@ -63,7 +63,7 @@ class Point:
                 self.z + other.z)
     """
 
-
+#TODO:add: , center=[0,0,0]
 class Box:
     def __init__(self, id='0', order='0', box_type='', width='0', height='0', length='0',
                  priority='0', taxability='0', weigth='0', color='gray', isIn=0):
@@ -84,7 +84,7 @@ class Box:
         self.taxability = taxability
         self.weight = weigth
         self.FLB = None
-        self.center = [width /2 ,height /2,-length /2]
+        self.center = [width /2 ,height /2,-length /2] #TODO: change to: center
         self.color = color
         self.isIn = isIn
 

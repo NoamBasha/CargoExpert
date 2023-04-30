@@ -3,6 +3,9 @@ import { useProject } from "../ProjectProvider.js";
 import { Button } from "@mui/material";
 import { EditPanel } from "./EditPanel.js";
 import { useEdit } from "./EditProvider.js";
+import { BoxesViewTable } from "./BoxesViewTable.js";
+import { BoxesViewTableImproved } from "./BoxesViewTableImproved.js";
+
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import ArrowBackIosOutlinedIcon from "@mui/icons-material/ArrowBackIosOutlined";
 
@@ -28,7 +31,8 @@ const ViewButton = ({ deselectBoxes, setEdit, validateBoxesLocation }) => {
 export const View = () => {
 	const { edit, setEdit } = useEdit();
 	const {
-		boxes,
+		inBoxes,
+		outBoxes,
 		getNextSolution,
 		getPreviousSolution,
 		container,
@@ -39,8 +43,8 @@ export const View = () => {
 
 	// returns true if there is a box that is out of bounds
 	// return false if everything is ok
-	const isBoxesOutOfBounds = (boxes, container) => {
-		const isOutOfBounds = boxes.some((box) => {
+	const isBoxesOutOfBounds = (inBoxes, container) => {
+		const isOutOfBounds = inBoxes.some((box) => {
 			const x_condiction =
 				box.position[0] + 0.5 * box.size[0] > container[0] ||
 				box.position[0] - 0.5 * box.size[0] < 0;
@@ -90,11 +94,11 @@ export const View = () => {
 	};
 
 	// returns true if everything is ok
-	const isBoxesOverlapping = (boxes) => {
-		for (let i = 0; i < boxes.length; i++) {
-			for (let j = i + 1; j < boxes.length; j++) {
-				if (isTwoBoxesOverLapping(boxes[i], boxes[j])) {
-					console.log(boxes[i], boxes[j]);
+	const isBoxesOverlapping = (inBoxes) => {
+		for (let i = 0; i < inBoxes.length; i++) {
+			for (let j = i + 1; j < inBoxes.length; j++) {
+				if (isTwoBoxesOverLapping(inBoxes[i], inBoxes[j])) {
+					console.log(inBoxes[i], inBoxes[j]);
 					return true;
 				}
 			}
@@ -102,7 +106,7 @@ export const View = () => {
 		return false;
 	};
 
-	const isBoxesHovering = (boxes) => {
+	const isBoxesHovering = (inBoxes) => {
 		const getXs = (box, otherBox, i) => {
 			const boxMin = box.flb.x;
 			const boxMax = box.flb.x + box.size[i];
@@ -170,7 +174,7 @@ export const View = () => {
 			return x_intersection * z_intersection;
 		};
 
-		const boxes_with_flb = boxes.map((box) => {
+		const boxes_with_flb = inBoxes.map((box) => {
 			let flb = {
 				x: box.position[0] - box.size[0] / 2,
 				y: box.position[1] - box.size[1] / 2,
@@ -202,13 +206,13 @@ export const View = () => {
 		return false;
 	};
 
-	const validateBoxesLocation = (boxes, container) => {
+	const validateBoxesLocation = (inBoxes, container) => {
 		return () => {
-			if (isBoxesOutOfBounds(boxes, container)) {
+			if (isBoxesOutOfBounds(inBoxes, container)) {
 				alert("Not all of the boxes are inside the container");
-			} else if (isBoxesOverlapping(boxes, container)) {
+			} else if (isBoxesOverlapping(inBoxes, container)) {
 				alert("There are boxes overlapping");
-			} else if (isBoxesHovering(boxes)) {
+			} else if (isBoxesHovering(inBoxes)) {
 				alert("There are boxes hovering");
 			} else {
 				return true;
@@ -225,11 +229,13 @@ export const View = () => {
 
 	return (
 		<div className="d-flex flex-column">
-			{edit ? <EditPanel /> : null}
-
-			<div className="d-flex flex-row justify-content-center">
+			<div className="position-relative mt-5 d-flex flex-row justify-content-between align-items-center">
 				{edit ? null : (
-					<Button onClick={getPreviousSolution}>
+					<Button
+						onClick={getPreviousSolution}
+						className="position-absolute d-flex"
+						style={{ top: 335, left: 10, zIndex: 1 }}
+					>
 						<ArrowBackIosOutlinedIcon
 							color="primary"
 							size="small"
@@ -237,10 +243,37 @@ export const View = () => {
 					</Button>
 				)}
 
-				<ThreeScene container={container} />
+				<ThreeScene container={container}>
+					{edit ? (
+						<div
+							className="position-absolute d-flex flex-row-reverse"
+							style={{ top: 0, right: 300, zIndex: 1 }}
+						>
+							<EditPanel />
+						</div>
+					) : null}
+					<div
+						className="w-25 position-absolute d-flex flex-column"
+						style={{ top: 0, left: 100, zIndex: 1 }}
+					>
+						<BoxesViewTableImproved
+							boxes={inBoxes}
+							isIn={true}
+						/>
+						<br />
+						<BoxesViewTableImproved
+							boxes={outBoxes}
+							isIn={false}
+						/>
+					</div>
+				</ThreeScene>
 
 				{edit ? null : (
-					<Button onClick={getNextSolution}>
+					<Button
+						onClick={getNextSolution}
+						className="position-absolute d-flex"
+						style={{ top: 335, right: 10, zIndex: 1 }}
+					>
 						<ArrowForwardIosOutlinedIcon
 							color="primary"
 							size="small"
@@ -249,29 +282,25 @@ export const View = () => {
 				)}
 			</div>
 
-			{edit ? null : <EditButton setEdit={() => setEdit(true)} />}
 			{edit ? (
 				<ViewButton
 					deselectBoxes={() => deselectBoxes()}
 					setEdit={() => setEdit(false)}
 					validateBoxesLocation={validateBoxesLocation(
-						boxes,
+						inBoxes,
 						container
 					)}
 				/>
-			) : null}
-
-			<br />
-			{edit ? null : (
-				<Button onClick={(e) => handleSaveSolution(e)}>
-					Save Solution
-				</Button>
-			)}
-
-			{edit ? null : (
-				<Button onClick={(e) => setSolutionId(null)}>
-					Back To Solutions
-				</Button>
+			) : (
+				<>
+					<EditButton setEdit={() => setEdit(true)} />
+					<Button onClick={(e) => handleSaveSolution(e)}>
+						Save Solution
+					</Button>
+					<Button onClick={(e) => setSolutionId(null)}>
+						Back To Solutions
+					</Button>
+				</>
 			)}
 		</div>
 	);

@@ -20,6 +20,10 @@ export const ProjectProvider = ({ children }) => {
 	const [container, setContainer] = useState(null);
 	const [boxes, setBoxes] = useState([]);
 	const [previousBoxes, setPreviousBoxes] = useState(boxes);
+	const [inBoxes, setInBoxes] = useState([]);
+	const [previousInBoxes, setPreviousInBoxes] = useState(inBoxes);
+	const [outBoxes, setOutBoxes] = useState([]);
+	const [previousOutBoxes, setPreviousOutBoxes] = useState(outBoxes);
 	const [boxIndices, setBoxIndices] = useState([]);
 
 	const { projects, updateSolution } = useUserData();
@@ -47,8 +51,20 @@ export const ProjectProvider = ({ children }) => {
 			);
 			console.log(solution);
 			//setSolution(solution);
+
+			const isInBoxes = solution.boxes.filter((box) => {
+				return box.isIn == 1;
+			});
+			const isOutBoxes = solution.boxes.filter((box) => {
+				return box.isIn == 0;
+			});
+
 			setBoxes(solution.boxes);
+			setInBoxes(isInBoxes);
+			setOutBoxes(isOutBoxes);
 			setPreviousBoxes(solution.boxes);
+			setPreviousInBoxes(isInBoxes);
+			setPreviousOutBoxes(isOutBoxes);
 			setBoxIndices([]);
 		}
 	}, [solutions, solutionId, projects]);
@@ -75,18 +91,18 @@ export const ProjectProvider = ({ children }) => {
 	};
 
 	const moveBox = ([a, b, c]) => {
-		const newBoxes = boxes.map((box) => {
+		const newBoxes = inBoxes.map((box) => {
 			console.log(boxIndices);
 			if (boxIndices.includes(box.id)) {
 				const [x, y, z] = box.position;
 				return { ...box, position: [x + a, y + b, z + c] };
 			} else return box;
 		});
-		setBoxes(newBoxes);
+		setInBoxes(newBoxes);
 	};
 
 	const rotateBox = (axis) => {
-		const newBoxes = boxes.map((box) => {
+		const newBoxes = inBoxes.map((box) => {
 			if (boxIndices.includes(box.id)) {
 				const [w, h, l] = box.size;
 				if (axis === "x") {
@@ -101,16 +117,18 @@ export const ProjectProvider = ({ children }) => {
 				return box;
 			} else return box;
 		});
-		setBoxes(newBoxes);
+		setInBoxes(newBoxes);
 	};
 
 	const resetBoxes = () => {
 		deselectBoxes();
 		setBoxes(previousBoxes);
+		setInBoxes(previousInBoxes);
+		setOutBoxes(previousOutBoxes);
 	};
 
 	const changeBoxById = (id, newBox) => {
-		const newBoxes = boxes.map((box) => {
+		const newBoxes = inBoxes.map((box) => {
 			if (box.id === id) {
 				console.log(box, newBox);
 				return newBox;
@@ -118,11 +136,11 @@ export const ProjectProvider = ({ children }) => {
 				return box;
 			}
 		});
-		setBoxes(newBoxes);
+		setInBoxes(newBoxes);
 	};
 
 	const saveSolution = () => {
-		updateSolution(projectId, solutionId, boxes);
+		updateSolution(projectId, solutionId, inBoxes.concat(outBoxes));
 	};
 
 	const deselectBoxes = () => {
@@ -133,6 +151,8 @@ export const ProjectProvider = ({ children }) => {
 		<ProjectContext.Provider
 			value={{
 				boxes,
+				inBoxes,
+				outBoxes,
 				boxIndices,
 				moveBox,
 				changeBoxIndices,

@@ -60,6 +60,7 @@ export const BoxForm = ({ setBoxes, boxes, selectedIds, editBox }) => {
 			width: formWidth,
 			height: formHeight,
 			length: formLength,
+			isIn: 0,
 		};
 		const newBoxes = [...boxes, newBox];
 		setBoxes(newBoxes);

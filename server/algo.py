@@ -141,8 +141,9 @@ def constructive_packing(boxes: list[Box], container: Container) -> list[Box]:
             solution_boxes.append(b)
             solution_data['number_of_items'] += 1
             solution_data['capacity'] += b.volume
-        # Adding it to the list without adding it to the container
-        solution_boxes.append(b)
+        else:
+            # Adding it to the list without adding it to the container
+            solution_boxes.append(b)
         # if we know all boxes must be in container, then we can stop here
         # else:
         #     return None
@@ -150,10 +151,6 @@ def constructive_packing(boxes: list[Box], container: Container) -> list[Box]:
     solution_data['order_score'] = order_metric(solution_boxes, boxes, container)
     solution_data['overall_score'] = overall_metric(solution_boxes, boxes, container, solution_data, False)
     return solution_boxes, solution_data
-
-# TODO:
-#def improve_packing(constants: list[Box], out: list[Box], container: Container) -> list[Box]:
-
 
 def algo():
     # every key in json is a string in python dict.
@@ -200,6 +197,7 @@ def algo():
         solution_list = sorted(solution_list.values(), key = lambda x: x["solution_data"]["order_score"], reverse=False)[0:20]
         solution_list = sorted(solution_list, key = lambda x: x["solution_data"]["number_of_items"], reverse=True)[0:15]
         solution_list = sorted(solution_list, key = lambda x: x["solution_data"]["capacity"], reverse=True)[0:10]
+    #solution_list = sorted(solution_list.values(), key = lambda x: x["solution_data"]["overall_score"], reverse=True)[:10]
     solution_list = sorted(solution_list, key = lambda x: x["solution_data"]["overall_score"], reverse=True)
 
     solution_dict = dict()

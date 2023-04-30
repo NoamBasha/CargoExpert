@@ -7,23 +7,24 @@ import { EditContext } from "./View.js";
 import { useProject } from "../ProjectProvider.js";
 import { useEdit } from "./EditProvider.js";
 
-export const ThreeScene = ({ container }) => {
+export const ThreeScene = ({ container, children }) => {
 	const { edit } = useEdit();
-	const { boxes } = useProject();
+	const { inBoxes } = useProject();
 
 	const camera_position = container.map((n) => n * 2);
 	const axes_length = Math.max(...container) * 1.5;
 
 	return (
 		<div
-			className="w-75 d-flex"
+			className="w-100 d-flex flex-row justify-content-center align-items-center"
 			style={{ height: "75vh" }}
 		>
+			{children}
 			<Canvas camera={{ fov: 75, position: camera_position }}>
 				<Container size={container} />
-				{boxes.map(
+				{inBoxes.map(
 					({ id, order, size, position, color, text, isIn }) => {
-						return isIn == 1 ? (
+						return (
 							<Box
 								key={id}
 								id={id}
@@ -32,8 +33,9 @@ export const ThreeScene = ({ container }) => {
 								position={position}
 								color={color}
 								text={text}
+								isIn={isIn}
 							/>
-						) : null;
+						);
 					}
 				)}
 				<OrbitControls />
