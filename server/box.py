@@ -3,10 +3,7 @@ from enum import Enum
 
 class Rotation(Enum):
     """
-    according to article page 3 figure 2. Each letter stands for the box axe - Width, Heigth and Length.
-    The first letter is parallel to container's width
-    The second letter is parallel to container's height
-    The third letter is parallel to container's length
+    Each letter stands for a box axis - W = width, H = height, L = length.
     """
     WHL = 0
     LHW = 1

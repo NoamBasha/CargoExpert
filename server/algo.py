@@ -6,7 +6,6 @@ from util import order_metric, overall_metric, rotation, perturbation
 from box import Box, Rotation
 from container import Container
 
-NUMBER_OF_ITERATIONS = 1000
 """
 the structure of the file is:
 contWidth, contHeight, contLength, order, type, width, height, length, priority ,taxabilty
@@ -17,7 +16,7 @@ the same goes for height and length.
 
 
 
-def constructive_packing(boxes: list[Box], container: Container) -> list[Box]:
+def constructive_packing(boxes: list[Box], container: Container, is_quantity: int) -> list[Box]:
     # each point has x,y,z values. In addition, it holds the direction it came from - 1 for left and -1 for right.
     pp = set([(0, 0, 0, 1), (container.size[0] - 1, 0, 0, -1)])
     retry_list = []
@@ -64,15 +63,20 @@ def constructive_packing(boxes: list[Box], container: Container) -> list[Box]:
         #     return None
 
     solution_data['order_score'] = order_metric(solution_boxes, boxes, container)
-    solution_data['overall_score'] = overall_metric(solution_boxes, boxes, container, solution_data, False)
+    solution_data['overall_score'] = overall_metric(solution_boxes, boxes, container, solution_data, is_quantity)
     return solution_boxes, solution_data
 
 def algo():
     # every key in json is a string in python dict.
     obj = json.loads(sys.argv[1])
 
+
+    # is_quality vs time - number of epochs
     is_quality = int(obj['project_data']['isQuality'])
+    NUMBER_OF_ITERATIONS = 2000 if is_quality else 1000
+
     is_quantity = int(obj['project_data']['isQuantity'])
+    # quantity vs order - overall score and sorting
 
     # TODO: remove!
     with open('file.txt', 'w') as file:
@@ -100,7 +104,7 @@ def algo():
 
         rotation(copy_boxes)
         perturbation(copy_boxes)
-        temp = constructive_packing(copy_boxes, container)
+        temp = constructive_packing(copy_boxes, container, is_quantity)
         if temp is None:
             continue
 
@@ -111,7 +115,7 @@ def algo():
                 "name": "solution " + counter_string ,"id": counter, "boxes": boxes_in_solution, "solution_data": solution_data}
             counter += 1
 
-    if True:
+    if is_quantity:
         solution_list = sorted(solution_list.values(), key = lambda x: x["solution_data"]["number_of_items"], reverse=True)[0:50]
         solution_list = sorted(solution_list, key = lambda x: x["solution_data"]["capacity"], reverse=True)[0:25]
         solution_list = sorted(solution_list, key = lambda x: x["solution_data"]["order_score"], reverse=False)[0:10]

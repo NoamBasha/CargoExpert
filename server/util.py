@@ -81,12 +81,12 @@ def normalize(numbers):
     normalized = [(number - min_number) / (max_number - min_number) for number in numbers]
     return normalized
 
-def overall_metric(solution_boxes: list[Box], project_boxes: list[Box], container: Container, solution_data, isOrder=False):
+def overall_metric(solution_boxes: list[Box], project_boxes: list[Box], container: Container, solution_data, is_quantity):
     num_score = solution_data["number_of_items"] / len(project_boxes)
     cap_score = solution_data["capacity"] / container.volume
     ord_score = solution_data["order_score"] / 100
     score = 0
-    if isOrder:
+    if not is_quantity:
         score = 0.3 * num_score + 0.2 * cap_score + 0.5 * (1 - ord_score)
     else:
         score = 0.5 * num_score + 0.2 * cap_score + 0.3 * (1 - ord_score)

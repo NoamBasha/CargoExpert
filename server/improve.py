@@ -77,7 +77,7 @@ def improve_packing(in_boxes: list[Box], out_boxes: list[Box], container: Contai
 
     boxes = in_boxes + out_boxes
     solution_data['order_score'] = order_metric(solution_boxes, boxes, container)
-    solution_data['overall_score'] = overall_metric(solution_boxes, boxes, container, solution_data, False)
+    solution_data['overall_score'] = overall_metric(solution_boxes, boxes, container, solution_data, 1)
     return solution_boxes, solution_data
 
 
