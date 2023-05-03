@@ -3,6 +3,8 @@ import { useState, createContext, useContext } from "react";
 const UserDataContext = createContext("");
 
 export const UserDataProvider = ({ children }) => {
+	/* #region State Variables */
+
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [projects, setProjects] = useState([]);
@@ -10,6 +12,9 @@ export const UserDataProvider = ({ children }) => {
 	const [error, setError] = useState(null);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+	/* #endregion */
+
+	/* #region User CRUD */
 	const createUser = async ({ email, password, setIsRegistered }) => {
 		setError("");
 		setIsLoading(true);
@@ -126,64 +131,9 @@ export const UserDataProvider = ({ children }) => {
 			setIsLoading(false);
 		}
 	};
+	/* #endregion */
 
-	const improveSolution = async (projectId, solutionId) => {
-		const project = projects[projectId];
-		let container_data = {
-			width: project.container[0],
-			height: project.container[1],
-			length: project.container[2],
-		};
-
-		console.log(project);
-		const container_and_boxes = {
-			boxes: project.solutions[solutionId.toString()].boxes,
-			container: container_data,
-		};
-
-		console.log(container_and_boxes);
-
-		setError("");
-		setIsLoading(true);
-		try {
-			const requestOptions = {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(container_and_boxes),
-			};
-
-			const response = await fetch(
-				"http://localhost:1337/improveSolution",
-				requestOptions
-			);
-			if (response.status === 200) {
-				const improvedSolution = await response.json();
-
-				console.log(improvedSolution);
-
-				updateImprovedSolution(
-					project.id,
-					solutionId,
-					improvedSolution.boxes,
-					improvedSolution.solution_data
-				);
-
-				// updateImprovedSolution(
-				// 	project.id,
-				// 	solutionId,
-				// 	project.boxes,
-				// 	projects[project.id]["0"].solution_data
-				// );
-			} else {
-				throw new Error(`${response.status} ${response.statusText}`);
-			}
-		} catch (error) {
-			setError(error);
-		} finally {
-			setIsLoading(false);
-		}
-	};
-
+	/* #region Project Functions */
 	const addProject = async (project) => {
 		let container_data = {
 			width: project.container[0],
@@ -258,12 +208,65 @@ export const UserDataProvider = ({ children }) => {
 		updateUser(new_projects);
 	};
 
-	const resetIds = (list) => {
-		return list.map((item, index) => {
-			return { ...item, id: index };
-		});
-	};
+	/* #endregion */
 
+	/* #region Solution Functions */
+	const improveSolution = async (projectId, solutionId) => {
+		const project = projects.find((proj) => proj.id === projectId);
+		let container_data = {
+			width: project.container[0],
+			height: project.container[1],
+			length: project.container[2],
+		};
+
+		const solution = project.solutions.find((sol) => sol.id === solutionId);
+		const container_and_boxes = {
+			boxes: solution.boxes,
+			container: container_data,
+		};
+
+		console.log(container_and_boxes);
+
+		setError("");
+		setIsLoading(true);
+		try {
+			const requestOptions = {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(container_and_boxes),
+			};
+
+			const response = await fetch(
+				"http://localhost:1337/improveSolution",
+				requestOptions
+			);
+			if (response.status === 200) {
+				const improvedSolution = await response.json();
+
+				console.log(improvedSolution);
+
+				updateImprovedSolution(
+					project.id,
+					solutionId,
+					improvedSolution.boxes,
+					improvedSolution.solution_data
+				);
+
+				// updateImprovedSolution(
+				// 	project.id,
+				// 	solutionId,
+				// 	project.boxes,
+				// 	projects[project.id]["0"].solution_data
+				// );
+			} else {
+				throw new Error(`${response.status} ${response.statusText}`);
+			}
+		} catch (error) {
+			setError(error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
 	const duplicateSolution = (projectId, solutionId) => {
 		const removeIds = (obj) => {
 			if (Array.isArray(obj)) {
@@ -437,6 +440,15 @@ export const UserDataProvider = ({ children }) => {
 			updateProject(newProject);
 		};
 	};
+	/* #endregion */
+
+	/* #region Utilities */
+	const resetIds = (list) => {
+		return list.map((item, index) => {
+			return { ...item, id: index };
+		});
+	};
+	/* #endregion */
 
 	return (
 		<UserDataContext.Provider

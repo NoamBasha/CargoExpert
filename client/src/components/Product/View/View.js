@@ -229,9 +229,6 @@ export const View = () => {
 
 	return (
 		<div className="d-flex flex-column">
-			<Button onClick={(e) => improveSolutionInView()}>
-				Improve Solution
-			</Button>
 			<div className="position-relative mt-5 d-flex flex-row justify-content-between align-items-center">
 				{edit ? null : (
 					<Button
@@ -252,7 +249,9 @@ export const View = () => {
 							className="position-absolute d-flex flex-row-reverse"
 							style={{ top: 0, right: 300, zIndex: 1 }}
 						>
-							<EditPanel />
+							<EditPanel
+								maxStepSize={Math.max(...container) / 2}
+							/>
 						</div>
 					) : null}
 					<div
@@ -260,12 +259,14 @@ export const View = () => {
 						style={{ top: 0, left: 100, zIndex: 1 }}
 					>
 						<BoxesViewTableImproved
+							isEdit={edit}
 							boxes={inBoxes}
 							toggleIsIn={toggleIsIn}
 							isIn={true}
 						/>
 						<br />
 						<BoxesViewTableImproved
+							isEdit={edit}
 							boxes={outBoxes}
 							toggleIsIn={toggleIsIn}
 							isIn={false}
@@ -301,6 +302,9 @@ export const View = () => {
 					<EditButton setEdit={() => setEdit(true)} />
 					<Button onClick={(e) => handleSaveSolution(e)}>
 						Save Solution
+					</Button>
+					<Button onClick={(e) => improveSolutionInView()}>
+						Improve Solution
 					</Button>
 					<Button onClick={(e) => setSolutionId(null)}>
 						Back To Solutions

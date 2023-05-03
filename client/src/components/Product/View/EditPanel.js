@@ -5,6 +5,8 @@ import ArrowForwardOutlinedIcon from "@mui/icons-material/ArrowForwardOutlined";
 import ThreeSixtyOutlinedIcon from "@mui/icons-material/ThreeSixtyOutlined";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import IconButton from "@mui/material/IconButton";
+import { useState } from "react";
+import { Slider } from "@mui/material";
 
 const BoxesButton = ({ text, onClick }) => {
 	return <Button onClick={() => onClick()}>{text}</Button>;
@@ -24,32 +26,19 @@ const MovementIconButton = ({ icon, arg, onClick, bgColor }) => {
 	);
 };
 
-export const EditPanel = () => {
-	const { moveBox, rotateBox, resetBoxes, deselectBoxes } = useProject();
+export const EditPanel = ({ maxStepSize }) => {
+	const { moveBox, rotateBox, resetBoxes, deselectBoxes, removeBoxes } =
+		useProject();
+	const [stepSize, setStepSize] = useState(0);
 
 	const buttonsArgs = [
-		[[-1, 0, 0], "x", [1, 0, 0], "rgb(255, 90, 90)"],
-		[[0, -1, 0], "y", [0, 1, 0], "rgb(90, 255, 90)"],
-		[[0, 0, -1], "z", [0, 0, 1], "rgb(90, 90, 255)"],
-	];
-
-	const axisButtons = [
-		{ text: "-x", moveBy: [-1, 0, 0] },
-		{ text: "x+", moveBy: [1, 0, 0] },
-		{ text: "-y", moveBy: [0, -1, 0] },
-		{ text: "y+", moveBy: [0, 1, 0] },
-		{ text: "-z", moveBy: [0, 0, -1] },
-		{ text: "z+", moveBy: [0, 0, 1] },
-	];
-
-	const rotationButtons = [
-		{ text: "rotate x", axis: "x" },
-		{ text: "rotate y", axis: "y" },
-		{ text: "rotate z", axis: "z" },
+		[[-stepSize, 0, 0], "x", [stepSize, 0, 0], "rgb(255, 90, 90)"],
+		[[0, -stepSize, 0], "y", [0, stepSize, 0], "rgb(90, 255, 90)"],
+		[[0, 0, -stepSize], "z", [0, 0, stepSize], "rgb(90, 90, 255)"],
 	];
 
 	return (
-		<div className="mt-5 auto-mx w-25 d-flex flex-column justify-content-center align-items-center">
+		<div className="mt-5 auto-mx w-75 d-flex flex-column justify-content-center align-items-center">
 			<ButtonGroup orientation="vertical">
 				{buttonsArgs.map((args) => {
 					return (
@@ -76,42 +65,28 @@ export const EditPanel = () => {
 					);
 				})}
 			</ButtonGroup>
-
-			{/* 
-			{axisButtons.map(({ text, moveBy }, index) => {
-				return (
-					<MovementButton
-						key={index}
-						text={text}
-						arg={moveBy}
-						onClick={moveBox}
-					/>
-				);
-			})}
-
-			{rotationButtons.map(({ text, axis }, index) => {
-				return (
-					<MovementButton
-						key={index}
-						text={text}
-						arg={axis}
-						onClick={rotateBox}
-					/>
-				);
-			})}
-			*/}
-
-			<div>
-				<BoxesButton
-					text="Reset"
-					onClick={resetBoxes}
-				/>
-
-				<BoxesButton
-					text="Deselect"
-					onClick={deselectBoxes}
-				/>
-			</div>
+			Step Size: {stepSize}
+			<Slider
+				defaultValue={0}
+				//valueLabelDisplay="auto"
+				step={0.5}
+				marks
+				min={0}
+				max={maxStepSize}
+				onChange={(event) => setStepSize(event.target.value)}
+			/>
+			<BoxesButton
+				text="Remove"
+				onClick={removeBoxes}
+			/>
+			<BoxesButton
+				text="Reset"
+				onClick={resetBoxes}
+			/>
+			<BoxesButton
+				text="Deselect"
+				onClick={deselectBoxes}
+			/>
 		</div>
 	);
 };

@@ -13,7 +13,7 @@ import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 import { Button, Snackbar } from "@mui/material";
 
-export const BoxesViewTableImproved = ({ boxes, toggleIsIn, isIn }) => {
+export const BoxesViewTableImproved = ({ isEdit, boxes, toggleIsIn, isIn }) => {
 	const rows = boxes.map((box) => {
 		return {
 			id: box.id,
@@ -55,7 +55,7 @@ export const BoxesViewTableImproved = ({ boxes, toggleIsIn, isIn }) => {
 							<TableCell>H</TableCell>
 							<TableCell>L</TableCell>
 							<TableCell>Type</TableCell>
-							<TableCell>Action</TableCell>
+							{isEdit ? <TableCell>Action</TableCell> : null}
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -74,20 +74,22 @@ export const BoxesViewTableImproved = ({ boxes, toggleIsIn, isIn }) => {
 									<TableCell>{row.height}</TableCell>
 									<TableCell>{row.length}</TableCell>
 									<TableCell>{row.type}</TableCell>
-									<TableCell>
-										<Button
-											onClick={() => {
-												console.log(row.id);
-												toggleIsIn(row.id);
-											}}
-										>
-											{isIn ? (
-												<RemoveOutlinedIcon size="small" />
-											) : (
-												<AddOutlinedIcon size="small" />
-											)}
-										</Button>
-									</TableCell>
+									{isEdit ? (
+										<TableCell>
+											<Button
+												onClick={() => {
+													console.log(row.id);
+													toggleIsIn(row.id);
+												}}
+											>
+												{isIn ? (
+													<RemoveOutlinedIcon size="small" />
+												) : (
+													<AddOutlinedIcon size="small" />
+												)}
+											</Button>
+										</TableCell>
+									) : null}
 								</TableRow>
 							);
 						})}

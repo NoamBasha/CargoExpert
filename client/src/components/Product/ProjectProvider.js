@@ -150,6 +150,33 @@ export const ProjectProvider = ({ children }) => {
 		setBoxIndices([]);
 	};
 
+	const removeBoxes = () => {
+		let allBoxes = inBoxes.concat(outBoxes);
+
+		allBoxes = allBoxes.map((box) => {
+			if (boxIndices.includes(box.id)) {
+				return { ...box, isIn: 0 };
+			} else {
+				return box;
+			}
+		});
+
+		const { newInBoxes, newOutBoxes } = allBoxes.reduce(
+			(acc, box) => {
+				if (box.isIn == 1) {
+					acc.newInBoxes.push(box);
+				} else {
+					acc.newOutBoxes.push(box);
+				}
+				return acc;
+			},
+			{ newInBoxes: [], newOutBoxes: [] }
+		);
+		setInBoxes(newInBoxes);
+		setOutBoxes(newOutBoxes);
+		setBoxIndices([]);
+	};
+
 	const toggleIsIn = (id) => {
 		let allBoxes = inBoxes.concat(outBoxes);
 		console.log(allBoxes);
@@ -200,6 +227,7 @@ export const ProjectProvider = ({ children }) => {
 				deselectBoxes,
 				improveSolutionInView,
 				toggleIsIn,
+				removeBoxes,
 			}}
 		>
 			{children}
