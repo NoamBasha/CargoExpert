@@ -1,44 +1,51 @@
-import copy
-import sys
-import json
 import random
 from box import Box, Rotation
 from container import Container
 
 def rotate_each_box(boxes: list[Box]) -> None:
+    '''
+    For each box picks one of its feasible orientations with equal probability.
+    '''
     for b in boxes:
         b.rotation = random.choice(list(Rotation))
 
-
 def rotate_subset(boxes: list[Box]) -> None:
-    d = {}
+    '''
+    For each subset of items sharing all dimensions,
+    randomly pick one of the orientations that with equal probability.
+    '''
+    same_size_dict = {}
     for b in boxes:
-        if b.size in d.keys():
-            d[b.size].append(b)
+        if b.size in same_size_dict.keys():
+            same_size_dict[b.size].append(b)
         else:
-            d[b.size] = [b]
+            same_size_dict[b.size] = [b]
 
-    for k in d.keys():
+    for k in same_size_dict.keys():
         rotation = random.choice(list(Rotation))
-        for b in d[k]:
+        for b in same_size_dict[k]:
             b.rotation = rotation
 
-
 def rotation(boxes: list[Box]) -> None:
+    '''
+    Rotate boxes individually or by subset with equal probability
+    '''
     if boxes:
         chosen_rotation = random.choice([rotate_each_box, rotate_subset])
         chosen_rotation(boxes)
 
-
 def volume_perturb(b1: Box, b2: Box):
-    # return True if the division gap is less than 0.3 in 50% of cases
+    '''
+    return True if the division gap is less than 0.3 in 50% of cases
+    '''
     if 0.7 <= (b1.volume/b2.volume) <= 1.3 and random.randint(0, 1) > 0.5:
         return True
     return False
 
-
 def perturbation(boxes: list[Box]):
-    # perturb the sorted list using one perturbation option randomly
+    '''
+    perturb the sorted list using one perturbation option randomly
+    '''
     if len(boxes) <= 1:
         return boxes
 
@@ -62,13 +69,11 @@ def volume_metric(solution_boxes: list[Box]):
 def order_metric(solution_boxes: list[Box], project_boxes: list[Box], container: Container):
     in_boxes = [box for box in solution_boxes if box.isIn]
     order_list = normalize([box.order for box in in_boxes])
-    # z_list = normalize([(box.FLB[2] + box.get_size()[2]) / 2 for box in solution_boxes])
     z_list = normalize([container.size[2] - box.FLB[2] for box in in_boxes])
-    # z_list = normalize([container.size[2] - ((box.FLB[2] + box.get_size()[2]) / 2) for box in solution_boxes])
 
     score = 0
     for order,z in zip(order_list,z_list):
-        # maybe we should multiply by the score by a factor of something?
+        #TODO: maybe we should multiply by the score by a factor of something?
         if order < 0.5:
             score += 1000 * (abs(order - z))
         else:
@@ -78,10 +83,13 @@ def order_metric(solution_boxes: list[Box], project_boxes: list[Box], container:
 def normalize(numbers):
     max_number = max(numbers)
     min_number = min(numbers)
+    #TODO: return 1 or another number?
+    if max_number == min_number:
+        return [1 for _ in numbers]
     normalized = [(number - min_number) / (max_number - min_number) for number in numbers]
     return normalized
 
-def overall_metric(solution_boxes: list[Box], project_boxes: list[Box], container: Container, solution_data, is_quantity):
+def overall_metric(project_boxes: list[Box], container: Container, solution_data, is_quantity):
     num_score = solution_data["number_of_items"] / len(project_boxes)
     cap_score = solution_data["capacity"] / container.volume
     ord_score = solution_data["order_score"] / 100

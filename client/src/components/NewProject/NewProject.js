@@ -75,7 +75,7 @@ export const NewProject = () => {
 	const handleAddProject = async (e) => {
 		if (validateBoxes()) {
 			let project_boxes = boxes.map((box) => {
-				return { ...box, color: stringToColour(box.type) };
+				return { ...box, color: stringToColour(box.type), isIn: 0 };
 			});
 
 			const project_data = {

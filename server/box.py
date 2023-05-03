@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class Rotation(Enum):
     """
     Each letter stands for a box axis - W = width, H = height, L = length.
@@ -12,78 +11,30 @@ class Rotation(Enum):
     WLH = 4
     HWL = 5
 
-
-"""
-class Vector:
-    def __init__(self, x, y, z):
-        self.x = x
-        self.y = y
-        self.z = z
-    
-    def __repr__(self)-> str:
-        return f"Vector: x-{self.x}, y-{self.y}, z-{self.z}"
-    
-    
-    def __add__(self, other):
-        return Point(self.x + other.x,\
-                self.y + other.y,\
-                self.z + other.z)
-    
-    def __gt__(self, other):
-        #return True if any of the  other's values is greater than its corresponding value.
-        if self.x > other.x or\
-            self.y > other.y or\
-            self.z > other.z:
-            return True
-        return False
-    
-    def __lt__(self, other):
-        #return True if any of the  other's values is less than its corresponding value.
-        if self.x < other.x or\
-            self.y < other.y or\
-            self.z < other.z:
-            return True
-        return False
-    
-class Point:
-    def __init__(self, x, y, z):
-        self.x = x
-        self.y = y
-        self.z = z
-    
-    def __repr__(self)-> str:
-        return f"Point: x-{self.x}, y-{self.y}, z-{self.z}"
-    
-    def __add__(self, other: Vector):
-        return Vector(self.x + other.x,\
-                self.y + other.y,\
-                self.z + other.z)
-    """
-
 class Box:
-    def __init__(self, id='0', order='0', box_type='', width='0', height='0', length='0',
-                 color='gray', isIn=0, center=[0,0,0]):
-        # casting for convenient
+    def __init__(self, id, order, box_type, width, height, length, color, isIn, center=[0,0,0]):
+
+        # The algorithm works with integers only.
         width, height, length =  int(width), int(height), int(length)
 
         self.id = int(id)
         self.order =  int(order)
         self.box_type = box_type
         self.size = width, height, length
-        self.volume = width*height*length
+        self.volume = width * height * length
         self.rotation = Rotation.WHL
-
-        self.center = [float(axis) for axis in center]
-        self.FLB = (self.center[0] - self.get_size()[0]/2, self.center[1] - \
-                self.get_size()[1]/2, self.center[2] - self.get_size()[2]/2)
         self.color = color
         self.isIn = int(isIn)
+        
+        self.center = [float(axis) for axis in center]
+        #TODO: what happens if FLB is float?
+        self.FLB = (self.center[0] - self.get_size()[0]/2,
+                    self.center[1] - self.get_size()[1]/2,
+                    self.center[2] - self.get_size()[2]/2)
 
     def get_size(self) -> tuple[int, int, int] | Exception:
         """
-        gives the right size after considering the rotation.
-        since the box may be rotated in either direction, we need to a method
-        to get the correct size of the box after rotation was applied.
+        Returns size considering the rotation. 
         """
         match self.rotation:
             case Rotation.WHL:
@@ -99,9 +50,12 @@ class Box:
             case Rotation.HWL:
                 return self.size[1], self.size[0], self.size[2]
             case __:
-                raise Exception("error! Box.get_size: no rotation was found!!")
+                raise Exception("Error: Box.get_size: no rotation was found")
 
     def set_position(self, p: tuple[int, int, int]):
+        """
+        Sets the position of the box given its FLB point.
+        """
         self.FLB = p
         self.center = p[0] + self.get_size()[0]/2, p[1] + \
             self.get_size()[1]/2, p[2] + self.get_size()[2]/2

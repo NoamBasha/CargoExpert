@@ -1,9 +1,8 @@
 import copy
 import sys
 import json
-import random
 from util import order_metric, overall_metric, rotation, perturbation
-from box import Box, Rotation
+from box import Box
 from container import Container
 
 NUMBER_OF_ITERATIONS = 1000
@@ -77,7 +76,7 @@ def improve_packing(in_boxes: list[Box], out_boxes: list[Box], container: Contai
 
     boxes = in_boxes + out_boxes
     solution_data['order_score'] = order_metric(solution_boxes, boxes, container)
-    solution_data['overall_score'] = overall_metric(solution_boxes, boxes, container, solution_data, 1)
+    solution_data['overall_score'] = overall_metric(boxes, container, solution_data, 1)
     return solution_boxes, solution_data
 
 
