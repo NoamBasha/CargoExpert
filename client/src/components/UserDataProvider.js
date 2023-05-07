@@ -147,6 +147,8 @@ export const UserDataProvider = ({ children }) => {
 			project_data: project.project_data,
 		};
 
+		console.log(container_and_boxes);
+
 		setError("");
 		setIsLoading(true);
 		try {
@@ -157,7 +159,7 @@ export const UserDataProvider = ({ children }) => {
 			};
 
 			const response = await fetch(
-				"http://localhost:1337/getSolutions",
+				"http://localhost:1337/getSolutionsJS",
 				requestOptions
 			);
 			if (response.status === 200) {
@@ -237,7 +239,7 @@ export const UserDataProvider = ({ children }) => {
 			};
 
 			const response = await fetch(
-				"http://localhost:1337/improveSolution",
+				"http://localhost:1337/improveSolutionJS",
 				requestOptions
 			);
 			if (response.status === 200) {

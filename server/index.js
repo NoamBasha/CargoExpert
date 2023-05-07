@@ -1,3 +1,6 @@
+const { algo } = require("./algo_js/algo.js");
+const { improve } = require("./algo_js/improve.js");
+
 let PythonShellLibrary = require("python-shell");
 let { PythonShell } = PythonShellLibrary;
 const bodyParser = require("body-parser");
@@ -52,6 +55,11 @@ app.post("/getSolutions", (req, res) => {
 	});
 });
 
+app.post("/getSolutionsJS", (req, res) => {
+	const solutions = algo(req.body);
+	res.send(solutions);
+});
+
 app.post("/improveSolution", (req, res) => {
 	console.log(req.body);
 	//res.sendFile(path.join(__dirname, 'uploadFile.html'));
@@ -67,6 +75,11 @@ app.post("/improveSolution", (req, res) => {
 			res.send(result);
 		}
 	});
+});
+
+app.post("/improveSolutionJS", (req, res) => {
+	const solutions = improve(req.body);
+	res.send(solutions);
 });
 
 app.get("/userInputExample", function (req, res) {
