@@ -1,6 +1,6 @@
 import random
-from algo_py.box import Box, Rotation
-from algo_py.container import Container
+from box import Box, Rotation
+from container import Container
 
 
 def rotate_each_box(boxes: list[Box]) -> None:

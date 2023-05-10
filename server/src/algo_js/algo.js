@@ -133,12 +133,11 @@ const constructive_packing = (boxes, container, isQuantity) => {
 		);
 	});
 
-	solution_data.order_score = orderMetric(solutionBoxes, container);
-	solution_data.overall_score = overallMetric(
-		boxes,
-		container,
-		solution_data,
-		isQuantity
+	solution_data.order_score = parseFloat(
+		orderMetric(solutionBoxes, container)
+	);
+	solution_data.overall_score = parseFloat(
+		overallMetric(boxes, container, solution_data, isQuantity)
 	);
 	return [solutionBoxes, solution_data];
 };

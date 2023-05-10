@@ -1,7 +1,7 @@
 import copy
 import sys
 import json
-from utils.util import order_metric, overall_metric, rotation, perturbation
+from util import order_metric, overall_metric, rotation, perturbation
 from box import Box
 from container import Container
 
@@ -85,14 +85,19 @@ def improve_packing(in_boxes: list[Box], out_boxes: list[Box], container: Contai
 
 
 def improve():
+
     # every key in json is a string in python dict.
     obj = json.loads(sys.argv[1])
+
+    
 
     container = Container(obj['container']['width'],
                           obj['container']['height'],
                           obj['container']['length'])
 
     boxes = []
+
+   
 
     for b in obj['boxes']:
         boxes.append(Box(b['id'], b['order'], b['text'], b['size'][0],
@@ -106,6 +111,10 @@ def improve():
 
     solution_list = {}
     counter = 0
+
+    
+
+
     for _ in range(NUMBER_OF_ITERATIONS):
         copy_in_boxes = copy.deepcopy(in_boxes)
         copy_out_boxes = copy.deepcopy(out_boxes)

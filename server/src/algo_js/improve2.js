@@ -8,7 +8,7 @@ const { orderMetric, overallMetric } = require("./metrics.js");
 
 const { handleBox } = require("./algo.js");
 
-const improve_packing = (inBoxes, outBoxes, container) => {
+const startImprove = (inBoxes, container) => {
 	let pp = new Set([
 		{
 			x: 0,
@@ -25,7 +25,6 @@ const improve_packing = (inBoxes, outBoxes, container) => {
 	]);
 
 	let solutionBoxes = [];
-	let retryList = [];
 
 	let solution_data = {
 		number_of_items: 0,
@@ -55,6 +54,18 @@ const improve_packing = (inBoxes, outBoxes, container) => {
 		solution_data["capacity"] += box.volume;
 	});
 
+	return [pp, solutionBoxes, solution_data];
+};
+
+const improve_packing = (
+	inBoxes,
+	outBoxes,
+	container,
+	pp,
+	solutionBoxes,
+	solution_data
+) => {
+	let retryList = [];
 	// Adding each boxes in out_boxes to the container
 	outBoxes.forEach((box) => {
 		handleBox(
@@ -152,15 +163,29 @@ const improve = (data) => {
 
 	let solutionList = {};
 	let counter = 0;
-	for (let i = 0; i < numOfIterations; i++) {
-		inBoxesCopy = [...inBoxes];
-		outBoxesCopy = [...outBoxes];
+	let inBoxesCopy = [...inBoxes];
+	let outBoxesCopy = [...outBoxes];
+	let [pp, solutionBoxes, init_solution_data] = startImprove(
+		inBoxesCopy,
+		container
+	);
+	let ppCopy = new Set(Object.assign([], pp));
+	let solutionBoxesCopy = [...solutionBoxes];
+	let copy_init_solution_data = Object.assign({}, init_solution_data);
 
+	for (let i = 0; i < numOfIterations; i++) {
 		// For non-deterministic algorithm
 		rotation(outBoxesCopy);
 		perturbation(outBoxesCopy);
 
-		let solution = improve_packing(inBoxesCopy, outBoxesCopy, container);
+		let solution = improve_packing(
+			inBoxesCopy,
+			outBoxesCopy,
+			container,
+			ppCopy,
+			solutionBoxesCopy,
+			copy_init_solution_data
+		);
 		if (solution === null) {
 			continue;
 		}
