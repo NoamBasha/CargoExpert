@@ -12,7 +12,7 @@ import "./NewProject.css";
 export const NewProject = () => {
 	const [container, setContainer] = useState([]);
 	const [boxes, setBoxes] = useState([]);
-	const [name, setName] = useState("Project");
+	const [name, setName] = useState("");
 	const [stage, setStage] = useState(0);
 	const [orderQuantity, setOrderQuantity] = useState("Quantity");
 	const [timeQuality, setTimeQuality] = useState("Time");
@@ -99,7 +99,16 @@ export const NewProject = () => {
 	return (
 		<>
 			<Wizard stage={stage} />
-			<div className="w-100 d-flex justify-content-center mt-5">
+			<h1
+				style={{ textAlign: "center" }}
+				className="m-0 pt-5 mb-4 display-4"
+			>
+				{stage == 0 ? "Project Settings" : null}
+				{stage == 1 ? "File Upload" : null}
+				{stage == 2 ? "Edit Container" : null}
+				{stage == 3 ? "Edit Boxes" : null}
+			</h1>
+			<div className="w-100 d-flex justify-content-center">
 				{stage == 0 ? (
 					<ProjectSettings
 						name={name}

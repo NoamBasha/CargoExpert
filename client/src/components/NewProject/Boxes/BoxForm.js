@@ -68,7 +68,7 @@ export const BoxForm = ({ setBoxes, boxes, selectedIds, editBox }) => {
 
 	return (
 		<form className="d-flex flex-column">
-			<label>Order:</label>
+			<label className="mt-3">Order:</label>
 			<TextField
 				className="mb-2"
 				type="number"

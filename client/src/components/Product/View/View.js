@@ -228,13 +228,19 @@ export const View = () => {
 	};
 
 	return (
-		<div className="d-flex flex-column">
-			<div className="position-relative mt-5 d-flex flex-row justify-content-between align-items-center">
+		<div
+			style={{ height: "90vh" }}
+			className="d-flex flex-column"
+		>
+			<div
+				style={{ height: "80vh" }}
+				className="d-flex flex-row justify-content-between align-items-center"
+			>
 				{edit ? null : (
 					<Button
 						onClick={getPreviousSolution}
 						className="position-absolute d-flex"
-						style={{ top: 335, left: 10, zIndex: 1 }}
+						style={{ top: 435, left: 10, zIndex: 1 }}
 					>
 						<ArrowBackIosOutlinedIcon
 							color="primary"
@@ -247,7 +253,7 @@ export const View = () => {
 					{edit ? (
 						<div
 							className="position-absolute d-flex flex-row-reverse"
-							style={{ top: 0, right: 300, zIndex: 1 }}
+							style={{ top: 100, right: 300, zIndex: 1 }}
 						>
 							<EditPanel
 								maxStepSize={Math.max(...container) / 2}
@@ -256,7 +262,7 @@ export const View = () => {
 					) : null}
 					<div
 						className="w-25 position-absolute d-flex flex-column"
-						style={{ top: 0, left: 100, zIndex: 1 }}
+						style={{ top: 115, left: 100, zIndex: 1 }}
 					>
 						<BoxesViewTableImproved
 							isEdit={edit}
@@ -278,7 +284,7 @@ export const View = () => {
 					<Button
 						onClick={getNextSolution}
 						className="position-absolute d-flex"
-						style={{ top: 335, right: 10, zIndex: 1 }}
+						style={{ top: 435, right: 10, zIndex: 1 }}
 					>
 						<ArrowForwardIosOutlinedIcon
 							color="primary"
@@ -288,29 +294,34 @@ export const View = () => {
 				)}
 			</div>
 
-			{edit ? (
-				<ViewButton
-					deselectBoxes={() => deselectBoxes()}
-					setEdit={() => setEdit(false)}
-					validateBoxesLocation={validateBoxesLocation(
-						inBoxes,
-						container
-					)}
-				/>
-			) : (
-				<>
-					<EditButton setEdit={() => setEdit(true)} />
-					<Button onClick={(e) => handleSaveSolution(e)}>
-						Save Solution
-					</Button>
-					<Button onClick={(e) => improveSolutionInView()}>
-						Improve Solution
-					</Button>
-					<Button onClick={(e) => setSolutionId(null)}>
-						Back To Solutions
-					</Button>
-				</>
-			)}
+			<div
+				style={{ height: "10vh" }}
+				className="w-25 d-flex justify-content-around mx-auto"
+			>
+				{edit ? (
+					<ViewButton
+						deselectBoxes={() => deselectBoxes()}
+						setEdit={() => setEdit(false)}
+						validateBoxesLocation={validateBoxesLocation(
+							inBoxes,
+							container
+						)}
+					/>
+				) : (
+					<>
+						<Button onClick={(e) => setSolutionId(null)}>
+							Back
+						</Button>
+						<EditButton setEdit={() => setEdit(true)} />
+						<Button onClick={(e) => handleSaveSolution(e)}>
+							Save
+						</Button>
+						<Button onClick={(e) => improveSolutionInView()}>
+							Improve
+						</Button>
+					</>
+				)}
+			</div>
 		</div>
 	);
 };

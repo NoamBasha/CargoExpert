@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserData } from "../UserDataProvider.js";
-import "./Register.css";
 import { Button, TextField, Alert, CircularProgress } from "@mui/material";
 
 export const Register = () => {
@@ -23,11 +22,13 @@ export const Register = () => {
 	};
 
 	return (
-		<div className="register">
-			<h1 className="m-0 p-5 display-1">Cargo Expert</h1>
-			<form className="form-register w-20 mx-auto">
+		<div className="text-center">
+			<h1 className="m-0 p-5 display-1 mt-5">Cargo Expert</h1>
+			<form
+				style={{ width: "20%" }}
+				className="d-flex flex-column mx-auto align-items-center"
+			>
 				<TextField
-					className="my-3"
 					id="email"
 					label="Email"
 					variant="outlined"
@@ -38,9 +39,8 @@ export const Register = () => {
 					onChange={(e) => setEmail(e.target.value)}
 					fullWidth
 				/>
-				<br />
 				<TextField
-					className="my-3"
+					className="mt-4"
 					id="password"
 					label="Password"
 					variant="outlined"
@@ -51,19 +51,23 @@ export const Register = () => {
 					onChange={(e) => setPassword(e.target.value)}
 					fullWidth
 				/>
-				<br />
 				{error && (
+					// TODO: align text of error to center?
 					<Alert
+						style={{ width: "100%" }}
+						className="mt-2"
 						severity="error"
-						className="mt-3"
 					>
 						{error}
 					</Alert>
 				)}
 				{isLoading ? (
-					<CircularProgress />
+					<CircularProgress className="mt-2" />
 				) : (
 					<Button
+						style={{ width: "25%" }}
+						className="mt-3"
+						color="primary"
 						variant="outlined"
 						onClick={handleRegister}
 					>

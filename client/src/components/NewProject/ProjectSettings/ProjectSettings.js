@@ -1,8 +1,6 @@
 import { Button, TextField } from "@mui/material";
 import { PreferencesPanel } from "./PreferencesPanel";
 
-import "./../../../App.css";
-
 export const ProjectSettings = ({
 	name,
 	setName,
@@ -20,18 +18,22 @@ export const ProjectSettings = ({
 	};
 
 	return (
-		<form className="w-25 d-flex flex-column mt-5">
-			<label className="darkBrown mb-2">Name:</label>
+		<form
+			style={{ width: "20%" }}
+			className="d-flex flex-column"
+		>
+			<label className="mb-2">Name:</label>
 			<TextField
+				className="mb-1"
 				type="text"
 				id="name"
 				value={name}
 				onChange={(e) => {
 					setName(e.target.value);
 				}}
+				placeholder="Project"
 			/>
-			<br />
-
+			{/* <label className="my-1">Preferences:</label> */}
 			<PreferencesPanel
 				preference={orderQuantity}
 				setPreference={setOrderQuantity}
@@ -47,7 +49,7 @@ export const ProjectSettings = ({
 			/>
 
 			<Button
-				className="w-25 mx-auto mt-2 rounded"
+				className="w-25 mx-auto mt-2"
 				onClick={() => {
 					if (validateName()) {
 						setStage((prevStage) => prevStage + 1);

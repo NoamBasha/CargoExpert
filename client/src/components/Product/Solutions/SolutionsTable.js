@@ -4,6 +4,7 @@ import { useUserData } from "../../UserDataProvider.js";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
+import { IconButton } from "@mui/material";
 
 import {
 	TableContainer,
@@ -67,24 +68,39 @@ export const SolutionsTable = () => {
 
 	return (
 		<div>
-			<TableContainer
-				component={Paper}
-				sx={{ maxHeight: "800px" }}
-			>
+			<TableContainer component={Paper}>
 				<Table
 					aria-label="projects table"
 					stickyHeader
 				>
 					<TableHead>
 						<TableRow>
-							<TableCell>Solution</TableCell>
-							<TableCell>Number Of Items</TableCell>
-							<TableCell>Capacity</TableCell>
-							<TableCell>Order Score</TableCell>
-							<TableCell>Overall Score</TableCell>
-							<TableCell>Delete</TableCell>
-							<TableCell>Change Name</TableCell>
-							<TableCell>Duplicate</TableCell>
+							<TableCell style={{ fontWeight: "bold" }}>
+								Solution
+							</TableCell>
+							<TableCell style={{ fontWeight: "bold" }}>
+								Number Of Items
+							</TableCell>
+							<TableCell style={{ fontWeight: "bold" }}>
+								Capacity
+							</TableCell>
+							<TableCell style={{ fontWeight: "bold" }}>
+								Order Score
+							</TableCell>
+							<TableCell style={{ fontWeight: "bold" }}>
+								Overall Score
+							</TableCell>
+							<TableCell style={{ fontWeight: "bold" }}>
+								Change Name
+							</TableCell>
+							<TableCell style={{ fontWeight: "bold" }}>
+								Duplicate
+							</TableCell>
+							{solutions.length != 1 ? (
+								<TableCell style={{ fontWeight: "bold" }}>
+									Delete
+								</TableCell>
+							) : null}
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -112,21 +128,9 @@ export const SolutionsTable = () => {
 									<TableCell>
 										{row.solution_data.overall_score}
 									</TableCell>
+
 									<TableCell>
-										<Button
-											onClick={() => {
-												setShowDeletePopup(true);
-												setTableSolutionId(row.id);
-											}}
-										>
-											<DeleteOutlineIcon
-												color="primary"
-												size="small"
-											></DeleteOutlineIcon>
-										</Button>
-									</TableCell>
-									<TableCell>
-										<Button
+										<IconButton
 											onClick={() => {
 												setShowChangeNamePopup(true);
 												setTableSolutionId(row.id);
@@ -136,10 +140,10 @@ export const SolutionsTable = () => {
 												color="primary"
 												size="small"
 											></EditOutlinedIcon>
-										</Button>
+										</IconButton>
 									</TableCell>
 									<TableCell>
-										<Button
+										<IconButton
 											onClick={() => {
 												duplicateSolution(
 													projectId,
@@ -154,8 +158,23 @@ export const SolutionsTable = () => {
 												color="primary"
 												size="small"
 											></ContentCopyOutlinedIcon>
-										</Button>
+										</IconButton>
 									</TableCell>
+									{solutions.length != 1 ? (
+										<TableCell>
+											<IconButton
+												onClick={() => {
+													setShowDeletePopup(true);
+													setTableSolutionId(row.id);
+												}}
+											>
+												<DeleteOutlineIcon
+													color="primary"
+													size="small"
+												></DeleteOutlineIcon>
+											</IconButton>
+										</TableCell>
+									) : null}
 								</TableRow>
 							);
 						})}

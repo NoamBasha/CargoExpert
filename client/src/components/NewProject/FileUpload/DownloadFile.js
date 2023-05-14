@@ -20,8 +20,15 @@ export const DownloadFile = () => {
 	};
 
 	return (
-		<div className="mt-3 mb-2">
-			<Button onClick={handleClick}>Click here for example file</Button>
+		<div className="mt-0 mb-2">
+			<Button
+				style={{
+					fontSize: "0.75rem",
+				}}
+				onClick={handleClick}
+			>
+				Download example file
+			</Button>
 		</div>
 	);
 };

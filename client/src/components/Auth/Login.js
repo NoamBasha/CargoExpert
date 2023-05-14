@@ -1,5 +1,4 @@
 import { useUserData } from "../UserDataProvider.js";
-import "./Login.css";
 import { Button, TextField, Alert, CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
@@ -28,11 +27,13 @@ export const Login = () => {
 	};
 
 	return (
-		<div className="login">
-			<h1 className="m-0 p-5 display-1">Cargo Expert</h1>
-			<form className="form-login w-20 mx-auto">
+		<div className="text-center">
+			<h1 className="m-0 p-5 display-1 mt-5">Cargo Expert</h1>
+			<form
+				style={{ width: "20%" }}
+				className="d-flex flex-column mx-auto align-items-center"
+			>
 				<TextField
-					className="my-3"
 					id="email"
 					label="Email"
 					variant="outlined"
@@ -43,9 +44,8 @@ export const Login = () => {
 					onChange={(e) => setEmail(e.target.value)}
 					fullWidth
 				/>
-				<br />
 				<TextField
-					className="my-3"
+					className="mt-4"
 					id="password"
 					label="Password"
 					variant="outlined"
@@ -57,17 +57,22 @@ export const Login = () => {
 					fullWidth
 				/>
 				{error && (
+					// TODO: align text of error to center?
 					<Alert
+						style={{ width: "100%" }}
+						className="mt-2"
 						severity="error"
-						className="mt-3"
 					>
 						{error}
 					</Alert>
 				)}
 				{isLoading ? (
-					<CircularProgress />
+					<CircularProgress className="mt-2" />
 				) : (
 					<Button
+						style={{ width: "20%" }}
+						className="mt-3"
+						color="primary"
 						variant="outlined"
 						onClick={handleLogin}
 					>
@@ -76,14 +81,14 @@ export const Login = () => {
 				)}
 			</form>
 			<br />
-			{isLoading ? null : (
+			{/* {isLoading ? null : (
 				<Button
 					variant="outlined"
 					onClick={() => navigate("/register")}
 				>
 					Register
 				</Button>
-			)}
+			)} */}
 		</div>
 	);
 };

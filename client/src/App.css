@@ -1,19 +1,21 @@
 body {
 	font-family: Arial, Helvetica, sans-serif;
+	color: #3a4750;
+	background-color: #f3f3f3;
 }
 
-.beige {
-	color: rgb(237, 228, 224);
+.blue {
+	color: #1976d2;
 }
 
-.green {
-	color: #c8dbbe;
+.darkGray {
+	color: #3a4750;
 }
 
-.brown {
-	color: #9f8772;
+.drakBlueGray {
+	color: #303841;
 }
 
-.darkBrown {
-	color: #665a48;
+.lightGray {
+	color: #f3f3f3;
 }

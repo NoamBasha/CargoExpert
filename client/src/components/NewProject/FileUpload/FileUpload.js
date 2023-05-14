@@ -5,7 +5,6 @@ import { DownloadFile } from "./DownloadFile";
 import { useState } from "react";
 import { FileIndicator } from "./FileIndicator";
 import { Snackbar, Alert } from "@mui/material";
-
 import "./FileUpload.css";
 
 export const FileUpload = ({ setStage, setContainer, setBoxes }) => {
@@ -85,12 +84,14 @@ export const FileUpload = ({ setStage, setContainer, setBoxes }) => {
 	return (
 		<div className="d-flex flex-column align-items-center">
 			<DropzoneArea
-				dropzoneClass={"px-4 text-secondary d-flex align-items-center"}
+				dropzoneClass={
+					"fileUpload px-4 text-secondary d-flex align-items-center"
+				}
 				acceptedFiles={["text/csv"]}
 				dropzoneText={"Drop a CSV file or click to upload your file!"}
 				filesLimit={1}
 				maxFileSize={5000000}
-				showAlerts={true} // false?
+				showAlerts={false} // false?
 				showPreviews={false}
 				showFileNamesInPreview={false}
 				showPreviewsInDropzone={false} // true?
@@ -109,12 +110,17 @@ export const FileUpload = ({ setStage, setContainer, setBoxes }) => {
 				onDelete={handleDelete}
 				alertSnackbarProps={{}}
 			/>
-			<br />
-			{fileName
-				? `${fileName} is uploaded successfully`
-				: "No file is uploaded"}
+			{fileName ? (
+				<strong>
+					<p class="mt-2 mb-0">
+						{`${fileName} is uploaded successfully`}
+					</p>
+				</strong>
+			) : (
+				<p class="mt-2 mb-0">{"No file is uploaded"}</p>
+			)}
 			<DownloadFile />
-			<div className="w-50 d-flex justify-content-between">
+			<div className="w-100 d-flex justify-content-between">
 				<Button onClick={() => setStage((prevStage) => prevStage - 1)}>
 					Back
 				</Button>

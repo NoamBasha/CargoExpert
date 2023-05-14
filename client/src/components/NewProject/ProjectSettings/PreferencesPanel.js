@@ -7,9 +7,9 @@ export const PreferencesPanel = ({
 	text,
 }) => {
 	return (
-		<div>
-			<label className="darkBrown mb-2">{text}</label>
-			<div className="mx-auto w-50 d-flex m-1 justify-content-around">
+		<div className="my-2">
+			<label className="mb-1">{text}</label>
+			<div className="mx-auto w-100 d-flex  justify-content-between">
 				{options.map((option, i) => {
 					return (
 						<OptionButton

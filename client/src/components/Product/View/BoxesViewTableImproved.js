@@ -26,15 +26,29 @@ export const BoxesViewTableImproved = ({ isEdit, boxes, toggleIsIn, isIn }) => {
 	});
 
 	return (
-		<div>
+		<>
 			<h6>
-				{isIn ? "Boxes in the solution" : "Boxes out of the solution"}
+				<strong>
+					{isIn
+						? "Boxes in the solution"
+						: "Boxes out of the solution"}
+				</strong>
 			</h6>
-			<TableContainer
-				component={Paper}
-				sx={{ height: "35vh", width: "400px" }}
+			<div
+				style={{
+					height: "35vh",
+					width: "400px",
+				}}
 			>
-				{/* <Typography>
+				<TableContainer
+					component={Paper}
+					sx={{
+						backgroundColor: "#f3f3f3",
+						height: "35vh",
+						width: "400px",
+					}}
+				>
+					{/* <Typography>
 					<caption
 						style={{ display: "inline-block", margin: "0.5em 0" }}
 					>
@@ -43,59 +57,61 @@ export const BoxesViewTableImproved = ({ isEdit, boxes, toggleIsIn, isIn }) => {
 							: "Boxes out of the solution"}
 					</caption>
 				</Typography> */}
-				<Table
-					aria-label="projects table"
-					size="small"
-					stickyHeader
-				>
-					<TableHead>
-						<TableRow>
-							<TableCell>Order</TableCell>
-							<TableCell>W</TableCell>
-							<TableCell>H</TableCell>
-							<TableCell>L</TableCell>
-							<TableCell>Type</TableCell>
-							{isEdit ? <TableCell>Action</TableCell> : null}
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{rows.map((row) => {
-							return (
-								<TableRow
-									key={row.id}
-									sx={{
-										"&:last-child td, &:last-child th": {
-											border: 0,
-										},
-									}}
-								>
-									<TableCell>{row.order}</TableCell>
-									<TableCell>{row.width}</TableCell>
-									<TableCell>{row.height}</TableCell>
-									<TableCell>{row.length}</TableCell>
-									<TableCell>{row.type}</TableCell>
-									{isEdit ? (
-										<TableCell>
-											<Button
-												onClick={() => {
-													console.log(row.id);
-													toggleIsIn(row.id);
-												}}
-											>
-												{isIn ? (
-													<RemoveOutlinedIcon size="small" />
-												) : (
-													<AddOutlinedIcon size="small" />
-												)}
-											</Button>
-										</TableCell>
-									) : null}
-								</TableRow>
-							);
-						})}
-					</TableBody>
-				</Table>
-			</TableContainer>
-		</div>
+					<Table
+						aria-label="projects table"
+						size="small"
+						stickyHeader
+					>
+						<TableHead>
+							<TableRow>
+								<TableCell>Order</TableCell>
+								<TableCell>W</TableCell>
+								<TableCell>H</TableCell>
+								<TableCell>L</TableCell>
+								<TableCell>Type</TableCell>
+								{isEdit ? <TableCell>Action</TableCell> : null}
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{rows.map((row) => {
+								return (
+									<TableRow
+										key={row.id}
+										sx={{
+											"&:last-child td, &:last-child th":
+												{
+													border: 0,
+												},
+										}}
+									>
+										<TableCell>{row.order}</TableCell>
+										<TableCell>{row.width}</TableCell>
+										<TableCell>{row.height}</TableCell>
+										<TableCell>{row.length}</TableCell>
+										<TableCell>{row.type}</TableCell>
+										{isEdit ? (
+											<TableCell>
+												<Button
+													onClick={() => {
+														console.log(row.id);
+														toggleIsIn(row.id);
+													}}
+												>
+													{isIn ? (
+														<RemoveOutlinedIcon size="small" />
+													) : (
+														<AddOutlinedIcon size="small" />
+													)}
+												</Button>
+											</TableCell>
+										) : null}
+									</TableRow>
+								);
+							})}
+						</TableBody>
+					</Table>
+				</TableContainer>
+			</div>
+		</>
 	);
 };

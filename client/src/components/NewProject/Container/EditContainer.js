@@ -42,6 +42,14 @@ export const EditContainer = ({ setStage, container, setContainer }) => {
 
 	return (
 		<div>
+			<p
+				style={{
+					fontSize: "16px",
+				}}
+				className="m-0"
+			>
+				Choose a standrad size or enter a size of your own!
+			</p>
 			<StandardContainers setStandardContainer={setStandardContainer} />
 
 			<form className="d-flex flex-column">

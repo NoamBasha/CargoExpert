@@ -29,7 +29,7 @@ export const EditBoxes = ({
 		<div className="d-flex flex-column w-100 justify-content-center align-items-center">
 			<div
 				className=" d-flex justify-content-between "
-				style={{ width: "53%" }}
+				style={{ width: "45%" }}
 			>
 				<BoxesTable
 					boxes={boxes}
