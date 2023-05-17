@@ -13,6 +13,7 @@ export const Login = () => {
 		readUser,
 		isLoading,
 		error,
+		setCustomizedError,
 		isLoggedIn,
 	} = useUserData();
 
@@ -23,7 +24,13 @@ export const Login = () => {
 	}, [isLoggedIn]);
 
 	const handleLogin = async (e) => {
-		await readUser();
+		if (email.length === 0) {
+			setCustomizedError("Invalid Email!");
+		} else if (password.length === 0) {
+			setCustomizedError("Invalid Password!");
+		} else {
+			await readUser();
+		}
 	};
 
 	return (
@@ -41,7 +48,7 @@ export const Login = () => {
 					type="text"
 					placeholder="Email..."
 					required
-					onChange={(e) => setEmail(e.target.value)}
+					onChange={(e) => setEmail(e.target.value.trim())}
 					fullWidth
 				/>
 				<TextField
@@ -53,10 +60,10 @@ export const Login = () => {
 					type="password"
 					placeholder="Password..."
 					required
-					onChange={(e) => setPassword(e.target.value)}
+					onChange={(e) => setPassword(e.target.value.trim())}
 					fullWidth
 				/>
-				{error && (
+				{/* {error && (
 					// TODO: align text of error to center?
 					<Alert
 						style={{ width: "100%" }}
@@ -65,7 +72,7 @@ export const Login = () => {
 					>
 						{error}
 					</Alert>
-				)}
+				)} */}
 				{isLoading ? (
 					<CircularProgress className="mt-2" />
 				) : (

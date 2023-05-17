@@ -41,28 +41,25 @@ const ProjectSchema = new mongoose.Schema({
 const UserSchema = new mongoose.Schema({
 	email: {
 		type: String,
-		required: false,
-		//unique: true,
-		//lowercase: true,
-		//validate: [emailSyntax, "Invalid email!"],
+		required: true,
+		unique: true,
+		lowercase: true,
+		validate: [
+			{
+				validator: (email) => {
+					const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+					return emailRegex.test(email);
+				},
+				message: "Email should be a valid email address",
+			},
+		],
 	},
 	password: {
 		type: String,
-		//validate: [notEmpty, "Password is required."],
-		required: false,
+		required: true,
 	},
-	projects: { type: [ProjectSchema], required: false },
+	projects: { type: [ProjectSchema], required: true },
 });
-
-function notEmpty(password) {
-	return password.trim().length > 0;
-}
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-function emailSyntax(email) {
-	console.log(email);
-	return emailRegex.test(email);
-}
 
 const User = mongoose.model("User", UserSchema);
 const Project = mongoose.model("Project", ProjectSchema);

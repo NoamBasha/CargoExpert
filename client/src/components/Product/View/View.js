@@ -5,6 +5,7 @@ import { EditPanel } from "./EditPanel.js";
 import { useEdit } from "./EditProvider.js";
 import { BoxesViewTable } from "./BoxesViewTable.js";
 import { BoxesViewTableImproved } from "./BoxesViewTableImproved.js";
+import { useUserData } from "../../UserDataProvider.js";
 
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import ArrowBackIosOutlinedIcon from "@mui/icons-material/ArrowBackIosOutlined";
@@ -42,6 +43,7 @@ export const View = () => {
 		improveSolutionInView,
 		toggleIsIn,
 	} = useProject();
+	const { setCustomizedError } = useUserData();
 
 	// returns true if there is a box that is out of bounds
 	// return false if everything is ok
@@ -209,11 +211,13 @@ export const View = () => {
 	const validateBoxesLocation = (inBoxes, container) => {
 		return () => {
 			if (isBoxesOutOfBounds(inBoxes, container)) {
-				alert("Not all of the boxes are inside the container");
+				setCustomizedError(
+					"Not all of the boxes are inside the container"
+				);
 			} else if (isBoxesOverlapping(inBoxes, container)) {
-				alert("There are boxes overlapping");
+				setCustomizedError("There are boxes overlapping");
 			} else if (isBoxesHovering(inBoxes)) {
-				alert("There are boxes hovering");
+				setCustomizedError("There are boxes hovering");
 			} else {
 				return true;
 			}

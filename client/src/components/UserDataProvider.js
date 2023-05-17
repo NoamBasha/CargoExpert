@@ -4,6 +4,7 @@ const UserDataContext = createContext("");
 
 export const UserDataProvider = ({ children }) => {
 	/* #region State Variables */
+	const [open, setOpen] = useState(false);
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -11,6 +12,11 @@ export const UserDataProvider = ({ children }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+	const setCustomizedError = (error) => {
+		setError(error);
+		setOpen(true);
+	};
 
 	/* #endregion */
 
@@ -34,10 +40,11 @@ export const UserDataProvider = ({ children }) => {
 			if (response.status === 200) {
 				setIsRegistered(true);
 			} else {
-				throw new Error(`${response.status} ${response.statusText}`);
+				const data = await response.json();
+				setCustomizedError(data.error);
 			}
 		} catch (error) {
-			setError(error.message);
+			setCustomizedError(error.message);
 		} finally {
 			setIsLoading(false);
 		}
@@ -60,16 +67,16 @@ export const UserDataProvider = ({ children }) => {
 				"http://localhost:1337/readUser",
 				requestOptions
 			);
+			const data = await response.json();
 			if (response.status === 200) {
-				const data = await response.json();
 				setProjects(data);
 				setIsLoggedIn(true);
 			} else {
-				throw new Error(`${response.status} ${response.statusText}`);
+				setCustomizedError(data.error);
 			}
 		} catch (error) {
 			//TODO: fix error message
-			setError(error.message);
+			setCustomizedError(error.message);
 		} finally {
 			setIsLoading(false);
 		}
@@ -98,7 +105,7 @@ export const UserDataProvider = ({ children }) => {
 				throw new Error(`${response.status} ${response.statusText}`);
 			}
 		} catch (error) {
-			setError(error.message);
+			setCustomizedError(error.message);
 		} finally {
 			setIsLoading(false);
 		}
@@ -126,7 +133,7 @@ export const UserDataProvider = ({ children }) => {
 				throw new Error(`${response.status} ${response.statusText}`);
 			}
 		} catch (error) {
-			setError(error);
+			setCustomizedError(error);
 		} finally {
 			setIsLoading(false);
 		}
@@ -162,8 +169,8 @@ export const UserDataProvider = ({ children }) => {
 				"http://localhost:1337/getSolutionsJS",
 				requestOptions
 			);
+			const solutions = await response.json();
 			if (response.status === 200) {
-				const solutions = await response.json();
 				let current_id = 0;
 				if (projects.length !== 0) {
 					//TODO: set id by first unused id?
@@ -183,10 +190,10 @@ export const UserDataProvider = ({ children }) => {
 				setProjects(new_projects);
 				updateUser(new_projects);
 			} else {
-				throw new Error(`${response.status} ${response.statusText}`);
+				setCustomizedError(solutions.error);
 			}
 		} catch (error) {
-			setError(error);
+			setCustomizedError(error);
 		} finally {
 			setIsLoading(false);
 		}
@@ -261,10 +268,10 @@ export const UserDataProvider = ({ children }) => {
 				// 	projects[project.id]["0"].solution_data
 				// );
 			} else {
-				throw new Error(`${response.status} ${response.statusText}`);
+				setCustomizedError(response.error);
 			}
 		} catch (error) {
-			setError(error);
+			setCustomizedError(error);
 		} finally {
 			setIsLoading(false);
 		}
@@ -467,6 +474,8 @@ export const UserDataProvider = ({ children }) => {
 				readUser,
 				isLoading,
 				error,
+				setError,
+				setCustomizedError,
 				createUser,
 				isLoggedIn,
 				setIsLoggedIn,
@@ -475,6 +484,8 @@ export const UserDataProvider = ({ children }) => {
 				duplicateSolution,
 				updateSolutionName,
 				improveSolution,
+				open,
+				setOpen,
 			}}
 		>
 			{children}

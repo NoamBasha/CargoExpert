@@ -8,16 +8,26 @@ import { useUserData } from "../UserDataProvider";
 import { useNavigate } from "react-router-dom";
 import { Button, Alert, CircularProgress } from "@mui/material";
 import "./NewProject.css";
+import { ErrorSnackbar } from "../ErrorSnackbar.js";
 
 export const NewProject = () => {
-	const [container, setContainer] = useState([]);
+	const [container, setContainer] = useState([0, 0, 0]);
 	const [boxes, setBoxes] = useState([]);
 	const [name, setName] = useState("");
 	const [stage, setStage] = useState(0);
 	const [orderQuantity, setOrderQuantity] = useState("Quantity");
 	const [timeQuality, setTimeQuality] = useState("Time");
-	const { addProject, isLoading, error } = useUserData();
+	const { addProject, isLoading, error, setError, setCustomizedError } =
+		useUserData();
+
 	const navigate = useNavigate();
+
+	console.log(stage);
+
+	const setNewStage = (dir) => {
+		setError("");
+		setStage((prevStage) => prevStage + dir * 1);
+	};
 
 	const stringToColour = function (str) {
 		let hash = 0;
@@ -73,7 +83,10 @@ export const NewProject = () => {
 	};
 
 	const handleAddProject = async (e) => {
-		if (validateBoxes()) {
+		setError("");
+		if (!validateBoxes()) {
+			setCustomizedError("Problem with boxes");
+		} else {
 			let project_boxes = boxes.map((box) => {
 				return { ...box, color: stringToColour(box.type), isIn: 0 };
 			});
@@ -84,15 +97,17 @@ export const NewProject = () => {
 				isQuality: timeQuality == "Quality" ? 1 : 0,
 			};
 
-			await addProject({
-				project_data: project_data,
-				container: container,
-				boxes: project_boxes,
-				solutions: [],
-			});
-			navigate("/home");
-		} else {
-			alert("Problem with boxes");
+			try {
+				await addProject({
+					project_data: project_data,
+					container: container,
+					boxes: project_boxes,
+					solutions: [],
+				});
+				navigate("/home");
+			} catch (err) {
+				setCustomizedError(err);
+			}
 		}
 	};
 
@@ -104,56 +119,57 @@ export const NewProject = () => {
 				className="m-0 pt-5 mb-4 display-4"
 			>
 				{stage == 0 ? "Project Settings" : null}
-				{stage == 1 ? "File Upload" : null}
+				{stage == 1 ? "File Upload (Optional)" : null}
 				{stage == 2 ? "Edit Container" : null}
 				{stage == 3 ? "Edit Boxes" : null}
 			</h1>
-			<div className="w-100 d-flex justify-content-center">
+			<div className="w-100 d-flex flex-column justify-content-center mx-auto align-items-center">
 				{stage == 0 ? (
 					<ProjectSettings
 						name={name}
 						setName={setName}
-						setStage={setStage}
+						setNewStage={setNewStage}
 						orderQuantity={orderQuantity}
 						setOrderQuantity={setOrderQuantity}
 						timeQuality={timeQuality}
 						setTimeQuality={setTimeQuality}
+						setCustomizedError={setCustomizedError}
 					/>
 				) : null}
 
 				{stage == 1 ? (
 					<FileUpload
-						setStage={setStage}
+						setNewStage={setNewStage}
 						setContainer={setContainer}
 						setBoxes={setBoxes}
+						setCustomizedError={setCustomizedError}
 					/>
 				) : null}
 				{stage == 2 ? (
 					<EditContainer
-						setStage={setStage}
+						setNewStage={setNewStage}
 						container={container}
 						setContainer={setContainer}
+						setCustomizedError={setCustomizedError}
 					/>
 				) : null}
 				{stage == 3 ? (
 					<EditBoxes
-						setStage={setStage}
+						setNewStage={setNewStage}
 						boxes={boxes}
 						setBoxes={setBoxes}
 						handleAddProject={handleAddProject}
 						isLoading={isLoading}
 					/>
 				) : null}
-				{error && (
+				{/* {error && (
 					<Alert
 						severity="error"
 						className="mt-3"
 					>
 						{error}
 					</Alert>
-				)}
-
-				<br />
+				)} */}
 			</div>
 		</>
 	);

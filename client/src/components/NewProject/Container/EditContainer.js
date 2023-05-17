@@ -3,9 +3,13 @@ import { useState } from "react";
 import { Button, TextField } from "@mui/material";
 import { StandardContainers } from "./StandardContainers";
 
-export const EditContainer = ({ setStage, container, setContainer }) => {
-	//const { container, setContainer } = useFileData();
-	const { width, height, length } = container;
+export const EditContainer = ({
+	setNewStage,
+	container,
+	setContainer,
+	setCustomizedError,
+}) => {
+	const [width, height, length] = container;
 
 	const [formWidth, setFormWidth] = useState(width);
 	const [formHeight, setFormHeight] = useState(height);
@@ -28,9 +32,9 @@ export const EditContainer = ({ setStage, container, setContainer }) => {
 				parseInt(formHeight),
 				parseInt(formLength),
 			]);
-			setStage((prevStage) => prevStage + 1);
+			setNewStage(1);
 		} else {
-			alert("Problem with container");
+			setCustomizedError("Problem with container");
 		}
 	};
 
@@ -85,11 +89,7 @@ export const EditContainer = ({ setStage, container, setContainer }) => {
 				/>
 
 				<div className="d-flex justify-content-between">
-					<Button
-						onClick={() => setStage((prevStage) => prevStage - 1)}
-					>
-						Back
-					</Button>
+					<Button onClick={() => setNewStage(-1)}>Back</Button>
 					<Button onClick={handleEditContainer}>Continue</Button>
 				</div>
 			</form>

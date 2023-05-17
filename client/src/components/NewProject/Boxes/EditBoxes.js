@@ -6,7 +6,7 @@ import { CircularProgress } from "@mui/material";
 import "./EditBoxes.css";
 
 export const EditBoxes = ({
-	setStage,
+	setNewStage,
 	boxes,
 	setBoxes,
 	handleAddProject,
@@ -45,7 +45,12 @@ export const EditBoxes = ({
 			</div>
 
 			<div className="w-25 mt-3 d-flex justify-content-between">
-				<Button onClick={() => setStage((prevStage) => prevStage - 1)}>
+				<Button
+					onClick={() => {
+						console.log("Backed");
+						setNewStage(-1);
+					}}
+				>
 					Back
 				</Button>
 				{isLoading ? (

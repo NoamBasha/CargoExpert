@@ -7,58 +7,69 @@ import { FileIndicator } from "./FileIndicator";
 import { Snackbar, Alert } from "@mui/material";
 import "./FileUpload.css";
 
-export const FileUpload = ({ setStage, setContainer, setBoxes }) => {
+export const FileUpload = ({
+	setNewStage,
+	setContainer,
+	setBoxes,
+	setCustomizedError,
+}) => {
 	const [fileName, setFileName] = useState(null);
 	const [snackbarMessage, setSnackbarMessage] = useState("");
 
 	const parseData = (data) => {
-		let numeric_data = [];
-		for (let i = 0; i < data.length; i++) {
-			let numberic_object = {};
-			for (let property in data[i]) {
-				if (!isNaN(data[i][property])) {
-					numberic_object[property] = parseFloat(data[i][property]);
-				} else {
-					numberic_object[property] = data[i][property];
+		try {
+			let numeric_data = [];
+			for (let i = 0; i < data.length; i++) {
+				let numberic_object = {};
+				for (let property in data[i]) {
+					if (!isNaN(data[i][property])) {
+						numberic_object[property] = parseFloat(
+							data[i][property]
+						);
+					} else {
+						numberic_object[property] = data[i][property];
+					}
 				}
+				numberic_object = {
+					id: i,
+					...numberic_object,
+					color: "",
+					isIn: 0,
+				};
+				if (
+					Object.values(numberic_object).includes(null) ||
+					Object.values(numberic_object).includes(undefined)
+				) {
+					setCustomizedError("Problem with boxes");
+					return;
+				}
+				numeric_data.push(numberic_object);
 			}
-			numberic_object = {
-				id: i,
-				...numberic_object,
-				color: "",
-				isIn: 0,
+
+			let container_data = {
+				width: numeric_data[0]["width"],
+				height: numeric_data[0]["height"],
+				length: numeric_data[0]["length"],
 			};
+
 			if (
-				Object.values(numberic_object).includes(null) ||
-				Object.values(numberic_object).includes(undefined)
+				container_data.height == null ||
+				container_data.width == null ||
+				container_data.length == null
 			) {
-				alert("boxes problem");
+				setCustomizedError("Problem with container");
 				return;
 			}
-			numeric_data.push(numberic_object);
-		}
 
-		let container_data = {
-			width: numeric_data[0]["width"],
-			height: numeric_data[0]["height"],
-			length: numeric_data[0]["length"],
-		};
-
-		if (
-			container_data.height == null ||
-			container_data.width == null ||
-			container_data.length == null
-		) {
-			alert("container problem");
-			return;
+			let boxes = [];
+			for (let i = 1; i < numeric_data.length; i++) {
+				boxes.push(numeric_data[i]);
+			}
+			setContainer(Object.values(container_data));
+			setBoxes(boxes);
+		} catch (err) {
+			setCustomizedError("Error pasring the file");
 		}
-
-		let boxes = [];
-		for (let i = 1; i < numeric_data.length; i++) {
-			boxes.push(numeric_data[i]);
-		}
-		setContainer(container_data);
-		setBoxes(boxes);
 	};
 
 	const handleDrop = (files) => {
@@ -112,21 +123,17 @@ export const FileUpload = ({ setStage, setContainer, setBoxes }) => {
 			/>
 			{fileName ? (
 				<strong>
-					<p class="mt-2 mb-0">
+					<p className="mt-2 mb-0">
 						{`${fileName} is uploaded successfully`}
 					</p>
 				</strong>
 			) : (
-				<p class="mt-2 mb-0">{"No file is uploaded"}</p>
+				<p className="mt-2 mb-0">{"No file is uploaded"}</p>
 			)}
 			<DownloadFile />
 			<div className="w-100 d-flex justify-content-between">
-				<Button onClick={() => setStage((prevStage) => prevStage - 1)}>
-					Back
-				</Button>
-				<Button onClick={() => setStage((prevStage) => prevStage + 1)}>
-					Continue
-				</Button>
+				<Button onClick={() => setNewStage(-1)}>Back</Button>
+				<Button onClick={() => setNewStage(1)}>Continue</Button>
 			</div>
 		</div>
 	);

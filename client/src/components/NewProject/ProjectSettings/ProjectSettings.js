@@ -4,11 +4,12 @@ import { PreferencesPanel } from "./PreferencesPanel";
 export const ProjectSettings = ({
 	name,
 	setName,
-	setStage,
+	setNewStage,
 	orderQuantity,
 	setOrderQuantity,
 	timeQuality,
 	setTimeQuality,
+	setCustomizedError,
 }) => {
 	const validateName = () => {
 		if (name.trim().length === 0) {
@@ -52,9 +53,9 @@ export const ProjectSettings = ({
 				className="w-25 mx-auto mt-2"
 				onClick={() => {
 					if (validateName()) {
-						setStage((prevStage) => prevStage + 1);
+						setNewStage(1);
 					} else {
-						alert("Problem with the name");
+						setCustomizedError("Problem with name");
 					}
 				}}
 			>

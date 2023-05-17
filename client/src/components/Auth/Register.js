@@ -8,7 +8,7 @@ export const Register = () => {
 	const [password, setPassword] = useState("");
 	const navigate = useNavigate();
 	const [isRegistered, setIsRegistered] = useState(false);
-	const { createUser, isLoading, error } = useUserData();
+	const { createUser, isLoading, error, setCustomizedError } = useUserData();
 
 	useEffect(() => {
 		if (isRegistered) {
@@ -18,7 +18,13 @@ export const Register = () => {
 
 	const handleRegister = async (e) => {
 		setIsRegistered(false);
-		await createUser({ email, password, setIsRegistered });
+		if (email.length === 0) {
+			setCustomizedError("Invalid Email!");
+		} else if (password.length === 0) {
+			setCustomizedError("Invalid Password!");
+		} else {
+			await createUser({ email, password, setIsRegistered });
+		}
 	};
 
 	return (
@@ -36,7 +42,7 @@ export const Register = () => {
 					type="text"
 					placeholder="Email..."
 					required
-					onChange={(e) => setEmail(e.target.value)}
+					onChange={(e) => setEmail(e.target.value.trim())}
 					fullWidth
 				/>
 				<TextField
@@ -48,10 +54,10 @@ export const Register = () => {
 					type="password"
 					placeholder="Password..."
 					required
-					onChange={(e) => setPassword(e.target.value)}
+					onChange={(e) => setPassword(e.target.value.trim())}
 					fullWidth
 				/>
-				{error && (
+				{/* {error && (
 					// TODO: align text of error to center?
 					<Alert
 						style={{ width: "100%" }}
@@ -60,7 +66,7 @@ export const Register = () => {
 					>
 						{error}
 					</Alert>
-				)}
+				)} */}
 				{isLoading ? (
 					<CircularProgress className="mt-2" />
 				) : (
