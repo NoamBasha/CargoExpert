@@ -1,45 +1,41 @@
 const mongoose = require("mongoose");
 
 const BoxSchema = new mongoose.Schema({
-	id: { type: Number, required: false },
-	order: { type: Number, required: false },
-	position: { type: [Number], required: false },
-	text: { type: String, required: false },
-	type: { type: String, required: false },
-	color: { type: String, required: false },
-	size: { type: [Number], required: false },
-	width: { type: Number, required: false },
-	height: { type: Number, required: false },
-	length: { type: Number, required: false },
-	isIn: { type: Number, required: false },
+	id: { type: Number, required: true },
+	order: { type: Number, required: true },
+	position: { type: [Number], required: true },
+	type: { type: String, required: true },
+	color: { type: String, required: true },
+	size: { type: [Number], required: true },
+	isIn: { type: Number, required: true },
 });
 
 const SolutionDataSchema = new mongoose.Schema({
-	capacity: { type: Number, required: false },
-	number_of_items: { type: Number, required: false },
-	order_score: { type: Number, required: false },
-	overall_score: { type: Number, required: false },
+	capacity: { type: Number, required: true },
+	number_of_items: { type: Number, required: true },
+	order_score: { type: Number, required: true },
+	overall_score: { type: Number, required: true },
 });
 
 const SolutionSchema = new mongoose.Schema({
-	id: { type: Number, required: false },
-	boxes: { type: [BoxSchema], required: false },
-	name: { type: String, required: false },
-	solution_data: { type: SolutionDataSchema, required: false },
+	id: { type: Number, required: true },
+	boxes: { type: [BoxSchema], required: true },
+	name: { type: String, required: true },
+	solution_data: { type: SolutionDataSchema, required: true },
 });
 
 const ProjectDataSchema = new mongoose.Schema({
-	name: { type: String, required: false },
-	isQuantity: { type: Number, required: false },
-	isQuality: { type: Number, required: false },
+	name: { type: String, required: true },
+	isQuantity: { type: Number, required: true },
+	isQuality: { type: Number, required: true },
 });
 
 const ProjectSchema = new mongoose.Schema({
-	id: { type: Number, required: false },
-	container: { type: [Number], required: false },
-	project_data: { type: ProjectDataSchema, required: false },
-	boxes: { type: [BoxSchema], required: false },
-	solutions: { type: [SolutionSchema], required: false },
+	id: { type: Number, required: true },
+	container: { type: [Number], required: true },
+	project_data: { type: ProjectDataSchema, required: true },
+	boxes: { type: [BoxSchema], required: true },
+	solutions: { type: [SolutionSchema], required: true },
 });
 
 const UserSchema = new mongoose.Schema({

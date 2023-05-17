@@ -159,7 +159,7 @@ export const UserDataProvider = ({ children }) => {
 			};
 
 			const response = await fetch(
-				"http://localhost:1337/getSolutions2",
+				"http://localhost:1337/getSolutionsJS",
 				requestOptions
 			);
 			if (response.status === 200) {

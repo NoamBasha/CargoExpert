@@ -6,7 +6,7 @@ import { useProject } from "../ProjectProvider.js";
 import { BoxText } from "./BoxText.js";
 import { useEdit } from "./EditProvider.js";
 
-export const Box = ({ id, order, size, position, color, text, isIn }) => {
+export const Box = ({ id, order, size, position, color, type, isIn }) => {
 	const { changeBoxById, changeBoxIndices, solutionId, boxIndices } =
 		useProject();
 	const { edit } = useEdit();
@@ -32,28 +32,28 @@ export const Box = ({ id, order, size, position, color, text, isIn }) => {
 		{
 			rotation: [0, Math.PI / 2, 0],
 			position: [x + w / 2 + eps, y, z],
-			text: text,
+			type: type,
 		},
 		{
 			rotation: [-Math.PI / 2, 0, Math.PI / 2],
 			position: [x, y + h / 2 + eps, z],
-			text: text,
+			type: type,
 		},
-		{ rotation: [0, 0, 0], position: [x, y, z + l / 2 + eps], text: text },
+		{ rotation: [0, 0, 0], position: [x, y, z + l / 2 + eps], type: type },
 		{
 			rotation: [0, -Math.PI / 2, 0],
 			position: [x - w / 2 - eps, y, z],
-			text: text,
+			type: type,
 		},
 		{
 			rotation: [Math.PI / 2, 0, -Math.PI / 2],
 			position: [x, y - h / 2 - eps, z],
-			text: text,
+			type: type,
 		},
 		{
 			rotation: [0, -Math.PI, 0],
 			position: [x, y, z - l / 2 - eps],
-			text: text,
+			type: type,
 		},
 	];
 
@@ -73,7 +73,7 @@ export const Box = ({ id, order, size, position, color, text, isIn }) => {
 							id: id,
 							order: order,
 							position: position,
-							text: text,
+							type: type,
 							color: color,
 							size: size,
 							isIn: isIn,
@@ -91,13 +91,13 @@ export const Box = ({ id, order, size, position, color, text, isIn }) => {
 				/>
 			</mesh>
 
-			{boxTexts.map(({ rotation, position, text }, id) => {
+			{boxTexts.map(({ rotation, position, type }, id) => {
 				return (
 					<BoxText
 						key={id}
 						rotation={rotation}
 						position={position}
-						text={text}
+						text={type}
 					/>
 				);
 			})}

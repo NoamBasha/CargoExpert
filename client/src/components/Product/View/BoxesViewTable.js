@@ -17,7 +17,7 @@ export const BoxesViewTable = ({ boxes }) => {
 			width: box.size[0],
 			height: box.size[1],
 			length: box.size[2],
-			type: box.text,
+			type: box.type,
 		};
 	});
 

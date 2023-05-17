@@ -1,10 +1,106 @@
-class Rotation:
-    WHL = 0
-    LHW = 1
-    HLW = 2
-    LWH = 3
-    WLH = 4
-    HWL = 5
+from box_motion import Rotation
+
+'''
+class Point:
+    def __init__(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
+
+    def to_list(self):
+        return [self.x, self.y, self.z]
+
+class Size:
+    def __init__(self, width, height, length):
+        self.width = width
+        self.height = height
+        self.length = length
+
+    def to_list(self):
+        return [self.width, self.height, self.length]
+'''
+
+
+class Box:
+    def __init__(self, box):
+        self.width = box['width']
+        self.height = box['height']
+        self.length = box['length']
+        self.volume = self.width * self.height * self.length
+        self.rotation = Rotation.WHL
+        self.center = (0, 0, 0) # Point(0, 0, 0)
+        self.FLB = (0, 0, 0) # Point(0, 0, 0)
+        self.isIn = 0
+        self.id = box['id']
+        self.order = box['order']
+        self.color = box['color']
+        self.type = box['type']
+
+    def get_size(self):
+        """
+        Returns size considering the rotation. 
+        """
+        match self.rotation:
+            case Rotation.WHL:
+                return (self.width, self.height, self.length)
+            case Rotation.LHW:
+                return (self.length, self.height, self.width)
+            case Rotation.HLW:
+                return (self.height, self.length, self.width)
+            case Rotation.LWH:
+                return (self.length, self.width, self.height)
+            case Rotation.WLH:
+                 return (self.width, self.length, self.height)
+            case Rotation.HWL:
+                return (self.height, self.width, self.length)
+            case __:
+                raise Exception("Error: Box.get_size: no rotation was found")
+
+
+    def set_position(self, p):
+        box_size = self.get_size()
+
+        if p[3] == 1:
+            self.FLB = (p[0], p[1], p[2]) # Point(p[0], p[1], p[2])
+        else:
+            self.FLB = (p[0] - box_size[0], p[1], p[2]) # Point(p[0] - box_size.width, p[1], p[2])
+
+        self.center = (
+            self.FLB[0] + box_size[0] / 2,
+            self.FLB[1] + box_size[1] / 2,
+            self.FLB[2] + box_size[2] / 2
+            )
+        
+
+        # self.center = Point(
+        #     self.FLB.x + box_size.width / 2,
+        #     self.FLB.y + box_size.height / 2,
+        #     self.FLB.z + box_size.length / 2
+        # )
+        self.isIn = 1
+
+    def unset_position(self):
+        self.FLB = (0, 0, 0) # Point(0, 0, 0)
+        self.center = (0, 0, 0)# Point(0, 0, 0)
+        self.isIn = 0
+
+    #TODO: change usage of "get_box_object" to "get_box"
+    def get_box_object(self):
+        return {
+            "id": self.id,
+            "order": self.order,
+            "size": self.get_size().to_list(),
+            "position": self.center.to_list(),
+            "color": self.color,
+            "text": self.type,
+            "isIn": self.isIn
+        }
+
+    def get_box(self):
+        initial = f'"id": {str(self.id)}, "order": {str(self.order)}, "size": {str(self.get_size().to_list())},"position": {str(self.center.to_list())}, "color": "{self.color}","text": "{self.type}","isIn": "{str(self.isIn)}"'
+        return '{' + initial + '}'
+
+'''
 
 def init_box(box):
     box_size = box['width'] * box['height'] * box['length']
@@ -125,3 +221,5 @@ def get_box_object(box):
 def get_box(box):
     initial = f'"id": {box["id"].__str__()}, "order": {box["order"].__str__()}, "size": {list(get_size(box).values()).__str__()},"position": {list(box["center"].values()).__str__()}, "color": \"{box["color"]}\","text": \"{box["type"]}\","isIn": \"{box["isIn"].__str__()}\"'
     return '{' + initial + '}'
+
+'''

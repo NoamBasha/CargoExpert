@@ -1,7 +1,7 @@
-from box import init_box, set_position, get_box, get_box_object
 from container import get_score, update_pps
 from box_motion import rotation, perturbation
 from metrics import order_metric, overall_metric
+from box import Box
 import copy
 import sys
 import json
@@ -22,11 +22,11 @@ def get_best_point(pp, box, container, solutionBoxes):
 
 def add_box_to_solution(bestPoint, box, pp, solutionBoxes, solution_data, retryList, container, isRetry):
     if bestPoint:
-        set_position(box, bestPoint)
+        box.set_position(bestPoint)
         pp = update_pps(box, bestPoint, pp, container)
         solutionBoxes.append(box)
         solution_data["number_of_items"] += 1
-        solution_data["capacity"] += box["volume"]
+        solution_data["capacity"] += box.volume
     else:
         if not isRetry:
             retryList.append(box)
@@ -72,8 +72,8 @@ def handle_data(data):
     container = data['container']
     boxes = data['boxes']
 
-    initBoxes = [init_box(box) for box in boxes]
-    initBoxes.sort(key=lambda x: x["order"], reverse=True)
+    initBoxes = [Box(box) for box in boxes]
+    initBoxes.sort(key=lambda b: b.order, reverse=True)
 
     return initBoxes, container, numOfIterations, isQuantity
 
@@ -82,20 +82,20 @@ def get_solutions(numOfIterations, boxes, container, isQuantity):
     counter = 0
     for _ in range(numOfIterations):
         #TODO: copy or deepcopy?
-        boxesCopy = boxes.deepcopy()
-        boxesCopy = rotation(boxesCopy)
-        boxesCopy = perturbation(boxesCopy)
+        boxesCopy = copy.deepcopy(boxes)
+        rotation(boxesCopy)
+        perturbation(boxesCopy)
         solution = constructive_packing(boxesCopy, container, isQuantity)
         if solution is None:
             continue
         boxesInSolution, solution_data = solution
         if boxesInSolution is not None and solution_data is not None:
-            currentBoxes = [get_box_object(box) for box in boxesInSolution]
+            ## currentBoxes = [box.get_box() for box in boxesInSolution]
             counterString = str(counter)
             solutionList[counterString] = {
                 "name": "solution " + counterString,
                 "id": counter,
-                "boxes": currentBoxes,
+                "boxes": boxesInSolution, ##currentBoxes,
                 "solution_data": solution_data
             }
             counter += 1

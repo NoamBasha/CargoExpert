@@ -20,7 +20,7 @@ export const ThreeScene = ({ container, children }) => {
 			<Canvas camera={{ fov: 75, position: camera_position }}>
 				<Container size={container} />
 				{inBoxes.map(
-					({ id, order, size, position, color, text, isIn }) => {
+					({ id, order, size, position, color, type, isIn }) => {
 						return (
 							<Box
 								key={id}
@@ -29,7 +29,7 @@ export const ThreeScene = ({ container, children }) => {
 								size={size}
 								position={position}
 								color={color}
-								text={text}
+								type={type}
 								isIn={isIn}
 							/>
 						);

@@ -1,4 +1,3 @@
-from box import get_size
 from enum import IntEnum
 import random
 
@@ -13,12 +12,8 @@ class Rotation(IntEnum):
 
 
 def rotate_each_box(boxes):
-    numOfRotations = len(Rotation)
-    rotationsList = list(Rotation)
-    return [
-        {**box, "rotation": random.choice(rotationsList)}
-        for box in boxes
-    ]
+    for b in boxes:
+        b.rotation = random.choice(list(Rotation))
 
 
 def rotate_subset(boxes):
@@ -27,43 +22,31 @@ def rotate_subset(boxes):
     randomly pick one of the orientations that with equal probability.
     """
 
-    # Group boxes by size
-    sameSizeDict = {}
-    for box in boxes:
-        boxSizeString = str(get_size(box))
-        if boxSizeString not in sameSizeDict:
-            sameSizeDict[boxSizeString] = []
-        sameSizeDict[boxSizeString].append(box)
+    same_size_dict = {}
+    for b in boxes:
+        box_size = b.get_size()
+        if box_size in same_size_dict.keys():
+            same_size_dict[box_size].append(b)
+        else:
+            same_size_dict[box_size] = [b]
 
-    # Generate random rotation for each size
-    numOfRotations = len(Rotation)
-    rotationsList = list(Rotation)
-    rotations = {
-        size: random.choice(rotationsList)
-        for size in sameSizeDict.keys()
-    }
-
-    # Assign rotation to boxes
-    return [
-        {**box, "rotation": rotations[str(get_size(box))]}
-        for box in boxes
-    ]
+    for k in same_size_dict.keys():
+        rotation = random.choice(list(Rotation))
+        for b in same_size_dict[k]:
+            b.rotation = rotation
 
 
 def rotation(boxes):
     # Rotate boxes individually or by subset with equal probability
-    if len(boxes):
-        return (
-            rotate_each_box(boxes)
-            if random.random() < 0.5
-            else rotate_subset(boxes)
-        )
-    else:
-        return []
+    if boxes:
+        chosen_rotation = random.choice([rotate_each_box, rotate_subset])
+        chosen_rotation(boxes)
+
+
 
 
 def volume_perturb(b1, b2):
-    if 0.7 <= b1["volume"] / b2["volume"] <= 1.3 and random.random() > 0.5:
+    if 0.7 <= (b1.volume/b2.volume) <= 1.3 and random.randint(0, 1) > 0.5:
         return True
     return False
 
@@ -71,8 +54,9 @@ def volume_perturb(b1, b2):
 def perturbation(boxes):
     if len(boxes) <= 1:
         return boxes
-    for i in range(len(boxes) - 1):
-        if volume_perturb(boxes[i], boxes[i + 1]):
-            boxes[i], boxes[i + 1] = boxes[i + 1], boxes[i]
 
-    return boxes
+    options = [volume_perturb]
+    chosen_perturb = random.choice(options)
+    for i, b1 in enumerate(boxes[:-1]):
+        if chosen_perturb(b1, boxes[i+1]):
+            boxes[i], boxes[i+1] = boxes[i+1], boxes[i]

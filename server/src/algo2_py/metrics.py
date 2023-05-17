@@ -1,16 +1,16 @@
 def num_of_items_metric(solution_boxes):
-    in_boxes = [box for box in solution_boxes if box['isIn']]
+    in_boxes = [box for box in solution_boxes if box.isIn]
     return len(in_boxes)
 
 def volume_metric(solution_boxes):
-    in_boxes = [box for box in solution_boxes if box['isIn']]
-    volume = sum(normalize([box['volume'] for box in in_boxes]))
+    in_boxes = [box for box in solution_boxes if box.isIn]
+    volume = sum(normalize([box.volume for box in in_boxes]))
     return volume
 
 def order_metric(solution_boxes, container):
-    in_boxes = [box for box in solution_boxes if box['isIn']]
-    order_list = normalize([box['order'] for box in in_boxes])
-    z_list = normalize([container['length'] - box['FLB']['z'] for box in in_boxes])
+    in_boxes = [box for box in solution_boxes if box.isIn]
+    order_list = normalize([box.order for box in in_boxes])
+    z_list = normalize([container['length'] - box.FLB[2] for box in in_boxes])
     
     score = 0
     for i in range(len(order_list)):
