@@ -39,16 +39,19 @@ function parse_response_from_algo(result) {
 }
 
 app.post("/getSolutions", (req, res) => {
+	const scriptPath = path.join(__dirname, "/algo_py/algo.py");
 	console.log("Algo with Python");
 	console.log(req.body);
 	options = {
 		args: [JSON.stringify(req.body)],
 		pythonOptions: ["-u"], // The '-u' tells Python to flush every time // get print results in real-time
 	};
-	PythonShell.run("./algo_py/algo.py", options, function (err, result) {
+	PythonShell.run(scriptPath, options, function (err, result) {
 		if (err) {
 			console.log(err.traceback);
 		} else {
+			//TODO: remove!
+			console.log(result);
 			result = parse_response_from_algo(result);
 			res.send(result);
 		}
@@ -59,6 +62,24 @@ app.post("/getSolutionsJS", (req, res) => {
 	console.log("Algo with JS");
 	const solutions = algo(req.body);
 	res.send(solutions);
+});
+
+app.post("/getSolutions2", (req, res) => {
+	const scriptPath = path.join(__dirname, "/algo2_py/algo.py");
+	console.log("Algo2 with Python");
+	console.log(req.body);
+	options = {
+		args: [JSON.stringify(req.body)],
+		pythonOptions: ["-u"], // The '-u' tells Python to flush every time // get print results in real-time
+	};
+	PythonShell.run(scriptPath, options, function (err, result) {
+		if (err) {
+			console.log(err.traceback);
+		} else {
+			result = parse_response_from_algo(result);
+			res.send(result);
+		}
+	});
 });
 
 app.post("/improveSolution", (req, res) => {

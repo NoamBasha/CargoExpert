@@ -1,7 +1,7 @@
 import copy
 import sys
 import json
-from utils.util import order_metric, overall_metric, rotation, perturbation
+from util import order_metric, overall_metric, rotation, perturbation
 from box import Box
 from container import Container
 
