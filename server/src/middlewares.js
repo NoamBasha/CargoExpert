@@ -226,8 +226,8 @@ const updateUser = (req, res) => {
 	);
 };
 
-const serverListen = () => {
-	console.log("listening on port 1337");
+const serverListen = (port) => {
+	console.log(`listening on port ${port}`);
 };
 
 module.exports = {

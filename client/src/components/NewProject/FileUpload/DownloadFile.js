@@ -6,8 +6,11 @@ export const DownloadFile = () => {
 		e.preventDefault();
 		try {
 			const response = await fetch(
-				"http://localhost:1337/userInputExample"
+				"https://cargoexpert.onrender.com/userInputExample"
 			);
+			// const response = await fetch(
+			// 	"http://localhost:1337/userInputExample"
+			// );
 			if (response.status === 200) {
 				const res_blob = await response.blob();
 				FileDownload(res_blob, "user_input_example_from_server.csv");

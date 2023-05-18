@@ -34,9 +34,13 @@ export const UserDataProvider = ({ children }) => {
 				}),
 			};
 			const response = await fetch(
-				"http://localhost:1337/createUser",
+				"https://cargoexpert.onrender.com/createUser",
 				requestOptions
 			);
+			// const response = await fetch(
+			// 	"http://localhost:1337/createUser",
+			// 	requestOptions
+			// );
 			if (response.status === 200) {
 				setIsRegistered(true);
 			} else {
@@ -64,9 +68,13 @@ export const UserDataProvider = ({ children }) => {
 				}),
 			};
 			const response = await fetch(
-				"http://localhost:1337/readUser",
+				"https://cargoexpert.onrender.com/readUser",
 				requestOptions
 			);
+			// const response = await fetch(
+			// 	"http://localhost:1337/readUser",
+			// 	requestOptions
+			// );
 			const data = await response.json();
 			if (response.status === 200) {
 				setProjects(data);
@@ -96,9 +104,13 @@ export const UserDataProvider = ({ children }) => {
 				}),
 			};
 			const response = await fetch(
-				"http://localhost:1337/updateUser",
+				"https://cargoexpert.onrender.com/updateUser",
 				requestOptions
 			);
+			// const response = await fetch(
+			// 	"http://localhost:1337/updateUser",
+			// 	requestOptions
+			// );
 			if (response.status === 200) {
 				console.log("User updated successfully");
 			} else {
@@ -124,9 +136,13 @@ export const UserDataProvider = ({ children }) => {
 				}),
 			};
 			const response = await fetch(
-				"http://localhost:1337/deleteUser",
+				"https://cargoexpert.onrender.com/deleteUser",
 				requestOptions
 			);
+			// const response = await fetch(
+			// 	"http://localhost:1337/deleteUser",
+			// 	requestOptions
+			// );
 			if (response.status === 200) {
 				console.log("User deleted successfully");
 			} else {
@@ -164,11 +180,14 @@ export const UserDataProvider = ({ children }) => {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(container_and_boxes),
 			};
-
 			const response = await fetch(
-				"http://localhost:1337/getSolutionsJS",
+				"https://cargoexpert.onrender.com/getSolutionsJS",
 				requestOptions
 			);
+			// const response = await fetch(
+			// 	"http://localhost:1337/getSolutionsJS",
+			// 	requestOptions
+			// );
 			const solutions = await response.json();
 			if (response.status === 200) {
 				let current_id = 0;
@@ -244,11 +263,14 @@ export const UserDataProvider = ({ children }) => {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(container_and_boxes),
 			};
-
 			const response = await fetch(
-				"http://localhost:1337/improveSolutionJS",
+				"https://cargoexpert.onrender.com/improveSolutionJS",
 				requestOptions
 			);
+			// const response = await fetch(
+			// 	"http://localhost:1337/improveSolutionJS",
+			// 	requestOptions
+			// );
 			if (response.status === 200) {
 				const improvedSolution = await response.json();
 

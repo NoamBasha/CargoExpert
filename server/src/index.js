@@ -14,6 +14,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const path = require("path");
+const port = process.env.PORT || 1337;
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
@@ -35,4 +36,6 @@ app.post("/deleteUser", (req, res) => deleteUser(req, res));
 // update User
 app.post("/updateUser", (req, res) => updateUser(req, res));
 
-app.listen(1337, () => serverListen());
+app.listen(port, () => {
+	console.log(`listening on port ${port}`);
+});
