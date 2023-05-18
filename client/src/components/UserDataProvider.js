@@ -1,5 +1,7 @@
 import { useState, createContext, useContext } from "react";
 
+const DEV = false;
+
 const UserDataContext = createContext("");
 
 export const UserDataProvider = ({ children }) => {
@@ -33,14 +35,20 @@ export const UserDataProvider = ({ children }) => {
 					password: password,
 				}),
 			};
-			const response = await fetch(
-				"https://cargoexpert.onrender.com/createUser",
-				requestOptions
-			);
-			// const response = await fetch(
-			// 	"http://localhost:1337/createUser",
-			// 	requestOptions
-			// );
+			let response;
+
+			if (DEV) {
+				response = await fetch(
+					"http://localhost:1337/createUser",
+					requestOptions
+				);
+			} else {
+				response = await fetch(
+					"https://cargoexpert.onrender.com/createUser",
+					requestOptions
+				);
+			}
+
 			if (response.status === 200) {
 				setIsRegistered(true);
 			} else {
@@ -67,14 +75,19 @@ export const UserDataProvider = ({ children }) => {
 					password: password,
 				}),
 			};
-			const response = await fetch(
-				"https://cargoexpert.onrender.com/readUser",
-				requestOptions
-			);
-			// const response = await fetch(
-			// 	"http://localhost:1337/readUser",
-			// 	requestOptions
-			// );
+			let response;
+
+			if (DEV) {
+				response = await fetch(
+					"http://localhost:1337/readUser",
+					requestOptions
+				);
+			} else {
+				response = await fetch(
+					"https://cargoexpert.onrender.com/readUser",
+					requestOptions
+				);
+			}
 			const data = await response.json();
 			if (response.status === 200) {
 				setProjects(data);
@@ -103,14 +116,18 @@ export const UserDataProvider = ({ children }) => {
 					newProjects: new_projects,
 				}),
 			};
-			const response = await fetch(
-				"https://cargoexpert.onrender.com/updateUser",
-				requestOptions
-			);
-			// const response = await fetch(
-			// 	"http://localhost:1337/updateUser",
-			// 	requestOptions
-			// );
+			let response;
+			if (DEV) {
+				response = await fetch(
+					"http://localhost:1337/updateUser",
+					requestOptions
+				);
+			} else {
+				response = await fetch(
+					"https://cargoexpert.onrender.com/updateUser",
+					requestOptions
+				);
+			}
 			if (response.status === 200) {
 				console.log("User updated successfully");
 			} else {
@@ -135,14 +152,20 @@ export const UserDataProvider = ({ children }) => {
 					password: password,
 				}),
 			};
-			const response = await fetch(
-				"https://cargoexpert.onrender.com/deleteUser",
-				requestOptions
-			);
-			// const response = await fetch(
-			// 	"http://localhost:1337/deleteUser",
-			// 	requestOptions
-			// );
+			let response;
+
+			if (DEV) {
+				response = await fetch(
+					"http://localhost:1337/deleteUser",
+					requestOptions
+				);
+			} else {
+				response = await fetch(
+					"https://cargoexpert.onrender.com/deleteUser",
+					requestOptions
+				);
+			}
+
 			if (response.status === 200) {
 				console.log("User deleted successfully");
 			} else {
@@ -180,14 +203,20 @@ export const UserDataProvider = ({ children }) => {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(container_and_boxes),
 			};
-			const response = await fetch(
-				"https://cargoexpert.onrender.com/getSolutionsJS",
-				requestOptions
-			);
-			// const response = await fetch(
-			// 	"http://localhost:1337/getSolutionsJS",
-			// 	requestOptions
-			// );
+			let response;
+
+			if (DEV) {
+				response = await fetch(
+					"http://localhost:1337/getSolutionsJS",
+					requestOptions
+				);
+			} else {
+				response = await fetch(
+					"https://cargoexpert.onrender.com/getSolutionsJS",
+					requestOptions
+				);
+			}
+
 			const solutions = await response.json();
 			if (response.status === 200) {
 				let current_id = 0;
@@ -263,14 +292,20 @@ export const UserDataProvider = ({ children }) => {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(container_and_boxes),
 			};
-			const response = await fetch(
-				"https://cargoexpert.onrender.com/improveSolutionJS",
-				requestOptions
-			);
-			// const response = await fetch(
-			// 	"http://localhost:1337/improveSolutionJS",
-			// 	requestOptions
-			// );
+			let response;
+
+			if (DEV) {
+				response = await fetch(
+					"http://localhost:1337/improveSolutionJS",
+					requestOptions
+				);
+			} else {
+				response = await fetch(
+					"https://cargoexpert.onrender.com/improveSolutionJS",
+					requestOptions
+				);
+			}
+
 			if (response.status === 200) {
 				const improvedSolution = await response.json();
 

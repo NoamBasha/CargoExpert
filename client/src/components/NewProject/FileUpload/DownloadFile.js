@@ -1,16 +1,23 @@
 import FileDownload from "js-file-download";
 import { Button, TextField } from "@mui/material";
 
+const DEV = false;
+
 export const DownloadFile = () => {
 	const handleClick = async (e) => {
 		e.preventDefault();
 		try {
-			const response = await fetch(
-				"https://cargoexpert.onrender.com/userInputExample"
-			);
-			// const response = await fetch(
-			// 	"http://localhost:1337/userInputExample"
-			// );
+			let response;
+			if (DEV) {
+				response = await fetch(
+					"http://localhost:1337/userInputExample"
+				);
+			} else {
+				response = await fetch(
+					"https://cargoexpert.onrender.com/userInputExample"
+				);
+			}
+
 			if (response.status === 200) {
 				const res_blob = await response.blob();
 				FileDownload(res_blob, "user_input_example_from_server.csv");
