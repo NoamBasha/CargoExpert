@@ -13,11 +13,16 @@ export const PreferencesPanel = ({
 				<label className="mb-1">{text}</label>
 				<ExplanationIcon
 					explanationHeader="Preference Panel"
-					explanationText={`Choose your preferences:
-						Order means that you prefer the boxes to fit the order you entered.
-						Quantity means that you prefer to have as many boxes inside the container as possible.
-						Time means that you prefer to wait as little as possible for a solution.
-						Quality means that you prefer to wait as much as needed for an optimal solution.`}
+					explanationText={`
+					Select your preferences:
+
+					Order: This preference prioritizes the arrangement of the boxes to match the order in which you entered them.
+					
+					Quantity: This preference focuses on maximizing the number of boxes inside the container.
+					
+					Time: This preference aims to minimize the waiting time for a solution.
+					
+					Quality: This preference emphasizes waiting for as long as necessary to achieve an optimal solution.`}
 				/>
 			</div>
 			<div className="mx-auto w-100 d-flex  justify-content-between">

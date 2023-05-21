@@ -16,9 +16,10 @@ import { DeletePopup } from "../DeletePopup";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { IconButton } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 
 export const ProjectsTable = () => {
-	const { projects, deleteProject, updateProject } = useUserData();
+	const { projects, deleteProject, updateProject, isLoading } = useUserData();
 	const { setProjectId } = useProject();
 	const [tableProjectId, setTableProjectId] = useState(null);
 	const [showChangeNamePopup, setShowChangeNamePopup] = useState(false);
@@ -106,32 +107,46 @@ export const ProjectsTable = () => {
 											</Button>
 										</TableCell>
 										<TableCell>
-											<IconButton
-												onClick={() => {
-													setShowChangeNamePopup(
-														true
-													);
-													setTableProjectId(row.id);
-												}}
-											>
-												<EditOutlinedIcon
-													color="primary"
-													size="small"
-												></EditOutlinedIcon>
-											</IconButton>
+											{isLoading ? (
+												<CircularProgress />
+											) : (
+												<IconButton
+													onClick={() => {
+														setShowChangeNamePopup(
+															true
+														);
+														setTableProjectId(
+															row.id
+														);
+													}}
+												>
+													<EditOutlinedIcon
+														color="primary"
+														size="small"
+													></EditOutlinedIcon>
+												</IconButton>
+											)}
 										</TableCell>
 										<TableCell>
-											<IconButton
-												onClick={() => {
-													setShowDeletePopup(true);
-													setTableProjectId(row.id);
-												}}
-											>
-												<DeleteOutlineIcon
-													color="primary"
-													size="small"
-												></DeleteOutlineIcon>
-											</IconButton>
+											{isLoading ? (
+												<CircularProgress />
+											) : (
+												<IconButton
+													onClick={() => {
+														setShowDeletePopup(
+															true
+														);
+														setTableProjectId(
+															row.id
+														);
+													}}
+												>
+													<DeleteOutlineIcon
+														color="primary"
+														size="small"
+													></DeleteOutlineIcon>
+												</IconButton>
+											)}
 										</TableCell>
 									</TableRow>
 								);

@@ -6,12 +6,27 @@ import { useEdit } from "./EditProvider.js";
 import { BoxesViewTable } from "./BoxesViewTable.js";
 import { BoxesViewTableImproved } from "./BoxesViewTableImproved.js";
 import { useUserData } from "../../UserDataProvider.js";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import { CircularProgress } from "@mui/material";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import ArrowBackIosOutlinedIcon from "@mui/icons-material/ArrowBackIosOutlined";
 
-const EditButton = ({ setEdit }) => {
-	return <Button onClick={() => setEdit()}>Edit</Button>;
+const EditButton = ({ onClick, text, style }) => {
+	return (
+		<Button
+			style={style}
+			sx={{
+				fontSize: "16px",
+			}}
+			onClick={() => onClick()}
+		>
+			{text}
+		</Button>
+	);
 };
 
 const ViewButton = ({ deselectBoxes, setEdit, validateBoxesLocation }) => {
@@ -43,7 +58,7 @@ export const View = () => {
 		improveSolutionInView,
 		toggleIsIn,
 	} = useProject();
-	const { setCustomizedError } = useUserData();
+	const { setCustomizedError, isLoading } = useUserData();
 
 	// returns true if there is a box that is out of bounds
 	// return false if everything is ok
@@ -238,7 +253,7 @@ export const View = () => {
 		>
 			<div
 				style={{ height: "80vh" }}
-				className="d-flex flex-row justify-content-between align-items-center"
+				className="position-relative d-flex flex-row justify-content-between align-items-center"
 			>
 				{edit ? null : (
 					<Button
@@ -256,8 +271,8 @@ export const View = () => {
 				<ThreeScene container={container}>
 					{edit ? (
 						<div
-							className="position-absolute d-flex flex-row-reverse"
-							style={{ top: 100, right: 300, zIndex: 1 }}
+							className="w-25 position-absolute d-flex flex-row-reverse"
+							style={{ top: 30, right: 100, zIndex: 1 }}
 						>
 							<EditPanel
 								maxStepSize={Math.max(...container) / 2}
@@ -266,7 +281,7 @@ export const View = () => {
 					) : null}
 					<div
 						className="w-25 position-absolute d-flex flex-column"
-						style={{ top: 115, left: 100, zIndex: 1 }}
+						style={{ top: 10, left: 100, zIndex: 1 }}
 					>
 						<BoxesViewTableImproved
 							isEdit={edit}
@@ -312,18 +327,43 @@ export const View = () => {
 						)}
 					/>
 				) : (
-					<>
-						<Button onClick={(e) => setSolutionId(null)}>
-							Back
-						</Button>
-						<EditButton setEdit={() => setEdit(true)} />
-						<Button onClick={(e) => handleSaveSolution(e)}>
-							Save
-						</Button>
-						<Button onClick={(e) => improveSolutionInView()}>
-							Improve
-						</Button>
-					</>
+					<Container className="">
+						<Row>
+							<Col className="d-flex justify-content-center">
+								<EditButton
+									onClick={(e) => setSolutionId(null)}
+									text={"Back"}
+								></EditButton>
+							</Col>
+							<Col className="d-flex justify-content-center">
+								<EditButton
+									style={{ fontWeight: "bold" }}
+									onClick={() => setEdit(true)}
+									text={"Edit"}
+								/>
+							</Col>
+							<Col className="d-flex justify-content-center">
+								{isLoading ? (
+									<CircularProgress />
+								) : (
+									<EditButton
+										onClick={(e) => handleSaveSolution(e)}
+										text={"Save"}
+									></EditButton>
+								)}
+							</Col>
+							<Col className="d-flex justify-content-center">
+								{isLoading ? (
+									<CircularProgress />
+								) : (
+									<EditButton
+										onClick={(e) => improveSolutionInView()}
+										text={"Improve"}
+									></EditButton>
+								)}
+							</Col>
+						</Row>
+					</Container>
 				)}
 			</div>
 		</div>

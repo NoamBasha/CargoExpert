@@ -5,7 +5,7 @@ import ArrowForwardOutlinedIcon from "@mui/icons-material/ArrowForwardOutlined";
 import ThreeSixtyOutlinedIcon from "@mui/icons-material/ThreeSixtyOutlined";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import IconButton from "@mui/material/IconButton";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Slider } from "@mui/material";
 
 const BoxesButton = ({ text, onClick }) => {
@@ -29,7 +29,13 @@ const MovementIconButton = ({ icon, arg, onClick, bgColor }) => {
 export const EditPanel = ({ maxStepSize }) => {
 	const { moveBox, rotateBox, resetBoxes, deselectBoxes, removeBoxes } =
 		useProject();
-	const [stepSize, setStepSize] = useState(0);
+	const [stepSize, setStepSize] = useState(1);
+	const [unitsStepSize, setUnitsStepSize] = useState(1);
+	const [tenthsStepSize, setTenthsStepSize] = useState(0);
+
+	useEffect(() => {
+		setStepSize(tenthsStepSize + unitsStepSize);
+	}, [tenthsStepSize, unitsStepSize]);
 
 	const buttonsArgs = [
 		[[-stepSize, 0, 0], "x", [stepSize, 0, 0], "rgb(255, 90, 90)"],
@@ -38,55 +44,107 @@ export const EditPanel = ({ maxStepSize }) => {
 	];
 
 	return (
-		<div className="mt-5 auto-mx w-75 d-flex flex-column justify-content-center align-items-center">
-			<ButtonGroup orientation="vertical">
-				{buttonsArgs.map((args) => {
-					return (
-						<ButtonGroup variant="outlined">
-							<MovementIconButton
-								icon={<ArrowBackOutlinedIcon size="small" />}
-								arg={args[0]}
-								onClick={moveBox}
-								bgColor={args[3]}
-							/>
-							<MovementIconButton
-								icon={<ThreeSixtyOutlinedIcon size="small" />}
-								arg={args[1]}
-								onClick={rotateBox}
-								bgColor={args[3]}
-							/>
-							<MovementIconButton
-								icon={<ArrowForwardOutlinedIcon size="small" />}
-								arg={args[2]}
-								onClick={moveBox}
-								bgColor={args[3]}
-							/>
-						</ButtonGroup>
-					);
-				})}
-			</ButtonGroup>
-			Step Size: {stepSize}
-			<Slider
-				defaultValue={0}
-				//valueLabelDisplay="auto"
-				step={0.5}
-				marks
-				min={0}
-				max={maxStepSize}
-				onChange={(event) => setStepSize(event.target.value)}
-			/>
-			<BoxesButton
-				text="Remove"
-				onClick={removeBoxes}
-			/>
-			<BoxesButton
-				text="Reset"
-				onClick={resetBoxes}
-			/>
-			<BoxesButton
-				text="Deselect"
-				onClick={deselectBoxes}
-			/>
+		<div
+			style={{
+				border: "1px solid",
+				borderRadius: "20px",
+				width: "60%",
+				borderColor: "rgba(0, 0, 0, 0.1)",
+			}}
+			className="p-3 auto-mx  d-flex flex-column justify-content-center align-items-center"
+		>
+			<div className="w-100 d-flex mx-auto justify-content-around align-items-center">
+				<ButtonGroup orientation="vertical">
+					{buttonsArgs.map((args) => {
+						return (
+							<ButtonGroup variant="outlined">
+								<MovementIconButton
+									icon={
+										<ArrowBackOutlinedIcon size="small" />
+									}
+									arg={args[0]}
+									onClick={moveBox}
+									bgColor={args[3]}
+								/>
+								<MovementIconButton
+									icon={
+										<ThreeSixtyOutlinedIcon size="small" />
+									}
+									arg={args[1]}
+									onClick={rotateBox}
+									bgColor={args[3]}
+								/>
+								<MovementIconButton
+									icon={
+										<ArrowForwardOutlinedIcon size="small" />
+									}
+									arg={args[2]}
+									onClick={moveBox}
+									bgColor={args[3]}
+								/>
+							</ButtonGroup>
+						);
+					})}
+				</ButtonGroup>
+				<div className="d-flex flex-column">
+					<BoxesButton
+						text="Remove"
+						onClick={removeBoxes}
+					/>
+					<BoxesButton
+						text="Reset"
+						onClick={resetBoxes}
+					/>
+					<BoxesButton
+						text="Deselect"
+						onClick={deselectBoxes}
+					/>
+				</div>
+			</div>
+			<div className="w-100 d-flex flex-column">
+				<p
+					style={{ fontWeight: "bold" }}
+					className="mt-3 mb-1 d-flex justify-content-center"
+				>
+					Step Size: {stepSize}
+				</p>
+				<div className="w-100 d-flex">
+					<p
+						className="my-auto"
+						style={{ width: "40%", fontWeight: "bold" }}
+					>
+						Units:
+					</p>
+					<Slider
+						defaultValue={unitsStepSize}
+						step={1}
+						marks
+						min={0}
+						max={maxStepSize}
+						onChange={(event) =>
+							setUnitsStepSize(event.target.value)
+						}
+					/>
+				</div>
+				<div className="w-100 d-flex">
+					<p
+						className="my-auto"
+						style={{ width: "40%", fontWeight: "bold" }}
+					>
+						Tenths:
+					</p>
+					<Slider
+						defaultValue={tenthsStepSize}
+						step={0.1}
+						marks
+						min={0}
+						max={1}
+						onChange={(event) =>
+							setTenthsStepSize(event.target.value)
+						}
+					/>
+				</div>
+			</div>
 		</div>
 	);
 };

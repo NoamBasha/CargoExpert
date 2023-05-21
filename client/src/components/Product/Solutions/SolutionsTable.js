@@ -5,6 +5,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import { IconButton } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 
 import {
 	TableContainer,
@@ -21,7 +22,7 @@ import { DeletePopup } from "../DeletePopup";
 
 export const SolutionsTable = () => {
 	const { solutions, setSolutionId, projectId } = useProject();
-	const { deleteSolution, duplicateSolution, updateSolutionName } =
+	const { deleteSolution, duplicateSolution, updateSolutionName, isLoading } =
 		useUserData();
 
 	const [tableSolutionId, setTableSolutionId] = useState(null);
@@ -130,49 +131,68 @@ export const SolutionsTable = () => {
 									</TableCell>
 
 									<TableCell>
-										<IconButton
-											onClick={() => {
-												setShowChangeNamePopup(true);
-												setTableSolutionId(row.id);
-											}}
-										>
-											<EditOutlinedIcon
-												color="primary"
-												size="small"
-											></EditOutlinedIcon>
-										</IconButton>
-									</TableCell>
-									<TableCell>
-										<IconButton
-											onClick={() => {
-												duplicateSolution(
-													projectId,
-													row.id
-												);
-												setSnackbarMessage(
-													`Duplicated solution`
-												);
-											}}
-										>
-											<ContentCopyOutlinedIcon
-												color="primary"
-												size="small"
-											></ContentCopyOutlinedIcon>
-										</IconButton>
-									</TableCell>
-									{solutions.length != 1 ? (
-										<TableCell>
+										{isLoading ? (
+											<CircularProgress />
+										) : (
 											<IconButton
 												onClick={() => {
-													setShowDeletePopup(true);
+													setShowChangeNamePopup(
+														true
+													);
 													setTableSolutionId(row.id);
 												}}
 											>
-												<DeleteOutlineIcon
+												<EditOutlinedIcon
 													color="primary"
 													size="small"
-												></DeleteOutlineIcon>
+												></EditOutlinedIcon>
 											</IconButton>
+										)}
+									</TableCell>
+									<TableCell>
+										{isLoading ? (
+											<CircularProgress />
+										) : (
+											<IconButton
+												onClick={() => {
+													duplicateSolution(
+														projectId,
+														row.id
+													);
+													setSnackbarMessage(
+														`Duplicated solution`
+													);
+												}}
+											>
+												<ContentCopyOutlinedIcon
+													color="primary"
+													size="small"
+												></ContentCopyOutlinedIcon>
+											</IconButton>
+										)}
+									</TableCell>
+
+									{solutions.length != 1 ? (
+										<TableCell>
+											{isLoading ? (
+												<CircularProgress />
+											) : (
+												<IconButton
+													onClick={() => {
+														setShowDeletePopup(
+															true
+														);
+														setTableSolutionId(
+															row.id
+														);
+													}}
+												>
+													<DeleteOutlineIcon
+														color="primary"
+														size="small"
+													></DeleteOutlineIcon>
+												</IconButton>
+											)}
 										</TableCell>
 									) : null}
 								</TableRow>
