@@ -2,9 +2,7 @@ import Papa from "papaparse";
 import { Button } from "@mui/material";
 import { DropzoneArea } from "material-ui-dropzone";
 import { DownloadFile } from "./DownloadFile";
-import { useState } from "react";
-import { FileIndicator } from "./FileIndicator";
-import { Snackbar, Alert } from "@mui/material";
+import { useState, useEffect } from "react";
 import "./FileUpload.css";
 
 export const FileUpload = ({
@@ -15,6 +13,10 @@ export const FileUpload = ({
 }) => {
 	const [fileName, setFileName] = useState(null);
 	const [snackbarMessage, setSnackbarMessage] = useState("");
+
+	useEffect(() => {
+		handleDelete();
+	}, []);
 
 	const parseData = (data) => {
 		try {
@@ -94,12 +96,31 @@ export const FileUpload = ({
 
 	return (
 		<div className="d-flex flex-column align-items-center">
+			<p className="mb-0">
+				You may upload a CSV file which contains the information about
+				<br />
+				your container and boxes. You may find an example file here:
+			</p>
+			<DownloadFile />
+			{fileName ? (
+				<strong>
+					<p className="mt-0 mb-2">
+						{`${fileName} was uploaded successfully`}
+					</p>
+				</strong>
+			) : (
+				<p className="mt-0 mb-2">{"Currently no file is uploaded"}</p>
+			)}
 			<DropzoneArea
 				dropzoneClass={
 					"fileUpload px-4 text-secondary d-flex align-items-center"
 				}
 				acceptedFiles={["text/csv"]}
-				dropzoneText={"Drop a CSV file or click to upload your file!"}
+				dropzoneText={
+					fileName
+						? `${fileName} was uploaded successfully`
+						: `Drop a CSV file or click to upload your file!`
+				}
 				filesLimit={1}
 				maxFileSize={5000000}
 				showAlerts={false} // false?
@@ -121,16 +142,7 @@ export const FileUpload = ({
 				onDelete={handleDelete}
 				alertSnackbarProps={{}}
 			/>
-			{fileName ? (
-				<strong>
-					<p className="mt-2 mb-0">
-						{`${fileName} is uploaded successfully`}
-					</p>
-				</strong>
-			) : (
-				<p className="mt-2 mb-0">{"No file is uploaded"}</p>
-			)}
-			<DownloadFile />
+
 			<div className="w-100 d-flex justify-content-between">
 				<Button onClick={() => setNewStage(-1)}>Back</Button>
 				<Button onClick={() => setNewStage(1)}>Continue</Button>

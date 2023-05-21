@@ -1,7 +1,7 @@
 import FileDownload from "js-file-download";
-import { Button, TextField } from "@mui/material";
+import { Button } from "@mui/material";
 
-const DEV = false;
+const DEV = true;
 
 export const DownloadFile = () => {
 	const handleClick = async (e) => {
@@ -30,7 +30,7 @@ export const DownloadFile = () => {
 	};
 
 	return (
-		<div className="mt-0 mb-2">
+		<div className="mt-0 mb-0">
 			<Button
 				style={{
 					fontSize: "0.75rem",

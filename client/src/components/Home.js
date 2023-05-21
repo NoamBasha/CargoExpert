@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 
-const BigChooseButton = ({ text, onClick }) => {
+const BigChoiceButton = ({ text, onClick }) => {
 	return (
 		<Button
 			className="border border-primary m-1"
@@ -21,11 +21,11 @@ export const Home = () => {
 			style={{ height: "80vh" }}
 			className="w-auto d-flex justify-content-center align-items-center"
 		>
-			<BigChooseButton
+			<BigChoiceButton
 				text="Exisiting Projects"
 				onClick={() => navigate("/product")}
 			/>
-			<BigChooseButton
+			<BigChoiceButton
 				text="New Project"
 				onClick={() => navigate("/new_project")}
 			/>

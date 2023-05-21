@@ -6,9 +6,7 @@ import { useState } from "react";
 import { Wizard } from "./Wizard";
 import { useUserData } from "../UserDataProvider";
 import { useNavigate } from "react-router-dom";
-import { Button, Alert, CircularProgress } from "@mui/material";
 import "./NewProject.css";
-import { ErrorSnackbar } from "../ErrorSnackbar.js";
 
 export const NewProject = () => {
 	const [container, setContainer] = useState([0, 0, 0]);
@@ -17,19 +15,17 @@ export const NewProject = () => {
 	const [stage, setStage] = useState(0);
 	const [orderQuantity, setOrderQuantity] = useState("Quantity");
 	const [timeQuality, setTimeQuality] = useState("Time");
-	const { addProject, isLoading, error, setError, setCustomizedError } =
+	const { addProject, isLoading, setError, setCustomizedError } =
 		useUserData();
 
 	const navigate = useNavigate();
-
-	console.log(stage);
 
 	const setNewStage = (dir) => {
 		setError("");
 		setStage((prevStage) => prevStage + dir * 1);
 	};
 
-	const stringToColour = function (str) {
+	const stringToColour = (str) => {
 		let hash = 0;
 		for (let i = 0; i < str.length; i++) {
 			hash = str.charCodeAt(i) + ((hash << 5) - hash);
@@ -82,7 +78,7 @@ export const NewProject = () => {
 		return true;
 	};
 
-	const handleAddProject = async (e) => {
+	const handleAddProject = async () => {
 		setError("");
 		if (!validateBoxes()) {
 			setCustomizedError("Problem with boxes");
@@ -145,6 +141,7 @@ export const NewProject = () => {
 						setCustomizedError={setCustomizedError}
 					/>
 				) : null}
+
 				{stage == 2 ? (
 					<EditContainer
 						setNewStage={setNewStage}
@@ -153,6 +150,7 @@ export const NewProject = () => {
 						setCustomizedError={setCustomizedError}
 					/>
 				) : null}
+
 				{stage == 3 ? (
 					<EditBoxes
 						setNewStage={setNewStage}
@@ -162,14 +160,6 @@ export const NewProject = () => {
 						isLoading={isLoading}
 					/>
 				) : null}
-				{/* {error && (
-					<Alert
-						severity="error"
-						className="mt-3"
-					>
-						{error}
-					</Alert>
-				)} */}
 			</div>
 		</>
 	);

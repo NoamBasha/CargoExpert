@@ -1,6 +1,6 @@
 import { useState, createContext, useContext } from "react";
 
-const DEV = false;
+const DEV = true;
 
 const UserDataContext = createContext("");
 

@@ -1,5 +1,6 @@
 import { Button, TextField } from "@mui/material";
 import { PreferencesPanel } from "./PreferencesPanel";
+import { ExplanationIcon } from "../../ExplanationIcon.js";
 
 export const ProjectSettings = ({
 	name,
@@ -23,7 +24,13 @@ export const ProjectSettings = ({
 			style={{ width: "20%" }}
 			className="d-flex flex-column"
 		>
-			<label className="mb-2">Name:</label>
+			<div className="d-flex justify-content-between align-items-center">
+				<label className="">Project's Name:</label>
+				<ExplanationIcon
+					explanationHeader="Project's Name"
+					explanationText="Enter a name for your new project!"
+				/>
+			</div>
 			<TextField
 				className="mb-1"
 				type="text"
@@ -34,7 +41,7 @@ export const ProjectSettings = ({
 				}}
 				placeholder="Project"
 			/>
-			{/* <label className="my-1">Preferences:</label> */}
+
 			<PreferencesPanel
 				preference={orderQuantity}
 				setPreference={setOrderQuantity}

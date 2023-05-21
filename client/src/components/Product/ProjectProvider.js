@@ -1,21 +1,11 @@
 import { useState, createContext, useContext, useEffect } from "react";
 import { useUserData } from "../UserDataProvider";
 
-/*
-user: order, type, width, height, length
-react: order, type, size, position, color
-to_server: order, type, size, position, color
-to_algorithm: order, width, height, length
-from_algorithm: order, x, y, z, orientation
-from_server: order, type, size, position, color
-*/
-
 const ProjectContext = createContext("");
 
 export const ProjectProvider = ({ children }) => {
 	const [projectId, setProjectId] = useState(null);
 	const [solutions, setSolutions] = useState(null);
-	//const [solution, setSolution] = useState(null);
 	const [solutionId, setSolutionId] = useState(null);
 	const [container, setContainer] = useState(null);
 	const [boxes, setBoxes] = useState([]);

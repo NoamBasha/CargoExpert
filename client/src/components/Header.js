@@ -1,9 +1,8 @@
 import { Button } from "@mui/material";
 import { useUserData } from "./UserDataProvider.js";
 import { useNavigate } from "react-router-dom";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import { ReactComponent as CargoExpert } from "./CargoExpert.svg";
+import { ReactComponent as CargoExpert } from "../CargoExpert.svg";
+import { ExplanationIcon } from "./ExplanationIcon.js";
 
 export const Header = () => {
 	const navigate = useNavigate();
@@ -38,22 +37,12 @@ export const Header = () => {
 				</>
 			) : (
 				<>
-					<Button onClick={() => navigate("/home")}>
-						Home
-						{/* <HomeOutlinedIcon
-							color="primary"
-							size="small"
-						></HomeOutlinedIcon> */}
-					</Button>
+					<Button onClick={() => navigate("/home")}>Home</Button>
 					<Button
 						className="mx-2"
 						onClick={logout}
 					>
 						Logout
-						{/* <LogoutOutlinedIcon
-							color="primary"
-							size="small"
-						></LogoutOutlinedIcon> */}
 					</Button>
 				</>
 			)}
