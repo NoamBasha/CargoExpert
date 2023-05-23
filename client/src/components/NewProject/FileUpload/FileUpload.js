@@ -95,14 +95,14 @@ export const FileUpload = ({
 	};
 
 	return (
-		<div className="d-flex flex-column align-items-center">
+		<div className="d-flex flex-column align-items-center w-25">
 			<p className="mb-0">
 				You may upload a CSV file which contains the information about
 				<br />
 				your container and boxes. You may find an example file here:
 			</p>
 			<DownloadFile />
-			{fileName ? (
+			{/* {fileName ? (
 				<strong>
 					<p className="mt-0 mb-2">
 						{`${fileName} was uploaded successfully`}
@@ -110,16 +110,18 @@ export const FileUpload = ({
 				</strong>
 			) : (
 				<p className="mt-0 mb-2">{"Currently no file is uploaded"}</p>
-			)}
+			)} */}
 			<DropzoneArea
 				dropzoneClass={
-					"fileUpload px-4 text-secondary d-flex align-items-center"
+					"fileUpload px-4 text-secondary d-flex align-items-center w-100"
 				}
 				acceptedFiles={["text/csv"]}
 				dropzoneText={
-					fileName
-						? `${fileName} was uploaded successfully`
-						: `Drop a CSV file or click to upload your file!`
+					fileName ? (
+						<strong>{fileName} was uploaded successfully</strong>
+					) : (
+						`Drop a CSV file or click to upload your file!`
+					)
 				}
 				filesLimit={1}
 				maxFileSize={5000000}

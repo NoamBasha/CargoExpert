@@ -7,6 +7,7 @@ import { Wizard } from "./Wizard";
 import { useUserData } from "../UserDataProvider";
 import { useNavigate } from "react-router-dom";
 import "./NewProject.css";
+import { Modal, Box, Typography, LinearProgress } from "@mui/material";
 
 export const NewProject = () => {
 	const [container, setContainer] = useState([0, 0, 0]);
@@ -17,6 +18,7 @@ export const NewProject = () => {
 	const [timeQuality, setTimeQuality] = useState("Time");
 	const { addProject, isLoading, setError, setCustomizedError } =
 		useUserData();
+	const [openModal, setOpenModal] = useState(false);
 
 	const navigate = useNavigate();
 
@@ -83,6 +85,7 @@ export const NewProject = () => {
 		if (!validateBoxes()) {
 			setCustomizedError("Problem with boxes");
 		} else {
+			setOpenModal(true);
 			let project_boxes = boxes.map((box) => {
 				return { ...box, color: stringToColour(box.type), isIn: 0 };
 			});
@@ -160,6 +163,37 @@ export const NewProject = () => {
 						isLoading={isLoading}
 					/>
 				) : null}
+				<Modal
+					open={openModal}
+					onClose={() => setOpenModal(false)}
+					aria-labelledby="modal-modal-title"
+					aria-describedby="modal-modal-description"
+				>
+					<Box
+						sx={{
+							position: "absolute",
+							top: "50%",
+							left: "50%",
+							transform: "translate(-50%, -50%)",
+							width: "20%",
+							bgcolor: "background.paper",
+							color: "#1976d2",
+							border: "2px solid rgba(0,0,0,0.5)",
+							borderRadius: "10px",
+							boxShadow: 0,
+							p: 3,
+						}}
+					>
+						<Typography
+							id="modal-modal-description"
+							sx={{ mt: 2 }}
+						>
+							We are creating your project, it might take a few
+							minutes.
+						</Typography>
+						<LinearProgress className="mt-1" />
+					</Box>
+				</Modal>
 			</div>
 		</>
 	);

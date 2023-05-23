@@ -227,6 +227,17 @@ const sortByPreference = (solutionList, isQuantity) => {
 	return solutionList;
 };
 
+// const sortByQuantity = (solutionList, isQuantity) => {
+// 	solutionList = Object.values(solutionList)
+// 		.sort(
+// 			(a, b) =>
+// 				b.solution_data.number_of_items -
+// 				a.solution_data.number_of_items
+// 		)
+// 		.slice(0, 10);
+// 	return solutionList;
+// };
+
 const dictSolutionsFromList = (solutionList) => {
 	let solutionDict = {};
 	for (let index = 0; index < solutionList.length; index++) {

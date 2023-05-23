@@ -23,6 +23,7 @@ export const PreferencesPanel = ({
 					Time: This preference aims to minimize the waiting time for a solution.
 					
 					Quality: This preference emphasizes waiting for as long as necessary to achieve an optimal solution.`}
+					isPopover={false}
 				/>
 			</div>
 			<div className="mx-auto w-100 d-flex  justify-content-between">
