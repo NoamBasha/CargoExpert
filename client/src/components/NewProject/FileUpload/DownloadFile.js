@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 
 const DEV = true;
 
-export const DownloadFile = () => {
+export const DownloadFile = ({ setCustomizedError }) => {
 	const handleClick = async (e) => {
 		e.preventDefault();
 		try {
@@ -22,10 +22,13 @@ export const DownloadFile = () => {
 				const res_blob = await response.blob();
 				FileDownload(res_blob, "user_input_example_from_server.csv");
 			} else {
-				throw new Error(`${response.status} ${response.statusText}`);
+				const data = await response.json();
+				setCustomizedError(data.error);
 			}
 		} catch (err) {
-			alert("Can't download file at this time. Please try again later.");
+			setCustomizedError(
+				"Can't download file at this time. Please try again later."
+			);
 		}
 	};
 

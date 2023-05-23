@@ -101,7 +101,7 @@ export const FileUpload = ({
 				<br />
 				your container and boxes. You may find an example file here:
 			</p>
-			<DownloadFile />
+			<DownloadFile setCustomizedError={setCustomizedError} />
 			{/* {fileName ? (
 				<strong>
 					<p className="mt-0 mb-2">

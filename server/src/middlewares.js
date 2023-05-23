@@ -96,8 +96,14 @@ const improveSolutionJS = (req, res) => {
 };
 
 const userInputExample = (req, res) => {
-	const fileName = "./user_input_example.csv"; // The default name the browser will use
-	res.download(fileName);
+	console.log("Downloading Example File");
+	try {
+		res.download("./user_input_example.csv");
+	} catch (err) {
+		res.status(400).json({
+			error: "Can't download file at this time. Please try again later.",
+		});
+	}
 };
 
 const createUser = async (req, res) => {
