@@ -13,8 +13,7 @@ export const PreferencesPanel = ({
 				<label className="mb-1">{text}</label>
 				<ExplanationIcon
 					explanationHeader="Preference Panel"
-					explanationText={`
-					Select your preferences:
+					explanationText={`Select your preferences:
 
 					Order: This preference prioritizes the arrangement of the boxes to match the order in which you entered them.
 					
@@ -23,7 +22,7 @@ export const PreferencesPanel = ({
 					Time: This preference aims to minimize the waiting time for a solution.
 					
 					Quality: This preference emphasizes waiting for as long as necessary to achieve an optimal solution.`}
-					isPopover={false}
+					type="dialog"
 				/>
 			</div>
 			<div className="mx-auto w-100 d-flex  justify-content-between">

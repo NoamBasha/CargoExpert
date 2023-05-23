@@ -11,9 +11,43 @@ import { CircularProgress } from "@mui/material";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import FileDownload from "js-file-download";
 
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import ArrowBackIosOutlinedIcon from "@mui/icons-material/ArrowBackIosOutlined";
+import { ExplanationIcon } from "../../ExplanationIcon.js";
+
+const viewExplanationText = `Container:
+- You can use your left and right mouse buttons to change the angle you see the container.
+- You can scroll in and out to change the zoom level of the container.
+Boxes Tables:
+- You can see which boxes are in the solution and which are not.
+Bottom Buttons:
+- BACK is used to go back to the solutions screen.
+- DOWNLOAD is used to download the current solution.
+- EDIT is used to edit the current solution.
+- SAVE is used to save the changes you made on the edit screen.
+- IMPROVE is used to let the algorithm try and improve your solution.
+`;
+
+const editExplanationText = `Container:
+- You can use your left and right mouse buttons to change the angle you see the container.
+- You can scroll in and out to change the zoom level of the container.
+- You can press on one or multiple boxes to move it around using the edit panel.
+Boxes Tables:
+- You can see which boxes are in the solution and which are not.
+- You can add and remove boxes from the solution.
+Bottom Buttons:
+- VIEW is used to go back to the view screen.
+Edit Panel:
+- The three colors - red, green and blue are complatibe to the axes colors.
+- You can use the arrow buttons to move the selected boxes in the container.
+- You can determine the step size of the boxes by adjusting the sliders.
+Edit Panel Buttons:
+- REMOVE is used to remove all slected boxes form the solution.
+- RESET is used to reset the solution to the initial state.
+- DESELECT is used to deselect all boxes that are currently selected.
+`;
 
 const EditButton = ({ onClick, text, style }) => {
 	return (
@@ -57,8 +91,14 @@ export const View = () => {
 		setSolutionId,
 		improveSolutionInView,
 		toggleIsIn,
+		getCurrentProjectName,
+		getCurrentSolutionName,
 	} = useProject();
 	const { setCustomizedError, isLoading } = useUserData();
+
+	const projectName = getCurrentProjectName();
+	const solutionName = getCurrentSolutionName();
+	const solutionDetails = `${projectName} - ${solutionName}`;
 
 	// returns true if there is a box that is out of bounds
 	// return false if everything is ok
@@ -246,11 +286,66 @@ export const View = () => {
 		console.log("Saving solution");
 	};
 
+	const downloadSolutionAsCSV = () => {
+		const convertToCSV = (array, isIn) => {
+			const csvRows = [];
+
+			// Add data rows
+			for (const item of array) {
+				const order = item.order;
+				const size = item.size;
+				const position = isIn
+					? item.position.map((axis, i) => {
+							return axis - 0.5 * size[i];
+					  })
+					: ["-", "-", "-"];
+
+				const boxIsIn = item.isIn;
+				const values = [order, ...position, ...size, boxIsIn];
+				csvRows.push(values.join(","));
+			}
+
+			// Join rows with newlines
+			return csvRows.join("\n");
+		};
+
+		const downloadCSV = (fileName) => {
+			const headerCSV = `order,x,y,z,width,height,length,isIn`;
+			const containerAsCSV = `container,-,-,-,${container[0]}, ${container[1]}, ${container[2]},-`;
+			const inBoxesAsCSV = convertToCSV(inBoxes, true);
+			const outBoxesAsCSV = convertToCSV(outBoxes, false);
+			const finalCSV =
+				headerCSV +
+				"\n" +
+				containerAsCSV +
+				"\n" +
+				inBoxesAsCSV +
+				"\n" +
+				outBoxesAsCSV;
+			FileDownload(finalCSV, fileName);
+		};
+
+		downloadCSV("solution.csv");
+	};
+
 	return (
 		<div
 			style={{ height: "90vh" }}
-			className="d-flex flex-column"
+			className="d-flex flex-column position-relative"
 		>
+			<h1
+				className="position-absolute"
+				style={{
+					fontWeight: "bold",
+					fontSize: "24px",
+					top: "10px",
+					left: "50%",
+					transform: "translate(-50%, 0)",
+				}}
+			>
+				{solutionDetails}
+			</h1>
+
 			<div
 				style={{ height: "80vh" }}
 				className="position-relative d-flex flex-row justify-content-between align-items-center"
@@ -312,59 +407,89 @@ export const View = () => {
 					</Button>
 				)}
 			</div>
-
 			<div
-				style={{ height: "10vh" }}
-				className="w-25 d-flex justify-content-around mx-auto"
+				style={{ height: "10vh", width: "40%" }}
+				className="d-flex justify-content-around mx-auto align-items-center  position-relative"
 			>
-				{edit ? (
-					<ViewButton
-						deselectBoxes={() => deselectBoxes()}
-						setEdit={() => setEdit(false)}
-						validateBoxesLocation={validateBoxesLocation(
-							inBoxes,
-							container
+				<Container className="w-100">
+					<Row className="w-100">
+						{edit ? (
+							<ViewButton
+								deselectBoxes={() => deselectBoxes()}
+								setEdit={() => setEdit(false)}
+								validateBoxesLocation={validateBoxesLocation(
+									inBoxes,
+									container
+								)}
+							/>
+						) : (
+							<>
+								<Col className="d-flex justify-content-center">
+									<EditButton
+										onClick={(e) => setSolutionId(null)}
+										text={"Back"}
+									></EditButton>
+								</Col>
+								<Col className="d-flex justify-content-center">
+									{isLoading ? (
+										<CircularProgress />
+									) : (
+										<EditButton
+											onClick={(e) =>
+												downloadSolutionAsCSV(e)
+											}
+											text={"Download"}
+										></EditButton>
+									)}
+								</Col>
+								<Col className="d-flex justify-content-center">
+									<EditButton
+										style={{ fontWeight: "bold" }}
+										onClick={() => setEdit(true)}
+										text={"Edit"}
+									/>
+								</Col>
+								<Col className="d-flex justify-content-center">
+									{isLoading ? (
+										<CircularProgress />
+									) : (
+										<EditButton
+											onClick={(e) =>
+												handleSaveSolution(e)
+											}
+											text={"Save"}
+										></EditButton>
+									)}
+								</Col>
+
+								<Col className="d-flex justify-content-center">
+									{isLoading ? (
+										<CircularProgress />
+									) : (
+										<EditButton
+											onClick={(e) =>
+												improveSolutionInView()
+											}
+											text={"Improve"}
+										></EditButton>
+									)}
+								</Col>
+							</>
 						)}
-					/>
-				) : (
-					<Container className="">
-						<Row>
-							<Col className="d-flex justify-content-center">
-								<EditButton
-									onClick={(e) => setSolutionId(null)}
-									text={"Back"}
-								></EditButton>
-							</Col>
-							<Col className="d-flex justify-content-center">
-								<EditButton
-									style={{ fontWeight: "bold" }}
-									onClick={() => setEdit(true)}
-									text={"Edit"}
-								/>
-							</Col>
-							<Col className="d-flex justify-content-center">
-								{isLoading ? (
-									<CircularProgress />
-								) : (
-									<EditButton
-										onClick={(e) => handleSaveSolution(e)}
-										text={"Save"}
-									></EditButton>
-								)}
-							</Col>
-							<Col className="d-flex justify-content-center">
-								{isLoading ? (
-									<CircularProgress />
-								) : (
-									<EditButton
-										onClick={(e) => improveSolutionInView()}
-										text={"Improve"}
-									></EditButton>
-								)}
-							</Col>
-						</Row>
-					</Container>
-				)}
+					</Row>
+				</Container>
+				<ExplanationIcon
+					explanationHeader={edit ? "Edit Screen" : "View Screen"}
+					explanationText={
+						edit ? editExplanationText : viewExplanationText
+					}
+					type={"dialog"}
+					style={{
+						position: "absolute",
+						top: "27.5%",
+						right: "-72%",
+					}}
+				/>
 			</div>
 		</div>
 	);

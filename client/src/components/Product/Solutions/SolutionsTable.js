@@ -20,7 +20,7 @@ import { useState } from "react";
 import { ChangeNamePopup } from "../ChangeNamePopup";
 import { DeletePopup } from "../DeletePopup";
 
-export const SolutionsTable = () => {
+export const SolutionsTable = ({ title }) => {
 	const { solutions, setSolutionId, projectId } = useProject();
 	const { deleteSolution, duplicateSolution, updateSolutionName, isLoading } =
 		useUserData();
@@ -68,7 +68,7 @@ export const SolutionsTable = () => {
 	};
 
 	return (
-		<div>
+		<div className="w-100 ">
 			<TableContainer component={Paper}>
 				<Table
 					aria-label="projects table"
@@ -77,7 +77,7 @@ export const SolutionsTable = () => {
 					<TableHead>
 						<TableRow>
 							<TableCell style={{ fontWeight: "bold" }}>
-								Solution
+								{title} - Solution
 							</TableCell>
 							<TableCell style={{ fontWeight: "bold" }}>
 								Number Of Items

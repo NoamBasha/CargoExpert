@@ -12,7 +12,8 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 export const ExplanationIcon = ({
 	explanationHeader,
 	explanationText,
-	isPopover,
+	type,
+	style,
 }) => {
 	const [open, setOpen] = useState(false);
 	const [anchorEl, setAnchorEl] = React.useState(null);
@@ -29,13 +30,16 @@ export const ExplanationIcon = ({
 
 	return (
 		<>
-			<IconButton onClick={handleOpen}>
+			<IconButton
+				onClick={handleOpen}
+				style={style}
+			>
 				<HelpOutlineOutlinedIcon
 					size="small"
 					color="primary"
 				/>
 			</IconButton>
-			{isPopover ? (
+			{type === "popover" ? (
 				<Popover
 					open={open}
 					anchorEl={anchorEl}
@@ -51,7 +55,8 @@ export const ExplanationIcon = ({
 				>
 					<Typography sx={{ p: 2 }}>{explanationText}</Typography>
 				</Popover>
-			) : (
+			) : null}
+			{type === "dialog" ? (
 				<Dialog
 					open={open}
 					onClose={handleClose}
@@ -61,7 +66,7 @@ export const ExplanationIcon = ({
 						<Typography>{explanationText}</Typography>
 					</DialogContent>
 				</Dialog>
-			)}
+			) : null}
 		</>
 	);
 };

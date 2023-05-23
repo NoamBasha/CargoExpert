@@ -29,7 +29,7 @@ export const ProjectSettings = ({
 				<ExplanationIcon
 					explanationHeader="Project's Name"
 					explanationText="Enter a name for your new project!"
-					isPopover={true}
+					type="popover"
 				/>
 			</div>
 			<TextField

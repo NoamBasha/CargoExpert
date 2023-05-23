@@ -59,6 +59,24 @@ export const ProjectProvider = ({ children }) => {
 		}
 	}, [solutions, solutionId, projects]);
 
+	const getCurrentProjectName = () => {
+		if (projectId === null) {
+			return "";
+		} else {
+			return projects.filter((project) => project.id === projectId)[0]
+				.project_data.name;
+		}
+	};
+
+	const getCurrentSolutionName = () => {
+		if (solutionId === null) {
+			return "";
+		} else {
+			return solutions.filter((solution) => solution.id === solutionId)[0]
+				.name;
+		}
+	};
+
 	// Change id access
 	const getPreviousSolution = () => {
 		let len = Object.keys(solutions).length;
@@ -218,6 +236,8 @@ export const ProjectProvider = ({ children }) => {
 				improveSolutionInView,
 				toggleIsIn,
 				removeBoxes,
+				getCurrentProjectName,
+				getCurrentSolutionName,
 			}}
 		>
 			{children}
