@@ -9,14 +9,14 @@ export const BoxForm = ({ setBoxes, boxes, selectedIds, editBox }) => {
 	const [formType, setFormType] = useState("");
 
 	useEffect(() => {
-		if (selectedIds.length == 0) {
+		if (selectedIds.length === 0) {
 			setFormOrder("");
 			setFormWidth("");
 			setFormHeight("");
 			setFormLength("");
 			setFormType("");
 		}
-		if (selectedIds.length == 1) {
+		if (selectedIds.length === 1) {
 			const filteredBoxes = boxes.filter((box) => {
 				return box.id === selectedIds[0];
 			});
@@ -27,7 +27,7 @@ export const BoxForm = ({ setBoxes, boxes, selectedIds, editBox }) => {
 			setFormLength(box.length);
 			setFormType(box.type);
 		}
-	}, [selectedIds]);
+	}, [selectedIds, boxes]);
 
 	const handleEditBox = (e) => {
 		e.preventDefault();
@@ -67,7 +67,13 @@ export const BoxForm = ({ setBoxes, boxes, selectedIds, editBox }) => {
 	};
 
 	return (
-		<form className="d-flex flex-column">
+		<form
+			className="d-flex flex-column px-3"
+			style={{
+				border: "1px solid rgba(0,0,0,0.1)",
+				borderRadius: "5px",
+			}}
+		>
 			<label className="mt-3">Order:</label>
 			<TextField
 				className="mb-2"
