@@ -17,7 +17,6 @@ def constructive_packing(boxes: list[Box], container: Container, is_quantity: in
     for b in boxes:
         best_point = None
         best_score = (0, 0)
-        # to find the best point we need to know what corner of the box is placed there
         for p in pp:
             score = container.get_score(b, p)
             if score > best_score:
@@ -49,9 +48,6 @@ def constructive_packing(boxes: list[Box], container: Container, is_quantity: in
         else:
             # Adding it to the list without adding it to the container
             solution_boxes.append(b)
-        # if we know all boxes must be in container, then we can stop here
-        # else:
-        #     return None
 
     solution_data['order_score'] = order_metric(
         solution_boxes, boxes, container)
@@ -78,7 +74,7 @@ def handle_data(data):
     return (boxes, container, NUMBER_OF_ITERATIONS, is_quantity)
 
 
-def get_solutions(NUMBER_OF_ITERATIONS, boxes, container, is_quantity):
+def get_solutions(NUMBER_OF_ITERATIONS: int, boxes: list[Box], container: Container, is_quantity: bool):
     solution_list = {}
     counter = 0
     for _ in range(NUMBER_OF_ITERATIONS):
@@ -86,10 +82,8 @@ def get_solutions(NUMBER_OF_ITERATIONS, boxes, container, is_quantity):
         container.start_packing()
         rotation(copy_boxes)
         perturbation(copy_boxes)
-        solution = constructive_packing(copy_boxes, container, is_quantity)
-        if solution is None:
-            continue
-        boxes_in_solution, solution_data = solution
+        boxes_in_solution, solution_data = constructive_packing(
+            copy_boxes, container, is_quantity)
         if boxes_in_solution is not None and solution_data is not None:
             counter_string = f'{counter}'
             solution_list[counter_string] = {
