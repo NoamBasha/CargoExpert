@@ -1,4 +1,6 @@
 import { SolutionsTable } from "./SolutionsTable";
+import { UpdatedSolutionsTable } from "./UpdatedSolutionsTable";
+
 import { useProject } from "../ProjectProvider";
 
 export const Solutions = () => {

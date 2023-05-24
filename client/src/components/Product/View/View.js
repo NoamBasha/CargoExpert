@@ -280,10 +280,9 @@ export const View = () => {
 		};
 	};
 
-	const handleSaveSolution = (e) => {
-		e.preventDefault();
-		saveSolution();
+	const handleSaveSolution = () => {
 		console.log("Saving solution");
+		saveSolution();
 	};
 
 	const downloadSolutionAsCSV = () => {
@@ -454,9 +453,7 @@ export const View = () => {
 										<CircularProgress />
 									) : (
 										<EditButton
-											onClick={(e) =>
-												handleSaveSolution(e)
-											}
+											onClick={() => handleSaveSolution()}
 											text={"Save"}
 										></EditButton>
 									)}
@@ -467,7 +464,7 @@ export const View = () => {
 										<CircularProgress />
 									) : (
 										<EditButton
-											onClick={(e) =>
+											onClick={() =>
 												improveSolutionInView()
 											}
 											text={"Improve"}

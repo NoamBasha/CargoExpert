@@ -6,7 +6,6 @@ const numOfItemsMetric = (solutionBoxes) => {
 const volumeMetric = (solutionBoxes) => {
 	let volume = 0;
 	const inBoxes = solutionBoxes.filter((box) => box.isIn);
-	// Removed normalization of "inBoxes.map((box) => box.volume)""
 	for (const v of inBoxes.map((box) => box.volume)) {
 		volume += v;
 	}
@@ -16,7 +15,11 @@ const volumeMetric = (solutionBoxes) => {
 const orderMetric = (solutionBoxes, container) => {
 	const inBoxes = solutionBoxes.filter((box) => box.isIn);
 	const orderList = normalize(inBoxes.map((box) => box.order));
-	const zList = normalize(inBoxes.map((box) => container.length - box.FLB.z));
+	const zList = normalize(
+		inBoxes.map(
+			(box) => container.length - (box.position[2] - 0.5 * box.size[2])
+		)
+	);
 
 	let score = 0;
 	for (let i = 0; i < orderList.length; i++) {
@@ -44,8 +47,7 @@ const normalize = (numbers) => {
 };
 
 const overallMetric = (projectBoxes, container, solution_data, isQuantity) => {
-	const containerVolume =
-		container.width * container.height * container.length;
+	const containerVolume = container[0] * container[1] * container[2];
 	const numScore = solution_data.number_of_items / projectBoxes.length;
 	const capScore = solution_data.capacity / containerVolume;
 	const ordScore = solution_data.order_score / 100;

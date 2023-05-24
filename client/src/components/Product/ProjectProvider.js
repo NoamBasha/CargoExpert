@@ -147,7 +147,7 @@ export const ProjectProvider = ({ children }) => {
 	};
 
 	const saveSolution = () => {
-		updateSolution(projectId, solutionId, inBoxes.concat(outBoxes));
+		updateSolution(projectId, solutionId, inBoxes, outBoxes);
 	};
 
 	const improveSolutionInView = () => {

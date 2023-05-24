@@ -1,4 +1,10 @@
 import { useState, createContext, useContext } from "react";
+import {
+	numOfItemsMetric,
+	volumeMetric,
+	orderMetric,
+	overallMetric,
+} from "./metrics.js";
 
 const DEV = true;
 
@@ -463,7 +469,32 @@ export const UserDataProvider = ({ children }) => {
 		updateUser(new_projects);
 	};
 
-	const updateSolution = (project_id, solution_id, boxes) => {
+	const updateSolution = (project_id, solution_id, inBoxes, outBoxes) => {
+		const currentProject = projects.filter((current_project) => {
+			return current_project.id === project_id;
+		})[0];
+
+		const isQuantity = currentProject.project_data.isQuantity;
+		const container = currentProject.container;
+
+		const solutionBoxes = inBoxes.concat(outBoxes);
+		let updatedSolutionData = {
+			capacity: volumeMetric(solutionBoxes),
+			number_of_items: numOfItemsMetric(solutionBoxes),
+			order_score: orderMetric(solutionBoxes, container),
+			overall_score: 0,
+		};
+
+		let updatedSolutionDataWithOverall = {
+			...updatedSolutionData,
+			overall_score: overallMetric(
+				solutionBoxes,
+				container,
+				updatedSolutionData,
+				isQuantity
+			),
+		};
+
 		let new_projects = projects.map((current_project) => {
 			if (current_project.id === project_id) {
 				let new_project = {
@@ -471,7 +502,12 @@ export const UserDataProvider = ({ children }) => {
 					solutions: current_project.solutions.map(
 						(current_solution) =>
 							current_solution.id === solution_id
-								? { ...current_solution, boxes: boxes }
+								? {
+										...current_solution,
+										boxes: solutionBoxes,
+										solution_data:
+											updatedSolutionDataWithOverall,
+								  }
 								: current_solution
 					),
 				};
