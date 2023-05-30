@@ -258,7 +258,12 @@ const algo = (data) => {
 
 	solutionList = sortByPreference(solutionList, isQuantity);
 
+	solutionList = solutionList.map((solution, index) => {
+		return { ...solution, name: `solution ${index + 1}` };
+	});
+
 	let solutionDict = dictSolutionsFromList(solutionList);
+
 	return solutionDict;
 };
 

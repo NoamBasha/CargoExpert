@@ -4,12 +4,14 @@ const numOfItemsMetric = (solutionBoxes) => {
 };
 
 const volumeMetric = (solutionBoxes) => {
-	let volume = 0;
+	let volumes_sum = 0;
 	const inBoxes = solutionBoxes.filter((box) => box.isIn);
-	for (const v of inBoxes.map((box) => box.volume)) {
-		volume += v;
+	for (const volume of inBoxes.map(
+		(box) => box.size[0] * box.size[1] * box.size[2]
+	)) {
+		volumes_sum += volume;
 	}
-	return volume;
+	return volumes_sum;
 };
 
 const orderMetric = (solutionBoxes, container) => {

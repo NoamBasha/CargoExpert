@@ -1,35 +1,39 @@
 import { DataGrid } from "@mui/x-data-grid";
-import "./BoxesTable.css";
+import { useMemo } from "react";
+
+const COLUMN_WIDTH = 100;
+const PAGE_SIZE = 10;
+const ROWS_PER_PAGE = 10;
+
+const columns = [
+	{ field: "order", headerName: "Order", width: COLUMN_WIDTH },
+	{ field: "width", headerName: "Width", width: COLUMN_WIDTH },
+	{ field: "height", headerName: "Height", width: COLUMN_WIDTH },
+	{ field: "length", headerName: "Length", width: COLUMN_WIDTH },
+	{ field: "type", headerName: "Type", width: COLUMN_WIDTH },
+];
 
 export const BoxesTable = ({ boxes, selectedIds, setSelecetedIds }) => {
-	console.log(selectedIds);
-
-	const columns = [
-		{ field: "order", headerName: "Order", width: 100 },
-		{ field: "width", headerName: "Width", width: 100 },
-		{ field: "height", headerName: "Height", width: 100 },
-		{ field: "length", headerName: "Length", width: 100 },
-		{ field: "type", headerName: "Type", width: 100 },
-	];
-
-	const rows = boxes.map((box) => {
-		return {
-			id: box.id,
-			order: box.order,
-			width: box.width,
-			height: box.height,
-			length: box.length,
-			type: box.type,
-		};
-	});
+	const rows = useMemo(
+		() =>
+			boxes.map((box) => ({
+				id: box.id,
+				order: box.order,
+				width: box.width,
+				height: box.height,
+				length: box.length,
+				type: box.type,
+			})),
+		[boxes]
+	);
 
 	return (
-		<div className="boxes-table">
+		<div style={{ width: "70%" }}>
 			<DataGrid
 				rows={rows}
 				columns={columns}
-				pageSize={10}
-				rowsPerPageOptions={10}
+				pageSize={PAGE_SIZE}
+				rowsPerPageOptions={ROWS_PER_PAGE}
 				checkboxSelection
 				disableRowSelectionOnClick
 				onRowSelectionModelChange={(rows) => {

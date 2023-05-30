@@ -146,43 +146,44 @@ export const UserDataProvider = ({ children }) => {
 		}
 	};
 
-	const deleteUser = async ({ email, password }) => {
-		setError("");
-		setIsLoading(true);
-		try {
-			const requestOptions = {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					email: email,
-					password: password,
-				}),
-			};
-			let response;
+	// const deleteUser = async ({ email, password }) => {
+	// 	setError("");
+	// 	setIsLoading(true);
+	// 	try {
+	// 		const requestOptions = {
+	// 			method: "POST",
+	// 			headers: { "Content-Type": "application/json" },
+	// 			body: JSON.stringify({
+	// 				email: email,
+	// 				password: password,
+	// 			}),
+	// 		};
+	// 		let response;
 
-			if (DEV) {
-				response = await fetch(
-					"http://localhost:1337/deleteUser",
-					requestOptions
-				);
-			} else {
-				response = await fetch(
-					"https://cargoexpert.onrender.com/deleteUser",
-					requestOptions
-				);
-			}
+	// 		if (DEV) {
+	// 			response = await fetch(
+	// 				"http://localhost:1337/deleteUser",
+	// 				requestOptions
+	// 			);
+	// 		} else {
+	// 			response = await fetch(
+	// 				"https://cargoexpert.onrender.com/deleteUser",
+	// 				requestOptions
+	// 			);
+	// 		}
 
-			if (response.status === 200) {
-				console.log("User deleted successfully");
-			} else {
-				throw new Error(`${response.status} ${response.statusText}`);
-			}
-		} catch (error) {
-			setCustomizedError(error);
-		} finally {
-			setIsLoading(false);
-		}
-	};
+	// 		if (response.status === 200) {
+	// 			console.log("User deleted successfully");
+	// 		} else {
+	// 			throw new Error(`${response.status} ${response.statusText}`);
+	// 		}
+	// 	} catch (error) {
+	// 		setCustomizedError(error);
+	// 	} finally {
+	// 		setIsLoading(false);
+	// 	}
+	// };
+
 	/* #endregion */
 
 	/* #region Project Functions */

@@ -14,7 +14,7 @@ export const Register = () => {
 		if (isRegistered) {
 			navigate("/");
 		}
-	}, [isRegistered]);
+	}, [isRegistered, navigate]);
 
 	const handleRegister = async (e) => {
 		setIsRegistered(false);

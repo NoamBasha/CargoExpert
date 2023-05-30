@@ -7,8 +7,6 @@ import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import { IconButton } from "@mui/material";
 import { CircularProgress } from "@mui/material";
 import { useEffect } from "react";
-import HeightIcon from "@mui/icons-material/Height";
-import UnfoldMoreOutlinedIcon from "@mui/icons-material/UnfoldMoreOutlined";
 
 import {
 	TableContainer,
@@ -88,7 +86,7 @@ export const SolutionsTable = ({ title }) => {
 
 	const handleChangeName = (id, name) => {
 		const solution = getSolutionById(id);
-		if (solution != null) {
+		if (solution !== null) {
 			const newSolution = {
 				...solution,
 				name: name,
@@ -165,7 +163,7 @@ export const SolutionsTable = ({ title }) => {
 							<TableCell style={{ fontWeight: "bold" }}>
 								Duplicate
 							</TableCell>
-							{solutions.length != 1 ? (
+							{solutions.length !== 1 ? (
 								<TableCell style={{ fontWeight: "bold" }}>
 									Delete
 								</TableCell>
@@ -232,7 +230,7 @@ export const SolutionsTable = ({ title }) => {
 										)}
 									</TableCell>
 
-									{solutions.length != 1 ? (
+									{solutions.length !== 1 ? (
 										<TableCell>
 											{isLoading ? (
 												<CircularProgress />

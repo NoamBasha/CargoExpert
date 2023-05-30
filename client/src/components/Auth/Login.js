@@ -20,7 +20,7 @@ export const Login = () => {
 		if (isLoggedIn) {
 			navigate("/home");
 		}
-	}, [isLoggedIn]);
+	}, [isLoggedIn, navigate]);
 
 	const handleLogin = async (e) => {
 		if (email.length === 0) {

@@ -1,4 +1,3 @@
-import { DataGrid } from "@mui/x-data-grid";
 import {
 	TableContainer,
 	Table,
@@ -7,23 +6,25 @@ import {
 	TableRow,
 	TableCell,
 	Paper,
-	Typography,
 } from "@mui/material";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
-import { Button, Snackbar } from "@mui/material";
+import { Button } from "@mui/material";
+import { useMemo } from "react";
 
 export const BoxesViewTableImproved = ({ isEdit, boxes, toggleIsIn, isIn }) => {
-	const rows = boxes.map((box) => {
-		return {
-			id: box.id,
-			order: box.order,
-			width: box.size[0],
-			height: box.size[1],
-			length: box.size[2],
-			type: box.type,
-		};
-	});
+	const rows = useMemo(() => {
+		boxes.map((box) => {
+			return {
+				id: box.id,
+				order: box.order,
+				width: box.size[0],
+				height: box.size[1],
+				length: box.size[2],
+				type: box.type,
+			};
+		});
+	}, [boxes]);
 
 	return (
 		<>
@@ -48,15 +49,6 @@ export const BoxesViewTableImproved = ({ isEdit, boxes, toggleIsIn, isIn }) => {
 						width: "400px",
 					}}
 				>
-					{/* <Typography>
-					<caption
-						style={{ display: "inline-block", margin: "0.5em 0" }}
-					>
-						{isIn
-							? "Boxes in the solution"
-							: "Boxes out of the solution"}
-					</caption>
-				</Typography> */}
 					<Table
 						aria-label="projects table"
 						size="small"

@@ -4,6 +4,9 @@ import { Button } from "@mui/material";
 const DEV = true;
 
 export const DownloadFile = ({ setCustomizedError }) => {
+	const DOWNLOAD_FILE_ERROR =
+		"Can't download file at this time. Please try again later.";
+
 	const handleClick = async (e) => {
 		e.preventDefault();
 		try {
@@ -26,9 +29,7 @@ export const DownloadFile = ({ setCustomizedError }) => {
 				setCustomizedError(data.error);
 			}
 		} catch (err) {
-			setCustomizedError(
-				"Can't download file at this time. Please try again later."
-			);
+			setCustomizedError(DOWNLOAD_FILE_ERROR);
 		}
 	};
 
