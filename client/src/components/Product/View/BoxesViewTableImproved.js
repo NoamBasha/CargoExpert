@@ -13,18 +13,18 @@ import { Button } from "@mui/material";
 import { useMemo } from "react";
 
 export const BoxesViewTableImproved = ({ isEdit, boxes, toggleIsIn, isIn }) => {
-	const rows = useMemo(() => {
-		boxes.map((box) => {
-			return {
+	const rows = useMemo(
+		() =>
+			boxes.map((box) => ({
 				id: box.id,
 				order: box.order,
 				width: box.size[0],
 				height: box.size[1],
 				length: box.size[2],
 				type: box.type,
-			};
-		});
-	}, [boxes]);
+			})),
+		[boxes]
+	);
 
 	return (
 		<>
