@@ -53,6 +53,7 @@ export const ProjectProvider = ({ children }) => {
 			setPreviousInBoxes(isInBoxes);
 			setPreviousOutBoxes(isOutBoxes);
 			setBoxIndices([]);
+			console.log(solution);
 		}
 	}, [solutions, solutionId, projects]);
 

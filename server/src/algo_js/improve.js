@@ -96,7 +96,7 @@ const initImproveBox = (box) => {
 		width: box.size[0],
 		height: box.size[1],
 		length: box.size[2],
-		volume: box.width * box.height * box.length,
+		volume: box.size[0] * box.size[1] * box.size[2],
 		rotation: Rotation.WHL,
 		size: {
 			width: box.size[0],
@@ -180,10 +180,12 @@ const improve = (data) => {
 		}
 	}
 
-	// TODO: reverse=True?
-	return Object.values(solutionList).sort(
+	const bestSolution = Object.values(solutionList).sort(
 		(a, b) => b.solution_data.overall_score - a.solution_data.overall_score
 	)[0];
+
+	console.log(bestSolution.solution_data);
+	return bestSolution;
 };
 
 module.exports = { improve };
