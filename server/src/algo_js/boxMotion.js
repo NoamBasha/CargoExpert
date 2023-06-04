@@ -51,7 +51,7 @@ const rotateSubset = (boxes) => {
 	return boxes.map((box) => {
 		const boxSizeString = JSON.stringify(getSize(box));
 		const rotation = rotations[boxSizeString];
-		return { ...box, rotation };
+		return { ...box, rotation: rotation };
 	});
 };
 

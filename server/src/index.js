@@ -24,7 +24,7 @@ app.post("/getSolutionsJS", (req, res) => getSolutionsJS(req, res));
 app.post("/improveSolutionJS", (req, res) => improveSolutionJS(req, res));
 app.get("/userInputExample", (req, res) => userInputExample(req, res));
 
-// User CRUD
+// User CRUD - Should have used multiple API calls instead of doing two operations in one API call
 app.post("/createUser", (req, res) => createUser(req, res));
 app.post("/readUser", (req, res) => readUser(req, res));
 app.post("/deleteUser", (req, res) => deleteUser(req, res));

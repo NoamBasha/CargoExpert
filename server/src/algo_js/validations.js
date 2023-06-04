@@ -130,15 +130,6 @@ const isBoxesHovering = (inBoxes) => {
 		return x_intersection * z_intersection;
 	};
 
-	// const boxes_with_flb = inBoxes.map((box) => {
-	// 	let flb = {
-	// 		x: box.center.x - box.size[0] / 2,
-	// 		y: box.position[1] - box.size[1] / 2,
-	// 		z: box.position[2] - box.size[2] / 2,
-	// 	};
-	// 	return { ...box, flb: flb };
-	// });
-
 	for (let i = 0; i < inBoxes.length; i++) {
 		const box = inBoxes[i];
 		const boxSize = getSize(box);

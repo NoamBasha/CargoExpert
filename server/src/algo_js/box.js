@@ -113,7 +113,6 @@ const getBox = (box) => {
 		...box,
 		size: Object.values(getSize(box)),
 		position: Object.values(box.center),
-		type: box.type,
 	};
 };
 

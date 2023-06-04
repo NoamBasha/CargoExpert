@@ -1,4 +1,3 @@
-
 //  tests 1-7 are tested with no randomness in algo.py
 const test_1 = {
 	container: { width: 3, height: 1, length: 1 },
@@ -328,5 +327,3 @@ const test_11 = {
 		},
 	],
 };
-
-

@@ -180,6 +180,8 @@ const improve = (data) => {
 		}
 	}
 
+	console.log(Object.values(solutionList).length);
+
 	const bestSolution = Object.values(solutionList).sort(
 		(a, b) =>
 			b.solution_data.number_of_items - a.solution_data.number_of_items
