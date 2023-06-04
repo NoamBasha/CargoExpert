@@ -17,6 +17,11 @@ const volumeMetric = (solutionBoxes) => {
 
 const orderMetric = (solutionBoxes, container) => {
 	const inBoxes = solutionBoxes.filter((box) => box.isIn);
+
+	if (inBoxes.length === 0) {
+		return 0.0;
+	}
+
 	const orderList = normalize(inBoxes.map((box) => box.order));
 	const zList = normalize(inBoxes.map((box) => container.length - box.FLB.z));
 

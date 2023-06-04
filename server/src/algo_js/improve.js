@@ -153,6 +153,7 @@ const improve = (data) => {
 
 	const endTime = Date.now() + algorithmTime;
 	while (Date.now() < endTime) {
+		counter += 1;
 		inBoxesCopy = [...inBoxes];
 		outBoxesCopy = [...outBoxes];
 
