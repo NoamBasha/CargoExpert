@@ -83,22 +83,21 @@ const orderMetric = (solutionBoxes, container) => {
 
 /* // Original orderMetric
 const orderMetric = (solutionBoxes, container) => {
-  const inBoxes = solutionBoxes.filter((box) => box.isIn);
-  const orderList = normalize(inBoxes.map((box) => box.order));
-  const zList = normalize(inBoxes.map((box) => container.length - box.FLB.z));
+	const inBoxes = solutionBoxes.filter((box) => box.isIn);
+	const orderList = normalize(inBoxes.map((box) => box.order));
+	const zList = normalize(inBoxes.map((box) => container.length - box.FLB.z));
 
-  let scores = [];
-  for (let i = 0; i < orderList.length; i++) {
-    const order = orderList[i];
-    const z = zList[i];
-    if (order < 0.5) {
-      scores[i] = 1000 * Math.abs(order - z);
-    } else {
-      scores[i] = 10 * Math.abs(order - z);
-    }
-  }
-  const normalizedScoresSum = scores.reduce((a, b) => a + b, 0);
-  return normalizedScoresSum / inBoxes.length;
+	let score = 0;
+	for (let i = 0; i < orderList.length; i++) {
+		const order = orderList[i];
+		const z = zList[i];
+		if (order < 0.5) {
+			score += 1000 * Math.abs(order - z);
+		} else {
+			score += 10 * Math.abs(order - z);
+		}
+	}
+	return (score / inBoxes.length).toFixed(2);
 };
 */
 
