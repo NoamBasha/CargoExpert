@@ -1,6 +1,16 @@
 import { OptionButton } from "./OptionButton";
 import { ExplanationIcon } from "../../ExplanationIcon.js";
 
+const PREFERENCES_PANEL_EXPLANATION_TEXT = `Select your preferences:
+
+Order: This preference prioritizes the arrangement of the boxes to match the order in which you entered them.
+
+Quantity: This preference focuses on maximizing the number of boxes inside the container.
+
+Time: This preference aims to minimize the waiting time for a solution.
+
+Quality: This preference emphasizes waiting for as long as necessary to achieve an optimal solution.`;
+
 export const PreferencesPanel = ({
 	preference,
 	setPreference,
@@ -13,15 +23,7 @@ export const PreferencesPanel = ({
 				<label className="mb-1">{text}</label>
 				<ExplanationIcon
 					explanationHeader="Preference Panel"
-					explanationText={`Select your preferences:
-
-					Order: This preference prioritizes the arrangement of the boxes to match the order in which you entered them.
-					
-					Quantity: This preference focuses on maximizing the number of boxes inside the container.
-					
-					Time: This preference aims to minimize the waiting time for a solution.
-					
-					Quality: This preference emphasizes waiting for as long as necessary to achieve an optimal solution.`}
+					explanationText={PREFERENCES_PANEL_EXPLANATION_TEXT}
 					type="dialog"
 				/>
 			</div>

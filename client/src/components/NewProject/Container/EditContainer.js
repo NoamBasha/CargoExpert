@@ -24,7 +24,7 @@ export const EditContainer = ({
 		return true;
 	};
 
-	const handleEditContainer = (event) => {
+	const handleEditContainer = () => {
 		if (validateContainer()) {
 			setContainer([
 				parseInt(formWidth),
@@ -51,7 +51,7 @@ export const EditContainer = ({
 				}}
 				className="m-0"
 			>
-				Choose a standrad size or enter a size of your own!
+				Choose a standard size or enter a size of your own!
 			</p>
 			<StandardContainers setStandardContainer={setStandardContainer} />
 

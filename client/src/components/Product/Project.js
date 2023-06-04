@@ -8,9 +8,11 @@ export const Project = () => {
 
 	return (
 		<div>
-			{projectId == null && solutionId == null ? <Projects /> : null}
-			{projectId != null && solutionId == null ? <Solutions /> : null}
-			{projectId != null && solutionId != null ? <SolutionView /> : null}
+			{projectId === null && solutionId === null ? <Projects /> : null}
+			{projectId !== null && solutionId === null ? <Solutions /> : null}
+			{projectId !== null && solutionId !== null ? (
+				<SolutionView />
+			) : null}
 		</div>
 	);
 };

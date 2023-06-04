@@ -55,9 +55,12 @@ export const EditPanel = ({ maxStepSize }) => {
 		>
 			<div className="w-100 d-flex mx-auto justify-content-around align-items-center">
 				<ButtonGroup orientation="vertical">
-					{buttonsArgs.map((args) => {
+					{buttonsArgs.map((args, i) => {
 						return (
-							<ButtonGroup variant="outlined">
+							<ButtonGroup
+								variant="outlined"
+								key={i}
+							>
 								<MovementIconButton
 									icon={
 										<ArrowBackOutlinedIcon size="small" />

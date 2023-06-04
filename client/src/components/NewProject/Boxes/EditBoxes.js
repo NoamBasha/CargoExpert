@@ -1,9 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { BoxesTable } from "./BoxesTable.js";
 import { BoxForm } from "./BoxForm";
 import { Button } from "@mui/material";
 import { CircularProgress } from "@mui/material";
-import "./EditBoxes.css";
+import { ExplanationIcon } from "../../ExplanationIcon.js";
+
+const EDIT_BOXES_EXPLANATION_TEXT = `Boxes Table:
+- You can view the boxes you uploaded.
+- You can select one or multiple boxes and edit them in the form on the right.
+Boxes Form:
+- After selecting one or mulptiple boxes you can edit and delete them via the matching buttons.
+- You can add a new box by entering the new box's details in the form and click 'ADD'
+- Bottom Buttons:
+- You can go back to the previous steps and edit your new project.
+- You can create a new project by presing the CREATE PROJECT! button.
+`;
 
 export const EditBoxes = ({
 	setNewStage,
@@ -28,7 +39,7 @@ export const EditBoxes = ({
 	return (
 		<div className="d-flex flex-column w-100 justify-content-center align-items-center">
 			<div
-				className=" d-flex justify-content-between "
+				className="d-flex justify-content-between "
 				style={{ width: "45%" }}
 			>
 				<BoxesTable
@@ -44,8 +55,9 @@ export const EditBoxes = ({
 				/>
 			</div>
 
-			<div className="w-25 mt-3 d-flex justify-content-between">
+			<div className="w-25 mt-3 d-flex justify-content-center position-relative">
 				<Button
+					className="mx-4"
 					onClick={() => {
 						console.log("Backed");
 						setNewStage(-1);
@@ -54,10 +66,25 @@ export const EditBoxes = ({
 					Back
 				</Button>
 				{isLoading ? (
-					<CircularProgress />
+					<CircularProgress className="mx-4" />
 				) : (
-					<Button onClick={handleAddProject}>Create Project!</Button>
+					<Button
+						className="mx-4"
+						onClick={handleAddProject}
+					>
+						Create Project!
+					</Button>
 				)}
+				<ExplanationIcon
+					style={{
+						position: "absolute",
+						bottom: "0",
+						right: "-200px",
+					}}
+					explanationHeader="Edit Boxes"
+					explanationText={EDIT_BOXES_EXPLANATION_TEXT}
+					type="dialog"
+				/>
 			</div>
 		</div>
 	);

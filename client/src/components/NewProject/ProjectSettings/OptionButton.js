@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { Button } from "@mui/material";
 
 export const OptionButton = ({ preference, option, setOption }) => {
@@ -8,7 +7,7 @@ export const OptionButton = ({ preference, option, setOption }) => {
 				width: "50%",
 			}}
 			className="mx-1"
-			variant={preference == option ? "contained" : "outlined"}
+			variant={preference === option ? "contained" : "outlined"}
 			onClick={() => setOption(option)}
 		>
 			{option}

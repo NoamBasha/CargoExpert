@@ -2,8 +2,13 @@ import Papa from "papaparse";
 import { Button } from "@mui/material";
 import { DropzoneArea } from "material-ui-dropzone";
 import { DownloadFile } from "./DownloadFile";
-import { useState, useEffect } from "react";
-import "./FileUpload.css";
+import { useState, useEffect, useCallback } from "react";
+
+const CONTAINER_ERROR = "There is a problem with the container";
+const BOXES_ERROR = "There is a problem with the boxes";
+const FILE_ERROR = "There was an error pasring the file";
+const FILE_UPLOAD_PAGE_TEXT = `You may upload a CSV file which contains the information about 
+your container and boxes. You may find an example file here:`;
 
 export const FileUpload = ({
 	setNewStage,
@@ -12,11 +17,16 @@ export const FileUpload = ({
 	setCustomizedError,
 }) => {
 	const [fileName, setFileName] = useState(null);
-	const [snackbarMessage, setSnackbarMessage] = useState("");
+
+	const handleDelete = useCallback(() => {
+		setContainer([]);
+		setBoxes([]);
+		setFileName(null);
+	}, [setContainer, setBoxes, setFileName]);
 
 	useEffect(() => {
 		handleDelete();
-	}, []);
+	}, [handleDelete]);
 
 	const parseData = (data) => {
 		try {
@@ -42,7 +52,7 @@ export const FileUpload = ({
 					Object.values(numberic_object).includes(null) ||
 					Object.values(numberic_object).includes(undefined)
 				) {
-					setCustomizedError("Problem with boxes");
+					setCustomizedError(BOXES_ERROR);
 					return;
 				}
 				numeric_data.push(numberic_object);
@@ -59,7 +69,7 @@ export const FileUpload = ({
 				container_data.width == null ||
 				container_data.length == null
 			) {
-				setCustomizedError("Problem with container");
+				setCustomizedError(CONTAINER_ERROR);
 				return;
 			}
 
@@ -70,7 +80,7 @@ export const FileUpload = ({
 			setContainer(Object.values(container_data));
 			setBoxes(boxes);
 		} catch (err) {
-			setCustomizedError("Error pasring the file");
+			setCustomizedError(FILE_ERROR);
 		}
 	};
 
@@ -84,36 +94,17 @@ export const FileUpload = ({
 				},
 			});
 		} catch (e) {
-			alert("Error parsing");
+			alert(FILE_ERROR);
 		}
-	};
-
-	const handleDelete = () => {
-		setContainer([]);
-		setBoxes([]);
-		setFileName(null);
 	};
 
 	return (
 		<div className="d-flex flex-column align-items-center w-25">
-			<p className="mb-0">
-				You may upload a CSV file which contains the information about
-				<br />
-				your container and boxes. You may find an example file here:
-			</p>
+			<p className="mb-0 text-center">{FILE_UPLOAD_PAGE_TEXT}</p>
 			<DownloadFile setCustomizedError={setCustomizedError} />
-			{/* {fileName ? (
-				<strong>
-					<p className="mt-0 mb-2">
-						{`${fileName} was uploaded successfully`}
-					</p>
-				</strong>
-			) : (
-				<p className="mt-0 mb-2">{"Currently no file is uploaded"}</p>
-			)} */}
 			<DropzoneArea
 				dropzoneClass={
-					"fileUpload px-4 text-secondary d-flex align-items-center w-100"
+					"px-4 text-secondary d-flex align-items-center w-100"
 				}
 				acceptedFiles={["text/csv"]}
 				dropzoneText={
@@ -125,19 +116,17 @@ export const FileUpload = ({
 				}
 				filesLimit={1}
 				maxFileSize={5000000}
-				showAlerts={false} // false?
+				showAlerts={false}
 				showPreviews={false}
 				showFileNamesInPreview={false}
-				showPreviewsInDropzone={false} // true?
-				showFileNames={false} // true?
+				showPreviewsInDropzone={false}
+				showFileNames={false}
 				getFileAddedMessage={(fileName) => {
 					setFileName(fileName);
-					setSnackbarMessage(`CSV file ${fileName} added`);
 					return `CSV file ${fileName} added`;
 				}}
 				getFileRemovedMessage={(fileName) => {
 					setFileName(null);
-					setSnackbarMessage(`CSV file ${fileName} removed`);
 					return `CSV file ${fileName} removed`;
 				}}
 				onDrop={(files) => handleDrop(files)}

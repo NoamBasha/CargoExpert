@@ -23,7 +23,6 @@ export const ProjectProvider = ({ children }) => {
 			let index = projects.findIndex(
 				(project) => project.id === projectId
 			);
-			console.log(projects[index]);
 			setSolutions(projects[index].solutions);
 			setContainer(projects[index].container);
 		}
@@ -39,14 +38,12 @@ export const ProjectProvider = ({ children }) => {
 			const solution = solutions.find(
 				(solution) => solution.id === solutionId
 			);
-			console.log(solution);
-			//setSolution(solution);
 
 			const isInBoxes = solution.boxes.filter((box) => {
-				return box.isIn == 1;
+				return box.isIn === 1;
 			});
 			const isOutBoxes = solution.boxes.filter((box) => {
-				return box.isIn == 0;
+				return box.isIn === 0;
 			});
 
 			setBoxes(solution.boxes);
@@ -56,6 +53,7 @@ export const ProjectProvider = ({ children }) => {
 			setPreviousInBoxes(isInBoxes);
 			setPreviousOutBoxes(isOutBoxes);
 			setBoxIndices([]);
+			console.log(solution);
 		}
 	}, [solutions, solutionId, projects]);
 
@@ -137,7 +135,6 @@ export const ProjectProvider = ({ children }) => {
 	const changeBoxById = (id, newBox) => {
 		const newBoxes = inBoxes.map((box) => {
 			if (box.id === id) {
-				console.log(box, newBox);
 				return newBox;
 			} else {
 				return box;
@@ -147,7 +144,7 @@ export const ProjectProvider = ({ children }) => {
 	};
 
 	const saveSolution = () => {
-		updateSolution(projectId, solutionId, inBoxes.concat(outBoxes));
+		updateSolution(projectId, solutionId, inBoxes, outBoxes);
 	};
 
 	const improveSolutionInView = () => {
@@ -171,7 +168,7 @@ export const ProjectProvider = ({ children }) => {
 
 		const { newInBoxes, newOutBoxes } = allBoxes.reduce(
 			(acc, box) => {
-				if (box.isIn == 1) {
+				if (box.isIn === 1) {
 					acc.newInBoxes.push(box);
 				} else {
 					acc.newOutBoxes.push(box);
@@ -187,10 +184,9 @@ export const ProjectProvider = ({ children }) => {
 
 	const toggleIsIn = (id) => {
 		let allBoxes = inBoxes.concat(outBoxes);
-		console.log(allBoxes);
 		allBoxes = allBoxes.map((box) => {
 			if (box.id === id) {
-				return { ...box, isIn: box.isIn == 1 ? 0 : 1 };
+				return { ...box, isIn: box.isIn === 1 ? 0 : 1 };
 			} else {
 				return box;
 			}
@@ -198,7 +194,7 @@ export const ProjectProvider = ({ children }) => {
 
 		const { newInBoxes, newOutBoxes } = allBoxes.reduce(
 			(acc, box) => {
-				if (box.isIn == 1) {
+				if (box.isIn === 1) {
 					acc.newInBoxes.push(box);
 				} else {
 					acc.newOutBoxes.push(box);

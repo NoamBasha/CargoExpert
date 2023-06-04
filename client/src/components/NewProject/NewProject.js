@@ -6,8 +6,53 @@ import { useState } from "react";
 import { Wizard } from "./Wizard";
 import { useUserData } from "../UserDataProvider";
 import { useNavigate } from "react-router-dom";
-import "./NewProject.css";
 import { Modal, Box, Typography, LinearProgress } from "@mui/material";
+
+const CREATE_PROJECT_MODAL_TEXT =
+	"We are creating your project, it might take a few minutes.";
+
+const stringToColour = (str) => {
+	let hash = 0;
+	for (let i = 0; i < str.length; i++) {
+		hash = str.charCodeAt(i) + ((hash << 5) - hash);
+	}
+	let colour = "#";
+	for (let i = 0; i < 3; i++) {
+		let value = (hash >> (i * 8)) & 0xff;
+		colour += ("00" + value.toString(16)).substr(-2);
+	}
+	return colour;
+};
+
+const validateBox = (box) => {
+	if (Object.values(box).includes(null)) {
+		return false;
+	}
+	if (Object.values(box).includes(undefined)) {
+		return false;
+	}
+	if (isNaN(box.order) || box.order <= 0) {
+		return false;
+	}
+	if (
+		!validateNumberProperty(box.width) ||
+		!validateNumberProperty(box.height) ||
+		!validateNumberProperty(box.length)
+	) {
+		return false;
+	}
+	return true;
+};
+
+const validateNumberProperty = (property) => {
+	if (isNaN(property)) {
+		return false;
+	}
+	if (parseFloat(property) <= 0) {
+		return false;
+	}
+	return true;
+};
 
 export const NewProject = () => {
 	const [container, setContainer] = useState([0, 0, 0]);
@@ -27,49 +72,6 @@ export const NewProject = () => {
 		setStage((prevStage) => prevStage + dir * 1);
 	};
 
-	const stringToColour = (str) => {
-		let hash = 0;
-		for (let i = 0; i < str.length; i++) {
-			hash = str.charCodeAt(i) + ((hash << 5) - hash);
-		}
-		let colour = "#";
-		for (let i = 0; i < 3; i++) {
-			let value = (hash >> (i * 8)) & 0xff;
-			colour += ("00" + value.toString(16)).substr(-2);
-		}
-		return colour;
-	};
-
-	const validateNumberProperty = (property) => {
-		if (isNaN(property)) {
-			return false;
-		}
-		if (parseFloat(property) <= 0) {
-			return false;
-		}
-		return true;
-	};
-
-	const validateBox = (box) => {
-		if (Object.values(box).includes(null)) {
-			return false;
-		}
-		if (Object.values(box).includes(undefined)) {
-			return false;
-		}
-		if (isNaN(box.order) || box.order <= 0) {
-			return false;
-		}
-		if (
-			!validateNumberProperty(box.width) ||
-			!validateNumberProperty(box.height) ||
-			!validateNumberProperty(box.length)
-		) {
-			return false;
-		}
-		return true;
-	};
-
 	const validateBoxes = () => {
 		for (let i = 0; i < boxes.length; i++) {
 			let box = boxes[i];
@@ -83,6 +85,7 @@ export const NewProject = () => {
 	const handleAddProject = async () => {
 		setError("");
 		if (!validateBoxes()) {
+			//TODO: change this to error from file to be created...
 			setCustomizedError("Problem with boxes");
 		} else {
 			setOpenModal(true);
@@ -92,8 +95,8 @@ export const NewProject = () => {
 
 			const project_data = {
 				name: name,
-				isQuantity: orderQuantity == "Quantity" ? 1 : 0,
-				isQuality: timeQuality == "Quality" ? 1 : 0,
+				isQuantity: orderQuantity === "Quantity" ? 1 : 0,
+				isQuality: timeQuality === "Quality" ? 1 : 0,
 			};
 
 			try {
@@ -117,13 +120,13 @@ export const NewProject = () => {
 				style={{ textAlign: "center" }}
 				className="m-0 pt-5 mb-4 display-4"
 			>
-				{stage == 0 ? "Project Settings" : null}
-				{stage == 1 ? "File Upload (Optional)" : null}
-				{stage == 2 ? "Edit Container" : null}
-				{stage == 3 ? "Edit Boxes" : null}
+				{stage === 0 ? "Project Settings" : null}
+				{stage === 1 ? "File Upload (Optional)" : null}
+				{stage === 2 ? "Edit Container" : null}
+				{stage === 3 ? "Edit Boxes" : null}
 			</h1>
 			<div className="w-100 d-flex flex-column justify-content-center mx-auto align-items-center">
-				{stage == 0 ? (
+				{stage === 0 ? (
 					<ProjectSettings
 						name={name}
 						setName={setName}
@@ -136,7 +139,7 @@ export const NewProject = () => {
 					/>
 				) : null}
 
-				{stage == 1 ? (
+				{stage === 1 ? (
 					<FileUpload
 						setNewStage={setNewStage}
 						setContainer={setContainer}
@@ -145,7 +148,7 @@ export const NewProject = () => {
 					/>
 				) : null}
 
-				{stage == 2 ? (
+				{stage === 2 ? (
 					<EditContainer
 						setNewStage={setNewStage}
 						container={container}
@@ -154,7 +157,7 @@ export const NewProject = () => {
 					/>
 				) : null}
 
-				{stage == 3 ? (
+				{stage === 3 ? (
 					<EditBoxes
 						setNewStage={setNewStage}
 						boxes={boxes}
@@ -188,8 +191,7 @@ export const NewProject = () => {
 							id="modal-modal-description"
 							sx={{ mt: 2 }}
 						>
-							We are creating your project, it might take a few
-							minutes.
+							{CREATE_PROJECT_MODAL_TEXT}
 						</Typography>
 						<LinearProgress className="mt-1" />
 					</Box>

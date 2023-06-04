@@ -1,21 +1,7 @@
 const { initBox, setPosition, getBox } = require("./box.js");
 const { getScore, updatePps } = require("./container.js");
 const { rotation, perturbation } = require("./boxMotion.js");
-
 const { orderMetric, overallMetric } = require("./metrics.js");
-
-/*
-
-The purpose of the algorithm is to position each box inside the conatiner in the best way possible.
-It is done by placing a box, see if it fits, and then add the points it generates.
-
-So:
-1. For every box:
-	1.1. For every pp:
-		1.1.1. position the box in the pp, TODO: check if p[3] == 1, place it accordingly
-		1.1.2. If it fits - check if it gets a better score, else - continue.
-				check for score: Check if it validates.
-*/
 
 const getBestPoint = (pp, box, container, solutionBoxes) => {
 	let bestPoint = null;
@@ -144,7 +130,7 @@ const constructive_packing = (boxes, container, isQuantity) => {
 
 const handleData = (data) => {
 	const isQuality = data.project_data.isQuality;
-	const numOfIterations = isQuality ? 2000 : 1000;
+	const algorithmTime = isQuality ? 60000 : 15000;
 	const isQuantity = data.project_data.isQuantity;
 	const container = data.container;
 	const boxes = data.boxes;
@@ -154,13 +140,14 @@ const handleData = (data) => {
 	});
 
 	initBoxes.sort((a, b) => (a.order > b.order ? -1 : 1));
-	return [initBoxes, container, numOfIterations, isQuantity];
+	return [initBoxes, container, isQuantity, algorithmTime];
 };
 
-const getSolutions = (numOfIterations, boxes, container, isQuantity) => {
+const getSolutions = (algorithmTime, boxes, container, isQuantity) => {
 	let solutionList = {};
 	let counter = 0;
-	for (let i = 0; i < numOfIterations; i++) {
+	const endTime = Date.now() + algorithmTime;
+	while (Date.now() < endTime) {
 		let boxesCopy = [...boxes];
 		boxesCopy = rotation(boxesCopy);
 		boxesCopy = perturbation(boxesCopy);
@@ -182,6 +169,7 @@ const getSolutions = (numOfIterations, boxes, container, isQuantity) => {
 			counter += 1;
 		}
 	}
+
 	return solutionList;
 };
 
@@ -200,14 +188,14 @@ const sortByPreference = (solutionList, isQuantity) => {
 		solutionList = solutionList
 			.sort(
 				(a, b) =>
-					a.solution_data.order_score - b.solution_data.order_score
+					b.solution_data.order_score - a.solution_data.order_score
 			)
 			.slice(0, 10);
 	} else {
 		solutionList = Object.values(solutionList)
 			.sort(
 				(a, b) =>
-					a.solution_data.order_score - b.solution_data.order_score
+					b.solution_data.order_score - a.solution_data.order_score
 			)
 			.slice(0, 20);
 		solutionList = solutionList
@@ -227,17 +215,6 @@ const sortByPreference = (solutionList, isQuantity) => {
 	return solutionList;
 };
 
-// const sortByQuantity = (solutionList, isQuantity) => {
-// 	solutionList = Object.values(solutionList)
-// 		.sort(
-// 			(a, b) =>
-// 				b.solution_data.number_of_items -
-// 				a.solution_data.number_of_items
-// 		)
-// 		.slice(0, 10);
-// 	return solutionList;
-// };
-
 const dictSolutionsFromList = (solutionList) => {
 	let solutionDict = {};
 	for (let index = 0; index < solutionList.length; index++) {
@@ -248,9 +225,9 @@ const dictSolutionsFromList = (solutionList) => {
 };
 
 const algo = (data) => {
-	const [boxes, container, numOfIterations, isQuantity] = handleData(data);
+	const [boxes, container, isQuantity, algorithmTime] = handleData(data);
 	let solutionList = getSolutions(
-		numOfIterations,
+		algorithmTime,
 		boxes,
 		container,
 		isQuantity
@@ -258,7 +235,12 @@ const algo = (data) => {
 
 	solutionList = sortByPreference(solutionList, isQuantity);
 
+	solutionList = solutionList.map((solution, index) => {
+		return { ...solution, name: `solution ${index + 1}` };
+	});
+
 	let solutionDict = dictSolutionsFromList(solutionList);
+
 	return solutionDict;
 };
 

@@ -6,6 +6,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import { IconButton } from "@mui/material";
 import { CircularProgress } from "@mui/material";
+import { useEffect } from "react";
 
 import {
 	TableContainer,
@@ -19,6 +20,22 @@ import {
 import { useState } from "react";
 import { ChangeNamePopup } from "../ChangeNamePopup";
 import { DeletePopup } from "../DeletePopup";
+import { TableSortLabel } from "@mui/material";
+
+const SortIcon = ({ column, sortByColumn }) => {
+	const [isAscending, setIsAscending] = useState("asc");
+
+	return (
+		<TableSortLabel
+			onClick={() => {
+				sortByColumn(column, isAscending, setIsAscending);
+			}}
+			fontSize="small"
+			active={true}
+			direction={isAscending ? "asc" : "desc"}
+		/>
+	);
+};
 
 export const SolutionsTable = ({ title }) => {
 	const { solutions, setSolutionId, projectId } = useProject();
@@ -29,6 +46,26 @@ export const SolutionsTable = ({ title }) => {
 	const [showChangeNamePopup, setShowChangeNamePopup] = useState(false);
 	const [showDeletePopup, setShowDeletePopup] = useState(false);
 	const [snackbarMessage, setSnackbarMessage] = useState("");
+	const [tableData, setTableData] = useState([]);
+	// const [isAscending, setIsAscending] = useState(true);
+
+	useEffect(() => {
+		if (solutions !== null && solutions.length !== 0) {
+			setTableData(
+				solutions.map((solution) => {
+					return {
+						id: solution.id,
+						name: solution.name,
+						number_of_items: solution.solution_data.number_of_items,
+						capacity: solution.solution_data.capacity,
+						order_score: solution.solution_data.order_score,
+						overall_score: solution.solution_data.overall_score,
+						solution_data: solution.solution_data,
+					};
+				})
+			);
+		}
+	}, [solutions]);
 
 	if (solutions == null || solutions.length === 0) {
 		return <h3>There are no solutions, please create a new project</h3>;
@@ -37,14 +74,6 @@ export const SolutionsTable = ({ title }) => {
 	const handleClick = (index) => {
 		setSolutionId(index);
 	};
-
-	const tableData = solutions.map((solution) => {
-		return {
-			id: solution.id,
-			name: solution.name,
-			solution_data: solution.solution_data,
-		};
-	});
 
 	const getSolutionById = (id) => {
 		for (let i = 0; i < solutions.length; i++) {
@@ -57,7 +86,7 @@ export const SolutionsTable = ({ title }) => {
 
 	const handleChangeName = (id, name) => {
 		const solution = getSolutionById(id);
-		if (solution != null) {
+		if (solution !== null) {
 			const newSolution = {
 				...solution,
 				name: name,
@@ -65,6 +94,23 @@ export const SolutionsTable = ({ title }) => {
 			updateSolutionName(projectId, newSolution);
 			setSnackbarMessage(`Changed name to ${name}`);
 		}
+	};
+
+	const sortByColumn = (column, isAscending, setIsAscending) => {
+		const sorted = [...tableData].sort((a, b) => {
+			const valueA = a[column];
+			const valueB = b[column];
+
+			setIsAscending((prevIsAscending) => !prevIsAscending);
+			if (typeof valueA === "string" && typeof valueB === "string") {
+				return isAscending
+					? valueA.localeCompare(valueB)
+					: valueB.localeCompare(valueA);
+			}
+
+			return isAscending ? valueA - valueB : valueB - valueA;
+		});
+		setTableData(sorted);
 	};
 
 	return (
@@ -78,18 +124,38 @@ export const SolutionsTable = ({ title }) => {
 						<TableRow>
 							<TableCell style={{ fontWeight: "bold" }}>
 								{title} - Solution
+								<SortIcon
+									column="name"
+									sortByColumn={sortByColumn}
+								/>
 							</TableCell>
 							<TableCell style={{ fontWeight: "bold" }}>
 								Number Of Items
+								<SortIcon
+									column="number_of_items"
+									sortByColumn={sortByColumn}
+								/>
 							</TableCell>
 							<TableCell style={{ fontWeight: "bold" }}>
 								Capacity
+								<SortIcon
+									column="capacity"
+									sortByColumn={sortByColumn}
+								/>
 							</TableCell>
 							<TableCell style={{ fontWeight: "bold" }}>
 								Order Score
+								<SortIcon
+									column="order_score"
+									sortByColumn={sortByColumn}
+								/>
 							</TableCell>
 							<TableCell style={{ fontWeight: "bold" }}>
 								Overall Score
+								<SortIcon
+									column="overall_score"
+									sortByColumn={sortByColumn}
+								/>
 							</TableCell>
 							<TableCell style={{ fontWeight: "bold" }}>
 								Change Name
@@ -97,7 +163,7 @@ export const SolutionsTable = ({ title }) => {
 							<TableCell style={{ fontWeight: "bold" }}>
 								Duplicate
 							</TableCell>
-							{solutions.length != 1 ? (
+							{solutions.length !== 1 ? (
 								<TableCell style={{ fontWeight: "bold" }}>
 									Delete
 								</TableCell>
@@ -117,18 +183,10 @@ export const SolutionsTable = ({ title }) => {
 											{row.name}
 										</Button>
 									</TableCell>
-									<TableCell>
-										{row.solution_data.number_of_items}
-									</TableCell>
-									<TableCell>
-										{row.solution_data.capacity}
-									</TableCell>
-									<TableCell>
-										{row.solution_data.order_score}
-									</TableCell>
-									<TableCell>
-										{row.solution_data.overall_score}
-									</TableCell>
+									<TableCell>{row.number_of_items}</TableCell>
+									<TableCell>{row.capacity}</TableCell>
+									<TableCell>{row.order_score}</TableCell>
+									<TableCell>{row.overall_score}</TableCell>
 
 									<TableCell>
 										{isLoading ? (
@@ -172,7 +230,7 @@ export const SolutionsTable = ({ title }) => {
 										)}
 									</TableCell>
 
-									{solutions.length != 1 ? (
+									{solutions.length !== 1 ? (
 										<TableCell>
 											{isLoading ? (
 												<CircularProgress />

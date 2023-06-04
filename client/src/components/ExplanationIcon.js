@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
 	IconButton,
 	Dialog,
@@ -16,7 +16,7 @@ export const ExplanationIcon = ({
 	style,
 }) => {
 	const [open, setOpen] = useState(false);
-	const [anchorEl, setAnchorEl] = React.useState(null);
+	const [anchorEl, setAnchorEl] = useState(null);
 
 	const handleOpen = (event) => {
 		setAnchorEl(event.currentTarget);

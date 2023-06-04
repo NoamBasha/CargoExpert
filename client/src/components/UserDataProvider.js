@@ -1,4 +1,10 @@
 import { useState, createContext, useContext } from "react";
+import {
+	numOfItemsMetric,
+	volumeMetric,
+	orderMetric,
+	overallMetric,
+} from "./metrics.js";
 
 const DEV = true;
 
@@ -96,7 +102,6 @@ export const UserDataProvider = ({ children }) => {
 				setCustomizedError(data.error);
 			}
 		} catch (error) {
-			//TODO: fix error message
 			setCustomizedError(error.message);
 		} finally {
 			setIsLoading(false);
@@ -140,43 +145,44 @@ export const UserDataProvider = ({ children }) => {
 		}
 	};
 
-	const deleteUser = async ({ email, password }) => {
-		setError("");
-		setIsLoading(true);
-		try {
-			const requestOptions = {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					email: email,
-					password: password,
-				}),
-			};
-			let response;
+	// const deleteUser = async ({ email, password }) => {
+	// 	setError("");
+	// 	setIsLoading(true);
+	// 	try {
+	// 		const requestOptions = {
+	// 			method: "POST",
+	// 			headers: { "Content-Type": "application/json" },
+	// 			body: JSON.stringify({
+	// 				email: email,
+	// 				password: password,
+	// 			}),
+	// 		};
+	// 		let response;
 
-			if (DEV) {
-				response = await fetch(
-					"http://localhost:1337/deleteUser",
-					requestOptions
-				);
-			} else {
-				response = await fetch(
-					"https://cargoexpert.onrender.com/deleteUser",
-					requestOptions
-				);
-			}
+	// 		if (DEV) {
+	// 			response = await fetch(
+	// 				"http://localhost:1337/deleteUser",
+	// 				requestOptions
+	// 			);
+	// 		} else {
+	// 			response = await fetch(
+	// 				"https://cargoexpert.onrender.com/deleteUser",
+	// 				requestOptions
+	// 			);
+	// 		}
 
-			if (response.status === 200) {
-				console.log("User deleted successfully");
-			} else {
-				throw new Error(`${response.status} ${response.statusText}`);
-			}
-		} catch (error) {
-			setCustomizedError(error);
-		} finally {
-			setIsLoading(false);
-		}
-	};
+	// 		if (response.status === 200) {
+	// 			console.log("User deleted successfully");
+	// 		} else {
+	// 			throw new Error(`${response.status} ${response.statusText}`);
+	// 		}
+	// 	} catch (error) {
+	// 		setCustomizedError(error);
+	// 	} finally {
+	// 		setIsLoading(false);
+	// 	}
+	// };
+
 	/* #endregion */
 
 	/* #region Project Functions */
@@ -221,7 +227,6 @@ export const UserDataProvider = ({ children }) => {
 			if (response.status === 200) {
 				let current_id = 0;
 				if (projects.length !== 0) {
-					//TODO: set id by first unused id?
 					current_id = projects[projects.length - 1].id + 1;
 				}
 
@@ -306,9 +311,8 @@ export const UserDataProvider = ({ children }) => {
 				);
 			}
 
+			const improvedSolution = await response.json();
 			if (response.status === 200) {
-				const improvedSolution = await response.json();
-
 				console.log(improvedSolution);
 
 				updateImprovedSolution(
@@ -325,7 +329,7 @@ export const UserDataProvider = ({ children }) => {
 				// 	projects[project.id]["0"].solution_data
 				// );
 			} else {
-				setCustomizedError(response.error);
+				setCustomizedError(improvedSolution.error);
 			}
 		} catch (error) {
 			setCustomizedError(error);
@@ -463,7 +467,32 @@ export const UserDataProvider = ({ children }) => {
 		updateUser(new_projects);
 	};
 
-	const updateSolution = (project_id, solution_id, boxes) => {
+	const updateSolution = (project_id, solution_id, inBoxes, outBoxes) => {
+		const currentProject = projects.filter((current_project) => {
+			return current_project.id === project_id;
+		})[0];
+
+		const isQuantity = currentProject.project_data.isQuantity;
+		const container = currentProject.container;
+
+		const solutionBoxes = inBoxes.concat(outBoxes);
+		let updatedSolutionData = {
+			capacity: volumeMetric(solutionBoxes),
+			number_of_items: numOfItemsMetric(solutionBoxes),
+			order_score: orderMetric(solutionBoxes, container),
+			overall_score: 0,
+		};
+
+		let updatedSolutionDataWithOverall = {
+			...updatedSolutionData,
+			overall_score: overallMetric(
+				solutionBoxes,
+				container,
+				updatedSolutionData,
+				isQuantity
+			),
+		};
+
 		let new_projects = projects.map((current_project) => {
 			if (current_project.id === project_id) {
 				let new_project = {
@@ -471,7 +500,12 @@ export const UserDataProvider = ({ children }) => {
 					solutions: current_project.solutions.map(
 						(current_solution) =>
 							current_solution.id === solution_id
-								? { ...current_solution, boxes: boxes }
+								? {
+										...current_solution,
+										boxes: solutionBoxes,
+										solution_data:
+											updatedSolutionDataWithOverall,
+								  }
 								: current_solution
 					),
 				};

@@ -162,7 +162,6 @@ const isBoxesHovering = (inBoxes) => {
 	return false;
 };
 
-// TODO: check all the methods
 const validateBoxesLocation = (box, boxes, container) => {
 	const boxesWithBox = [...boxes, box];
 	if (

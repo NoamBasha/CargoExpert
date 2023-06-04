@@ -2,8 +2,6 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { Box } from "./Box.js";
 import { Container } from "./Container.js";
-import { useContext } from "react";
-import { EditContext } from "./View.js";
 import { useProject } from "../ProjectProvider.js";
 import { useEdit } from "./EditProvider.js";
 

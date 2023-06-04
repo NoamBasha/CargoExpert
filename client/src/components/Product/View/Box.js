@@ -1,7 +1,6 @@
-import { useRef, useState, useEffect, useContext } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useHelper } from "@react-three/drei";
 import { BoxHelper } from "three";
-import { EditContext } from "./View.js";
 import { useProject } from "../ProjectProvider.js";
 import { BoxText } from "./BoxText.js";
 import { useEdit } from "./EditProvider.js";
@@ -10,23 +9,24 @@ export const Box = ({ id, order, size, position, color, type, isIn }) => {
 	const { changeBoxById, changeBoxIndices, solutionId, boxIndices } =
 		useProject();
 	const { edit } = useEdit();
-	const [outlineColor, setOutlineColor] = useState("#303030");
 	const [boxColor, setBoxColor] = useState(color);
 	const eps = 0.0001;
 	const [w, h, l] = size;
 	const [x, y, z] = position;
 	const mesh = useRef();
+	const outlineColor = "#303030";
+	const boxEditColor = "#FF6C6C";
 	useHelper(mesh, BoxHelper, outlineColor);
 
 	useEffect(() => {
 		setBoxColor(color);
-	}, [solutionId]);
+	}, [solutionId, color]);
 
 	useEffect(() => {
 		if (!boxIndices.includes(id)) {
 			setBoxColor(color);
 		}
-	}, [boxIndices]);
+	}, [boxIndices, color, setBoxColor, id]);
 
 	const boxTexts = [
 		{
@@ -58,7 +58,7 @@ export const Box = ({ id, order, size, position, color, type, isIn }) => {
 	];
 
 	const toggleColor = () => {
-		boxColor === color ? setBoxColor("#FF6C6C") : setBoxColor(color);
+		boxColor === color ? setBoxColor(boxEditColor) : setBoxColor(color);
 	};
 
 	return (

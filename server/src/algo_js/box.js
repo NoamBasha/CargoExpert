@@ -1,5 +1,3 @@
-//const { Rotation } = require("./boxMotion.js");
-
 const Rotation = {
 	WHL: 0,
 	LHW: 1,
