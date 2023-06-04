@@ -21,6 +21,70 @@ const orderMetric = (solutionBoxes, container) => {
 	const zList = normalize(inBoxes.map((box) => container.length - box.FLB.z));
 
 	let score = 0;
+	for (let i = 0; i < inBoxes.length; i++) {
+		const order = orderList[i];
+		const z = zList[i];
+
+		const zOrderDistance = Math.abs(order - z);
+		const zOrderDistanceSquared = zOrderDistance ** 2;
+		const zOrderDistanceQuaded = zOrderDistanceSquared ** 2;
+
+		if (zOrderDistance < 0.2) {
+			score += zOrderDistanceQuaded;
+		} else {
+			score += zOrderDistanceSquared;
+		}
+	}
+
+	let finalScore = (1000 * score) / inBoxes.length;
+	if (finalScore > 100) {
+		finalScore = 100.0;
+	}
+	if (finalScore < 0) {
+		finalScore = 0.0;
+	}
+
+	return (100 - finalScore).toFixed(2);
+};
+
+/*
+const orderMetric = (solutionBoxes, container) => {
+	const inBoxes = solutionBoxes.filter((box) => box.isIn);
+	const orderList = normalize(inBoxes.map((box) => box.order));
+	const zList = normalize(inBoxes.map((box) => container.length - box.FLB.z));
+
+	let score = 0;
+	let scores = [];
+	for (let i = 0; i < orderList.length; i++) {
+		const order = orderList[i];
+		const z = zList[i];
+		let currentScore = 0;
+		if (order < 0.5) {
+			currentScore = 1000 * Math.abs(order - z);
+		} else {
+			currentScore = 10 * Math.abs(order - z);
+		}
+		scores.push(currentScore);
+		score += currentScore;
+	}
+	const normalizedScores = normalize(scores);
+	console.log(scores);
+	console.log(normalizedScores);
+
+	const normalizedScoresSum = scores.reduce((a, b) => a + b, 0);
+	//console.log(normalizedScoresSum / inBoxes.length);
+
+	return (normalizedScoresSum / inBoxes.length).toFixed(2);
+};
+*/
+
+/* // Original orderMetric
+const orderMetric = (solutionBoxes, container) => {
+	const inBoxes = solutionBoxes.filter((box) => box.isIn);
+	const orderList = normalize(inBoxes.map((box) => box.order));
+	const zList = normalize(inBoxes.map((box) => container.length - box.FLB.z));
+
+	let score = 0;
 	for (let i = 0; i < orderList.length; i++) {
 		const order = orderList[i];
 		const z = zList[i];
@@ -32,15 +96,16 @@ const orderMetric = (solutionBoxes, container) => {
 	}
 	return (score / inBoxes.length).toFixed(2);
 };
+*/
 
 const normalize = (numbers) => {
 	const maxNumber = Math.max(...numbers);
-	const mimNumber = Math.min(...numbers);
-	if (maxNumber === mimNumber) {
+	const minNumber = Math.min(...numbers);
+	if (maxNumber === minNumber) {
 		return numbers.map(() => 1);
 	}
 	const normalized = numbers.map(
-		(number) => (number - mimNumber) / (maxNumber - mimNumber)
+		(number) => (number - minNumber) / (maxNumber - minNumber)
 	);
 	return normalized;
 };
@@ -54,9 +119,9 @@ const overallMetric = (projectBoxes, container, solution_data, isQuantity) => {
 
 	let score = 0;
 	if (!isQuantity) {
-		score = 0.3 * numScore + 0.2 * capScore + 0.5 * (1 - ordScore);
+		score = 0.3 * numScore + 0.2 * capScore + 0.5 * ordScore;
 	} else {
-		score = 0.5 * numScore + 0.2 * capScore + 0.3 * (1 - ordScore);
+		score = 0.5 * numScore + 0.2 * capScore + 0.3 * ordScore;
 	}
 
 	return (score * 100).toFixed(2);

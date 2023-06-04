@@ -24,16 +24,30 @@ const orderMetric = (solutionBoxes, container) => {
 	);
 
 	let score = 0;
-	for (let i = 0; i < orderList.length; i++) {
+	for (let i = 0; i < inBoxes.length; i++) {
 		const order = orderList[i];
 		const z = zList[i];
-		if (order < 0.5) {
-			score += 1000 * Math.abs(order - z);
+
+		const zOrderDistance = Math.abs(order - z);
+		const zOrderDistanceSquared = zOrderDistance ** 2;
+		const zOrderDistanceQuaded = zOrderDistanceSquared ** 2;
+
+		if (zOrderDistance < 0.2) {
+			score += zOrderDistanceQuaded;
 		} else {
-			score += 10 * Math.abs(order - z);
+			score += zOrderDistanceSquared;
 		}
 	}
-	return (score / inBoxes.length).toFixed(2);
+
+	let finalScore = (1000 * score) / inBoxes.length;
+	if (finalScore > 100) {
+		finalScore = 100.0;
+	}
+	if (finalScore < 0) {
+		finalScore = 0.0;
+	}
+
+	return (100 - finalScore).toFixed(2);
 };
 
 const normalize = (numbers) => {
@@ -56,9 +70,9 @@ const overallMetric = (projectBoxes, container, solution_data, isQuantity) => {
 
 	let score = 0;
 	if (!isQuantity) {
-		score = 0.3 * numScore + 0.2 * capScore + 0.5 * (1 - ordScore);
+		score = 0.3 * numScore + 0.2 * capScore + 0.5 * ordScore;
 	} else {
-		score = 0.5 * numScore + 0.2 * capScore + 0.3 * (1 - ordScore);
+		score = 0.5 * numScore + 0.2 * capScore + 0.3 * ordScore;
 	}
 
 	return (score * 100).toFixed(2);

@@ -1,14 +1,11 @@
 const {
-  getSolutions,
-  improveSolution,
-  getSolutionsJS,
-  improveSolutionJS,
-  userInputExample,
-  createUser,
-  readUser,
-  deleteUser,
-  updateUser,
-  serverListen,
+	getSolutionsJS,
+	improveSolutionJS,
+	userInputExample,
+	createUser,
+	readUser,
+	deleteUser,
+	updateUser,
 } = require("./middlewares.js");
 
 const { mongoose } = require("./db.js");
@@ -24,20 +21,15 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.static(path.join(__dirname + "/public")));
 
 app.post("/getSolutionsJS", (req, res) => getSolutionsJS(req, res));
-
 app.post("/improveSolutionJS", (req, res) => improveSolutionJS(req, res));
-
 app.get("/userInputExample", (req, res) => userInputExample(req, res));
 
-// create User
+// User CRUD
 app.post("/createUser", (req, res) => createUser(req, res));
-// read User
 app.post("/readUser", (req, res) => readUser(req, res));
-// delete User
 app.post("/deleteUser", (req, res) => deleteUser(req, res));
-// update User
 app.post("/updateUser", (req, res) => updateUser(req, res));
 
 app.listen(port, () => {
-  console.log(`listening on port ${port}`);
+	console.log(`listening on port ${port}`);
 });

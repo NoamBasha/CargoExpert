@@ -1,11 +1,8 @@
 const { Rotation } = require("./boxMotion.js");
-
 const { getSize } = require("./box.js");
 const { updatePps } = require("./container.js");
 const { rotation, perturbation } = require("./boxMotion.js");
-
 const { orderMetric, overallMetric } = require("./metrics.js");
-
 const { handleBox } = require("./algo.js");
 
 const improve_packing = (inBoxes, outBoxes, container) => {
@@ -126,7 +123,8 @@ const getImproveBox = (box) => {
 };
 
 const improve = (data) => {
-	const numOfIterations = 1000;
+	const algorithmTime = 10000;
+
 	const container = data.container;
 	let boxes = data.boxes;
 
@@ -152,13 +150,15 @@ const improve = (data) => {
 
 	let solutionList = {};
 	let counter = 0;
-	for (let i = 0; i < numOfIterations; i++) {
+
+	const endTime = Date.now() + algorithmTime;
+	while (Date.now() < endTime) {
 		inBoxesCopy = [...inBoxes];
 		outBoxesCopy = [...outBoxes];
 
 		// For non-deterministic algorithm
-		rotation(outBoxesCopy);
-		perturbation(outBoxesCopy);
+		outBoxesCopy = rotation(outBoxesCopy);
+		outBoxesCopy = perturbation(outBoxesCopy);
 
 		let solution = improve_packing(inBoxesCopy, outBoxesCopy, container);
 		if (solution === null) {
@@ -176,15 +176,14 @@ const improve = (data) => {
 				}),
 				solution_data: solution_data,
 			};
-			counter += 1;
 		}
 	}
 
 	const bestSolution = Object.values(solutionList).sort(
-		(a, b) => b.solution_data.overall_score - a.solution_data.overall_score
+		(a, b) =>
+			b.solution_data.number_of_items - a.solution_data.number_of_items
 	)[0];
 
-	console.log(bestSolution.solution_data);
 	return bestSolution;
 };
 

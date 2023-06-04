@@ -102,7 +102,6 @@ export const UserDataProvider = ({ children }) => {
 				setCustomizedError(data.error);
 			}
 		} catch (error) {
-			//TODO: fix error message
 			setCustomizedError(error.message);
 		} finally {
 			setIsLoading(false);
@@ -228,7 +227,6 @@ export const UserDataProvider = ({ children }) => {
 			if (response.status === 200) {
 				let current_id = 0;
 				if (projects.length !== 0) {
-					//TODO: set id by first unused id?
 					current_id = projects[projects.length - 1].id + 1;
 				}
 
@@ -313,9 +311,8 @@ export const UserDataProvider = ({ children }) => {
 				);
 			}
 
+			const improvedSolution = await response.json();
 			if (response.status === 200) {
-				const improvedSolution = await response.json();
-
 				console.log(improvedSolution);
 
 				updateImprovedSolution(
@@ -332,7 +329,7 @@ export const UserDataProvider = ({ children }) => {
 				// 	projects[project.id]["0"].solution_data
 				// );
 			} else {
-				setCustomizedError(response.error);
+				setCustomizedError(improvedSolution.error);
 			}
 		} catch (error) {
 			setCustomizedError(error);
