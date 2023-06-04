@@ -4,7 +4,7 @@
 
 #testing
 uploadFile.html
-a.txt
+*.txt
 dataSet.csv
 
 #caching
