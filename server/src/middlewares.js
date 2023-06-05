@@ -6,6 +6,23 @@ let { PythonShell } = PythonShellLibrary;
 const crypto = require("crypto");
 const { User } = require("./models/data_base.js");
 
+const Paths = {
+	pythonAlgorithmPath: "/algo_py/algo.py",
+	pythonAlgorithmTwoPath: "/algo2_py/algo.py",
+	pythonImprovePath: "src\\algo_py\\improve.py",
+	downloadFilePath: "./user_input_example.csv",
+};
+
+const Errors = {
+	solutionError: "Could not get solutions",
+	improveError: "There was a problem improving your solution",
+	downloadFileError:
+		"Can't download file at this time. Please try again later",
+	emailError: "Email already exists",
+	loginError: "Invalid login credentials",
+	userError: "Invalid user",
+};
+
 const parse_response_from_algo = (result) => {
 	result_string = result[0];
 	result_string = result_string.replace(/ /g, "");
@@ -15,9 +32,7 @@ const parse_response_from_algo = (result) => {
 };
 
 const getSolutions = (req, res) => {
-	const scriptPath = path.join(__dirname, "/algo_py/algo.py");
-	console.log("Algo with Python");
-	console.log(req.body);
+	const scriptPath = path.join(__dirname, Paths.pythonAlgorithmPath);
 	options = {
 		args: [JSON.stringify(req.body)],
 		pythonOptions: ["-u"], // The '-u' tells Python to flush every time // get print results in real-time
@@ -33,19 +48,16 @@ const getSolutions = (req, res) => {
 };
 
 const getSolutionsJS = (req, res) => {
-	console.log("Algo with JS");
 	try {
 		const solutions = algo(req.body);
 		res.send(solutions);
 	} catch (err) {
-		res.status(400).json({ error: "Could not get solutions" });
+		res.status(400).json({ error: Errors.solutionError });
 	}
 };
 
 const getSolutions2 = (req, res) => {
-	const scriptPath = path.join(__dirname, "/algo2_py/algo.py");
-	console.log("Algo2 with Python");
-	console.log(req.body);
+	const scriptPath = path.join(__dirname, Paths.pythonAlgorithmTwoPath);
 	options = {
 		args: [JSON.stringify(req.body)],
 		pythonOptions: ["-u"], // The '-u' tells Python to flush every time // get print results in real-time
@@ -61,46 +73,37 @@ const getSolutions2 = (req, res) => {
 };
 
 const improveSolution = (req, res) => {
-	console.log(req.body);
-	console.log("Improving with Python");
-	//res.sendFile(path.join(__dirname, 'uploadFile.html'));
 	options = {
 		args: [JSON.stringify(req.body)],
 		pythonOptions: ["-u"], // The '-u' tells Python to flush every time // get print results in real-time
 	};
-	PythonShell.run(
-		"src\\algo_py\\improve.py",
-		options,
-		function (err, result) {
-			if (err) {
-				console.log(err);
-			} else {
-				result = parse_response_from_algo(result);
-				res.send(result);
-			}
+	PythonShell.run(Paths.pythonImprovePath, options, function (err, result) {
+		if (err) {
+			console.log(err);
+		} else {
+			result = parse_response_from_algo(result);
+			res.send(result);
 		}
-	);
+	});
 };
 
 const improveSolutionJS = (req, res) => {
-	console.log("Improving with JS");
 	try {
 		const solutions = improve(req.body);
 		res.send(solutions);
 	} catch (err) {
 		res.status(400).json({
-			error: "There was a problem improving your solution",
+			error: Errors.improveError,
 		});
 	}
 };
 
 const userInputExample = (req, res) => {
-	console.log("Downloading Example File");
 	try {
-		res.download("./user_input_example.csv");
+		res.download(Paths.downloadFilePath);
 	} catch (err) {
 		res.status(400).json({
-			error: "Can't download file at this time. Please try again later.",
+			error: Errors.downloadFileError,
 		});
 	}
 };
@@ -112,13 +115,11 @@ const createUser = async (req, res) => {
 			email: req.body.email.trim(),
 			password: sha.update(req.body.password.trim()).digest("hex"),
 		});
-		console.log("Good job!");
-
 		res.sendStatus(200);
 	} catch (err) {
 		if (err.message.includes("duplicate key error")) {
 			res.status(400).json({
-				error: "Email already exists",
+				error: Errors.emailError,
 			});
 		}
 		if (err.errors.email) {
@@ -157,7 +158,7 @@ const readUser = async (req, res) => {
 					res.status(200).json(data.projects);
 				} else {
 					res.status(400).json({
-						error: "Invalid login credentials.",
+						error: Errors.loginError,
 					});
 				}
 			}
@@ -183,8 +184,6 @@ const deleteUser = (req, res) => {
 };
 
 const updateUser = (req, res) => {
-	// const bodySize = Buffer.byteLength(JSON.stringify(req.body));
-	// console.log(`Request body size: ${bodySize} bytes`);
 	sha = crypto.createHash("sha256");
 	User.findOne(
 		{
@@ -209,10 +208,9 @@ const updateUser = (req, res) => {
 						},
 					});
 					data.save();
-					console.log("updated projects successfully!!");
 					res.sendStatus(200);
 				} else {
-					res.status(400).json({ error: "Invalid user" });
+					res.status(400).json({ error: Errors.userError });
 				}
 			}
 		}

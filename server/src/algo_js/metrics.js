@@ -1,3 +1,5 @@
+const ORDER_METRIC_THRESHOLD = 0.2;
+
 const numOfItemsMetric = (solutionBoxes) => {
 	const inBoxes = solutionBoxes.filter((box) => box.isIn);
 	return inBoxes.length;
@@ -34,13 +36,18 @@ const orderMetric = (solutionBoxes, container) => {
 		const zOrderDistanceSquared = zOrderDistance ** 2;
 		const zOrderDistanceQuaded = zOrderDistanceSquared ** 2;
 
-		if (zOrderDistance < 0.2) {
+		/* 
+		If the difference between the normalized z and order is GREATER than the threshold then
+		the punishment should be higher.
+		*/
+		if (zOrderDistance < ORDER_METRIC_THRESHOLD) {
 			score += zOrderDistanceQuaded;
 		} else {
 			score += zOrderDistanceSquared;
 		}
 	}
 
+	// Normalizing the score
 	let finalScore = (1000 * score) / inBoxes.length;
 	if (finalScore > 100) {
 		finalScore = 100.0;

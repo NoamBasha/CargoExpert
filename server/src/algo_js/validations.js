@@ -1,6 +1,7 @@
 const { getSize } = require("./box.js");
 
 const isBoxOutOfBounds = (box, container) => {
+	// Box is out of bounds if one of its sides is out of the container sides.
 	const boxSize = getSize(box);
 	const x_condiction =
 		box.center.x + 0.5 * boxSize.width > container.width ||
@@ -15,6 +16,7 @@ const isBoxOutOfBounds = (box, container) => {
 };
 
 const isTwoBoxesOverLapping = (box1, box2) => {
+	// Two boxes are overlapping iff the overlap in all three axes.
 	const box1Size = getSize(box1);
 	const box2Size = getSize(box2);
 
@@ -60,6 +62,7 @@ const isBoxOverLapping = (box, boxes) => {
 };
 
 const isBoxesHovering = (inBoxes) => {
+	// Getting the length of the intersection of both boxes on the x axis.
 	const getXs = (box, otherBox) => {
 		const boxSize = getSize(box);
 		const otherBoxSize = getSize(otherBox);
@@ -89,6 +92,7 @@ const isBoxesHovering = (inBoxes) => {
 		return max - min;
 	};
 
+	// Getting the length of the intersection of both boxes on the z axis.
 	const getZs = (box, otherBox) => {
 		const boxSize = getSize(box);
 		const otherBoxSize = getSize(otherBox);
@@ -118,6 +122,7 @@ const isBoxesHovering = (inBoxes) => {
 		return max - min;
 	};
 
+	// Returns the surface coverage of box by otherBox
 	const getCoverage = (box, otherBox) => {
 		const otherBoxSize = getSize(otherBox);
 		if (box.FLB.y !== otherBox.FLB.y + otherBoxSize.height) {
@@ -130,6 +135,7 @@ const isBoxesHovering = (inBoxes) => {
 		return x_intersection * z_intersection;
 	};
 
+	// For each box going over all of the other boxes and check if it is covered completely.
 	for (let i = 0; i < inBoxes.length; i++) {
 		const box = inBoxes[i];
 		const boxSize = getSize(box);

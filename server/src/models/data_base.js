@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+const EMAIL_VALIDATION_ERROR = "Email should be a valid email address";
+
 const BoxSchema = new mongoose.Schema({
 	id: { type: Number, required: true },
 	order: { type: Number, required: true },
@@ -50,7 +52,7 @@ const UserSchema = new mongoose.Schema({
 					const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 					return emailRegex.test(email);
 				},
-				message: "Email should be a valid email address",
+				message: EMAIL_VALIDATION_ERROR,
 			},
 		],
 	},
@@ -67,22 +69,3 @@ const Box = mongoose.model("Box", BoxSchema);
 const Solution = mongoose.model("Solution", SolutionSchema);
 
 module.exports = { User, Project, Box, Solution };
-
-/**
- * 1. set true to some fields
- * 2. add name to project and solution schemas
- * 3. mongoose validation for email and password:
- * 		check password not empty
- * 		check uniqueness for email
- * 		check email validity
- * 4. lowercase email - add field to UserSchema.email 'lowercase: true'.
- *
- * algo:
- * 1. evaluate each solution by metrica
- * 2. to accept solutions with less than 100% success
- * 3. need to add this functionality:
- *      given a list of boxes where each box is signed
- *      with bit if it is in the container or not, load
- *      the container as much as possible to get the best
- *      results
- */

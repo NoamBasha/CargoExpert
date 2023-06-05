@@ -29,31 +29,32 @@ const updatePps = (box, p, pp, container) => {
 			y: p.y + boxSize.height,
 		});
 	}
+
 	if (p.dir == 1) {
 		if (p.x + boxSize.width < container.width) {
 			pp.add({
 				...p,
 				x: p.x + boxSize.width,
-			}); // b_FRB
+			});
 		}
 		if (p.z + boxSize.length < container.length) {
 			pp.add({
 				...p,
 				z: p.z + boxSize.length,
-			}); // b_RLB
+			});
 		}
 	} else {
 		if (p.x - boxSize.width > 0) {
 			pp.add({
 				...p,
 				x: p.x - boxSize.width,
-			}); // b_FLB
+			});
 		}
 		if (p.z + boxSize.length < container.length) {
 			pp.add({
 				...p,
 				z: p.z + boxSize.length,
-			}); // b_RRB
+			});
 		}
 	}
 };

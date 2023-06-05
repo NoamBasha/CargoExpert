@@ -5,7 +5,9 @@ const { rotation, perturbation } = require("./boxMotion.js");
 const { orderMetric, overallMetric } = require("./metrics.js");
 const { handleBox } = require("./algo.js");
 
-const improve_packing = (inBoxes, outBoxes, container) => {
+const IMPROVE_TIME = 10000;
+
+const improvePacking = (inBoxes, outBoxes, container) => {
 	let pp = new Set([
 		{
 			x: 0,
@@ -31,9 +33,8 @@ const improve_packing = (inBoxes, outBoxes, container) => {
 		overall_score: 0,
 	};
 
-	// Finding pps from in_boxes.
+	// Finding pps from inBoxes.
 	inBoxes.forEach((box) => {
-		// Placing the box in it right position
 		let pLeft = {
 			...box.FLB,
 			dir: 1,
@@ -52,7 +53,7 @@ const improve_packing = (inBoxes, outBoxes, container) => {
 		solution_data["capacity"] += box.volume;
 	});
 
-	// Adding each boxes in out_boxes to the container
+	// Adding each box in outBoxes to the container
 	outBoxes.forEach((box) => {
 		handleBox(
 			box,
@@ -123,8 +124,6 @@ const getImproveBox = (box) => {
 };
 
 const improve = (data) => {
-	const algorithmTime = 10000;
-
 	const container = data.container;
 	let boxes = data.boxes;
 
@@ -151,17 +150,16 @@ const improve = (data) => {
 	let solutionList = {};
 	let counter = 0;
 
-	const endTime = Date.now() + algorithmTime;
+	const endTime = Date.now() + IMPROVE_TIME;
 	while (Date.now() < endTime) {
 		counter += 1;
 		inBoxesCopy = [...inBoxes];
 		outBoxesCopy = [...outBoxes];
 
-		// For non-deterministic algorithm
 		outBoxesCopy = rotation(outBoxesCopy);
 		outBoxesCopy = perturbation(outBoxesCopy);
 
-		let solution = improve_packing(inBoxesCopy, outBoxesCopy, container);
+		let solution = improvePacking(inBoxesCopy, outBoxesCopy, container);
 		if (solution === null) {
 			continue;
 		}
@@ -180,8 +178,7 @@ const improve = (data) => {
 		}
 	}
 
-	console.log(Object.values(solutionList).length);
-
+	// The best solution is the one with the most boxes in it.
 	const bestSolution = Object.values(solutionList).sort(
 		(a, b) =>
 			b.solution_data.number_of_items - a.solution_data.number_of_items

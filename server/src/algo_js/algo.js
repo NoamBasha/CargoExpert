@@ -8,7 +8,6 @@ const getBestPoint = (pp, box, container, solutionBoxes) => {
 	let bestScore = [0, 0];
 
 	pp.forEach((p) => {
-		// Now the box has and position and center.
 		let score = getScore(box, p, solutionBoxes, container);
 		if (
 			score[0] > bestScore[0] ||
@@ -69,7 +68,12 @@ const handleBox = (
 	);
 };
 
-const constructive_packing = (boxes, container, isQuantity) => {
+const constructivePacking = (boxes, container, isQuantity) => {
+	/*
+	Initialize potential points as the FLB and FRB of the container.
+	Each point has a direction that indicates which corner of a box should be at the point.
+	1 = FLB, -1 = FRB.
+	*/
 	let pp = new Set([
 		{
 			x: 0,
@@ -95,6 +99,7 @@ const constructive_packing = (boxes, container, isQuantity) => {
 		overall_score: 0,
 	};
 
+	// For each box, put it in the best point possible.
 	boxes.forEach((box) => {
 		handleBox(
 			box,
@@ -107,6 +112,7 @@ const constructive_packing = (boxes, container, isQuantity) => {
 		);
 	});
 
+	// For each box which is not put in the solution, try and put it again.
 	retryList.forEach((box) => {
 		handleBox(
 			box,
@@ -130,7 +136,7 @@ const constructive_packing = (boxes, container, isQuantity) => {
 
 const handleData = (data) => {
 	const isQuality = data.project_data.isQuality;
-	const algorithmTime = isQuality ? 60000 : 15000;
+	const algorithmTime = isQuality ? 60000 : 15000; // miliseconds
 	const isQuantity = data.project_data.isQuantity;
 	const container = data.container;
 	const boxes = data.boxes;
@@ -139,6 +145,7 @@ const handleData = (data) => {
 		return initBox(box);
 	});
 
+	// Sort the boxes by descending order by the "order" property.
 	initBoxes.sort((a, b) => (a.order > b.order ? -1 : 1));
 	return [initBoxes, container, isQuantity, algorithmTime];
 };
@@ -149,9 +156,10 @@ const getSolutions = (algorithmTime, boxes, container, isQuantity) => {
 	const endTime = Date.now() + algorithmTime;
 	while (Date.now() < endTime) {
 		let boxesCopy = [...boxes];
+		// For non-deterministic algorithm - rotating and perturbating the boxes.
 		boxesCopy = rotation(boxesCopy);
 		boxesCopy = perturbation(boxesCopy);
-		let solution = constructive_packing(boxesCopy, container, isQuantity);
+		let solution = constructivePacking(boxesCopy, container, isQuantity);
 		if (solution === null) {
 			continue;
 		}
