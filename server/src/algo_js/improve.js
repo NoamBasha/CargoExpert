@@ -152,7 +152,6 @@ const improve = (data) => {
 
 	const endTime = Date.now() + IMPROVE_TIME;
 	while (Date.now() < endTime) {
-		counter += 1;
 		inBoxesCopy = [...inBoxes];
 		outBoxesCopy = [...outBoxes];
 
@@ -175,6 +174,7 @@ const improve = (data) => {
 				}),
 				solution_data: solution_data,
 			};
+			counter += 1;
 		}
 	}
 

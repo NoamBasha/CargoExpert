@@ -11,7 +11,6 @@ const DEV = true;
 const UserDataContext = createContext("");
 
 export const UserDataProvider = ({ children }) => {
-	/* #region State Variables */
 	const [open, setOpen] = useState(false);
 
 	const [email, setEmail] = useState("");
@@ -26,9 +25,6 @@ export const UserDataProvider = ({ children }) => {
 		setOpen(true);
 	};
 
-	/* #endregion */
-
-	/* #region User CRUD */
 	const createUser = async ({ email, password, setIsRegistered }) => {
 		setError("");
 		setIsLoading(true);
@@ -145,47 +141,46 @@ export const UserDataProvider = ({ children }) => {
 		}
 	};
 
-	// const deleteUser = async ({ email, password }) => {
-	// 	setError("");
-	// 	setIsLoading(true);
-	// 	try {
-	// 		const requestOptions = {
-	// 			method: "POST",
-	// 			headers: { "Content-Type": "application/json" },
-	// 			body: JSON.stringify({
-	// 				email: email,
-	// 				password: password,
-	// 			}),
-	// 		};
-	// 		let response;
+	/*
+	const deleteUser = async ({ email, password }) => {
+		setError("");
+		setIsLoading(true);
+		try {
+			const requestOptions = {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					email: email,
+					password: password,
+				}),
+			};
+			let response;
 
-	// 		if (DEV) {
-	// 			response = await fetch(
-	// 				"http://localhost:1337/deleteUser",
-	// 				requestOptions
-	// 			);
-	// 		} else {
-	// 			response = await fetch(
-	// 				"https://cargoexpert.onrender.com/deleteUser",
-	// 				requestOptions
-	// 			);
-	// 		}
+			if (DEV) {
+				response = await fetch(
+					"http://localhost:1337/deleteUser",
+					requestOptions
+				);
+			} else {
+				response = await fetch(
+					"https://cargoexpert.onrender.com/deleteUser",
+					requestOptions
+				);
+			}
 
-	// 		if (response.status === 200) {
-	// 			console.log("User deleted successfully");
-	// 		} else {
-	// 			throw new Error(`${response.status} ${response.statusText}`);
-	// 		}
-	// 	} catch (error) {
-	// 		setCustomizedError(error);
-	// 	} finally {
-	// 		setIsLoading(false);
-	// 	}
-	// };
+			if (response.status === 200) {
+				console.log("User deleted successfully");
+			} else {
+				throw new Error(`${response.status} ${response.statusText}`);
+			}
+		} catch (error) {
+			setCustomizedError(error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+	*/
 
-	/* #endregion */
-
-	/* #region Project Functions */
 	const addProject = async (project) => {
 		let container_data = {
 			width: project.container[0],
@@ -270,9 +265,6 @@ export const UserDataProvider = ({ children }) => {
 		updateUser(new_projects);
 	};
 
-	/* #endregion */
-
-	/* #region Solution Functions */
 	const improveSolution = async (projectId, solutionId) => {
 		const project = projects.find((proj) => proj.id === projectId);
 		let container_data = {
@@ -321,13 +313,6 @@ export const UserDataProvider = ({ children }) => {
 					improvedSolution.boxes,
 					improvedSolution.solution_data
 				);
-
-				// updateImprovedSolution(
-				// 	project.id,
-				// 	solutionId,
-				// 	project.boxes,
-				// 	projects[project.id]["0"].solution_data
-				// );
 			} else {
 				setCustomizedError(improvedSolution.error);
 			}
@@ -337,6 +322,7 @@ export const UserDataProvider = ({ children }) => {
 			setIsLoading(false);
 		}
 	};
+
 	const duplicateSolution = (projectId, solutionId) => {
 		const removeIds = (obj) => {
 			if (Array.isArray(obj)) {
@@ -365,14 +351,6 @@ export const UserDataProvider = ({ children }) => {
 			}
 		}
 
-		// const existingIds = new Set(
-		// 	project.solutions.map((solution) => solution.id)
-		// );
-		// let missingId = 0;
-		// while (existingIds.has(missingId)) {
-		// 	missingId++;
-		// }
-
 		let originalSolution;
 		for (let i = 0; i < project.solutions.length; i++) {
 			if (project.solutions[i].id === solutionId) {
@@ -382,12 +360,6 @@ export const UserDataProvider = ({ children }) => {
 		}
 
 		const originalSolutionNoIds = removeIds(originalSolution);
-
-		// const newSolution = {
-		// 	...originalSolutionNoIds,
-		// 	id: missingId,
-		// 	name: `${originalSolution.name} duplicated`,
-		// };
 
 		const newSolution = {
 			...originalSolutionNoIds,
@@ -540,15 +512,12 @@ export const UserDataProvider = ({ children }) => {
 			updateProject(newProject);
 		};
 	};
-	/* #endregion */
 
-	/* #region Utilities */
 	const resetIds = (list) => {
 		return list.map((item, index) => {
 			return { ...item, id: index };
 		});
 	};
-	/* #endregion */
 
 	return (
 		<UserDataContext.Provider

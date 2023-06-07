@@ -97,11 +97,11 @@ export const SolutionsTable = ({ title }) => {
 	};
 
 	const sortByColumn = (column, isAscending, setIsAscending) => {
+		setIsAscending((prevIsAscending) => !prevIsAscending);
 		const sorted = [...tableData].sort((a, b) => {
 			const valueA = a[column];
 			const valueB = b[column];
 
-			setIsAscending((prevIsAscending) => !prevIsAscending);
 			if (typeof valueA === "string" && typeof valueB === "string") {
 				return isAscending
 					? valueA.localeCompare(valueB)
