@@ -28,7 +28,7 @@ export const BoxesTable = ({ boxes, selectedIds, setSelecetedIds }) => {
 	);
 
 	return (
-		<div style={{ width: "70%" }}>
+		<div style={{ width: "70%", height: "500px" }}>
 			<DataGrid
 				rows={rows}
 				columns={columns}
