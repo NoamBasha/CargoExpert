@@ -1,16 +1,33 @@
 const ORDER_METRIC_THRESHOLD = 0.2;
 
 const numOfItemsMetric = (solutionBoxes) => {
+	if (!solutionBoxes || solutionBoxes.length === 0) {
+		return 0;
+	}
 	const inBoxes = solutionBoxes.filter((box) => box.isIn);
 	return inBoxes.length;
 };
 
 const volumeMetric = (solutionBoxes) => {
+	if (!solutionBoxes || solutionBoxes.length === 0) {
+		return 0;
+	}
+
 	let volumes_sum = 0;
 	const inBoxes = solutionBoxes.filter((box) => box.isIn);
+
+	const notValidVolumes = inBoxes.filter((box) => {
+		return box.size[0] * box.size[1] * box.size[2] <= 0;
+	});
+
+	if (notValidVolumes.length !== 0) {
+		return 0;
+	}
+
 	const volumes = inBoxes.map(
 		(box) => box.size[0] * box.size[1] * box.size[2]
 	);
+
 	for (const volume of volumes) {
 		volumes_sum += volume;
 	}
@@ -18,6 +35,14 @@ const volumeMetric = (solutionBoxes) => {
 };
 
 const orderMetric = (solutionBoxes, container) => {
+	if (!solutionBoxes || solutionBoxes.length === 0) {
+		return 0;
+	}
+
+	if (!container || Object.keys(container).length !== 3) {
+		return 0;
+	}
+
 	const inBoxes = solutionBoxes.filter((box) => box.isIn);
 
 	if (inBoxes.length === 0) {
@@ -80,6 +105,10 @@ const orderMetric = (solutionBoxes, container) => {
 */
 
 const normalize = (numbers) => {
+	if (!numbers || numbers.length === 0) {
+		return [];
+	}
+
 	const maxNumber = Math.max(...numbers);
 	const minNumber = Math.min(...numbers);
 	if (maxNumber === minNumber) {
@@ -92,6 +121,18 @@ const normalize = (numbers) => {
 };
 
 const overallMetric = (projectBoxes, container, solution_data, isQuantity) => {
+	if (!projectBoxes || projectBoxes.length === 0) {
+		return 0;
+	}
+
+	if (!container || Object.keys(container).length !== 3) {
+		return 0;
+	}
+
+	if (!solution_data) {
+		return 0;
+	}
+
 	const containerVolume =
 		container.width * container.height * container.length;
 	const numScore = solution_data.number_of_items / projectBoxes.length;

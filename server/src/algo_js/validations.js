@@ -1,6 +1,10 @@
 const { getSize } = require("./box.js");
 
 const isBoxOutOfBounds = (box, container) => {
+	if (!box || !container || Object.keys(container).length !== 3) {
+		return true;
+	}
+
 	// Box is out of bounds if one of its sides is out of the container sides.
 	const boxSize = getSize(box);
 	const x_condiction =
@@ -16,6 +20,10 @@ const isBoxOutOfBounds = (box, container) => {
 };
 
 const isTwoBoxesOverLapping = (box1, box2) => {
+	if (!box1 || !box2) {
+		return true;
+	}
+
 	// Two boxes are overlapping iff the overlap in all three axes.
 	const box1Size = getSize(box1);
 	const box2Size = getSize(box2);

@@ -1,6 +1,10 @@
 // returns true if there is a box that is out of bounds
 // return false if everything is ok
 const isBoxesOutOfBounds = (inBoxes, container) => {
+	if (!inBoxes || !container || container.length !== 3) {
+		return true;
+	}
+
 	const isOutOfBounds = inBoxes.some((box) => {
 		const x_condiction =
 			box.position[0] + 0.5 * box.size[0] > container[0] ||
@@ -18,6 +22,10 @@ const isBoxesOutOfBounds = (inBoxes, container) => {
 
 // return true if two boxes are overlapping
 const isTwoBoxesOverLapping = (box1, box2) => {
+	if (!box1 || !box2) {
+		return true;
+	}
+
 	const box1xMin = box1.position[0] - box1.size[0] / 2;
 	const box1xMax = box1.position[0] + box1.size[0] / 2;
 	const box2xMin = box2.position[0] - box2.size[0] / 2;
@@ -164,5 +172,6 @@ const isBoxesHovering = (inBoxes) => {
 module.exports = {
 	isBoxesOutOfBounds,
 	isBoxesOverlapping,
+	isTwoBoxesOverLapping,
 	isBoxesHovering,
 };

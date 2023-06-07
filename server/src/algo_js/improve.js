@@ -107,9 +107,9 @@ const initImproveBox = (box) => {
 			z: box.position[2],
 		},
 		FLB: {
-			x: box.position[0] - 0.5 * box.width,
-			y: box.position[1] - 0.5 * box.height,
-			z: box.position[2] - 0.5 * box.length,
+			x: box.position[0] - 0.5 * box.size[0],
+			y: box.position[1] - 0.5 * box.size[1],
+			z: box.position[2] - 0.5 * box.size[2],
 		},
 	};
 };
@@ -124,6 +124,8 @@ const getImproveBox = (box) => {
 };
 
 const improve = (data) => {
+	console.log(data);
+
 	const container = data.container;
 	let boxes = data.boxes;
 
