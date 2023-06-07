@@ -12,7 +12,16 @@ Welcome to the Cargo Expert repository! This project aims to provide a comprehen
 
 ## Features
 
-Please provide some information about the features and functionalities of Cargo Expert. What are the key aspects that make it stand out from other similar solutions? Feel free to include bullet points or a detailed description.
+## Features
+
+Cargo Expert offers several key features:
+
+- **Efficient Cargo Loading:** The main goal of Cargo Expert is to help load cargo while satisfying multiple constraints, such as volume, number of items, and the most critical one - unloading order. Since the unpacking order has great implications regarding time and money, we strongly aimed our algorithm to generate better results where the unpacking order is relatively preserved.
+
+- **Container Improvement:** Cargo Expert provides functionality to improve an existing container. Whether you have already packed half of your truck or you want to guarantee that certain boxes will be placed at specific points, Cargo Expert has got you covered. You can set boxes at fixed locations and ask for improvements right away.
+
+- **User-Friendly Experience:** Cargo Expert is designed to be simple, convenient, and user-friendly. We strive to provide an accessible solution that is both convenient and useful, making the cargo management process as smooth as possible.
+
 
 ## Installation
 
