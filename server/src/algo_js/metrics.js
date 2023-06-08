@@ -51,6 +51,10 @@ const orderMetric = (solutionBoxes, container) => {
 
 	const orderList = normalize(inBoxes.map((box) => box.order));
 	const zList = normalize(inBoxes.map((box) => container.length - box.FLB.z));
+	// const zList = normalizeByContainer(
+	// 	inBoxes.map((box) => box.FLB.z),
+	// 	container
+	// );
 
 	let score = 0;
 	for (let i = 0; i < inBoxes.length; i++) {
@@ -103,6 +107,14 @@ const orderMetric = (solutionBoxes, container) => {
 	return (score / inBoxes.length).toFixed(2);
 };
 */
+
+// const normalizeByContainer = (numbers, container) => {
+// 	if (!numbers || numbers.length === 0) {
+// 		return [];
+// 	}
+// 	const normalized = numbers.map((number) => number / container.length);
+// 	return normalized;
+// };
 
 const normalize = (numbers) => {
 	if (!numbers || numbers.length === 0) {

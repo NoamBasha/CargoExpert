@@ -22,6 +22,7 @@ export const EditBoxes = ({
 	setBoxes,
 	handleAddProject,
 	isLoading,
+	setCustomizedError,
 }) => {
 	const [selectedIds, setSelecetedIds] = useState([]);
 
@@ -52,6 +53,8 @@ export const EditBoxes = ({
 					boxes={boxes}
 					selectedIds={selectedIds}
 					editBox={editSelectedIds}
+					setCustomizedError={setCustomizedError}
+					setSelecetedIds={setSelecetedIds}
 				/>
 			</div>
 
@@ -59,7 +62,6 @@ export const EditBoxes = ({
 				<Button
 					className="mx-4"
 					onClick={() => {
-						console.log("Backed");
 						setNewStage(-1);
 					}}
 				>

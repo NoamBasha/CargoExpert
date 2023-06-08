@@ -130,9 +130,10 @@ export const UserDataProvider = ({ children }) => {
 				);
 			}
 			if (response.status === 200) {
-				console.log("User updated successfully");
+				//console.log("User updated successfully");
 			} else {
-				throw new Error(`${response.status} ${response.statusText}`);
+				//console.log("User NOT updated successfully");
+				//throw new Error(`${response.status} ${response.statusText}`);
 			}
 		} catch (error) {
 			setCustomizedError(error.message);
@@ -193,8 +194,6 @@ export const UserDataProvider = ({ children }) => {
 			container: container_data,
 			project_data: project.project_data,
 		};
-
-		console.log(container_and_boxes);
 
 		setError("");
 		setIsLoading(true);
@@ -279,8 +278,6 @@ export const UserDataProvider = ({ children }) => {
 			container: container_data,
 		};
 
-		console.log(container_and_boxes);
-
 		setError("");
 		setIsLoading(true);
 		try {
@@ -305,8 +302,6 @@ export const UserDataProvider = ({ children }) => {
 
 			const improvedSolution = await response.json();
 			if (response.status === 200) {
-				console.log(improvedSolution);
-
 				updateImprovedSolution(
 					project.id,
 					solutionId,

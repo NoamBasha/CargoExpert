@@ -63,7 +63,6 @@ const isBoxesOverlapping = (inBoxes) => {
 	for (let i = 0; i < inBoxes.length; i++) {
 		for (let j = i + 1; j < inBoxes.length; j++) {
 			if (isTwoBoxesOverLapping(inBoxes[i], inBoxes[j])) {
-				console.log(inBoxes[i], inBoxes[j]);
 				return true;
 			}
 		}
@@ -162,7 +161,6 @@ const isBoxesHovering = (inBoxes) => {
 			overall_coverage += current_coverage;
 		}
 		if (overall_coverage !== area) {
-			console.log(box.order, area, overall_coverage);
 			return true;
 		}
 	}

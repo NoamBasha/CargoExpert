@@ -119,7 +119,7 @@ export const EditPanel = ({ maxStepSize }) => {
 						Units:
 					</p>
 					<Slider
-						defaultValue={unitsStepSize}
+						value={unitsStepSize}
 						step={1}
 						marks
 						min={0}
@@ -137,7 +137,7 @@ export const EditPanel = ({ maxStepSize }) => {
 						Tenths:
 					</p>
 					<Slider
-						defaultValue={tenthsStepSize}
+						value={tenthsStepSize}
 						step={0.1}
 						marks
 						min={0}

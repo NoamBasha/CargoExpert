@@ -147,32 +147,32 @@ describe("orderMetric", () => {
 		expect(result).toBe(0);
 	});
 
-	test("returns 0.00 when no inBoxes are present", () => {
+	test("returns 0 when no inBoxes are present", () => {
 		const solutionBoxes = [
-			{ isIn: false, order: 2, position: [0, 0, 0], size: [1, 1, 1] },
-			{ isIn: false, order: 1, position: [0, 0, 0], size: [1, 1, 1] },
+			{ isIn: 0, order: 2, position: [0, 0, 0], size: [1, 1, 1] },
+			{ isIn: 0, order: 1, position: [0, 0, 0], size: [1, 1, 1] },
 		];
 		const container = [{ length: 10 }];
 		const result = orderMetric(solutionBoxes, container);
 		expect(result).toBe(0);
 	});
 
-	test("returns the correct order metric score", () => {
+	test("returns a correct order metric score", () => {
 		const solutionBoxes = [
 			{
-				isIn: true,
+				isIn: 1,
 				order: 3,
 				position: [0.5, 0.5, 1.5],
 				size: [1, 1, 1],
 			},
 			{
-				isIn: true,
+				isIn: 1,
 				order: 2,
 				position: [0.5, 0.5, 2.5],
 				size: [1, 1, 1],
 			},
 			{
-				isIn: true,
+				isIn: 1,
 				order: 1,
 				position: [0.5, 0.5, 3.5],
 				size: [1, 1, 1],
@@ -260,7 +260,7 @@ describe("overallMetric", () => {
 			capacity: 100,
 			order_score: 80,
 		};
-		const isQuantity = false;
+		const isQuantity = 0;
 		const result = overallMetric(
 			projectBoxes,
 			container,
@@ -278,7 +278,7 @@ describe("overallMetric", () => {
 			capacity: 100,
 			order_score: 80,
 		};
-		const isQuantity = false;
+		const isQuantity = 0;
 		const result = overallMetric(
 			projectBoxes,
 			container,
@@ -310,7 +310,7 @@ describe("overallMetric", () => {
 		const projectBoxes = [{ size: [1, 1, 1] }];
 		const container = [10, 10, 10];
 		const solution_data = undefined;
-		const isQuantity = false;
+		const isQuantity = 0;
 		const result = overallMetric(
 			projectBoxes,
 			container,

@@ -85,7 +85,6 @@ export const BoxesViewTableImproved = ({ isEdit, boxes, toggleIsIn, isIn }) => {
 											<TableCell>
 												<Button
 													onClick={() => {
-														console.log(row.id);
 														toggleIsIn(row.id);
 													}}
 												>

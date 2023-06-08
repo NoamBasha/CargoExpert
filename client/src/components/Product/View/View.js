@@ -122,7 +122,6 @@ export const View = () => {
 	};
 
 	const handleSaveSolution = () => {
-		console.log("Saving solution");
 		saveSolution();
 	};
 

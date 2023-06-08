@@ -14,14 +14,14 @@ describe("isBoxesOutOfBounds", () => {
 		expect(result).toBe(false);
 	});
 
-	test("returns false for undefined inBoxes", () => {
+	test("returns true for undefined inBoxes", () => {
 		const inBoxes = undefined;
 		const container = [10, 10, 10];
 		const result = isBoxesOutOfBounds(inBoxes, container);
 		expect(result).toBe(true);
 	});
 
-	test("returns false for undefined container", () => {
+	test("returns true for undefined container", () => {
 		const inBoxes = [{ position: [2, 2, 2], size: [1, 1, 1] }];
 		const container = undefined;
 		const result = isBoxesOutOfBounds(inBoxes, container);

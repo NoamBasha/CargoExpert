@@ -41,6 +41,9 @@ const validateBox = (box) => {
 	) {
 		return false;
 	}
+	if (!box.type || box.type.trim().length === 0) {
+		return false;
+	}
 	return true;
 };
 
@@ -164,6 +167,7 @@ export const NewProject = () => {
 						setBoxes={setBoxes}
 						handleAddProject={handleAddProject}
 						isLoading={isLoading}
+						setCustomizedError={setCustomizedError}
 					/>
 				) : null}
 				<Modal

@@ -34,12 +34,11 @@ export const FileUpload = ({
 			for (let i = 0; i < data.length; i++) {
 				let numberic_object = {};
 				for (let property in data[i]) {
-					if (!isNaN(data[i][property])) {
-						numberic_object[property] = parseFloat(
-							data[i][property]
-						);
+					const value = data[i][property];
+					if (value && value.trim().length !== 0 && !isNaN(value)) {
+						numberic_object[property] = parseFloat(value);
 					} else {
-						numberic_object[property] = data[i][property];
+						numberic_object[property] = value.trim();
 					}
 				}
 				numberic_object = {
@@ -107,12 +106,11 @@ export const FileUpload = ({
 					"px-4 text-secondary d-flex align-items-center w-100"
 				}
 				acceptedFiles={["text/csv"]}
+				dropzoneParagraphClass={fileName ? "fw-bold" : ""}
 				dropzoneText={
-					fileName ? (
-						<strong>{fileName} was uploaded successfully</strong>
-					) : (
-						`Drop a CSV file or click to upload your file!`
-					)
+					fileName
+						? `${fileName} was uploaded successfully`
+						: `Drop a CSV file or click to upload your file!`
 				}
 				filesLimit={1}
 				maxFileSize={5000000}

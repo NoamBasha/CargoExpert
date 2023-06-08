@@ -1,7 +1,22 @@
 import { useState, useEffect } from "react";
 import { Button, TextField } from "@mui/material";
 
-export const BoxForm = ({ setBoxes, boxes, selectedIds, editBox }) => {
+const formErrors = {
+	orderError: "There is a problem with the box's order",
+	widthError: "There is a problem with the box's width",
+	heightError: "There is a problem with the box's height",
+	lengthError: "There is a problem with the box's length",
+	typeError: "There is a problem with the box's type",
+};
+
+export const BoxForm = ({
+	setBoxes,
+	boxes,
+	selectedIds,
+	editBox,
+	setCustomizedError,
+	setSelecetedIds,
+}) => {
 	const [formOrder, setFormOrder] = useState("");
 	const [formWidth, setFormWidth] = useState("");
 	const [formHeight, setFormHeight] = useState("");
@@ -29,8 +44,38 @@ export const BoxForm = ({ setBoxes, boxes, selectedIds, editBox }) => {
 		}
 	}, [selectedIds, boxes]);
 
+	const isFormValid = () => {
+		if (!formOrder || formOrder <= 0) {
+			setCustomizedError(formErrors.orderError);
+			return false;
+		}
+		if (!formWidth || formWidth <= 0) {
+			setCustomizedError(formErrors.widthError);
+			return false;
+		}
+		if (!formHeight || formHeight <= 0) {
+			setCustomizedError(formErrors.heightError);
+			return false;
+		}
+		if (!formLength || formLength <= 0) {
+			setCustomizedError(formErrors.lengthError);
+			return false;
+		}
+		if (!formType || formType.trim().length <= 0) {
+			setCustomizedError(formErrors.typeError);
+			return false;
+		}
+		return true;
+	};
+
 	const handleEditBox = (e) => {
+		if (!selectedIds || selectedIds.length === 0) {
+			return;
+		}
 		e.preventDefault();
+		if (!isFormValid()) {
+			return;
+		}
 		editBox({
 			order: formOrder,
 			width: formWidth,
@@ -45,9 +90,13 @@ export const BoxForm = ({ setBoxes, boxes, selectedIds, editBox }) => {
 			return !selectedIds.includes(box.id);
 		});
 		setBoxes(newBoxes);
+		setSelecetedIds([]);
 	};
 
 	const addBox = () => {
+		if (!isFormValid()) {
+			return;
+		}
 		const existingIds = new Set(boxes.map((box) => box.id));
 		let missingId = 0;
 		while (existingIds.has(missingId)) {
@@ -80,8 +129,13 @@ export const BoxForm = ({ setBoxes, boxes, selectedIds, editBox }) => {
 				type="number"
 				id="order"
 				value={formOrder}
+				placeholder="1"
 				onChange={(e) => {
-					setFormOrder(parseFloat(e.target.value));
+					if (!e.target.value || isNaN(e.target.value)) {
+						setFormOrder("");
+					} else {
+						setFormOrder(parseFloat(e.target.value));
+					}
 				}}
 			/>
 			<label>Width:</label>
@@ -90,8 +144,13 @@ export const BoxForm = ({ setBoxes, boxes, selectedIds, editBox }) => {
 				type="number"
 				id="width"
 				value={formWidth}
+				placeholder="1"
 				onChange={(e) => {
-					setFormWidth(parseFloat(e.target.value));
+					if (!e.target.value || isNaN(e.target.value)) {
+						setFormWidth("");
+					} else {
+						setFormWidth(parseFloat(e.target.value));
+					}
 				}}
 			/>
 			<label>Height:</label>
@@ -100,8 +159,13 @@ export const BoxForm = ({ setBoxes, boxes, selectedIds, editBox }) => {
 				type="number"
 				id="height"
 				value={formHeight}
+				placeholder="1"
 				onChange={(e) => {
-					setFormHeight(parseFloat(e.target.value));
+					if (!e.target.value || isNaN(e.target.value)) {
+						setFormHeight("");
+					} else {
+						setFormHeight(parseFloat(e.target.value));
+					}
 				}}
 			/>
 			<label>Length:</label>
@@ -110,8 +174,13 @@ export const BoxForm = ({ setBoxes, boxes, selectedIds, editBox }) => {
 				type="number"
 				id="length"
 				value={formLength}
+				placeholder="1"
 				onChange={(e) => {
-					setFormLength(parseFloat(e.target.value));
+					if (!e.target.value || isNaN(e.target.value)) {
+						setFormLength("");
+					} else {
+						setFormLength(parseFloat(e.target.value));
+					}
 				}}
 			/>
 			<label>Type:</label>
@@ -120,8 +189,13 @@ export const BoxForm = ({ setBoxes, boxes, selectedIds, editBox }) => {
 				type="text"
 				id="type"
 				value={formType}
+				placeholder="Box 1"
 				onChange={(e) => {
-					setFormType(e.target.value);
+					if (!e.target.value || e.target.value.trim().length === 0) {
+						setFormType("");
+					} else {
+						setFormType(e.target.value);
+					}
 				}}
 			/>
 
