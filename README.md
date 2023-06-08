@@ -59,7 +59,19 @@ If you encounter any issues or have any questions or suggestions regarding Cargo
 
 ## Acknowledgments
 
-If there are any individuals, organizations, or external resources that you would like to acknowledge, please include them here.
+We would like to acknowledge the following individuals, organizations, and resources for their contributions and support:
+
+- [ChatGPT](https://openai.com/research/chatgpt/): The powerful language model that assists in generating responses and providing information.
+
+- [Google](https://www.google.com/): For the wealth of knowledge and resources that have aided in the development of Cargo Expert.
+
+- Mikele Gajda
+- Alessio Trivella
+- Renata Mansini
+- David Pisinger
+
+Thank you to all the individuals and organizations who have played a part in making Cargo Expert possible.
+
 
 ---
 
