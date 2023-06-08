@@ -191,6 +191,10 @@ export const SolutionsTable = ({ title }) => {
 								<TableRow key={row.id}>
 									<TableCell>
 										<Button
+											style={{
+												justifyContent: "flex-start",
+												textAlign: "left",
+											}}
 											onClick={() => {
 												handleClick(row.id);
 											}}
