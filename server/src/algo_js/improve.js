@@ -6,6 +6,7 @@ const { orderMetric, overallMetric } = require("./metrics.js");
 const { handleBox } = require("./algo.js");
 
 const IMPROVE_TIME = 10000;
+const IMPROVE_MAX_ITERATIONS = 1000000;
 
 const improvePacking = (inBoxes, outBoxes, container) => {
 	let pp = new Set([
@@ -177,6 +178,9 @@ const improve = (data) => {
 				solution_data: solution_data,
 			};
 			counter += 1;
+		}
+		if (counter === IMPROVE_MAX_ITERATIONS) {
+			break;
 		}
 	}
 

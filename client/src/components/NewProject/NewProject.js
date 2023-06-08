@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { Modal, Box, Typography, LinearProgress } from "@mui/material";
 
 const CREATE_PROJECT_MODAL_TEXT =
-	"We are creating your project, it might take a few minutes.";
+	"We are creating your project, it might take a few moments :)";
 
 const stringToColour = (str) => {
 	let hash = 0;

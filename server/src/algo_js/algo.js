@@ -3,6 +3,8 @@ const { getScore, updatePps } = require("./container.js");
 const { rotation, perturbation } = require("./boxMotion.js");
 const { orderMetric, overallMetric } = require("./metrics.js");
 
+const ALGOIRTHM_MAX_ITERATIONS = 1000000;
+
 const getBestPoint = (pp, box, container, solutionBoxes) => {
 	let bestPoint = null;
 	let bestScore = [0, 0];
@@ -175,6 +177,9 @@ const getSolutions = (algorithmTime, boxes, container, isQuantity) => {
 				solution_data: solution_data,
 			};
 			counter += 1;
+		}
+		if (counter === ALGOIRTHM_MAX_ITERATIONS) {
+			break;
 		}
 	}
 
