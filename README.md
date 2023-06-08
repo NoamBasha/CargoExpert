@@ -10,7 +10,6 @@ Welcome to the Cargo Expert repository! This project aims to provide a comprehen
 - [Contributing](#contributing)
 - [License](#license)
 
-## Features
 
 ## Features
 
@@ -30,7 +29,18 @@ Cargo Expert is a web app, meaning no installation is required. You can enjoy it
 
 ## Usage
 
-Explain how users can use Cargo Expert effectively. You can include examples, code snippets, or detailed instructions on how to perform common tasks using the application. If there are any specific configuration steps or environment variables that need to be set up, please mention them here.
+To get started with Cargo Expert, follow these steps:
+
+1. Open an account (if not already exist) to access the application.
+2. Choose between two options: creating a new project or viewing existing ones.
+   - To create a new project, you need a CSV file with a specific format. You can download an example file to see what it looks like.
+   - Afterward, you can view all the data you entered to ensure everything is in place and run the algorithm.
+3. Once a project is created, you can find it under the existing projects section. Here, you can see all the solutions the algorithm found displayed in a table. Each solution has several scores sorted by the overall score.
+4. Choose any solution to view it on your screen. You can also edit the solution, download it as a CSV file, and perform other actions.
+
+Simply follow these steps to make the most of Cargo Expert's features.
+
+
 
 ## Contributing
 
