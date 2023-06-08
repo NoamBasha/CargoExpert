@@ -12,17 +12,21 @@ Welcome to the Cargo Expert repository! This project aims to provide a comprehen
 
 ## Features
 
-Please provide some information about the features and functionalities of Cargo Expert. What are the key aspects that make it stand out from other similar solutions? Feel free to include bullet points or a detailed description.
+## Features
+
+Cargo Expert offers several key features:
+
+- **Efficient Cargo Loading:** The main goal of Cargo Expert is to help load cargo while satisfying multiple constraints, such as volume, number of items, and the most critical one - unloading order. Since the unpacking order has great implications regarding time and money, we strongly aimed our algorithm to generate better results where the unpacking order is relatively preserved.
+
+- **Container Improvement:** Cargo Expert provides functionality to improve an existing container. Whether you have already packed half of your truck or you want to guarantee that certain boxes will be placed at specific points, Cargo Expert has got you covered. You can set boxes at fixed locations and ask for improvements right away.
+
+- **User-Friendly Experience:** Cargo Expert is designed to be simple, convenient, and user-friendly. We strive to provide an accessible solution that is both convenient and useful, making the cargo management process as smooth as possible.
+
 
 ## Installation
 
-To get started with Cargo Expert, follow these steps:
+Cargo Expert is a web app, meaning no installation is required. You can enjoy it anywhere and anytime. All you need is a device (preferably with a large screen for convenience) and a good Wi-Fi connection. That's it – you're ready to go!
 
-1. Clone the repository: `git clone https://github.com/your-username/cargo-expert.git`
-2. Navigate to the project directory: `cd cargo-expert`
-3. Install the required dependencies: `npm install`
-
-Please provide any additional installation instructions or requirements specific to your project.
 
 ## Usage
 
@@ -38,17 +42,10 @@ We welcome contributions from the open-source community to make Cargo Expert eve
 4. Push to the branch: `git push origin my-feature-branch`.
 5. Submit a pull request detailing your changes.
 
-Make sure to adhere to the existing code style and follow best practices.
-
-## License
-
-State the license under which the Cargo Expert project is distributed. For example:
-
-This project is licensed under the [MIT License](LICENSE).
 
 ## Support
 
-If you encounter any issues or have any questions or suggestions regarding Cargo Expert, please feel free to [open an issue](https://github.com/your-username/cargo-expert/issues). We appreciate your feedback and will do our best to assist you.
+If you encounter any issues or have any questions or suggestions regarding Cargo Expert, please feel free to contact us yonatanpinchas@hotmail.co.il or noamBa10@gmail.com. We appreciate your feedback and will do our best to assist you.
 
 ## Acknowledgments
 
