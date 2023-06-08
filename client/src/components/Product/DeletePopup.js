@@ -1,8 +1,18 @@
 import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
 
-export const DeletePopup = ({ text, id, onSubmit, onClose }) => {
+export const DeletePopup = ({
+	text,
+	id,
+	onSubmit,
+	onClose,
+	setCustomizedError,
+}) => {
 	const handleSubmit = () => {
-		onSubmit(id);
+		if (!isNaN(id) && id >= 0) {
+			onSubmit(id);
+		} else {
+			setCustomizedError("Could not delete");
+		}
 		onClose();
 	};
 

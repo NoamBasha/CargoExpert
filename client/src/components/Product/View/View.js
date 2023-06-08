@@ -193,7 +193,7 @@ export const View = () => {
 					<Button
 						onClick={getPreviousSolution}
 						className="position-absolute d-flex"
-						style={{ top: 435, left: 10, zIndex: 1 }}
+						style={{ top: 380, left: 10, zIndex: 1 }}
 					>
 						<ArrowBackIosOutlinedIcon
 							color="primary"
@@ -237,7 +237,7 @@ export const View = () => {
 					<Button
 						onClick={getNextSolution}
 						className="position-absolute d-flex"
-						style={{ top: 435, right: 10, zIndex: 1 }}
+						style={{ top: 380, right: 10, zIndex: 1 }}
 					>
 						<ArrowForwardIosOutlinedIcon
 							color="primary"

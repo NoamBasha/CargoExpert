@@ -46,6 +46,7 @@ export const SolutionsTable = ({ title }) => {
 		updateSolutionName,
 		isLoading,
 		setCustomizedError,
+		error,
 	} = useUserData();
 
 	const [tableSolutionId, setTableSolutionId] = useState(null);
@@ -99,6 +100,14 @@ export const SolutionsTable = ({ title }) => {
 			};
 			updateSolutionName(projectId, newSolution);
 			setSnackbarMessage(`Changed name to ${name}`);
+		}
+	};
+
+	const handleDelete = (id) => {
+		const deleteSpecificSolution = deleteSolution(projectId);
+		deleteSpecificSolution(id);
+		if (error === "") {
+			setSnackbarMessage(`Deleted Solution successfully`);
 		}
 	};
 
@@ -278,11 +287,11 @@ export const SolutionsTable = ({ title }) => {
 				<DeletePopup
 					text="Delete Solution?"
 					id={tableSolutionId}
-					onSubmit={deleteSolution(projectId)}
+					onSubmit={handleDelete}
 					onClose={() => {
 						setShowDeletePopup(false);
-						setSnackbarMessage("Deleted solution");
 					}}
+					setCustomizedError={setCustomizedError}
 				/>
 			) : null}
 			<SuccessSnackbar

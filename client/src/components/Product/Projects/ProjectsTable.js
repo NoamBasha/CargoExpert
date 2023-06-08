@@ -26,6 +26,7 @@ export const ProjectsTable = () => {
 		updateProject,
 		isLoading,
 		setCustomizedError,
+		error,
 	} = useUserData();
 	const { setProjectId } = useProject();
 	const [tableProjectId, setTableProjectId] = useState(null);
@@ -62,6 +63,13 @@ export const ProjectsTable = () => {
 			};
 			updateProject(newProject);
 			setSnackbarMessage(`Changed name to ${name}`);
+		}
+	};
+
+	const handleDelete = (id) => {
+		deleteProject(id);
+		if (error === "") {
+			setSnackbarMessage(`Deleted Project successfully`);
 		}
 	};
 
@@ -174,8 +182,9 @@ export const ProjectsTable = () => {
 					<DeletePopup
 						text="Delete Project?"
 						id={tableProjectId}
-						onSubmit={deleteProject}
+						onSubmit={handleDelete}
 						onClose={() => setShowDeletePopup(false)}
+						setCustomizedError={setCustomizedError}
 					/>
 				) : null}
 				<SuccessSnackbar
