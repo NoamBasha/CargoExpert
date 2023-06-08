@@ -8,11 +8,21 @@ import {
 	Button,
 } from "@mui/material";
 
-export const ChangeNamePopup = ({ text, id, onSubmit, onClose }) => {
+export const ChangeNamePopup = ({
+	text,
+	id,
+	onSubmit,
+	onClose,
+	setCustomizedError,
+}) => {
 	const [name, setName] = useState("");
 
 	const handleSubmit = () => {
-		onSubmit(id, name);
+		if (name && name.trim().length !== 0) {
+			onSubmit(id, name);
+		} else {
+			setCustomizedError("Name can not be empty");
+		}
 		onClose();
 	};
 

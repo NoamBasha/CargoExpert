@@ -1,5 +1,5 @@
 import { useUserData } from "../../UserDataProvider.js";
-import { Button, Snackbar } from "@mui/material";
+import { Button } from "@mui/material";
 import {
 	TableContainer,
 	Table,
@@ -17,9 +17,16 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { IconButton } from "@mui/material";
 import { CircularProgress } from "@mui/material";
+import { SuccessSnackbar } from "../../SuccessSnackbar.js";
 
 export const ProjectsTable = () => {
-	const { projects, deleteProject, updateProject, isLoading } = useUserData();
+	const {
+		projects,
+		deleteProject,
+		updateProject,
+		isLoading,
+		setCustomizedError,
+	} = useUserData();
 	const { setProjectId } = useProject();
 	const [tableProjectId, setTableProjectId] = useState(null);
 	const [showChangeNamePopup, setShowChangeNamePopup] = useState(false);
@@ -160,6 +167,7 @@ export const ProjectsTable = () => {
 						id={tableProjectId}
 						onSubmit={handleChangeName}
 						onClose={() => setShowChangeNamePopup(false)}
+						setCustomizedError={setCustomizedError}
 					/>
 				) : null}
 				{showDeletePopup ? (
@@ -170,11 +178,10 @@ export const ProjectsTable = () => {
 						onClose={() => setShowDeletePopup(false)}
 					/>
 				) : null}
-				<Snackbar
+				<SuccessSnackbar
 					open={snackbarMessage !== ""}
-					message={snackbarMessage}
-					onClose={() => setSnackbarMessage("")}
-					autoHideDuration={4000}
+					text={snackbarMessage}
+					setOpen={() => setSnackbarMessage("")}
 				/>
 			</div>
 		);

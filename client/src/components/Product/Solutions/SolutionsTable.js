@@ -1,4 +1,4 @@
-import { Button, Snackbar } from "@mui/material";
+import { Button } from "@mui/material";
 import { useProject } from "../ProjectProvider";
 import { useUserData } from "../../UserDataProvider.js";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -7,6 +7,7 @@ import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import { IconButton } from "@mui/material";
 import { CircularProgress } from "@mui/material";
 import { useEffect } from "react";
+import { SuccessSnackbar } from "../../SuccessSnackbar.js";
 
 import {
 	TableContainer,
@@ -39,8 +40,13 @@ const SortIcon = ({ column, sortByColumn }) => {
 
 export const SolutionsTable = ({ title }) => {
 	const { solutions, setSolutionId, projectId } = useProject();
-	const { deleteSolution, duplicateSolution, updateSolutionName, isLoading } =
-		useUserData();
+	const {
+		deleteSolution,
+		duplicateSolution,
+		updateSolutionName,
+		isLoading,
+		setCustomizedError,
+	} = useUserData();
 
 	const [tableSolutionId, setTableSolutionId] = useState(null);
 	const [showChangeNamePopup, setShowChangeNamePopup] = useState(false);
@@ -265,6 +271,7 @@ export const SolutionsTable = ({ title }) => {
 					id={tableSolutionId}
 					onSubmit={handleChangeName}
 					onClose={() => setShowChangeNamePopup(false)}
+					setCustomizedError={setCustomizedError}
 				/>
 			) : null}
 			{showDeletePopup ? (
@@ -278,11 +285,10 @@ export const SolutionsTable = ({ title }) => {
 					}}
 				/>
 			) : null}
-			<Snackbar
+			<SuccessSnackbar
 				open={snackbarMessage !== ""}
-				message={snackbarMessage}
-				onClose={() => setSnackbarMessage("")}
-				autoHideDuration={4000}
+				text={snackbarMessage}
+				setOpen={() => setSnackbarMessage("")}
 			/>
 		</div>
 	);
