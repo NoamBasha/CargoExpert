@@ -41,12 +41,12 @@ export const UserDataProvider = ({ children }) => {
 
 			if (DEV) {
 				response = await fetch(
-					"http://localhost:1337/createUser",
+					"http://localhost:1337/api/users/createUser",
 					requestOptions
 				);
 			} else {
 				response = await fetch(
-					"https://cargoexpert.onrender.com/createUser",
+					"https://cargoexpert.onrender.com/api/users/createUser",
 					requestOptions
 				);
 			}
@@ -81,12 +81,12 @@ export const UserDataProvider = ({ children }) => {
 
 			if (DEV) {
 				response = await fetch(
-					"http://localhost:1337/readUser",
+					"http://localhost:1337/api/users/readUser",
 					requestOptions
 				);
 			} else {
 				response = await fetch(
-					"https://cargoexpert.onrender.com/readUser",
+					"https://cargoexpert.onrender.com/api/users/readUser",
 					requestOptions
 				);
 			}
@@ -120,19 +120,19 @@ export const UserDataProvider = ({ children }) => {
 			let response;
 			if (DEV) {
 				response = await fetch(
-					"http://localhost:1337/updateUser",
+					"http://localhost:1337/api/users/updateUser",
 					requestOptions
 				);
 			} else {
 				response = await fetch(
-					"https://cargoexpert.onrender.com/updateUser",
+					"https://cargoexpert.onrender.com/api/users/updateUser",
 					requestOptions
 				);
 			}
 			if (response.status === 200) {
-				//console.log("User updated successfully");
+				console.log("User updated successfully");
 			} else {
-				//console.log("User NOT updated successfully");
+				console.log("User NOT updated successfully");
 				//throw new Error(`${response.status} ${response.statusText}`);
 			}
 		} catch (error) {
@@ -159,12 +159,12 @@ export const UserDataProvider = ({ children }) => {
 
 			if (DEV) {
 				response = await fetch(
-					"http://localhost:1337/deleteUser",
+					"http://localhost:1337/api/users/deleteUser",
 					requestOptions
 				);
 			} else {
 				response = await fetch(
-					"https://cargoexpert.onrender.com/deleteUser",
+					"https://cargoexpert.onrender.com/api/users/deleteUser",
 					requestOptions
 				);
 			}
@@ -207,12 +207,12 @@ export const UserDataProvider = ({ children }) => {
 
 			if (DEV) {
 				response = await fetch(
-					"http://localhost:1337/getSolutionsJS",
+					"http://localhost:1337/api/projects/getSolutionsJS",
 					requestOptions
 				);
 			} else {
 				response = await fetch(
-					"https://cargoexpert.onrender.com/getSolutionsJS",
+					"https://cargoexpert.onrender.com/api/projects/getSolutionsJS",
 					requestOptions
 				);
 			}
@@ -290,12 +290,12 @@ export const UserDataProvider = ({ children }) => {
 
 			if (DEV) {
 				response = await fetch(
-					"http://localhost:1337/improveSolutionJS",
+					"http://localhost:1337/api/projects/improveSolutionJS",
 					requestOptions
 				);
 			} else {
 				response = await fetch(
-					"https://cargoexpert.onrender.com/improveSolutionJS",
+					"https://cargoexpert.onrender.com/api/projects/improveSolutionJS",
 					requestOptions
 				);
 			}
