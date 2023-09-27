@@ -1,9 +1,9 @@
-const Papa = require("papaparse");
-const PythonShellLibrary = require("python-shell");
+import Papa from "papaparse";
+import * as PythonShellLibrary from "python-shell";
 const { PythonShell } = PythonShellLibrary;
-const path = require("path");
-const fs = require("fs");
-const { type } = require("os");
+import path from "path";
+import fs from "fs";
+import { type as osType } from "os";
 
 const filePath = "./easy1.csv";
 const scriptPath = path.join(__dirname, "../../algo_py/algo.py");

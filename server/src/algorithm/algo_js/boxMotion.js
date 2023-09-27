@@ -1,6 +1,6 @@
-const { getSize } = require("./box.js");
+import { getSize } from "./box.js";
 
-const Rotation = {
+export const Rotation = {
 	WHL: 0,
 	LHW: 1,
 	HLW: 2,
@@ -55,7 +55,7 @@ const rotateSubset = (boxes) => {
 	});
 };
 
-const rotation = (boxes) => {
+export const rotation = (boxes) => {
 	// Rotate boxes individually or by subset with equal probability
 	if (boxes.length) {
 		return Math.random() < 0.5 ? rotateEachBox(boxes) : rotateSubset(boxes);
@@ -75,7 +75,7 @@ const volumePerturb = (b1, b2) => {
 	return false;
 };
 
-const perturbation = (boxes) => {
+export const perturbation = (boxes) => {
 	if (boxes.length <= 1) {
 		return boxes;
 	}
@@ -87,5 +87,3 @@ const perturbation = (boxes) => {
 
 	return boxes;
 };
-
-module.exports = { Rotation, rotation, perturbation };

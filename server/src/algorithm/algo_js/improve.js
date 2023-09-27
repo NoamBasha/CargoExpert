@@ -1,9 +1,9 @@
-const { Rotation } = require("./boxMotion.js");
-const { getSize } = require("./box.js");
-const { updatePps } = require("./container.js");
-const { rotation, perturbation } = require("./boxMotion.js");
-const { orderMetric, overallMetric } = require("./metrics.js");
-const { handleBox } = require("./algo.js");
+import { Rotation } from "./boxMotion.js";
+import { getSize } from "./box.js";
+import { updatePps } from "./container.js";
+import { rotation, perturbation } from "./boxMotion.js";
+import { orderMetric, overallMetric } from "./metrics.js";
+import { handleBox } from "./algo.js";
 
 const IMPROVE_TIME = 10000;
 const IMPROVE_MAX_ITERATIONS = 1000000;
@@ -124,7 +124,7 @@ const getImproveBox = (box) => {
 	};
 };
 
-const improve = (data) => {
+export const improve = (data) => {
 	console.log(data);
 
 	const container = data.container;
@@ -192,5 +192,3 @@ const improve = (data) => {
 
 	return bestSolution;
 };
-
-module.exports = { improve };

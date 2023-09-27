@@ -1,14 +1,10 @@
 import { algo } from "./algorithm/algo_js/algo.js";
 import { improve } from "./algorithm/algo_js/improve.js";
-
 import path from "path";
-
 import * as PythonShellLibrary from "python-shell";
-let { PythonShell } = PythonShellLibrary;
-
-import bcrypt from "bcryptjs";
-
 import { User } from "./models/data_base.js";
+
+import * as crypto from "crypto";
 
 const Paths = {
 	pythonAlgorithmPath: "/algo_py/algo.py",
@@ -53,7 +49,6 @@ export const getSolutions = (req, res) => {
 
 export const getSolutionsJS = (req, res) => {
 	try {
-		console.log(req.body);
 		const solutions = algo(req.body);
 		res.send(solutions);
 	} catch (err) {
@@ -114,16 +109,11 @@ export const userInputExample = (req, res) => {
 };
 
 export const createUser = async (req, res) => {
+	const sha = crypto.createHash("sha256");
 	try {
-		const saltRounds = 10;
-		const hashedPassword = await bcrypt.hash(
-			req.body.password.trim(),
-			saltRounds
-		);
-
 		await User.create({
 			email: req.body.email.trim(),
-			password: hashedPassword,
+			password: sha.update(req.body.password.trim()).digest("hex"),
 		});
 		res.sendStatus(200);
 	} catch (err) {
@@ -131,101 +121,81 @@ export const createUser = async (req, res) => {
 			res.status(400).json({
 				error: Errors.emailError,
 			});
-		} else {
-			res.status(400).json({
-				error: "Server / Database error",
-			});
 		}
-		// if (err.errors.email) {
-		// 	const emailError = err.errors.email.properties.message;
-		// 	if (emailError) {
-		// 		res.status(400).json({
-		// 			error: emailError,
-		// 		});
-		// 	}
-		// }
-		// if (err.errors.password) {
-		// 	console.log(err.errors);
-		// 	const passwordError = err.errors.password.properties.message;
-		// 	console.log(passwordError);
-		// 	if (passwordError) {
-		// 		res.status(400).json({
-		// 			error: passwordError,
-		// 		});
-		// 	}
-		// }
+		if (err.errors.email) {
+			const emailError = err.errors.email.properties.message;
+			if (emailError) {
+				res.status(400).json({
+					error: emailError,
+				});
+			}
+		}
+		if (err.errors.password) {
+			console.log(err.errors);
+			const passwordError = err.errors.password.properties.message;
+			console.log(passwordError);
+			if (passwordError) {
+				res.status(400).json({
+					error: passwordError,
+				});
+			}
+		}
 	}
 };
 
 export const readUser = async (req, res) => {
-	try {
-		const user = await User.findOne({ email: req.body.email });
-
-		if (user) {
-			const isPasswordValid = await bcrypt.compare(
-				req.body.password,
-				user.password
-			);
-
-			if (isPasswordValid) {
-				res.status(200).json(user.projects);
+	const sha = crypto.createHash("sha256");
+	User.findOne(
+		{
+			email: req.body.email,
+			password: sha.update(req.body.password).digest("hex"),
+		},
+		(err, data) => {
+			if (err) {
+				res.status(400).json({ error: err.message });
 			} else {
-				res.status(400).json({
-					error: Errors.loginError,
-				});
+				if (data) {
+					res.status(200).json(data.projects);
+				} else {
+					res.status(400).json({
+						error: Errors.loginError,
+					});
+				}
 			}
-		} else {
-			res.status(400).json({
-				error: Errors.loginError,
-			});
 		}
-	} catch (err) {
-		res.status(400).json({ error: err.message });
-	}
+	);
 };
 
-export const deleteUser = async (req, res) => {
-	try {
-		const user = await User.findOne({ email: req.body.email });
-
-		if (user) {
-			const isPasswordValid = await bcrypt.compare(
-				req.body.password,
-				user.password
-			);
-
-			if (isPasswordValid) {
-				await User.deleteOne({ email: req.body.email });
-				res.sendStatus(200);
+export const deleteUser = (req, res) => {
+	const sha = crypto.createHash("sha256");
+	User.deleteOne(
+		{
+			email: req.body.email,
+			password: sha.update(req.body.password).digest("hex"),
+		},
+		(err, data) => {
+			if (err) {
+				res.send(err);
 			} else {
-				res.status(400).json({
-					error: Errors.deleteUserError,
-				});
+				res.send(data);
 			}
-		} else {
-			res.status(400).json({
-				error: Errors.deleteUserError,
-			});
 		}
-	} catch (err) {
-		res.status(400).json({ error: err.message });
-	}
+	);
 };
 
-export const updateUser = async (req, res) => {
-	try {
-		const user = await User.findOne({ email: req.body.email });
-
-		if (user) {
-			const isPasswordValid = await bcrypt.compare(
-				req.body.password,
-				user.password
-			);
-
-			if (isPasswordValid) {
-				user.projects = req.body.newProjects;
-				await user
-					.populate({
+export const updateUser = (req, res) => {
+	const sha = crypto.createHash("sha256");
+	User.findOne(
+		{
+			email: req.body.email,
+			password: sha.update(req.body.password).digest("hex"),
+		},
+		(err, data) => {
+			if (err) res.send(err);
+			else {
+				if (data) {
+					data.projects = req.body.newProjects;
+					data.populate({
 						path: "projects",
 						populate: {
 							path: "boxes",
@@ -236,19 +206,15 @@ export const updateUser = async (req, res) => {
 								model: "Box",
 							},
 						},
-					})
-					.execPopulate();
-				await user.save();
-				res.sendStatus(200);
-			} else {
-				res.status(400).json({ error: Errors.userError });
+					});
+					data.save();
+					res.sendStatus(200);
+				} else {
+					res.status(400).json({ error: Errors.userError });
+				}
 			}
-		} else {
-			res.status(400).json({ error: Errors.userError });
 		}
-	} catch (err) {
-		res.status(400).json({ error: err.message });
-	}
+	);
 };
 
 export const serverListen = (port) => {

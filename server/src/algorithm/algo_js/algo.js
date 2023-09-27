@@ -1,7 +1,7 @@
-const { initBox, setPosition, getBox } = require("./box.js");
-const { getScore, updatePps } = require("./container.js");
-const { rotation, perturbation } = require("./boxMotion.js");
-const { orderMetric, overallMetric } = require("./metrics.js");
+import { initBox, setPosition, getBox } from "./box.js";
+import { getScore, updatePps } from "./container.js";
+import { rotation, perturbation } from "./boxMotion.js";
+import { orderMetric, overallMetric } from "./metrics.js";
 
 const ALGOIRTHM_MAX_ITERATIONS = 1000000;
 
@@ -11,6 +11,7 @@ const getBestPoint = (pp, box, container, solutionBoxes) => {
 
 	pp.forEach((p) => {
 		let score = getScore(box, p, solutionBoxes, container);
+
 		if (
 			score[0] > bestScore[0] ||
 			(score[0] === bestScore[0] && score[1] > bestScore[1])
@@ -48,7 +49,7 @@ const addBoxToSolution = (
 	}
 };
 
-const handleBox = (
+export const handleBox = (
 	box,
 	pp,
 	container,
@@ -58,6 +59,7 @@ const handleBox = (
 	isRetry
 ) => {
 	const bestPoint = getBestPoint(pp, box, container, solutionBoxes);
+
 	addBoxToSolution(
 		bestPoint,
 		box,
@@ -130,9 +132,11 @@ const constructivePacking = (boxes, container, isQuantity) => {
 	solution_data.order_score = parseFloat(
 		orderMetric(solutionBoxes, container)
 	);
+
 	solution_data.overall_score = parseFloat(
 		overallMetric(boxes, container, solution_data, isQuantity)
 	);
+
 	return [solutionBoxes, solution_data];
 };
 
@@ -160,12 +164,16 @@ const getSolutions = (algorithmTime, boxes, container, isQuantity) => {
 		let boxesCopy = [...boxes];
 		// For non-deterministic algorithm - rotating and perturbating the boxes.
 		boxesCopy = rotation(boxesCopy);
+
 		boxesCopy = perturbation(boxesCopy);
 		let solution = constructivePacking(boxesCopy, container, isQuantity);
+
 		if (solution === null) {
 			continue;
 		}
+
 		let [boxesInSolution, solution_data] = solution;
+
 		if (boxesInSolution !== null && solution_data !== null) {
 			let counterString = counter.toString();
 			solutionList[counterString] = {
@@ -178,11 +186,11 @@ const getSolutions = (algorithmTime, boxes, container, isQuantity) => {
 			};
 			counter += 1;
 		}
+
 		if (counter === ALGOIRTHM_MAX_ITERATIONS) {
 			break;
 		}
 	}
-
 	return solutionList;
 };
 
@@ -237,8 +245,9 @@ const dictSolutionsFromList = (solutionList) => {
 	return solutionDict;
 };
 
-const algo = (data) => {
+export const algo = (data) => {
 	const [boxes, container, isQuantity, algorithmTime] = handleData(data);
+
 	let solutionList = getSolutions(
 		algorithmTime,
 		boxes,
@@ -256,5 +265,3 @@ const algo = (data) => {
 
 	return solutionDict;
 };
-
-module.exports = { algo, handleBox };

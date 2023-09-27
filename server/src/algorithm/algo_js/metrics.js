@@ -1,6 +1,6 @@
 const ORDER_METRIC_THRESHOLD = 0.2;
 
-const numOfItemsMetric = (solutionBoxes) => {
+export const numOfItemsMetric = (solutionBoxes) => {
 	if (!solutionBoxes || solutionBoxes.length === 0) {
 		return 0;
 	}
@@ -8,7 +8,7 @@ const numOfItemsMetric = (solutionBoxes) => {
 	return inBoxes.length;
 };
 
-const volumeMetric = (solutionBoxes) => {
+export const volumeMetric = (solutionBoxes) => {
 	if (!solutionBoxes || solutionBoxes.length === 0) {
 		return 0;
 	}
@@ -34,7 +34,7 @@ const volumeMetric = (solutionBoxes) => {
 	return volumes_sum;
 };
 
-const orderMetric = (solutionBoxes, container) => {
+export const orderMetric = (solutionBoxes, container) => {
 	if (!solutionBoxes || solutionBoxes.length === 0) {
 		return 0;
 	}
@@ -132,7 +132,12 @@ const normalize = (numbers) => {
 	return normalized;
 };
 
-const overallMetric = (projectBoxes, container, solution_data, isQuantity) => {
+export const overallMetric = (
+	projectBoxes,
+	container,
+	solution_data,
+	isQuantity
+) => {
 	if (!projectBoxes || projectBoxes.length === 0) {
 		return 0;
 	}
@@ -160,5 +165,3 @@ const overallMetric = (projectBoxes, container, solution_data, isQuantity) => {
 
 	return (score * 100).toFixed(2);
 };
-
-module.exports = { numOfItemsMetric, volumeMetric, orderMetric, overallMetric };

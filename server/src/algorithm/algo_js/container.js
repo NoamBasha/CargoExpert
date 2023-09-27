@@ -1,10 +1,11 @@
-const { setPosition, unsetPosition, getSize } = require("./box.js");
+import { setPosition, unsetPosition, getSize } from "./box.js";
+import { validateBoxesLocation } from "./validations.js";
 
-const { validateBoxesLocation } = require("./validations.js");
-
-const getScore = (box, p, boxes, container) => {
+export const getScore = (box, p, boxes, container) => {
 	setPosition(box, p);
+
 	const isValid = validateBoxesLocation(box, boxes, container);
+
 	unsetPosition(box, p);
 
 	if (!isValid) {
@@ -12,13 +13,13 @@ const getScore = (box, p, boxes, container) => {
 	}
 
 	// Score calculation based on distance between FLB and container.
-	scoreZ = container.length - p.z;
-	scoreY = container.height - p.y;
+	const scoreZ = container.length - p.z;
+	const scoreY = container.height - p.y;
 
 	return [scoreZ, scoreY];
 };
 
-const updatePps = (box, p, pp, container) => {
+export const updatePps = (box, p, pp, container) => {
 	pp.delete(p);
 
 	const boxSize = getSize(box);
@@ -58,5 +59,3 @@ const updatePps = (box, p, pp, container) => {
 		}
 	}
 };
-
-module.exports = { getScore, updatePps };

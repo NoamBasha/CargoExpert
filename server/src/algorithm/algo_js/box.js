@@ -7,7 +7,7 @@ const Rotation = {
 	HWL: 5,
 };
 
-const initBox = (box) => {
+export const initBox = (box) => {
 	return {
 		...box,
 		volume: box.width * box.height * box.length,
@@ -25,7 +25,7 @@ const initBox = (box) => {
 	};
 };
 
-const getSize = (box) => {
+export const getSize = (box) => {
 	switch (box.rotation) {
 		case Rotation.WHL:
 			return {
@@ -66,7 +66,7 @@ const getSize = (box) => {
 	}
 };
 
-const setPosition = (box, p) => {
+export const setPosition = (box, p) => {
 	// set center, FLB and isIn
 	const boxSize = getSize(box);
 
@@ -92,7 +92,7 @@ const setPosition = (box, p) => {
 	box.isIn = 1;
 };
 
-const unsetPosition = (box) => {
+export const unsetPosition = (box) => {
 	box.FLB = {
 		x: 0,
 		y: 0,
@@ -108,12 +108,10 @@ const unsetPosition = (box) => {
 };
 
 // Returns the box with the correct size.
-const getBox = (box) => {
+export const getBox = (box) => {
 	return {
 		...box,
 		size: Object.values(getSize(box)),
 		position: Object.values(box.center),
 	};
 };
-
-module.exports = { initBox, getSize, getBox, setPosition, unsetPosition };

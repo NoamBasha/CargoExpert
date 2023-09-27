@@ -1,4 +1,4 @@
-const { getSize } = require("./box.js");
+import { getSize } from "./box.js";
 
 const isBoxOutOfBounds = (box, container) => {
 	if (!box || !container || Object.keys(container).length !== 3) {
@@ -167,7 +167,7 @@ const isBoxesHovering = (inBoxes) => {
 	return false;
 };
 
-const validateBoxesLocation = (box, boxes, container) => {
+export const validateBoxesLocation = (box, boxes, container) => {
 	const boxesWithBox = [...boxes, box];
 	if (
 		isBoxOutOfBounds(box, container) ||
@@ -178,5 +178,3 @@ const validateBoxesLocation = (box, boxes, container) => {
 	}
 	return true;
 };
-
-module.exports = { validateBoxesLocation };

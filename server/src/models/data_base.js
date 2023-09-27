@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const EMAIL_VALIDATION_ERROR = "Email should be a valid email address";
 
@@ -63,9 +63,7 @@ const UserSchema = new mongoose.Schema({
 	projects: { type: [ProjectSchema], required: true },
 });
 
-const User = mongoose.model("User", UserSchema);
-const Project = mongoose.model("Project", ProjectSchema);
-const Box = mongoose.model("Box", BoxSchema);
-const Solution = mongoose.model("Solution", SolutionSchema);
-
-module.exports = { User, Project, Box, Solution };
+export const User = mongoose.model("User", UserSchema);
+export const Project = mongoose.model("Project", ProjectSchema);
+export const Box = mongoose.model("Box", BoxSchema);
+export const Solution = mongoose.model("Solution", SolutionSchema);
