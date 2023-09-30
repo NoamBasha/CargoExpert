@@ -1,11 +1,17 @@
 import mongoose from "mongoose";
-import { projectSchema } from "./projectModel";
 
 const userSchema = new mongoose.Schema(
 	{
+		name: { type: String, required: true },
 		email: { type: String, required: true, unique: true },
 		password: { type: String, required: true },
-		projects: { type: [projectSchema], required: true },
+		projects: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "Project",
+				required: true,
+			},
+		],
 	},
 	{ timestamps: true }
 );

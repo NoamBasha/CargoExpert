@@ -1,17 +1,27 @@
 import mongoose from "mongoose";
-
-const projectDataSchema = new mongoose.Schema({
-	name: { type: String, required: true },
-	isQuantity: { type: Number, required: true },
-	isQuality: { type: Number, required: true },
-});
+import { sizeSchema } from "./utils.js";
 
 export const projectSchema = new mongoose.Schema(
 	{
-		container: { type: [Number], required: true },
-		projectData: { type: projectDataSchema, required: true },
-		boxes: { type: [BoxSchema], required: true },
-		solutions: { type: [SolutionSchema], required: true },
+		solutions: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "Solution",
+				required: true,
+			},
+		],
+		// TODO: think about removing the boxes from here
+		boxes: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "Box",
+				required: true,
+			},
+		],
+		name: { type: String, required: true },
+		containerSize: { type: sizeSchema, required: true },
+		// isQuantity: { type: Boolean, default: false, required: true },
+		// isQuality: { type: Boolean, default: false, required: true },
 	},
 	{ timestamps: true }
 );

@@ -1,17 +1,26 @@
 import mongoose from "mongoose";
+import { positionSchema } from "./utils.js";
 
-const solutionDataSchema = new mongoose.Schema({
-	capacity: { type: Number, required: true },
-	numberOfItems: { type: Number, required: true },
-	orderScore: { type: Number, required: true },
-	overallScore: { type: Number, required: true },
-});
-
-const solutionSchema = new mongoose.Schema(
+export const solutionSchema = new mongoose.Schema(
 	{
-		boxes: { type: [BoxSchema], required: true },
+		boxes: [
+			{
+				box: {
+					type: mongoose.Schema.Types.ObjectId,
+					ref: "Box",
+					required: true,
+				},
+				isIn: { type: Boolean, default: false, required: true },
+				position: { type: positionSchema, required: true },
+			},
+		],
 		name: { type: String, required: true },
-		solutionData: { type: solutionDataSchema, required: true },
+		data: {
+			capacity: { type: Number, required: true },
+			numberOfItems: { type: Number, required: true },
+			orderScore: { type: Number, required: true },
+			overallScore: { type: Number, required: true },
+		},
 	},
 	{ timestamps: true }
 );

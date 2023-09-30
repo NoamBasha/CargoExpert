@@ -1,0 +1,33 @@
+User:
+
+-   name
+-   email
+-   password
+-   projects[]
+
+Project:
+
+-   solutions[]
+-   containerSize
+-   name
+-   boxes[]
+    (- isQuantity)
+    (- isQuality)
+
+Solution:
+
+-   boxes[] + position (+ isIn)
+-   name
+-   data: {
+    -   orderScore
+    -   overallScore
+    -   capacity
+    -   numberOfItems
+        }
+
+Box:
+
+-   order
+-   size
+-   type
+-   color

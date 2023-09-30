@@ -41,12 +41,12 @@ export const UserDataProvider = ({ children }) => {
 
 			if (DEV) {
 				response = await fetch(
-					"http://localhost:1337/api/users/createUser",
+					"http://localhost:1337/api/users/registerUser",
 					requestOptions
 				);
 			} else {
 				response = await fetch(
-					"https://cargoexpert.onrender.com/api/users/createUser",
+					"https://cargoexpert.onrender.com/api/users/registerUser",
 					requestOptions
 				);
 			}
@@ -81,21 +81,33 @@ export const UserDataProvider = ({ children }) => {
 
 			if (DEV) {
 				response = await fetch(
-					"http://localhost:1337/api/users/readUser",
+					"http://localhost:1337/api/users/loginUser",
 					requestOptions
 				);
 			} else {
 				response = await fetch(
-					"https://cargoexpert.onrender.com/api/users/readUser",
+					"https://cargoexpert.onrender.com/api/users/loginUser",
 					requestOptions
 				);
 			}
-			const data = await response.json();
+			const loginData = await response.json();
 			if (response.status === 200) {
+				if (DEV) {
+					response = await fetch(
+						"http://localhost:1337/api/users/me",
+						requestOptions
+					);
+				} else {
+					response = await fetch(
+						"https://cargoexpert.onrender.com/api/users/me",
+						requestOptions
+					);
+				}
+				const data = await response.json();
 				setProjects(data);
 				setIsLoggedIn(true);
 			} else {
-				setCustomizedError(data.error);
+				setCustomizedError(loginData.error);
 			}
 		} catch (error) {
 			setCustomizedError(error.message);

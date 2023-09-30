@@ -1,151 +1,152 @@
+import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import { User } from "../models/data_base.js";
+import asyncHandler from "express-async-handler";
+import User from "../models/userModel.js";
 
-const Errors = {
-	solutionError: "Could not get solutions",
-	improveError: "There was a problem improving your solution",
-	downloadFileError:
-		"Can't download file at this time. Please try again later",
-	emailError: "Email already exists",
-	loginError: "Invalid login credentials",
-	userError: "Invalid user",
-};
+// @desc   Register a new user
+// @route  POST /api/users
+// @access Public
+export const registerUser = asyncHandler(async (req, res) => {
+	const { email, password, name } = req.body;
 
-export const createUser = async (req, res) => {
-	try {
-		const saltRounds = 10;
-		const hashedPassword = await bcrypt.hash(
-			req.body.password.trim(),
-			saltRounds
-		);
+	if (!email || !password || !name) {
+		res.status(400);
+		throw new Error("Please fill all fields");
+	}
 
-		await User.create({
-			email: req.body.email.trim(),
-			password: hashedPassword,
+	const isUserExists = await User.findOne({ email: email });
+
+	if (isUserExists) {
+		res.status(400);
+		throw new Error("Email already exists");
+	}
+
+	const saltRounds = 10;
+	const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+	const user = User.create({
+		name: name,
+		email: email,
+		password: hashedPassword,
+	});
+
+	if (user) {
+		res.status(201).json({
+			_id: user._id,
+			name: name,
+			email: user.email,
+			token: generateToken(used._id),
 		});
-		res.sendStatus(200);
-	} catch (err) {
-		if (err.message.includes("duplicate key error")) {
-			res.status(400).json({
-				error: Errors.emailError,
-			});
-		} else {
-			res.status(400).json({
-				error: "Server / Database error",
-			});
-		}
-		// if (err.errors.email) {
-		// 	const emailError = err.errors.email.properties.message;
-		// 	if (emailError) {
-		// 		res.status(400).json({
-		// 			error: emailError,
-		// 		});
-		// 	}
-		// }
-		// if (err.errors.password) {
-		// 	console.log(err.errors);
-		// 	const passwordError = err.errors.password.properties.message;
-		// 	console.log(passwordError);
-		// 	if (passwordError) {
-		// 		res.status(400).json({
-		// 			error: passwordError,
-		// 		});
-		// 	}
-		// }
+	} else {
+		res.status(400);
+		throw new Error("Invalid user data");
 	}
-};
+});
 
-export const readUser = async (req, res) => {
-	try {
-		const user = await User.findOne({ email: req.body.email });
+// @desc   Authenticate a user
+// @route  GET /api/users/login
+// @access Public
+export const loginUser = asyncHandler(async (req, res) => {
+	const { email, password } = req.body;
 
-		if (user) {
-			const isPasswordValid = await bcrypt.compare(
-				req.body.password,
-				user.password
-			);
-
-			if (isPasswordValid) {
-				res.status(200).json(user.projects);
-			} else {
-				res.status(400).json({
-					error: Errors.loginError,
-				});
-			}
-		} else {
-			res.status(400).json({
-				error: Errors.loginError,
-			});
-		}
-	} catch (err) {
-		res.status(400).json({ error: err.message });
+	if (!email || !password) {
+		res.status(400);
+		throw new Error("Please fill all fields");
 	}
-};
 
-export const deleteUser = async (req, res) => {
-	try {
-		const user = await User.findOne({ email: req.body.email });
+	const user = await User.findOne({ email: email });
 
-		if (user) {
-			const isPasswordValid = await bcrypt.compare(
-				req.body.password,
-				user.password
-			);
-
-			if (isPasswordValid) {
-				await User.deleteOne({ email: req.body.email });
-				res.sendStatus(200);
-			} else {
-				res.status(400).json({
-					error: Errors.deleteUserError,
-				});
-			}
-		} else {
-			res.status(400).json({
-				error: Errors.deleteUserError,
-			});
-		}
-	} catch (err) {
-		res.status(400).json({ error: err.message });
+	if (user && (await bcrypt.compare(password, user.password))) {
+		res.status(200).json({
+			_id: user._id,
+			name: user.name,
+			email: user.email,
+			token: generateToken(used._id),
+		});
+	} else {
+		res.status(400);
+		throw new Error("Invalid credentials");
 	}
-};
+});
 
-export const updateUser = async (req, res) => {
-	try {
-		const user = await User.findOne({ email: req.body.email });
+// @desc   Get user data
+// @route  POST /api/users/me
+// @access Private
+export const getMe = asyncHandler(async (req, res) => {
+	res.status(200).json(req.user);
+});
 
-		if (user) {
-			const isPasswordValid = await bcrypt.compare(
-				req.body.password,
-				user.password
-			);
+// export const deleteUser = async (req, res) => {
+// 	try {
+// 		const user = await User.findOne({ email: req.body.email });
 
-			if (isPasswordValid) {
-				user.projects = req.body.newProjects;
+// 		if (user) {
+// 			const isPasswordValid = await bcrypt.compare(
+// 				req.body.password,
+// 				user.password
+// 			);
 
-				await user.populate({
-					path: "projects",
-					populate: {
-						path: "boxes",
-						model: "Box",
-						path: "solutions",
-						populate: {
-							path: "boxes",
-							model: "Box",
-						},
-					},
-				});
+// 			if (isPasswordValid) {
+// 				await User.deleteOne({ email: req.body.email });
+// 				res.sendStatus(200);
+// 			} else {
+// 				res.status(400).json({
+// 					error: Errors.deleteUserError,
+// 				});
+// 			}
+// 		} else {
+// 			res.status(400).json({
+// 				error: Errors.deleteUserError,
+// 			});
+// 		}
+// 	} catch (err) {
+// 		res.status(400).json({ error: err.message });
+// 	}
+// };
 
-				await user.save();
+// export const updateUser = async (req, res) => {
+// 	try {
+// 		const user = await User.findOne({ email: req.body.email });
 
-				res.sendStatus(200);
-			} else {
-				res.status(400).json({ error: Errors.userError });
-			}
-		} else {
-			res.status(400).json({ error: Errors.userError });
-		}
-	} catch (err) {
-		res.status(400).json({ error: err.message });
-	}
+// 		if (user) {
+// 			const isPasswordValid = await bcrypt.compare(
+// 				req.body.password,
+// 				user.password
+// 			);
+
+// 			if (isPasswordValid) {
+// 				user.projects = req.body.newProjects;
+
+// 				await user.populate({
+// 					path: "projects",
+// 					populate: {
+// 						path: "boxes",
+// 						model: "Box",
+// 						path: "solutions",
+// 						populate: {
+// 							path: "boxes",
+// 							model: "Box",
+// 						},
+// 					},
+// 				});
+
+// 				await user.save();
+
+// 				res.sendStatus(200);
+// 			} else {
+// 				res.status(400).json({ error: Errors.userError });
+// 			}
+// 		} else {
+// 			res.status(400).json({ error: Errors.userError });
+// 		}
+// 	} catch (err) {
+// 		res.status(400).json({ error: err.message });
+// 	}
+// };
+
+// Generate JWT
+const generateToken = (id) => {
+	return jwt.sign({ id }, process.env.JWT_SECRET, {
+		expiresIn: "30d",
+	});
 };
