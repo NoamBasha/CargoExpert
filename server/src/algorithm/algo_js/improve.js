@@ -124,11 +124,8 @@ const getImproveBox = (box) => {
 	};
 };
 
-export const improve = (data) => {
+export const improve = (boxes, container) => {
 	console.log(data);
-
-	const container = data.container;
-	let boxes = data.boxes;
 
 	boxes = boxes.map((box) => {
 		return initImproveBox(box);

@@ -140,12 +140,8 @@ const constructivePacking = (boxes, container, isQuantity) => {
 	return [solutionBoxes, solution_data];
 };
 
-const handleData = (data) => {
-	const isQuality = data.project_data.isQuality;
+const handleData = (boxes, container, isQuantity, isQuality) => {
 	const algorithmTime = isQuality ? 60000 : 15000; // miliseconds
-	const isQuantity = data.project_data.isQuantity;
-	const container = data.container;
-	const boxes = data.boxes;
 
 	const initBoxes = boxes.map((box) => {
 		return initBox(box);
@@ -245,8 +241,13 @@ const dictSolutionsFromList = (solutionList) => {
 	return solutionDict;
 };
 
-export const algo = (data) => {
-	const [boxes, container, isQuantity, algorithmTime] = handleData(data);
+export const algo = (boxes, container, isQuantity, isQuality) => {
+	const [boxes, container, isQuantity, algorithmTime] = handleData(
+		boxes,
+		container,
+		isQuantity,
+		isQuality
+	);
 
 	let solutionList = getSolutions(
 		algorithmTime,
