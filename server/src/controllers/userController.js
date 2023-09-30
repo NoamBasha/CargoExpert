@@ -33,9 +33,10 @@ export const registerUser = asyncHandler(async (req, res) => {
 	if (user) {
 		res.status(201).json({
 			_id: user._id,
-			name: name,
+			name: user.name,
 			email: user.email,
-			token: generateToken(used._id),
+			projects: user.projects,
+			token: generateToken(user._id),
 		});
 	} else {
 		res.status(400);
@@ -61,7 +62,8 @@ export const loginUser = asyncHandler(async (req, res) => {
 			_id: user._id,
 			name: user.name,
 			email: user.email,
-			token: generateToken(used._id),
+			projects: user.projects,
+			token: generateToken(user._id),
 		});
 	} else {
 		res.status(400);
