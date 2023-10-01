@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import userRouter from "./routes/userRoutes.js";
 import projectRouter from "./routes/projectRoutes.js";
+import solutionRouter from "./routes/solutionRoutes.js";
 import cors from "cors";
 
 dotenv.config();
@@ -23,6 +24,7 @@ app.get("/userInputExample", (req, res) => userInputExample(req, res));
 
 app.use("/api/users", userRouter);
 app.use("/api/projects", projectRouter);
+app.use("/api/solutions", solutionRouter);
 
 app.listen(port, () => {
 	console.log(`listening on port ${port}`);

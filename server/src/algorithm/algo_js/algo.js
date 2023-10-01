@@ -241,12 +241,17 @@ const dictSolutionsFromList = (solutionList) => {
 	return solutionDict;
 };
 
-export const algo = (boxes, container, isQuantity, isQuality) => {
+export const algo = (
+	clientBoxes,
+	clientContainer,
+	clientIsQuantity,
+	clientIsQuality
+) => {
 	const [boxes, container, isQuantity, algorithmTime] = handleData(
-		boxes,
-		container,
-		isQuantity,
-		isQuality
+		clientBoxes,
+		clientContainer,
+		clientIsQuantity,
+		clientIsQuality
 	);
 
 	let solutionList = getSolutions(

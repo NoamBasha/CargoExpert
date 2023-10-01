@@ -1,6 +1,6 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import { Login } from "./components/Auth/Login";
+// import { Login } from "./components/Auth/Login";
 import { Register } from "./components/Auth/Register";
 import { Home } from "./components/Home";
 import { Product } from "./components/Product/Product";
@@ -10,6 +10,8 @@ import { Header } from "./components/Header";
 import { ProtectedRoutes } from "./components/ProtectedRoutes";
 import { ErrorSnackbar } from "./components/ErrorSnackbar";
 import { useUserData } from "./components/UserDataProvider";
+
+import Login from "./features/auth/Login.js";
 
 const Screen = () => {
 	const { open, setOpen, error } = useUserData();
@@ -44,11 +46,11 @@ const Screen = () => {
 					element={<Login />}
 				/>
 			</Routes>
-			<ErrorSnackbar
+			{/* <ErrorSnackbar
 				open={open}
 				setOpen={setOpen}
 				text={error}
-			/>
+			/> */}
 		</>
 	);
 };

@@ -6,7 +6,6 @@ import {
 	createSolution,
 	updateSolution,
 	deleteSolution,
-	improveSolution,
 } from "../controllers/solutionController.js";
 
 const router = express.Router();
@@ -18,6 +17,6 @@ router
 	.delete(protect, deleteSolution);
 router
 	.route("/improve/:projectId/:solutionId")
-	.post(protect, improveSolutionMiddleware, improveSolution);
+	.post(protect, improveSolutionMiddleware, updateSolution);
 
 export default router;

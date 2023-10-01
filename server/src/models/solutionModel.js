@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { positionSchema } from "./utils.js";
+import { positionSchema, sizeSchema } from "./utils.js";
 import { boxSchema } from "./boxModel.js";
 
 export const solutionSchema = new mongoose.Schema(
