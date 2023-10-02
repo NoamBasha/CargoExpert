@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import { positionSchema, sizeSchema } from "./utils.js";
 import { boxSchema } from "./boxModel.js";
 
+const MAX_BOXES = 100;
+
 export const solutionSchema = new mongoose.Schema(
 	{
 		boxes: [
@@ -9,6 +11,12 @@ export const solutionSchema = new mongoose.Schema(
 				box: { type: boxSchema, required: true },
 				isIn: { type: Boolean, default: false },
 				position: { type: positionSchema, required: true },
+				validate: {
+					validator: function (arr) {
+						return arr.length <= MAX_BOXES;
+					},
+					message: `The array can have a maximum of ${MAX_BOXES} elements.`,
+				},
 			},
 		],
 		name: { type: String, required: true },

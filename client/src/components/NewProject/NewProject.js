@@ -64,6 +64,7 @@ export const NewProject = () => {
 	const [stage, setStage] = useState(0);
 	const [orderQuantity, setOrderQuantity] = useState("Quantity");
 	const [timeQuality, setTimeQuality] = useState("Time");
+	// TODO change this to use redux!!!
 	const { addProject, isLoading, setError, setCustomizedError } =
 		useUserData();
 	const [openModal, setOpenModal] = useState(false);

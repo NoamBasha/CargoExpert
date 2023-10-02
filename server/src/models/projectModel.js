@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import { sizeSchema } from "./utils.js";
 
+const MAX_SOLUTIONS = 20;
+
 export const projectSchema = new mongoose.Schema(
 	{
 		name: { type: String, required: true },
@@ -9,6 +11,12 @@ export const projectSchema = new mongoose.Schema(
 				type: mongoose.Schema.Types.ObjectId,
 				ref: "Solution",
 				required: true,
+				validate: {
+					validator: function (arr) {
+						return arr.length <= MAX_SOLUTIONS;
+					},
+					message: `The array can have a maximum of ${MAX_SOLUTIONS} elements.`,
+				},
 			},
 		],
 		// boxes: [
