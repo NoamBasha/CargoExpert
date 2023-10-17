@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Solution from "../models/solutionModel.js";
+import Project from "../models/projectModel.js";
 
 export const createSolution = asyncHandler(async (req, res) => {
 	const projectId = req.params.projectId;
@@ -21,7 +22,7 @@ export const createSolution = asyncHandler(async (req, res) => {
 		throw new Error("Project not found");
 	}
 
-	project.solutions.push(solution._id);
+	project.solutions.push(solution);
 
 	await project.save();
 
@@ -53,11 +54,12 @@ export const deleteSolution = asyncHandler(async (req, res) => {
 
 	await project.save();
 
-	await Solution.findByIdAndDelete(solutionId);
+	//await Solution.findByIdAndDelete(solutionId);
 
 	res.status(200).send(project);
 });
 
+// TODO: fix this.
 export const updateSolution = asyncHandler(async (req, res) => {
 	const projectId = req.params.projectId;
 	const solutionId = req.params.solutionId;

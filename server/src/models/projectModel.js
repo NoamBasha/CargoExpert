@@ -7,7 +7,11 @@ const MAX_SOLUTIONS = 20;
 
 export const projectSchema = new mongoose.Schema(
 	{
-		user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true},
+		user: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "User",
+			required: true,
+		},
 		name: { type: String, required: true },
 		container: { type: sizeSchema, required: true },
 		boxes: { type: [boxSchema], required: true },

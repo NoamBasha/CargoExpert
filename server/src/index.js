@@ -17,7 +17,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
-app.use(express.json({ limit: "50mb" }));
+app.use(express.json({ extended: true, limit: "50mb" }));
 // app.use(express.static(path.join(__dirname + "/public")));
 
 app.get("/userInputExample", (req, res) => userInputExample(req, res));

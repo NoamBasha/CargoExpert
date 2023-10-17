@@ -7,7 +7,11 @@ export const solutionSchema = new mongoose.Schema(
 	{
 		boxes: [
 			{
-				boxId: { type: mongoose.Schema.Types.ObjectId, ref: "Box" , required: true },
+				boxId: {
+					type: mongoose.Schema.Types.ObjectId,
+					ref: "Box",
+					required: true,
+				},
 				isIn: { type: Boolean, default: false },
 				position: { type: positionSchema, required: true },
 			},
@@ -20,7 +24,7 @@ export const solutionSchema = new mongoose.Schema(
 			overallScore: { type: Number, required: true },
 		},
 	},
-	{ timestamps: true }
+	{ timestamps: true, _id: true }
 );
 
 const Solution = mongoose.model("Solution", solutionSchema);
