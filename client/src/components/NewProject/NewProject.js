@@ -7,6 +7,8 @@ import { Wizard } from "./Wizard";
 import { useUserData } from "../UserDataProvider";
 import { useNavigate } from "react-router-dom";
 import { Modal, Box, Typography, LinearProgress } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { createNewProject } from "../../features/projects/projectsSlice.js";
 
 const CREATE_PROJECT_MODAL_TEXT =
 	"We are creating your project, it might take a few moments :)";
@@ -70,6 +72,7 @@ export const NewProject = () => {
 	const [openModal, setOpenModal] = useState(false);
 
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	const setNewStage = (dir) => {
 		setError("");
@@ -104,12 +107,25 @@ export const NewProject = () => {
 			};
 
 			try {
-				await addProject({
-					project_data: project_data,
-					container: container,
-					boxes: project_boxes,
-					solutions: [],
-				});
+				//TODO before redux!
+				// await addProject({
+				// 	project_data: project_data,
+				// 	container: container,
+				// 	boxes: project_boxes,
+				// 	solutions: [],
+				// });
+
+				console.log("1");
+				//TODO After Redux
+				await dispatch(
+					createNewProject({
+						project_data: project_data,
+						container: container,
+						boxes: project_boxes,
+						solutions: [],
+					})
+				);
+
 				navigate("/home");
 			} catch (err) {
 				setCustomizedError(err);
