@@ -6,22 +6,16 @@ import Solution from "../models/solutionModel.js";
 import Box from "../models/boxModel.js";
 
 export const getProjects = asyncHandler(async (req, res) => {
-	const id = req.user._id;
+	const id = req.params.userId;
 
-	const user = await User.findById(id).populate({
-		path: "projects",
-		populate: {
-			path: "solutions",
-			model: "Solution",
-		},
-	});
+	const projects = await Project.find({ user: id });
 
-	if (!user) {
+	if (!projects) {
 		res.status(400);
-		throw new Error("User not found");
+		throw new Error("Projects not found");
 	}
 
-	res.status(200).json({ projects: user.projects });
+	res.status(200).json(projects);
 });
 
 export const createProject = asyncHandler(async (req, res) => {

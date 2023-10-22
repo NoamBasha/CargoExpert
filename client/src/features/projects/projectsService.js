@@ -2,13 +2,13 @@ import axios from "axios";
 
 const API_URL = "http://localhost:1337/api/projects/";
 
-const getProjects = async (token) => {
+const getProjects = async (userId, token) => {
 	const config = {
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},
 	};
-	const response = await axios.get(API_URL, config);
+	const response = await axios.get(API_URL + userId, config);
 
 	return response.data;
 };

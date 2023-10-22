@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "./authSlice.js";
 import { useLoginMutation } from "./authApiSlice.js";
+import { getProjects } from "../projects/projectsSlice.js";
 
 const Login = () => {
 	const emailRef = useRef();
@@ -31,6 +32,7 @@ const Login = () => {
 			dispatch(setCredentials({ user: userData, token: userData.token }));
 			setEmail("");
 			setPwd("");
+			dispatch(getProjects());
 			navigate("/home");
 		} catch (err) {
 			console.log(err);
