@@ -132,12 +132,7 @@ const normalize = (numbers) => {
 	return normalized;
 };
 
-export const overallMetric = (
-	projectBoxes,
-	container,
-	solution_data,
-	isQuantity
-) => {
+export const overallMetric = (projectBoxes, container, data, isQuantity) => {
 	if (!projectBoxes || projectBoxes.length === 0) {
 		return 0;
 	}
@@ -146,15 +141,15 @@ export const overallMetric = (
 		return 0;
 	}
 
-	if (!solution_data) {
+	if (!data) {
 		return 0;
 	}
 
 	const containerVolume =
 		container.width * container.height * container.length;
-	const numScore = solution_data.number_of_items / projectBoxes.length;
-	const capScore = solution_data.capacity / containerVolume;
-	const ordScore = solution_data.order_score / 100;
+	const numScore = data.numberOfItems / projectBoxes.length;
+	const capScore = data.capacity / containerVolume;
+	const ordScore = data.orderScore / 100;
 
 	let score = 0;
 	if (!isQuantity) {

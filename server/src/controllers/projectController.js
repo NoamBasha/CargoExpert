@@ -3,6 +3,7 @@ import { algo } from "../algorithm/algo_js/algo.js";
 import User from "../models/userModel.js";
 import Project from "../models/projectModel.js";
 import Solution from "../models/solutionModel.js";
+import Box from "../models/boxModel.js";
 
 export const getProjects = asyncHandler(async (req, res) => {
 	const id = req.user._id;
@@ -24,28 +25,77 @@ export const getProjects = asyncHandler(async (req, res) => {
 });
 
 export const createProject = asyncHandler(async (req, res) => {
-	const { name, boxes, containerSize, isQuantity, isQuality } = req.body;
+	console.log("Creating project...");
 
-	// This is an array of objects containing everything a solution needs.
-	const solutionsData = algo(boxes, containerSize, isQuantity, isQuality);
-
-	// Create solutions first
-	const createdSolutions = await Solution.create(solutionsData);
-
-	if (!createdSolutions) {
-		res.status(400);
-		throw new Error("Couldn't create solutions");
-	}
+	const { name, boxes, container, isQuantity, isQuality } = req.body;
 
 	const createdProject = await Project.create({
-		name,
-		solutions: createdSolutions,
+		user: req.params.userId,
+		name: name,
+		container: container,
+		boxes: boxes,
+		data: {
+			isQuantity: isQuantity == 1 ? true : false,
+			isQuality: isQuality == 1 ? true : false,
+		},
+		// solutions: createdSolutions,
 	});
 
 	if (!createdProject) {
 		res.status(400);
 		throw new Error("Couldn't create project");
 	}
+	const createdBoxes = createdProject.boxes;
+
+	const createdBoxesAndWHL = createdBoxes.map((box) => {
+		return {
+			id: box._id,
+			type: box.type,
+			color: box.color,
+			size: {
+				width: box.size.width,
+				height: box.size.height,
+				length: box.size.length,
+			},
+			order: box.order,
+			width: box.size.width,
+			height: box.size.height,
+			length: box.size.width,
+			isIn: 0,
+		};
+	});
+
+	const solutionsData = algo(
+		createdBoxesAndWHL,
+		container,
+		isQuantity,
+		isQuality
+	);
+
+	const solutionsToInsert = Object.values(solutionsData).map((solution) => {
+		return {
+			boxes: solution.boxes.map((box) => {
+				return {
+					boxId: box.id,
+					isIn: box.isIn,
+					position: {
+						x: box.position[0],
+						y: box.position[1],
+						z: box.position[2],
+					},
+					rotation: box.rotation,
+				};
+			}),
+			name: solution.name,
+			data: solution.data,
+		};
+	});
+
+	createdProject.solutions = solutionsToInsert;
+
+	createdProject.save();
+
+	console.log(createdProject);
 
 	res.status(201).json(createdProject);
 });

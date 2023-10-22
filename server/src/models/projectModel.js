@@ -15,7 +15,7 @@ export const projectSchema = new mongoose.Schema(
 		name: { type: String, required: true },
 		container: { type: sizeSchema, required: true },
 		boxes: { type: [boxSchema], required: true },
-		solutions: { type: [solutionSchema], required: true },
+		solutions: { type: [solutionSchema] },
 		data: {
 			isQuantity: { type: Boolean, default: false, required: true },
 			isQuality: { type: Boolean, default: false, required: true },

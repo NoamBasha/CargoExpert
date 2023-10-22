@@ -29,7 +29,7 @@ const addBoxToSolution = (
 	box,
 	pp,
 	solutionBoxes,
-	solution_data,
+	data,
 	retryList,
 	container,
 	isRetry
@@ -38,8 +38,8 @@ const addBoxToSolution = (
 		setPosition(box, bestPoint);
 		pp = updatePps(box, bestPoint, pp, container);
 		solutionBoxes.push(box);
-		solution_data["number_of_items"] += 1;
-		solution_data["capacity"] += box.volume;
+		data["numberOfItems"] += 1;
+		data["capacity"] += box.volume;
 	} else {
 		if (!isRetry) {
 			retryList.push(box);
@@ -54,7 +54,7 @@ export const handleBox = (
 	pp,
 	container,
 	solutionBoxes,
-	solution_data,
+	data,
 	retryList,
 	isRetry
 ) => {
@@ -65,7 +65,7 @@ export const handleBox = (
 		box,
 		pp,
 		solutionBoxes,
-		solution_data,
+		data,
 		retryList,
 		container,
 		isRetry
@@ -78,6 +78,7 @@ const constructivePacking = (boxes, container, isQuantity) => {
 	Each point has a direction that indicates which corner of a box should be at the point.
 	1 = FLB, -1 = FRB.
 	*/
+
 	let pp = new Set([
 		{
 			x: 0,
@@ -96,52 +97,35 @@ const constructivePacking = (boxes, container, isQuantity) => {
 	let solutionBoxes = [];
 	let retryList = [];
 
-	let solution_data = {
-		number_of_items: 0,
+	let data = {
+		numberOfItems: 0,
 		capacity: 0,
-		order_score: 0,
-		overall_score: 0,
+		orderScore: 0,
+		overallScore: 0,
 	};
 
 	// For each box, put it in the best point possible.
 	boxes.forEach((box) => {
-		handleBox(
-			box,
-			pp,
-			container,
-			solutionBoxes,
-			solution_data,
-			retryList,
-			false
-		);
+		handleBox(box, pp, container, solutionBoxes, data, retryList, false);
 	});
 
 	// For each box which is not put in the solution, try and put it again.
 	retryList.forEach((box) => {
-		handleBox(
-			box,
-			pp,
-			container,
-			solutionBoxes,
-			solution_data,
-			retryList,
-			true
-		);
+		handleBox(box, pp, container, solutionBoxes, data, retryList, true);
 	});
 
-	solution_data.order_score = parseFloat(
-		orderMetric(solutionBoxes, container)
+	data.orderScore = parseFloat(orderMetric(solutionBoxes, container));
+
+	data.overallScore = parseFloat(
+		overallMetric(boxes, container, data, isQuantity)
 	);
 
-	solution_data.overall_score = parseFloat(
-		overallMetric(boxes, container, solution_data, isQuantity)
-	);
-
-	return [solutionBoxes, solution_data];
+	return [solutionBoxes, data];
 };
 
 const handleData = (boxes, container, isQuantity, isQuality) => {
-	const algorithmTime = isQuality ? 60000 : 15000; // miliseconds
+	// TODO : change from 2000 to 15000
+	const algorithmTime = isQuality ? 60000 : 2000; // miliseconds
 
 	const initBoxes = boxes.map((box) => {
 		return initBox(box);
@@ -168,9 +152,9 @@ const getSolutions = (algorithmTime, boxes, container, isQuantity) => {
 			continue;
 		}
 
-		let [boxesInSolution, solution_data] = solution;
+		let [boxesInSolution, data] = solution;
 
-		if (boxesInSolution !== null && solution_data !== null) {
+		if (boxesInSolution !== null && data !== null) {
 			let counterString = counter.toString();
 			solutionList[counterString] = {
 				name: "solution " + counterString,
@@ -178,7 +162,7 @@ const getSolutions = (algorithmTime, boxes, container, isQuantity) => {
 				boxes: boxesInSolution.map((box) => {
 					return getBox(box);
 				}),
-				solution_data: solution_data,
+				data: data,
 			};
 			counter += 1;
 		}
@@ -193,41 +177,27 @@ const getSolutions = (algorithmTime, boxes, container, isQuantity) => {
 const sortByPreference = (solutionList, isQuantity) => {
 	if (isQuantity) {
 		solutionList = Object.values(solutionList)
-			.sort(
-				(a, b) =>
-					b.solution_data.number_of_items -
-					a.solution_data.number_of_items
-			)
+			.sort((a, b) => b.data.numberOfItems - a.data.numberOfItems)
 			.slice(0, 50);
 		solutionList = solutionList
-			.sort((a, b) => b.solution_data.capacity - a.solution_data.capacity)
+			.sort((a, b) => b.data.capacity - a.data.capacity)
 			.slice(0, 25);
 		solutionList = solutionList
-			.sort(
-				(a, b) =>
-					b.solution_data.order_score - a.solution_data.order_score
-			)
+			.sort((a, b) => b.data.orderScore - a.data.orderScore)
 			.slice(0, 10);
 	} else {
 		solutionList = Object.values(solutionList)
-			.sort(
-				(a, b) =>
-					b.solution_data.order_score - a.solution_data.order_score
-			)
+			.sort((a, b) => b.data.orderScore - a.data.orderScore)
 			.slice(0, 20);
 		solutionList = solutionList
-			.sort(
-				(a, b) =>
-					b.solution_data.number_of_items -
-					a.solution_data.number_of_items
-			)
+			.sort((a, b) => b.data.numberOfItems - a.data.numberOfItems)
 			.slice(0, 15);
 		solutionList = solutionList
-			.sort((a, b) => b.solution_data.capacity - a.solution_data.capacity)
+			.sort((a, b) => b.data.capacity - a.data.capacity)
 			.slice(0, 10);
 	}
 	solutionList = solutionList.sort(
-		(a, b) => b.solution_data.overall_score - a.solution_data.overall_score
+		(a, b) => b.data.overallScore - a.data.overallScore
 	);
 	return solutionList;
 };

@@ -8,7 +8,7 @@ User:
 Project:
 
 -   solutions[]
--   containerSize
+-   container
 -   name
 -   boxes[]
     (- isQuantity)

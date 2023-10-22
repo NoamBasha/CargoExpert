@@ -18,16 +18,21 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { IconButton } from "@mui/material";
 import { CircularProgress } from "@mui/material";
 import { SuccessSnackbar } from "../../SuccessSnackbar.js";
+import { selectAllProjects } from "../../../features/projects/projectsSlice.js";
+import { useSelector } from "react-redux";
 
 export const ProjectsTable = () => {
 	const {
-		projects,
+		// projects,
 		deleteProject,
 		updateProject,
 		isLoading,
 		setCustomizedError,
 		error,
 	} = useUserData();
+
+	const projects = useSelector(selectAllProjects);
+
 	const { setProjectId } = useProject();
 	const [tableProjectId, setTableProjectId] = useState(null);
 	const [showChangeNamePopup, setShowChangeNamePopup] = useState(false);
@@ -41,7 +46,7 @@ export const ProjectsTable = () => {
 	const tableData = projects.map((project) => {
 		return {
 			id: project.id,
-			name: project.project_data.name,
+			name: project.name,
 		};
 	});
 

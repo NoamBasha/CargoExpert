@@ -61,7 +61,7 @@ export const ProjectProvider = ({ children }) => {
 			return "";
 		} else {
 			return projects.filter((project) => project.id === projectId)[0]
-				.project_data.name;
+				.data.name;
 		}
 	};
 

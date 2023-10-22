@@ -8,7 +8,7 @@ import { useUserData } from "../UserDataProvider";
 import { useNavigate } from "react-router-dom";
 import { Modal, Box, Typography, LinearProgress } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { createNewProject } from "../../features/projects/projectsSlice.js";
+import { createProject } from "../../features/projects/projectsSlice.js";
 
 const CREATE_PROJECT_MODAL_TEXT =
 	"We are creating your project, it might take a few moments :)";
@@ -97,32 +97,30 @@ export const NewProject = () => {
 		} else {
 			setOpenModal(true);
 			let project_boxes = boxes.map((box) => {
-				return { ...box, color: stringToColour(box.type), isIn: 0 };
+				return {
+					...box,
+					size: {
+						width: box.width,
+						height: box.height,
+						length: box.length,
+					},
+					color: stringToColour(box.type),
+					isIn: 0,
+				};
 			});
 
-			const project_data = {
-				name: name,
-				isQuantity: orderQuantity === "Quantity" ? 1 : 0,
-				isQuality: timeQuality === "Quality" ? 1 : 0,
-			};
-
 			try {
-				//TODO before redux!
-				// await addProject({
-				// 	project_data: project_data,
-				// 	container: container,
-				// 	boxes: project_boxes,
-				// 	solutions: [],
-				// });
-
-				console.log("1");
-				//TODO After Redux
 				await dispatch(
-					createNewProject({
-						project_data: project_data,
-						container: container,
+					createProject({
+						name: name,
+						isQuantity: orderQuantity === "Quantity" ? 1 : 0,
+						isQuality: timeQuality === "Quality" ? 1 : 0,
+						container: {
+							width: container[0],
+							height: container[1],
+							length: container[2],
+						},
 						boxes: project_boxes,
-						solutions: [],
 					})
 				);
 

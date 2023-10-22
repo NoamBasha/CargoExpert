@@ -14,6 +14,7 @@ export const solutionSchema = new mongoose.Schema(
 				},
 				isIn: { type: Boolean, default: false },
 				position: { type: positionSchema, required: true },
+				rotation: { type: Number, required: true },
 			},
 		],
 		name: { type: String, required: true },
