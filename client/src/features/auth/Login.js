@@ -4,13 +4,12 @@ import { useDispatch } from "react-redux";
 import { setCredentials } from "./authSlice.js";
 import { useLoginMutation } from "./authApiSlice.js";
 import { getProjects } from "../projects/projectsSlice.js";
+import { toast } from "react-toastify";
 
 const Login = () => {
 	const emailRef = useRef();
-	const errRef = useRef();
 	const [email, setEmail] = useState("");
 	const [pwd, setPwd] = useState("");
-	const [errMsg, setErrMsg] = useState("");
 	const navigate = useNavigate();
 
 	const [login, { isLoading }] = useLoginMutation();
@@ -20,32 +19,29 @@ const Login = () => {
 		emailRef.current.focus();
 	}, []);
 
-	useEffect(() => {
-		setErrMsg("");
-	}, [email, pwd]);
-
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-
 		try {
 			const userData = await login({ email, password: pwd }).unwrap();
-			dispatch(setCredentials({ user: userData, token: userData.token }));
+			await dispatch(
+				setCredentials({ user: userData, token: userData.token })
+			);
+			await dispatch(getProjects());
 			setEmail("");
 			setPwd("");
-			dispatch(getProjects());
 			navigate("/home");
 		} catch (err) {
-			console.log(err);
+			let errMsg = "";
 			if (!err?.originalStatus) {
-				setErrMsg("No Server Response");
+				errMsg = "No Server Response";
 			} else if (err.originalStatus === 400) {
-				setErrMsg("Missing email or password");
+				errMsg = "Missing email or password";
 			} else if (err.originalStatus === 401) {
-				setErrMsg("Unauthorized");
+				errMsg = "Unauthorized";
 			} else {
-				setErrMsg("Login Failed");
+				errMsg = "Login Failed";
 			}
-			errRef.current.focus();
+			toast.error(errMsg);
 		}
 	};
 
@@ -55,9 +51,7 @@ const Login = () => {
 	const content = isLoading ? (
 		<h1>Loading...</h1>
 	) : (
-		<section className="login">
-			<p ref={errRef}>{errMsg}</p>
-
+		<div>
 			<h1>Login</h1>
 
 			<form onSubmit={handleSubmit}>
@@ -81,7 +75,7 @@ const Login = () => {
 				/>
 				<button>Sign In</button>
 			</form>
-		</section>
+		</div>
 	);
 
 	return content;

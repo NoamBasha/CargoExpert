@@ -3,6 +3,7 @@ import { Button } from "@mui/material";
 import { DropzoneArea } from "material-ui-dropzone";
 import { DownloadFile } from "./DownloadFile";
 import { useState, useEffect, useCallback } from "react";
+import { toast } from "react-toastify";
 
 const CONTAINER_ERROR = "There is a problem with the container";
 const BOXES_ERROR = "There is a problem with the boxes";
@@ -10,12 +11,7 @@ const FILE_ERROR = "There was an error pasring the file";
 const FILE_UPLOAD_PAGE_TEXT = `You may upload a CSV file which contains the information about 
 your container and boxes. You may find an example file here:`;
 
-export const FileUpload = ({
-	setNewStage,
-	setContainer,
-	setBoxes,
-	setCustomizedError,
-}) => {
+export const FileUpload = ({ setNewStage, setContainer, setBoxes }) => {
 	const [fileName, setFileName] = useState(null);
 
 	const handleDelete = useCallback(() => {
@@ -51,7 +47,7 @@ export const FileUpload = ({
 					Object.values(numberic_object).includes(null) ||
 					Object.values(numberic_object).includes(undefined)
 				) {
-					setCustomizedError(BOXES_ERROR);
+					toast.error(BOXES_ERROR);
 					return;
 				}
 				numeric_data.push(numberic_object);
@@ -68,7 +64,7 @@ export const FileUpload = ({
 				container_data.width == null ||
 				container_data.length == null
 			) {
-				setCustomizedError(CONTAINER_ERROR);
+				toast.error(CONTAINER_ERROR);
 				return;
 			}
 
@@ -79,7 +75,7 @@ export const FileUpload = ({
 			setContainer(Object.values(container_data));
 			setBoxes(boxes);
 		} catch (err) {
-			setCustomizedError(FILE_ERROR);
+			toast.error(FILE_ERROR);
 		}
 	};
 
@@ -100,7 +96,7 @@ export const FileUpload = ({
 	return (
 		<div className="d-flex flex-column align-items-center w-25">
 			<p className="mb-0 text-center">{FILE_UPLOAD_PAGE_TEXT}</p>
-			<DownloadFile setCustomizedError={setCustomizedError} />
+			<DownloadFile />
 			<DropzoneArea
 				dropzoneClass={
 					"px-4 text-secondary d-flex align-items-center w-100"

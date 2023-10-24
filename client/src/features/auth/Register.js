@@ -3,53 +3,47 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "./authSlice.js";
 import { useRegisterMutation } from "./authApiSlice.js";
+import { toast } from "react-toastify";
 
 const Register = () => {
-	const emailRef = useRef();
-	const errRef = useRef();
+	const nameRef = useRef();
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
 	const [pwd, setPwd] = useState("");
-	const [errMsg, setErrMsg] = useState("");
 	const navigate = useNavigate();
 
 	const [register, { isLoading }] = useRegisterMutation();
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		emailRef.current.focus();
+		nameRef.current.focus();
 	}, []);
-
-	useEffect(() => {
-		setErrMsg("");
-	}, [email, pwd]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-
 		try {
 			const userData = await register({
 				email,
 				password: pwd,
 				name,
 			}).unwrap();
-			dispatch(setCredentials({ ...userData, email }));
+			await dispatch(setCredentials({ ...userData, email }));
 			setEmail("");
 			setPwd("");
 			setName("");
 			navigate("/home");
 		} catch (err) {
-			console.log(err);
+			let errMsg = "";
 			if (!err?.originalStatus) {
-				setErrMsg("No Server Response");
+				errMsg = "No Server Response";
 			} else if (err.originalStatus === 400) {
-				setErrMsg("Missing email or password or name");
+				errMsg = "Missing email or password or name";
 			} else if (err.originalStatus === 401) {
-				setErrMsg("Unauthorized");
+				errMsg = "Unauthorized";
 			} else {
-				setErrMsg("Login Failed");
+				errMsg = "Login Failed";
 			}
-			errRef.current.focus();
+			toast.error(errMsg);
 		}
 	};
 
@@ -60,16 +54,15 @@ const Register = () => {
 	const content = isLoading ? (
 		<h1>Loading...</h1>
 	) : (
-		<section className="login">
-			<p ref={errRef}>{errMsg}</p>
-
-			<h1>Login</h1>
+		<div>
+			<h1>Register</h1>
 
 			<form onSubmit={handleSubmit}>
 				<label>Name:</label>
 				<input
 					type="text"
 					id="name"
+					ref={nameRef}
 					value={name}
 					onChange={handleNameInput}
 					required
@@ -79,7 +72,6 @@ const Register = () => {
 				<input
 					type="text"
 					id="email"
-					ref={emailRef}
 					value={email}
 					onChange={handleEmailInput}
 					required
@@ -95,7 +87,7 @@ const Register = () => {
 				/>
 				<button>Sign Up</button>
 			</form>
-		</section>
+		</div>
 	);
 
 	return content;

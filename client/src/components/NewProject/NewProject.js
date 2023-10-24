@@ -4,11 +4,11 @@ import { ProjectSettings } from "./ProjectSettings/ProjectSettings";
 import { EditBoxes } from "./Boxes/EditBoxes";
 import { useState } from "react";
 import { Wizard } from "./Wizard";
-import { useUserData } from "../UserDataProvider";
 import { useNavigate } from "react-router-dom";
 import { Modal, Box, Typography, LinearProgress } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { createProject } from "../../features/projects/projectsSlice.js";
+import { toast } from "react-toastify";
 
 const CREATE_PROJECT_MODAL_TEXT =
 	"We are creating your project, it might take a few moments :)";
@@ -66,16 +66,13 @@ export const NewProject = () => {
 	const [stage, setStage] = useState(0);
 	const [orderQuantity, setOrderQuantity] = useState("Quantity");
 	const [timeQuality, setTimeQuality] = useState("Time");
-	// TODO change this to use redux!!!
-	const { addProject, isLoading, setError, setCustomizedError } =
-		useUserData();
 	const [openModal, setOpenModal] = useState(false);
 
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
 	const setNewStage = (dir) => {
-		setError("");
+		// setError("");
 		setStage((prevStage) => prevStage + dir * 1);
 	};
 
@@ -90,10 +87,9 @@ export const NewProject = () => {
 	};
 
 	const handleAddProject = async () => {
-		setError("");
+		// setError("");
 		if (!validateBoxes()) {
-			//TODO: change this to error from file to be created...
-			setCustomizedError("Problem with boxes");
+			toast.error("Problem with boxes");
 		} else {
 			setOpenModal(true);
 			let project_boxes = boxes.map((box) => {
@@ -126,7 +122,7 @@ export const NewProject = () => {
 
 				navigate("/home");
 			} catch (err) {
-				setCustomizedError(err);
+				toast.error(err);
 			}
 		}
 	};
@@ -153,7 +149,6 @@ export const NewProject = () => {
 						setOrderQuantity={setOrderQuantity}
 						timeQuality={timeQuality}
 						setTimeQuality={setTimeQuality}
-						setCustomizedError={setCustomizedError}
 					/>
 				) : null}
 
@@ -162,7 +157,6 @@ export const NewProject = () => {
 						setNewStage={setNewStage}
 						setContainer={setContainer}
 						setBoxes={setBoxes}
-						setCustomizedError={setCustomizedError}
 					/>
 				) : null}
 
@@ -171,7 +165,6 @@ export const NewProject = () => {
 						setNewStage={setNewStage}
 						container={container}
 						setContainer={setContainer}
-						setCustomizedError={setCustomizedError}
 					/>
 				) : null}
 
@@ -181,8 +174,6 @@ export const NewProject = () => {
 						boxes={boxes}
 						setBoxes={setBoxes}
 						handleAddProject={handleAddProject}
-						isLoading={isLoading}
-						setCustomizedError={setCustomizedError}
 					/>
 				) : null}
 				<Modal

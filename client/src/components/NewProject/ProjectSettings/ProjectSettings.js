@@ -1,6 +1,7 @@
 import { Button, TextField } from "@mui/material";
 import { PreferencesPanel } from "./PreferencesPanel";
 import { ExplanationIcon } from "../../ExplanationIcon.js";
+import { toast } from "react-toastify";
 
 export const ProjectSettings = ({
 	name,
@@ -10,7 +11,6 @@ export const ProjectSettings = ({
 	setOrderQuantity,
 	timeQuality,
 	setTimeQuality,
-	setCustomizedError,
 }) => {
 	const validateName = () => {
 		if (name.trim().length === 0) {
@@ -63,7 +63,7 @@ export const ProjectSettings = ({
 					if (validateName()) {
 						setNewStage(1);
 					} else {
-						setCustomizedError("Problem with name");
+						toast.error("Problem with name");
 					}
 				}}
 			>

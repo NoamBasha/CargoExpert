@@ -4,6 +4,8 @@ import { BoxForm } from "./BoxForm";
 import { Button } from "@mui/material";
 import { CircularProgress } from "@mui/material";
 import { ExplanationIcon } from "../../ExplanationIcon.js";
+import { selectIsLoading } from "../../../features/projects/projectsSlice.js";
+import { useSelector } from "react-redux";
 
 const EDIT_BOXES_EXPLANATION_TEXT = `Boxes Table:
 - You can view the boxes you uploaded.
@@ -21,10 +23,9 @@ export const EditBoxes = ({
 	boxes,
 	setBoxes,
 	handleAddProject,
-	isLoading,
-	setCustomizedError,
 }) => {
 	const [selectedIds, setSelecetedIds] = useState([]);
+	const isLoading = useSelector(selectIsLoading);
 
 	const editSelectedIds = (newBox) => {
 		const newBoxes = boxes.map((box) => {
@@ -53,7 +54,6 @@ export const EditBoxes = ({
 					boxes={boxes}
 					selectedIds={selectedIds}
 					editBox={editSelectedIds}
-					setCustomizedError={setCustomizedError}
 					setSelecetedIds={setSelecetedIds}
 				/>
 			</div>

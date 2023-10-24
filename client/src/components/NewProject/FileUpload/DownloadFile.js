@@ -1,9 +1,10 @@
 import FileDownload from "js-file-download";
 import { Button } from "@mui/material";
+import { toast } from "react-toastify";
 
 const DEV = true;
 
-export const DownloadFile = ({ setCustomizedError }) => {
+export const DownloadFile = () => {
 	const DOWNLOAD_FILE_ERROR =
 		"Can't download file at this time. Please try again later.";
 
@@ -26,10 +27,10 @@ export const DownloadFile = ({ setCustomizedError }) => {
 				FileDownload(res_blob, "user_input_example_from_server.csv");
 			} else {
 				const data = await response.json();
-				setCustomizedError(data.error);
+				toast.error(data.error);
 			}
 		} catch (err) {
-			setCustomizedError(DOWNLOAD_FILE_ERROR);
+			toast.error(DOWNLOAD_FILE_ERROR);
 		}
 	};
 

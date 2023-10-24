@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button, TextField } from "@mui/material";
+import { toast } from "react-toastify";
 
 const formErrors = {
 	orderError: "There is a problem with the box's order",
@@ -14,7 +15,6 @@ export const BoxForm = ({
 	boxes,
 	selectedIds,
 	editBox,
-	setCustomizedError,
 	setSelecetedIds,
 }) => {
 	const [formOrder, setFormOrder] = useState("");
@@ -46,23 +46,23 @@ export const BoxForm = ({
 
 	const isFormValid = () => {
 		if (!formOrder || formOrder <= 0) {
-			setCustomizedError(formErrors.orderError);
+			toast.error(formErrors.orderError);
 			return false;
 		}
 		if (!formWidth || formWidth <= 0) {
-			setCustomizedError(formErrors.widthError);
+			toast.error(formErrors.widthError);
 			return false;
 		}
 		if (!formHeight || formHeight <= 0) {
-			setCustomizedError(formErrors.heightError);
+			toast.error(formErrors.heightError);
 			return false;
 		}
 		if (!formLength || formLength <= 0) {
-			setCustomizedError(formErrors.lengthError);
+			toast.error(formErrors.lengthError);
 			return false;
 		}
 		if (!formType || formType.trim().length <= 0) {
-			setCustomizedError(formErrors.typeError);
+			toast.error(formErrors.typeError);
 			return false;
 		}
 		return true;

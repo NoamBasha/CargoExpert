@@ -1,13 +1,9 @@
 import { useState } from "react";
 import { Button, TextField } from "@mui/material";
 import { StandardContainers } from "./StandardContainers";
+import { toast } from "react-toastify";
 
-export const EditContainer = ({
-	setNewStage,
-	container,
-	setContainer,
-	setCustomizedError,
-}) => {
+export const EditContainer = ({ setNewStage, container, setContainer }) => {
 	const [width, height, length] = container;
 
 	const [formWidth, setFormWidth] = useState(width);
@@ -33,7 +29,7 @@ export const EditContainer = ({
 			]);
 			setNewStage(1);
 		} else {
-			setCustomizedError("Problem with container");
+			toast.error("Problem with container");
 		}
 	};
 

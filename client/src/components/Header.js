@@ -1,19 +1,20 @@
 import { Button } from "@mui/material";
-import { useUserData } from "./UserDataProvider.js";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as CargoExpert } from "../CargoExpert.svg";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../features/auth/authSlice.js";
+import { logout } from "../features/auth/authSlice.js";
+import { useDispatch } from "react-redux";
 
 export const Header = () => {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
-	const { setEmail, setPassword, setIsLoggedIn, isLoggedIn } = useUserData();
-
-	const logout = () => {
-		setEmail("");
-		setPassword("");
-		setIsLoggedIn(false);
-		navigate("/");
+	const handleLogout = () => {
+		dispatch(logout());
 	};
+
+	const currentUser = useSelector(selectCurrentUser);
 
 	return (
 		<div
@@ -24,7 +25,7 @@ export const Header = () => {
 				style={{ width: "7%" }}
 				className="mx-5"
 			/>
-			{!isLoggedIn ? (
+			{!currentUser ? (
 				<>
 					<Button onClick={() => navigate("/login")}>Login</Button>
 					<Button
@@ -39,7 +40,7 @@ export const Header = () => {
 					<Button onClick={() => navigate("/home")}>Home</Button>
 					<Button
 						className="mx-2"
-						onClick={logout}
+						onClick={handleLogout}
 					>
 						Logout
 					</Button>

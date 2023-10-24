@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import projectsService from "./projectsService.js";
+import { logout } from "../auth/authSlice.js";
 
 const initialState = {
 	projects: [],
@@ -17,13 +18,7 @@ export const getProjects = createAsyncThunk(
 			const userId = thunkAPI.getState().auth.user._id;
 			return await projectsService.getProjects(userId, token);
 		} catch (error) {
-			const message =
-				(error.response &&
-					error.response.data &&
-					error.response.data.message) ||
-				error.message ||
-				error.toString();
-			return thunkAPI.rejectWithValue(message);
+			return thunkAPI.rejectWithValue(error.message);
 		}
 	}
 );
@@ -42,14 +37,7 @@ export const createProject = createAsyncThunk(
 
 			return response;
 		} catch (error) {
-			const message =
-				(error.response &&
-					error.response.data &&
-					error.response.data.message) ||
-				error.message ||
-				error.toString();
-
-			return thunkAPI.rejectWithValue(message);
+			return thunkAPI.rejectWithValue(error.message);
 		}
 	}
 );
@@ -64,13 +52,14 @@ export const updateProject = createAsyncThunk(
 				token
 			);
 		} catch (error) {
-			const message =
-				(error.response &&
-					error.response.data &&
-					error.response.data.message) ||
-				error.message ||
-				error.toString();
-			return thunkAPI.rejectWithValue(message);
+			// const message =
+			// 	(error.response &&
+			// 		error.response.data &&
+			// 		error.response.data.message) ||
+			// 	error.message ||
+			// 	error.toString();
+			// return thunkAPI.rejectWithValue(message);
+			return thunkAPI.rejectWithValue(error.message);
 		}
 	}
 );
@@ -82,16 +71,16 @@ export const deleteProject = createAsyncThunk(
 			const token = thunkAPI.getState().auth.user.token;
 			return await projectsService.deleteProject(projectId, token);
 		} catch (error) {
-			const message =
-				(error.response &&
-					error.response.data &&
-					error.response.data.message) ||
-				error.message ||
-				error.toString();
-			return thunkAPI.rejectWithValue(message);
+			return thunkAPI.rejectWithValue(error.message);
 		}
 	}
 );
+
+// TODO: implement these functions.
+export const createSolution = createAsyncThunk();
+export const updateSolution = createAsyncThunk();
+export const deleteSolution = createAsyncThunk();
+export const improveSolution = createAsyncThunk();
 
 export const projectsSlice = createSlice({
 	name: "projects",
@@ -155,6 +144,9 @@ export const projectsSlice = createSlice({
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;
+			})
+			.addCase(logout, () => {
+				return initialState;
 			});
 	},
 });
@@ -163,3 +155,4 @@ export const { reset } = projectsSlice.actions;
 export default projectsSlice.reducer;
 
 export const selectAllProjects = (state) => state.projects.projects;
+export const selectIsLoading = (state) => state.projects.isLoading;

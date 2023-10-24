@@ -7,16 +7,15 @@ import { Product } from "./components/Product/Product";
 import { NewProject } from "./components/NewProject/NewProject";
 import { UserDataProvider } from "./components/UserDataProvider";
 import { Header } from "./components/Header";
-// import { ProtectedRoutes } from "./components/ProtectedRoutes";
-import { ErrorSnackbar } from "./components/ErrorSnackbar";
-import { useUserData } from "./components/UserDataProvider";
 
 import Login from "./features/auth/Login.js";
 import Register from "./features/auth/Register.js";
 import RequireAuth from "./features/auth/RequireAuth.js";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const Screen = () => {
-	const { open, setOpen, error } = useUserData();
 	return (
 		<>
 			<Header />
@@ -48,11 +47,21 @@ const Screen = () => {
 					element={<Login />}
 				/>
 			</Routes>
-			{/* <ErrorSnackbar
-				open={open}
-				setOpen={setOpen}
-				text={error}
-			/> */}
+			<ToastContainer
+				position="top-right"
+				autoClose={5000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+				theme="light"
+				progressStyle={{
+					background: "grey",
+				}}
+			/>
 		</>
 	);
 };

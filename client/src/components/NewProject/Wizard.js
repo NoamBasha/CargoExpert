@@ -1,6 +1,13 @@
 import { Stepper, Step, StepLabel } from "@material-ui/core";
 
 export const Wizard = ({ stage }) => {
+	const steps = [
+		"Project Settings",
+		"Upload File",
+		"Edit Container",
+		"Edit Boxes",
+	];
+
 	return (
 		<div>
 			<Stepper
@@ -12,18 +19,13 @@ export const Wizard = ({ stage }) => {
 				activeStep={stage}
 				alternativeLabel
 			>
-				<Step>
-					<StepLabel>Project Settings</StepLabel>
-				</Step>
-				<Step>
-					<StepLabel>Upload File</StepLabel>
-				</Step>
-				<Step>
-					<StepLabel>Edit Container</StepLabel>
-				</Step>
-				<Step>
-					<StepLabel>Edit Boxes</StepLabel>
-				</Step>
+				{steps.map((step, i) => {
+					return (
+						<Step key={i}>
+							<StepLabel>{step}</StepLabel>
+						</Step>
+					);
+				})}
 			</Stepper>
 		</div>
 	);
