@@ -7,21 +7,16 @@ import {
 	DialogActions,
 	Button,
 } from "@mui/material";
+import { toast } from "react-toastify";
 
-export const ChangeNamePopup = ({
-	text,
-	id,
-	onSubmit,
-	onClose,
-	setCustomizedError,
-}) => {
+export const ChangeNamePopup = ({ text, id, onSubmit, onClose }) => {
 	const [name, setName] = useState("");
 
 	const handleSubmit = () => {
 		if (name && name.trim().length !== 0) {
 			onSubmit(id, name);
 		} else {
-			setCustomizedError("Name can not be empty");
+			toast.error("Name can not be empty");
 		}
 		onClose();
 	};

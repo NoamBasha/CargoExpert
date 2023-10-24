@@ -1,17 +1,12 @@
 import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
+import { toast } from "react-toastify";
 
-export const DeletePopup = ({
-	text,
-	id,
-	onSubmit,
-	onClose,
-	setCustomizedError,
-}) => {
+export const DeletePopup = ({ text, id, onSubmit, onClose }) => {
 	const handleSubmit = () => {
 		if (!isNaN(id) && id >= 0) {
 			onSubmit(id);
 		} else {
-			setCustomizedError("Could not delete");
+			toast.error("Could not delete");
 		}
 		onClose();
 	};

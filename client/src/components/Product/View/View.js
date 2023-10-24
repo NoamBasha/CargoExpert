@@ -15,6 +15,8 @@ import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutl
 import ArrowBackIosOutlinedIcon from "@mui/icons-material/ArrowBackIosOutlined";
 import { ExplanationIcon } from "../../ExplanationIcon.js";
 
+import { toast } from "react-toastify";
+
 import {
 	isBoxesOutOfBounds,
 	isBoxesOverlapping,
@@ -98,7 +100,7 @@ export const View = () => {
 		getCurrentProjectName,
 		getCurrentSolutionName,
 	} = useProject();
-	const { setCustomizedError, isLoading } = useUserData();
+	const { isLoading } = useUserData();
 
 	const projectName = getCurrentProjectName();
 	const solutionName = getCurrentSolutionName();
@@ -107,13 +109,11 @@ export const View = () => {
 	const validateBoxesLocation = (inBoxes, container) => {
 		return () => {
 			if (isBoxesOutOfBounds(inBoxes, container)) {
-				setCustomizedError(
-					"Not all of the boxes are inside the container"
-				);
+				toast.error("Not all of the boxes are inside the container");
 			} else if (isBoxesOverlapping(inBoxes, container)) {
-				setCustomizedError("There are boxes overlapping");
+				toast.error("There are boxes overlapping");
 			} else if (isBoxesHovering(inBoxes)) {
-				setCustomizedError("There are boxes hovering");
+				toast.error("There are boxes hovering");
 			} else {
 				return true;
 			}

@@ -7,7 +7,6 @@ import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import { IconButton } from "@mui/material";
 import { CircularProgress } from "@mui/material";
 import { useEffect } from "react";
-import { SuccessSnackbar } from "../../SuccessSnackbar.js";
 
 import {
 	TableContainer,
@@ -22,6 +21,8 @@ import { useState } from "react";
 import { ChangeNamePopup } from "../ChangeNamePopup";
 import { DeletePopup } from "../DeletePopup";
 import { TableSortLabel } from "@mui/material";
+
+import { toast } from "react-toastify";
 
 const SortIcon = ({ column, sortByColumn }) => {
 	const [isAscending, setIsAscending] = useState("asc");
@@ -45,14 +46,12 @@ export const SolutionsTable = ({ title }) => {
 		duplicateSolution,
 		updateSolutionName,
 		isLoading,
-		setCustomizedError,
 		error,
 	} = useUserData();
 
 	const [tableSolutionId, setTableSolutionId] = useState(null);
 	const [showChangeNamePopup, setShowChangeNamePopup] = useState(false);
 	const [showDeletePopup, setShowDeletePopup] = useState(false);
-	const [snackbarMessage, setSnackbarMessage] = useState("");
 	const [tableData, setTableData] = useState([]);
 	// const [isAscending, setIsAscending] = useState(true);
 
@@ -99,7 +98,7 @@ export const SolutionsTable = ({ title }) => {
 				name: name,
 			};
 			updateSolutionName(projectId, newSolution);
-			setSnackbarMessage(`Changed name to ${name}`);
+			toast.info(`Changed name to ${name}`);
 		}
 	};
 
@@ -107,7 +106,7 @@ export const SolutionsTable = ({ title }) => {
 		const deleteSpecificSolution = deleteSolution(projectId);
 		deleteSpecificSolution(id);
 		if (error === "") {
-			setSnackbarMessage(`Deleted Solution successfully`);
+			toast.success(`Deleted Solution successfully`);
 		}
 	};
 
@@ -236,7 +235,7 @@ export const SolutionsTable = ({ title }) => {
 														projectId,
 														row.id
 													);
-													setSnackbarMessage(
+													toast.success(
 														`Duplicated solution`
 													);
 												}}
@@ -284,7 +283,6 @@ export const SolutionsTable = ({ title }) => {
 					id={tableSolutionId}
 					onSubmit={handleChangeName}
 					onClose={() => setShowChangeNamePopup(false)}
-					setCustomizedError={setCustomizedError}
 				/>
 			) : null}
 			{showDeletePopup ? (
@@ -295,14 +293,8 @@ export const SolutionsTable = ({ title }) => {
 					onClose={() => {
 						setShowDeletePopup(false);
 					}}
-					setCustomizedError={setCustomizedError}
 				/>
 			) : null}
-			<SuccessSnackbar
-				open={snackbarMessage !== ""}
-				text={snackbarMessage}
-				setOpen={() => setSnackbarMessage("")}
-			/>
 		</div>
 	);
 };

@@ -17,19 +17,13 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { IconButton } from "@mui/material";
 import { CircularProgress } from "@mui/material";
-import { SuccessSnackbar } from "../../SuccessSnackbar.js";
 import { selectAllProjects } from "../../../features/projects/projectsSlice.js";
 import { useSelector } from "react-redux";
 
+import { toast } from "react-toastify";
+
 export const ProjectsTable = () => {
-	const {
-		// projects,
-		deleteProject,
-		updateProject,
-		isLoading,
-		setCustomizedError,
-		error,
-	} = useUserData();
+	const { deleteProject, updateProject, isLoading, error } = useUserData();
 
 	const projects = useSelector(selectAllProjects);
 
@@ -37,7 +31,6 @@ export const ProjectsTable = () => {
 	const [tableProjectId, setTableProjectId] = useState(null);
 	const [showChangeNamePopup, setShowChangeNamePopup] = useState(false);
 	const [showDeletePopup, setShowDeletePopup] = useState(false);
-	const [snackbarMessage, setSnackbarMessage] = useState("");
 
 	const handleClick = (index) => {
 		setProjectId(index);
@@ -67,14 +60,14 @@ export const ProjectsTable = () => {
 				project_data: { ...project.project_data, name: name },
 			};
 			updateProject(newProject);
-			setSnackbarMessage(`Changed name to ${name}`);
+			toast.success(`Changed name to ${name}`);
 		}
 	};
 
 	const handleDelete = (id) => {
 		deleteProject(id);
 		if (error === "") {
-			setSnackbarMessage(`Deleted Project successfully`);
+			toast.success(`Deleted Project successfully`);
 		}
 	};
 
@@ -185,7 +178,6 @@ export const ProjectsTable = () => {
 						id={tableProjectId}
 						onSubmit={handleChangeName}
 						onClose={() => setShowChangeNamePopup(false)}
-						setCustomizedError={setCustomizedError}
 					/>
 				) : null}
 				{showDeletePopup ? (
@@ -194,14 +186,8 @@ export const ProjectsTable = () => {
 						id={tableProjectId}
 						onSubmit={handleDelete}
 						onClose={() => setShowDeletePopup(false)}
-						setCustomizedError={setCustomizedError}
 					/>
 				) : null}
-				<SuccessSnackbar
-					open={snackbarMessage !== ""}
-					text={snackbarMessage}
-					setOpen={() => setSnackbarMessage("")}
-				/>
 			</div>
 		);
 	}
