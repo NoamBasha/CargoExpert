@@ -34,7 +34,6 @@ export const createProject = createAsyncThunk(
 				projectData,
 				token
 			);
-
 			return response;
 		} catch (error) {
 			return thunkAPI.rejectWithValue(error.message);
@@ -52,13 +51,6 @@ export const updateProject = createAsyncThunk(
 				token
 			);
 		} catch (error) {
-			// const message =
-			// 	(error.response &&
-			// 		error.response.data &&
-			// 		error.response.data.message) ||
-			// 	error.message ||
-			// 	error.toString();
-			// return thunkAPI.rejectWithValue(message);
 			return thunkAPI.rejectWithValue(error.message);
 		}
 	}
@@ -75,12 +67,6 @@ export const deleteProject = createAsyncThunk(
 		}
 	}
 );
-
-// TODO: implement these functions.
-export const createSolution = createAsyncThunk();
-export const updateSolution = createAsyncThunk();
-export const deleteSolution = createAsyncThunk();
-export const improveSolution = createAsyncThunk();
 
 export const projectsSlice = createSlice({
 	name: "projects",
@@ -154,5 +140,10 @@ export const projectsSlice = createSlice({
 export const { reset } = projectsSlice.actions;
 export default projectsSlice.reducer;
 
-export const selectAllProjects = (state) => state.projects.projects;
+export const selectProjects = (state) => state.projects.projects;
 export const selectIsLoading = (state) => state.projects.isLoading;
+export const selectIsError = (state) => state.projects.isError;
+export const selectMessage = (state) => state.projects.message;
+export const selectProjectById = (state, projectId) => {
+	return state.projects.projects.find((project) => project.id === projectId);
+};

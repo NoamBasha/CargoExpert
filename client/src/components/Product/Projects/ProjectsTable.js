@@ -17,20 +17,30 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { IconButton } from "@mui/material";
 import { CircularProgress } from "@mui/material";
-import { selectAllProjects } from "../../../features/projects/projectsSlice.js";
-import { useSelector } from "react-redux";
+import {
+	selectProjects,
+	selectIsError,
+	selectIsLoading,
+	selectMessage,
+} from "../../../features/projects/projectsSlice.js";
+import { useSelector, useDispatch } from "react-redux";
 
 import { toast } from "react-toastify";
 
 export const ProjectsTable = () => {
-	const { deleteProject, updateProject, isLoading, error } = useUserData();
+	const { deleteProject, updateProject } = useUserData();
 
-	const projects = useSelector(selectAllProjects);
+	const projects = useSelector(selectProjects);
+	const isError = useSelector(selectIsError);
+	const isLoading = useSelector(selectIsLoading);
+	const message = useSelector(selectMessage);
 
 	const { setProjectId } = useProject();
 	const [tableProjectId, setTableProjectId] = useState(null);
 	const [showChangeNamePopup, setShowChangeNamePopup] = useState(false);
 	const [showDeletePopup, setShowDeletePopup] = useState(false);
+
+	const dispatch = useDispatch();
 
 	const handleClick = (index) => {
 		setProjectId(index);
@@ -43,30 +53,25 @@ export const ProjectsTable = () => {
 		};
 	});
 
-	const getProjectById = (id) => {
-		for (let i = 0; i < projects.length; i++) {
-			if (projects[i].id === id) {
-				return projects[i];
-			}
-		}
-		return null;
-	};
-
-	const handleChangeName = (id, name) => {
-		const project = getProjectById(id);
+	const handleChangeName = async (id, name) => {
+		const project = projects.find((project) => project.id === id);
 		if (project != null) {
 			const newProject = {
 				...project,
-				project_data: { ...project.project_data, name: name },
+				name: name,
 			};
-			updateProject(newProject);
-			toast.success(`Changed name to ${name}`);
+			await dispatch(updateProject({ id, newProject }));
+			if (isError) {
+				toast.error(message);
+			} else {
+				toast.success(`Changed name to ${name}`);
+			}
 		}
 	};
 
 	const handleDelete = (id) => {
 		deleteProject(id);
-		if (error === "") {
+		if (isError === "") {
 			toast.success(`Deleted Project successfully`);
 		}
 	};

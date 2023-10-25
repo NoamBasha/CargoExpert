@@ -48,11 +48,11 @@ const deleteProject = async (projectId, token) => {
 	return response.data;
 };
 
-const projectService = {
+const projectsService = {
 	getProjects,
 	createProject,
 	updateProject,
 	deleteProject,
 };
 
-export default projectService;
+export default projectsService;
