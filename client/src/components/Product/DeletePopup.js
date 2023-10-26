@@ -3,9 +3,9 @@ import { toast } from "react-toastify";
 
 export const DeletePopup = ({ text, id, onSubmit, onClose }) => {
 	const handleSubmit = () => {
-		if (!isNaN(id) && id >= 0) {
+		try {
 			onSubmit(id);
-		} else {
+		} catch (err) {
 			toast.error("Could not delete");
 		}
 		onClose();

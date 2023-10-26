@@ -111,6 +111,7 @@ export const unsetPosition = (box) => {
 export const getBox = (box) => {
 	return {
 		...box,
+		//TODO: change back? - does not matter because I use the original size with the rotation
 		size: Object.values(getSize(box)),
 		position: Object.values(box.center),
 	};

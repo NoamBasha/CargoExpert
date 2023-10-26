@@ -24,7 +24,12 @@ import {
 } from "./validations.js";
 
 import { useSelector } from "react-redux";
-import { selectProjectName } from "../../../features/project/projectSlice.js";
+import {
+	selectProjectName,
+	selectProjectContainer,
+} from "../../../features/project/projectSlice.js";
+
+import { selectSolutionName } from "../../../features/solution/solutionSlice.js";
 
 const VIEW_EXPLANATION_TEXT = `Container:
 - You can use your left and right mouse buttons to change the angle you see the container.
@@ -89,23 +94,25 @@ const ViewButton = ({ deselectBoxes, setEdit, validateBoxesLocation }) => {
 
 export const View = () => {
 	const { edit, setEdit } = useEdit();
+
+	let container = useSelector(selectProjectContainer);
+	container = Object.values(container);
+
 	const {
 		inBoxes,
 		outBoxes,
 		getNextSolution,
 		getPreviousSolution,
-		container,
 		saveSolution,
 		deselectBoxes,
 		setSolutionId,
 		improveSolutionInView,
 		toggleIsIn,
-		getCurrentSolutionName,
 	} = useProject();
 	const { isLoading } = useUserData();
 
 	const projectName = useSelector(selectProjectName);
-	const solutionName = getCurrentSolutionName();
+	const solutionName = useSelector(selectSolutionName);
 	const solutionDetails = `${projectName} - ${solutionName}`;
 
 	const validateBoxesLocation = (inBoxes, container) => {

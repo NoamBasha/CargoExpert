@@ -5,14 +5,53 @@ import { useProject } from "../ProjectProvider.js";
 import { BoxText } from "./BoxText.js";
 import { useEdit } from "./EditProvider.js";
 
-export const Box = ({ id, order, size, position, color, type, isIn }) => {
+export const Box = ({
+	id,
+	order,
+	size,
+	position,
+	color,
+	type,
+	isIn,
+	rotation,
+}) => {
 	const { changeBoxById, changeBoxIndices, solutionId, boxIndices } =
 		useProject();
 	const { edit } = useEdit();
 	const [boxColor, setBoxColor] = useState(color);
 	const eps = 0.0001;
-	const [w, h, l] = size;
+
+	/*
+		const Rotation = {
+			WHL: 0,
+			LHW: 1,
+			HLW: 2,
+			LWH: 3,
+			WLH: 4,
+			HWL: 5,
+		};
+	*/
+	//TODO: understand how the size and position comes.
+	// let rotatedSize = [size[0], size[1], size[2]];
+
+	let rotatedSize = [];
+	if (rotation === 0) {
+		rotatedSize = [size[0], size[1], size[2]];
+	} else if (rotation === 1) {
+		rotatedSize = [size[2], size[1], size[0]];
+	} else if (rotation === 2) {
+		rotatedSize = [size[1], size[2], size[0]];
+	} else if (rotation === 3) {
+		rotatedSize = [size[2], size[0], size[1]];
+	} else if (rotation === 4) {
+		rotatedSize = [size[0], size[2], size[1]];
+	} else if (rotation === 5) {
+		rotatedSize = [size[1], size[0], size[2]];
+	}
+	const [w, h, l] = rotatedSize;
+	position = [position[0], position[1], position[2]];
 	const [x, y, z] = position;
+
 	const mesh = useRef();
 	const outlineColor = "#303030";
 	const boxEditColor = "#FF6C6C";
@@ -77,13 +116,14 @@ export const Box = ({ id, order, size, position, color, type, isIn }) => {
 							color: color,
 							size: size,
 							isIn: isIn,
+							rotation: rotation,
 						});
 					}
 				}}
 				ref={mesh}
 				position={position}
 			>
-				<boxGeometry args={size} />
+				<boxGeometry args={rotatedSize} />
 				<meshBasicMaterial
 					color={edit ? boxColor : color}
 					opacity={edit ? 0.9 : 1}

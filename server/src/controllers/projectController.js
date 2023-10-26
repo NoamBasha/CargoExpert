@@ -51,7 +51,7 @@ export const createProject = asyncHandler(async (req, res) => {
 			order: box.order,
 			width: box.size.width,
 			height: box.size.height,
-			length: box.size.width,
+			length: box.size.length,
 			isIn: 0,
 		};
 	});

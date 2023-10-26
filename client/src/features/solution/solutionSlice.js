@@ -86,10 +86,41 @@ export const solutionSlice = createSlice({
 			state.solutionId = solutionId;
 			state.name = solution.name;
 
-			//TODO! unite project and solutions boxes!
+			const joinedBoxes = [];
 
-			state.boxes = solution.boxes;
-			state.previousBoxes = solution.boxes;
+			console.log(solution.boxes);
+			console.log(projectBoxes);
+
+			for (const projectBox of projectBoxes) {
+				for (const solutionBox of solution.boxes) {
+					if (projectBox._id === solutionBox.boxId) {
+						// Merge the projectBox and solutionBox into a single object
+						const joinedBox = { ...projectBox, ...solutionBox };
+						joinedBoxes.push(joinedBox);
+					}
+				}
+			}
+
+			console.log(joinedBoxes);
+
+			/*
+				projectBox: 
+				order,
+				type,
+				color,
+				size,
+				_id (of the projectBox)
+
+				solutionBox:
+				boxId,
+				isIn,
+				position,
+				rotation,
+				_id (of the solutionBox)
+			*/
+
+			state.boxes = joinedBoxes;
+			state.previousBoxes = joinedBoxes;
 
 			state.data = solution.data;
 		},
