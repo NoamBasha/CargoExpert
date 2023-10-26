@@ -23,6 +23,9 @@ import {
 	isBoxesHovering,
 } from "./validations.js";
 
+import { useSelector } from "react-redux";
+import { selectProjectName } from "../../../features/project/projectSlice.js";
+
 const VIEW_EXPLANATION_TEXT = `Container:
 - You can use your left and right mouse buttons to change the angle you see the container.
 - You can scroll in and out to change the zoom level of the container.
@@ -97,12 +100,11 @@ export const View = () => {
 		setSolutionId,
 		improveSolutionInView,
 		toggleIsIn,
-		getCurrentProjectName,
 		getCurrentSolutionName,
 	} = useProject();
 	const { isLoading } = useUserData();
 
-	const projectName = getCurrentProjectName();
+	const projectName = useSelector(selectProjectName);
 	const solutionName = getCurrentSolutionName();
 	const solutionDetails = `${projectName} - ${solutionName}`;
 

@@ -1,10 +1,19 @@
 import { Projects } from "./Projects/Projects";
 import { Solutions } from "./Solutions/Solutions";
 import { SolutionView } from "./View/SolutionView";
-import { useProject } from "./ProjectProvider";
+import { useSelector } from "react-redux";
+import { selectProjectId } from "../../features/project/projectSlice.js";
+import { selectSolutionId } from "../../features/solution/solutionSlice.js";
 
 export const Project = () => {
-	const { projectId, solutionId } = useProject();
+	console.log("1");
+
+	const projectId = useSelector(selectProjectId);
+	console.log("2");
+
+	const solutionId = useSelector(selectSolutionId);
+
+	console.log("3");
 
 	return (
 		<div>

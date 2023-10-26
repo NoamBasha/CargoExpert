@@ -1,5 +1,7 @@
 import { useState, createContext, useContext, useEffect } from "react";
 import { useUserData } from "../UserDataProvider";
+import { useSelector } from "react-redux";
+import { selectProjects } from "../../features/projects/projectsSlice.js";
 
 const ProjectContext = createContext("");
 
@@ -16,7 +18,8 @@ export const ProjectProvider = ({ children }) => {
 	const [previousOutBoxes, setPreviousOutBoxes] = useState(outBoxes);
 	const [boxIndices, setBoxIndices] = useState([]);
 
-	const { projects, updateSolution, improveSolution } = useUserData();
+	const projects = useSelector(selectProjects);
+	const { updateSolution, improveSolution } = useUserData();
 
 	useEffect(() => {
 		if (projectId !== null) {

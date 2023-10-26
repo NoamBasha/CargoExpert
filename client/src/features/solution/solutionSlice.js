@@ -72,13 +72,13 @@ export const improveSolution = createAsyncThunk(
 	}
 );
 
-export const projectSlice = createSlice({
+export const solutionSlice = createSlice({
 	name: "solution",
 	initialState,
 	reducers: {
 		setSolutionById: (state, action) => {
-			const solutionId = action.payload;
-			const solutions = state.project.solutions;
+			const { solutionId, solutions, projectBoxes } = action.payload;
+
 			const solution = solutions.find(
 				(solution) => solution.id === solutionId
 			);
@@ -87,11 +87,11 @@ export const projectSlice = createSlice({
 			state.name = solution.name;
 
 			//TODO! unite project and solutions boxes!
-			const projectBoxes = state.project.boxes;
-			state.boxes = solution.boxes;
 
+			state.boxes = solution.boxes;
 			state.previousBoxes = solution.boxes;
-			state.data = project.data;
+
+			state.data = solution.data;
 		},
 		setBoxes: (state, action) => {
 			state.boxes = action.payload;

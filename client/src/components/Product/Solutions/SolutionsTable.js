@@ -24,6 +24,15 @@ import { TableSortLabel } from "@mui/material";
 
 import { toast } from "react-toastify";
 
+import { useDispatch, useSelector } from "react-redux";
+import {
+	selectProjectSolutions,
+	selectProjectId,
+	selectProjectBoxes,
+} from "../../../features/project/projectSlice.js";
+
+import { setSolutionById } from "../../../features/solution/solutionSlice.js";
+
 const SortIcon = ({ column, sortByColumn }) => {
 	const [isAscending, setIsAscending] = useState("asc");
 
@@ -40,7 +49,12 @@ const SortIcon = ({ column, sortByColumn }) => {
 };
 
 export const SolutionsTable = ({ title }) => {
-	const { solutions, setSolutionId, projectId } = useProject();
+	const dispatch = useDispatch();
+
+	const projectId = useSelector(selectProjectId);
+	const solutions = useSelector(selectProjectSolutions);
+	const projectBoxes = useSelector(selectProjectBoxes);
+
 	const {
 		deleteSolution,
 		duplicateSolution,
@@ -62,11 +76,11 @@ export const SolutionsTable = ({ title }) => {
 					return {
 						id: solution.id,
 						name: solution.name,
-						number_of_items: solution.solution_data.number_of_items,
-						capacity: solution.solution_data.capacity,
-						order_score: solution.solution_data.order_score,
-						overall_score: solution.solution_data.overall_score,
-						solution_data: solution.solution_data,
+						numberOfItems: solution.data.numberOfItems,
+						capacity: solution.data.capacity,
+						orderScore: solution.data.orderScore,
+						overallScore: solution.data.overallScore,
+						solutionData: solution.data,
 					};
 				})
 			);
@@ -77,8 +91,8 @@ export const SolutionsTable = ({ title }) => {
 		return <h3>There are no solutions, please create a new project</h3>;
 	}
 
-	const handleClick = (index) => {
-		setSolutionId(index);
+	const handleClick = (solutionId) => {
+		dispatch(setSolutionById({ solutionId, solutions, projectBoxes }));
 	};
 
 	const getSolutionById = (id) => {
@@ -146,7 +160,7 @@ export const SolutionsTable = ({ title }) => {
 							<TableCell style={{ fontWeight: "bold" }}>
 								Number Of Items
 								<SortIcon
-									column="number_of_items"
+									column="numberOfItems"
 									sortByColumn={sortByColumn}
 								/>
 							</TableCell>
@@ -160,14 +174,14 @@ export const SolutionsTable = ({ title }) => {
 							<TableCell style={{ fontWeight: "bold" }}>
 								Order Score
 								<SortIcon
-									column="order_score"
+									column="orderScore"
 									sortByColumn={sortByColumn}
 								/>
 							</TableCell>
 							<TableCell style={{ fontWeight: "bold" }}>
 								Overall Score
 								<SortIcon
-									column="overall_score"
+									column="overallScore"
 									sortByColumn={sortByColumn}
 								/>
 							</TableCell>
@@ -201,10 +215,10 @@ export const SolutionsTable = ({ title }) => {
 											{row.name}
 										</Button>
 									</TableCell>
-									<TableCell>{row.number_of_items}</TableCell>
+									<TableCell>{row.numberOfItems}</TableCell>
 									<TableCell>{row.capacity}</TableCell>
-									<TableCell>{row.order_score}</TableCell>
-									<TableCell>{row.overall_score}</TableCell>
+									<TableCell>{row.orderScore}</TableCell>
+									<TableCell>{row.overallScore}</TableCell>
 
 									<TableCell>
 										{isLoading ? (

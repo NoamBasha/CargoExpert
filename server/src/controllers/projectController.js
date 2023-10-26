@@ -19,8 +19,6 @@ export const getProjects = asyncHandler(async (req, res) => {
 });
 
 export const createProject = asyncHandler(async (req, res) => {
-	console.log("Creating project...");
-
 	const { name, boxes, container, isQuantity, isQuality } = req.body;
 
 	const createdProject = await Project.create({
@@ -32,7 +30,6 @@ export const createProject = asyncHandler(async (req, res) => {
 			isQuantity: isQuantity == 1 ? true : false,
 			isQuality: isQuality == 1 ? true : false,
 		},
-		// solutions: createdSolutions,
 	});
 
 	if (!createdProject) {
@@ -89,15 +86,12 @@ export const createProject = asyncHandler(async (req, res) => {
 
 	createdProject.save();
 
-	console.log(createdProject);
-
 	res.status(201).json(createdProject);
 });
 
 export const deleteProject = asyncHandler(async (req, res) => {
 	const id = req.params.id;
 
-	// Find the project by its ID
 	const project = await Project.findById(id);
 
 	if (!project) {
@@ -106,10 +100,12 @@ export const deleteProject = asyncHandler(async (req, res) => {
 	}
 
 	// Retrieve the list of associated solution IDs
-	const solutionIds = project.solutions;
+	const solutions = project.solutions;
+
+	//TODO: delete boxes?
 
 	// Delete all solutions with the retrieved IDs
-	await Solution.deleteMany({ _id: { $in: solutionIds } });
+	await Solution.deleteMany(solutions);
 
 	// Delete the project itself
 	await Project.findByIdAndDelete(id);

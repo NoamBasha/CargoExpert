@@ -18,12 +18,11 @@ export const projectSlice = createSlice({
 	initialState,
 	reducers: {
 		setProjectById: (state, action) => {
-			const projectId = action.payload;
-			const projects = state.projects.projects;
-			const project = projects.find(
-				(project) => project.id === projectId
-			);
+			const { projects, projectId } = action.payload;
 
+			const project = projects.find(
+				(project) => project._id === projectId
+			);
 			state.projectId = projectId;
 			state.name = project.name;
 			state.container = project.container;

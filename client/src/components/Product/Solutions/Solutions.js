@@ -1,10 +1,10 @@
 import { SolutionsTable } from "./SolutionsTable";
 import { useProject } from "../ProjectProvider";
+import { useSelector } from "react-redux";
+import { selectProjectName } from "../../../features/project/projectSlice.js";
 
 export const Solutions = () => {
-	const { getCurrentProjectName } = useProject();
-
-	const projectName = getCurrentProjectName();
+	const projectName = useSelector(selectProjectName);
 
 	return (
 		<div>

@@ -23,6 +23,8 @@ import {
 	selectIsLoading,
 	selectMessage,
 } from "../../../features/projects/projectsSlice.js";
+
+import { setProjectById } from "../../../features/project/projectSlice.js";
 import { useSelector, useDispatch } from "react-redux";
 
 import { toast } from "react-toastify";
@@ -35,20 +37,20 @@ export const ProjectsTable = () => {
 	const isLoading = useSelector(selectIsLoading);
 	const message = useSelector(selectMessage);
 
-	const { setProjectId } = useProject();
 	const [tableProjectId, setTableProjectId] = useState(null);
 	const [showChangeNamePopup, setShowChangeNamePopup] = useState(false);
 	const [showDeletePopup, setShowDeletePopup] = useState(false);
 
 	const dispatch = useDispatch();
 
-	const handleClick = (index) => {
-		setProjectId(index);
+	const handleClick = (projectId) => {
+		console.log(projectId);
+		dispatch(setProjectById({ projects, projectId }));
 	};
 
 	const tableData = projects.map((project) => {
 		return {
-			id: project.id,
+			id: project._id,
 			name: project.name,
 		};
 	});
