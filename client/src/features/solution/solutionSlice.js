@@ -136,9 +136,16 @@ export const solutionSlice = createSlice({
 		moveBox: (state, action) => {
 			const [a, b, c] = action.payload;
 			state.boxes = state.boxes.map((box) => {
-				if (state.selectedBoxes.includes(box.id)) {
-					const [x, y, z] = box.position;
-					return { ...box, position: [x + a, y + b, z + c] };
+				if (state.selectedBoxes.includes(box._id)) {
+					return {
+						...box,
+						position: {
+							...box.position,
+							x: box.position.x + a,
+							y: box.position.y + b,
+							z: box.position.z + c,
+						},
+					};
 				} else {
 					return box;
 				}
@@ -147,15 +154,31 @@ export const solutionSlice = createSlice({
 		rotateBox: (state, action) => {
 			const axis = action.payload;
 			state.boxes = state.boxes.map((box) => {
-				if (state.selectedBoxes.includes(box.id)) {
-					const [w, h, l] = box.size;
+				if (state.selectedBoxes.includes(box._id)) {
+					const newRotation = 0;
 					if (axis === "x") {
-						return { ...box, size: [w, l, h] };
+						if (box.rotation === 0) newRotation = 4;
+						if (box.rotation === 1) newRotation = 3;
+						if (box.rotation === 2) newRotation = 5;
+						if (box.rotation === 3) newRotation = 1;
+						if (box.rotation === 4) newRotation = 0;
+						if (box.rotation === 5) newRotation = 2;
 					} else if (axis === "y") {
-						return { ...box, size: [l, h, w] };
+						if (box.rotation === 0) newRotation = 1;
+						if (box.rotation === 1) newRotation = 0;
+						if (box.rotation === 2) newRotation = 4;
+						if (box.rotation === 3) newRotation = 5;
+						if (box.rotation === 4) newRotation = 2;
+						if (box.rotation === 5) newRotation = 3;
 					} else if (axis === "z") {
-						return { ...box, size: [h, w, l] };
+						if (box.rotation === 0) newRotation = 5;
+						if (box.rotation === 1) newRotation = 2;
+						if (box.rotation === 2) newRotation = 1;
+						if (box.rotation === 3) newRotation = 4;
+						if (box.rotation === 4) newRotation = 3;
+						if (box.rotation === 5) newRotation = 0;
 					}
+					return { ...box, rotation: newRotation };
 				} else {
 					return box;
 				}
@@ -168,7 +191,7 @@ export const solutionSlice = createSlice({
 		changeBoxById: (state, action) => {
 			const { id, newBox } = action.payload;
 			state.boxes = state.boxes.map((box) => {
-				if (box.id === id) {
+				if (box._id === id) {
 					return newBox;
 				} else {
 					return box;

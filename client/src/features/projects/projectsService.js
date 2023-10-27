@@ -25,13 +25,15 @@ const createProject = async (userId, projectData, token) => {
 	return response.data;
 };
 
-const updateProject = async ({ projectId, projectData }, token) => {
+const updateProject = async ({ projectId, newProject }, token) => {
 	const config = {
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},
 	};
-	const response = await axios.put(API_URL + projectId, projectData, config);
+	console.log(projectId);
+
+	const response = await axios.put(API_URL + projectId, newProject, config);
 
 	return response.data;
 };

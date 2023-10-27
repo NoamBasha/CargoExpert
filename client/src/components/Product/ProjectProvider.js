@@ -1,7 +1,11 @@
 import { useState, createContext, useContext, useEffect } from "react";
-import { useUserData } from "../UserDataProvider";
 import { useSelector } from "react-redux";
 import { selectProjects } from "../../features/projects/projectsSlice.js";
+
+import {
+	updateSolution,
+	improveSolution,
+} from "../../features/solution/solutionSlice.js";
 
 const ProjectContext = createContext("");
 
@@ -19,7 +23,6 @@ export const ProjectProvider = ({ children }) => {
 	const [boxIndices, setBoxIndices] = useState([]);
 
 	const projects = useSelector(selectProjects);
-	const { updateSolution, improveSolution } = useUserData();
 
 	useEffect(() => {
 		if (projectId !== null) {
@@ -58,24 +61,6 @@ export const ProjectProvider = ({ children }) => {
 			setBoxIndices([]);
 		}
 	}, [solutions, solutionId, projects]);
-
-	const getCurrentProjectName = () => {
-		if (projectId === null) {
-			return "";
-		} else {
-			return projects.filter((project) => project.id === projectId)[0]
-				.data.name;
-		}
-	};
-
-	const getCurrentSolutionName = () => {
-		if (solutionId === null) {
-			return "";
-		} else {
-			return solutions.filter((solution) => solution.id === solutionId)[0]
-				.name;
-		}
-	};
 
 	// Change id access
 	const getPreviousSolution = () => {
@@ -234,8 +219,6 @@ export const ProjectProvider = ({ children }) => {
 				improveSolutionInView,
 				toggleIsIn,
 				removeBoxes,
-				getCurrentProjectName,
-				getCurrentSolutionName,
 			}}
 		>
 			{children}

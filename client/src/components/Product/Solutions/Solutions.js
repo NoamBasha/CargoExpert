@@ -1,5 +1,4 @@
 import { SolutionsTable } from "./SolutionsTable";
-import { useProject } from "../ProjectProvider";
 import { useSelector } from "react-redux";
 import { selectProjectName } from "../../../features/project/projectSlice.js";
 

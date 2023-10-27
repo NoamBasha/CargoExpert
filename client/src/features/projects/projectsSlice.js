@@ -43,11 +43,12 @@ export const createProject = createAsyncThunk(
 
 export const updateProject = createAsyncThunk(
 	"projects/updateProject",
-	async ({ projectId, projectData }, thunkAPI) => {
+	async ({ projectId, newProject }, thunkAPI) => {
 		try {
+			console.log(projectId);
 			const token = thunkAPI.getState().auth.user.token;
 			return await projectsService.updateProject(
-				{ projectId, projectData },
+				{ projectId, newProject },
 				token
 			);
 		} catch (error) {
@@ -60,6 +61,7 @@ export const deleteProject = createAsyncThunk(
 	"projects/deleteProject",
 	async (projectId, thunkAPI) => {
 		try {
+			console.log(projectId);
 			const token = thunkAPI.getState().auth.user.token;
 			return await projectsService.deleteProject(projectId, token);
 		} catch (error) {
@@ -106,8 +108,10 @@ export const projectsSlice = createSlice({
 				state.isLoading = true;
 			})
 			.addCase(updateProject.fulfilled, (state, action) => {
+				state.isLoading = false;
+				console.log(action.payload);
 				const updatedProjectIndex = state.projects.findIndex(
-					(project) => project.id === action.payload.id
+					(project) => project._id === action.payload._id
 				);
 				if (updatedProjectIndex !== -1) {
 					state.projects[updatedProjectIndex] = action.payload;
@@ -122,8 +126,9 @@ export const projectsSlice = createSlice({
 				state.isLoading = true;
 			})
 			.addCase(deleteProject.fulfilled, (state, action) => {
+				state.isLoading = false;
 				state.projects = state.projects.filter(
-					(project) => project.id !== action.payload
+					(project) => project._id !== action.payload
 				);
 			})
 			.addCase(deleteProject.rejected, (state, action) => {

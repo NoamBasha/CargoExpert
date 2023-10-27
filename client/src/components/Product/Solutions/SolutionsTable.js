@@ -1,5 +1,4 @@
 import { Button } from "@mui/material";
-import { useProject } from "../ProjectProvider";
 import { useUserData } from "../../UserDataProvider.js";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -31,6 +30,18 @@ import {
 	selectProjectBoxes,
 } from "../../../features/project/projectSlice.js";
 
+import {
+	selectIsLoading,
+	selectIsError,
+	selectMessage,
+} from "../../../features/projects/projectsSlice.js";
+
+import {
+	createSolution,
+	deleteSolution,
+	updateSolution,
+} from "../../../features/solution/solutionSlice.js";
+
 import { setSolutionById } from "../../../features/solution/solutionSlice.js";
 
 const SortIcon = ({ column, sortByColumn }) => {
@@ -54,14 +65,12 @@ export const SolutionsTable = ({ title }) => {
 	const projectId = useSelector(selectProjectId);
 	const solutions = useSelector(selectProjectSolutions);
 	const projectBoxes = useSelector(selectProjectBoxes);
+	const isLoading = useSelector(selectIsLoading);
+	const isError = useSelector(selectIsError);
+	const message = useSelector(selectMessage);
 
-	const {
-		deleteSolution,
-		duplicateSolution,
-		updateSolutionName,
-		isLoading,
-		error,
-	} = useUserData();
+	//TODO: create those as thunks?
+	const { duplicateSolution, updateSolutionName } = useUserData();
 
 	const [tableSolutionId, setTableSolutionId] = useState(null);
 	const [showChangeNamePopup, setShowChangeNamePopup] = useState(false);
@@ -119,7 +128,7 @@ export const SolutionsTable = ({ title }) => {
 	const handleDelete = (id) => {
 		const deleteSpecificSolution = deleteSolution(projectId);
 		deleteSpecificSolution(id);
-		if (error === "") {
+		if (!isError) {
 			toast.success(`Deleted Solution successfully`);
 		}
 	};

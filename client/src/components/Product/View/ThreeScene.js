@@ -2,7 +2,6 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { Box } from "./Box.js";
 import { Container } from "./Container.js";
-import { useProject } from "../ProjectProvider.js";
 import { useEdit } from "./EditProvider.js";
 
 import { useSelector } from "react-redux";

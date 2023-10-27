@@ -4,7 +4,6 @@ import { Button } from "@mui/material";
 import { EditPanel } from "./EditPanel.js";
 import { useEdit } from "./EditProvider.js";
 import { BoxesViewTableImproved } from "./BoxesViewTableImproved.js";
-import { useUserData } from "../../UserDataProvider.js";
 import { CircularProgress } from "@mui/material";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -30,6 +29,7 @@ import {
 } from "../../../features/project/projectSlice.js";
 
 import { selectSolutionName } from "../../../features/solution/solutionSlice.js";
+import { selectIsLoading } from "../../../features/projects/projectsSlice.js";
 
 const VIEW_EXPLANATION_TEXT = `Container:
 - You can use your left and right mouse buttons to change the angle you see the container.
@@ -109,7 +109,7 @@ export const View = () => {
 		improveSolutionInView,
 		toggleIsIn,
 	} = useProject();
-	const { isLoading } = useUserData();
+	const isLoading = useSelector(selectIsLoading);
 
 	const projectName = useSelector(selectProjectName);
 	const solutionName = useSelector(selectSolutionName);

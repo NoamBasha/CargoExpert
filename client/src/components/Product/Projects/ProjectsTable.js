@@ -1,4 +1,3 @@
-import { useUserData } from "../../UserDataProvider.js";
 import { Button } from "@mui/material";
 import {
 	TableContainer,
@@ -10,7 +9,6 @@ import {
 	Paper,
 } from "@mui/material";
 import { useState } from "react";
-import { useProject } from "../ProjectProvider.js";
 import { ChangeNamePopup } from "../ChangeNamePopup.js";
 import { DeletePopup } from "../DeletePopup";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -22,6 +20,8 @@ import {
 	selectIsError,
 	selectIsLoading,
 	selectMessage,
+	deleteProject,
+	updateProject,
 } from "../../../features/projects/projectsSlice.js";
 
 import { setProjectById } from "../../../features/project/projectSlice.js";
@@ -30,8 +30,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
 export const ProjectsTable = () => {
-	const { deleteProject, updateProject } = useUserData();
-
 	const projects = useSelector(selectProjects);
 	const isError = useSelector(selectIsError);
 	const isLoading = useSelector(selectIsLoading);
@@ -50,19 +48,20 @@ export const ProjectsTable = () => {
 
 	const tableData = projects.map((project) => {
 		return {
-			id: project._id,
+			_id: project._id,
 			name: project.name,
 		};
 	});
 
-	const handleChangeName = async (id, name) => {
-		const project = projects.find((project) => project.id === id);
+	const handleChangeName = async (projectId, name) => {
+		const project = projects.find((project) => project._id === projectId);
 		if (project != null) {
 			const newProject = {
 				...project,
 				name: name,
 			};
-			await dispatch(updateProject({ id, newProject }));
+			console.log(newProject);
+			await dispatch(updateProject({ projectId, newProject }));
 			if (isError) {
 				toast.error(message);
 			} else {
@@ -71,8 +70,8 @@ export const ProjectsTable = () => {
 		}
 	};
 
-	const handleDelete = (id) => {
-		deleteProject(id);
+	const handleDelete = async (id) => {
+		await dispatch(deleteProject(id));
 		if (isError === "") {
 			toast.success(`Deleted Project successfully`);
 		}
@@ -116,7 +115,7 @@ export const ProjectsTable = () => {
 						<TableBody>
 							{tableData.map((row) => {
 								return (
-									<TableRow key={row.id}>
+									<TableRow key={row._id}>
 										<TableCell>
 											<Button
 												style={{
@@ -125,7 +124,7 @@ export const ProjectsTable = () => {
 													textAlign: "left",
 												}}
 												onClick={() =>
-													handleClick(row.id)
+													handleClick(row._id)
 												}
 											>
 												{row.name}
@@ -141,7 +140,7 @@ export const ProjectsTable = () => {
 															true
 														);
 														setTableProjectId(
-															row.id
+															row._id
 														);
 													}}
 												>
@@ -162,7 +161,7 @@ export const ProjectsTable = () => {
 															true
 														);
 														setTableProjectId(
-															row.id
+															row._id
 														);
 													}}
 												>

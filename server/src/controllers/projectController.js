@@ -90,46 +90,61 @@ export const createProject = asyncHandler(async (req, res) => {
 });
 
 export const deleteProject = asyncHandler(async (req, res) => {
-	const id = req.params.id;
+	const projectId = req.params.projectId;
 
-	const project = await Project.findById(id);
+	console.log("1");
+
+	const project = await Project.findById(projectId);
+
+	console.log("2");
 
 	if (!project) {
 		res.status(400);
 		throw new Error("Project not found");
 	}
 
-	// Retrieve the list of associated solution IDs
-	const solutions = project.solutions;
-
 	//TODO: delete boxes?
+	//TODO: delete solutions?
+	// TODO: delete Recursively?
+	// Retrieve the list of associated solution IDs
+	// const solutions = project.solutions;
+	// // Delete all solutions with the retrieved IDs
+	// if (solutions.length > 0) {
+	// 	await Solution.deleteMany(solutions);
+	// }
 
-	// Delete all solutions with the retrieved IDs
-	await Solution.deleteMany(solutions);
+	console.log("3");
 
 	// Delete the project itself
-	await Project.findByIdAndDelete(id);
+	await Project.findByIdAndDelete(projectId);
 
-	res.status(200).send(id);
+	console.log("4");
+
+	res.status(200).send(projectId);
 });
 
 export const updateProject = asyncHandler(async (req, res) => {
-	const projectId = req.params.id;
+	console.log(req.params);
+	const projectId = req.params.projectId;
+
+	console.log("1");
 	const { name } = req.body;
-
+	console.log(req.body);
+	console.log("2");
 	// Find the project by its ID
+	console.log(projectId);
 	const project = await Project.findById(projectId);
-
+	console.log("3");
 	if (!project) {
 		res.status(404);
 		throw new Error("Project not found");
 	}
-
+	console.log("4");
 	// Update the project properties
 	if (name) project.name = name;
-
+	console.log("5");
 	// Save the updated project
 	const updatedProject = await project.save();
-
+	console.log("6");
 	res.status(200).json(updatedProject);
 });
