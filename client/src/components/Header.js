@@ -48,7 +48,15 @@ export const Header = () => {
 				</>
 			) : (
 				<>
-					<Button onClick={() => navigate("/home")}>Home</Button>
+					<Button
+						onClick={() => {
+							navigate("/home");
+							dispatch(resetProject());
+							dispatch(resetSolution());
+						}}
+					>
+						Home
+					</Button>
 					<Button
 						className="mx-2"
 						onClick={handleLogout}

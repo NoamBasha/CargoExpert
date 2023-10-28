@@ -11,20 +11,30 @@ import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 import { Button } from "@mui/material";
 import { useMemo } from "react";
+import { useDispatch } from "react-redux";
 
 export const BoxesViewTableImproved = ({ isEdit, boxes, toggleIsIn, isIn }) => {
-	const rows = useMemo(
-		() =>
-			boxes.map((box) => ({
-				id: box.id,
-				order: box.order,
-				width: box.size[0],
-				height: box.size[1],
-				length: box.size[2],
-				type: box.type,
-			})),
-		[boxes]
-	);
+	const dispatch = useDispatch();
+	// const rows = useMemo(
+	// 	() =>
+	// 		boxes.map((box) => ({
+	// 			_id: box._id,
+	// 			order: box.order,
+	// 			width: box.size.width,
+	// 			height: box.size.height,
+	// 			length: box.size.length,
+	// 			type: box.type,
+	// 		})),
+	// 	[boxes]
+	// );
+	const rows = boxes.map((box) => ({
+		_id: box._id,
+		order: box.order,
+		width: box.size.width,
+		height: box.size.height,
+		length: box.size.length,
+		type: box.type,
+	}));
 
 	return (
 		<>
@@ -68,7 +78,7 @@ export const BoxesViewTableImproved = ({ isEdit, boxes, toggleIsIn, isIn }) => {
 							{rows.map((row) => {
 								return (
 									<TableRow
-										key={row.id}
+										key={row._id}
 										sx={{
 											"&:last-child td, &:last-child th":
 												{
@@ -85,7 +95,11 @@ export const BoxesViewTableImproved = ({ isEdit, boxes, toggleIsIn, isIn }) => {
 											<TableCell>
 												<Button
 													onClick={() => {
-														toggleIsIn(row.id);
+														dispatch(
+															toggleIsIn({
+																id: row._id,
+															})
+														);
 													}}
 												>
 													{isIn ? (

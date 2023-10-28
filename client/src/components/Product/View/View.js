@@ -40,6 +40,8 @@ import {
 } from "../../../features/solution/solutionSlice.js";
 import { selectIsLoading } from "../../../features/projects/projectsSlice.js";
 
+import { toggleIsIn } from "../../../features/solution/solutionSlice.js";
+
 const VIEW_EXPLANATION_TEXT = `Container:
 - You can use your left and right mouse buttons to change the angle you see the container.
 - You can scroll in and out to change the zoom level of the container.
@@ -115,7 +117,7 @@ export const View = () => {
 
 	container = [container.width, container.height, container.length];
 
-	const { saveSolution, improveSolutionInView, toggleIsIn } = useProject();
+	const { saveSolution, improveSolutionInView } = useProject();
 	const isLoading = useSelector(selectIsLoading);
 
 	const projectName = useSelector(selectProjectName);

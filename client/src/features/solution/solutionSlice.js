@@ -190,7 +190,6 @@ export const solutionSlice = createSlice({
 		},
 		changeBoxIndices: (state, action) => {
 			const { id } = action.payload;
-			console.log(id);
 			if (state.selectedBoxes.includes(id)) {
 				state.selectedBoxes = state.selectedBoxes.filter(
 					(id) => id !== id
@@ -220,6 +219,16 @@ export const solutionSlice = createSlice({
 				isIn: state.selectedBoxes.includes(box._id) ? false : box.isIn,
 			}));
 		},
+		toggleIsIn: (state, action) => {
+			const { id } = action.payload;
+			state.boxes = state.boxes.map((box) => {
+				if (box._id === id) {
+					return { ...box, isIn: box.isIn === true ? false : true };
+				} else {
+					return box;
+				}
+			});
+		},
 		reset: (state) => initialState,
 	},
 	extraReducers: (builder) => {
@@ -244,6 +253,7 @@ export const {
 	reset,
 	changeBoxIndices,
 	removeBoxes,
+	toggleIsIn,
 } = solutionSlice.actions;
 
 export default solutionSlice.reducer;
