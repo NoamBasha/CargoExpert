@@ -14,10 +14,7 @@ export const projectsApiSlice = apiSlice.injectEndpoints({
 		}),
 		createProject: builder.mutation({
 			query: (projectData, { getState }) => {
-				console.log("3");
-
 				const userId = getState().user._id;
-				console.log("4");
 
 				return {
 					url: `/projects/${userId}`,

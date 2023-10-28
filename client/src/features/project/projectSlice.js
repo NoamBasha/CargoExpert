@@ -39,7 +39,7 @@ export const projectSlice = createSlice({
 	},
 });
 
-export const { setProjectById } = projectSlice.actions;
+export const { setProjectById, reset } = projectSlice.actions;
 
 export default projectSlice.reducer;
 

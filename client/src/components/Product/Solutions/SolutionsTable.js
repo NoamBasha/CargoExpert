@@ -83,7 +83,7 @@ export const SolutionsTable = ({ title }) => {
 			setTableData(
 				solutions.map((solution) => {
 					return {
-						id: solution.id,
+						_id: solution._id,
 						name: solution.name,
 						numberOfItems: solution.data.numberOfItems,
 						capacity: solution.data.capacity,
@@ -106,7 +106,7 @@ export const SolutionsTable = ({ title }) => {
 
 	const getSolutionById = (id) => {
 		for (let i = 0; i < solutions.length; i++) {
-			if (solutions[i].id === id) {
+			if (solutions[i]._id === id) {
 				return solutions[i];
 			}
 		}
@@ -210,7 +210,7 @@ export const SolutionsTable = ({ title }) => {
 					<TableBody>
 						{tableData.map((row) => {
 							return (
-								<TableRow key={row.id}>
+								<TableRow key={row._id}>
 									<TableCell>
 										<Button
 											style={{
@@ -218,7 +218,7 @@ export const SolutionsTable = ({ title }) => {
 												textAlign: "left",
 											}}
 											onClick={() => {
-												handleClick(row.id);
+												handleClick(row._id);
 											}}
 										>
 											{row.name}
@@ -238,7 +238,7 @@ export const SolutionsTable = ({ title }) => {
 													setShowChangeNamePopup(
 														true
 													);
-													setTableSolutionId(row.id);
+													setTableSolutionId(row._id);
 												}}
 											>
 												<EditOutlinedIcon
@@ -256,7 +256,7 @@ export const SolutionsTable = ({ title }) => {
 												onClick={() => {
 													duplicateSolution(
 														projectId,
-														row.id
+														row._id
 													);
 													toast.success(
 														`Duplicated solution`
@@ -282,7 +282,7 @@ export const SolutionsTable = ({ title }) => {
 															true
 														);
 														setTableSolutionId(
-															row.id
+															row._id
 														);
 													}}
 												>

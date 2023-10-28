@@ -80,16 +80,10 @@ export const solutionSlice = createSlice({
 			const { solutionId, solutions, projectBoxes } = action.payload;
 
 			const solution = solutions.find(
-				(solution) => solution.id === solutionId
+				(solution) => solution._id === solutionId
 			);
 
-			state.solutionId = solutionId;
-			state.name = solution.name;
-
 			const joinedBoxes = [];
-
-			console.log(solution.boxes);
-			console.log(projectBoxes);
 
 			for (const projectBox of projectBoxes) {
 				for (const solutionBox of solution.boxes) {
@@ -100,8 +94,6 @@ export const solutionSlice = createSlice({
 					}
 				}
 			}
-
-			console.log(joinedBoxes);
 
 			/*
 				projectBox: 
@@ -118,10 +110,10 @@ export const solutionSlice = createSlice({
 				rotation,
 				_id (of the solutionBox)
 			*/
-
+			state.solutionId = solutionId;
+			state.name = solution.name;
 			state.boxes = joinedBoxes;
 			state.previousBoxes = joinedBoxes;
-
 			state.data = solution.data;
 		},
 		setBoxes: (state, action) => {
@@ -230,6 +222,7 @@ export const {
 	changeBoxById,
 	selectBox,
 	deselectBox,
+	reset,
 } = solutionSlice.actions;
 
 export default solutionSlice.reducer;

@@ -42,7 +42,6 @@ export const ProjectsTable = () => {
 	const dispatch = useDispatch();
 
 	const handleClick = (projectId) => {
-		console.log(projectId);
 		dispatch(setProjectById({ projects, projectId }));
 	};
 
@@ -60,7 +59,6 @@ export const ProjectsTable = () => {
 				...project,
 				name: name,
 			};
-			console.log(newProject);
 			await dispatch(updateProject({ projectId, newProject }));
 			if (isError) {
 				toast.error(message);

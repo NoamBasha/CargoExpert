@@ -23,13 +23,13 @@ const Login = () => {
 		e.preventDefault();
 		try {
 			const userData = await login({ email, password: pwd }).unwrap();
+			navigate("/home");
+			setEmail("");
+			setPwd("");
 			await dispatch(
 				setCredentials({ user: userData, token: userData.token })
 			);
 			await dispatch(getProjects());
-			setEmail("");
-			setPwd("");
-			navigate("/home");
 		} catch (err) {
 			let errMsg = "";
 			if (!err?.originalStatus) {

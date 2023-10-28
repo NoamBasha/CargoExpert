@@ -45,7 +45,6 @@ export const updateProject = createAsyncThunk(
 	"projects/updateProject",
 	async ({ projectId, newProject }, thunkAPI) => {
 		try {
-			console.log(projectId);
 			const token = thunkAPI.getState().auth.user.token;
 			return await projectsService.updateProject(
 				{ projectId, newProject },
@@ -61,7 +60,6 @@ export const deleteProject = createAsyncThunk(
 	"projects/deleteProject",
 	async (projectId, thunkAPI) => {
 		try {
-			console.log(projectId);
 			const token = thunkAPI.getState().auth.user.token;
 			return await projectsService.deleteProject(projectId, token);
 		} catch (error) {
@@ -109,7 +107,6 @@ export const projectsSlice = createSlice({
 			})
 			.addCase(updateProject.fulfilled, (state, action) => {
 				state.isLoading = false;
-				console.log(action.payload);
 				const updatedProjectIndex = state.projects.findIndex(
 					(project) => project._id === action.payload._id
 				);
