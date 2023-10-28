@@ -22,13 +22,22 @@ import {
 	isBoxesHovering,
 } from "./validations.js";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
 	selectProjectName,
 	selectProjectContainer,
+	selectProjectBoxes,
+	selectProjectSolutions,
 } from "../../../features/project/projectSlice.js";
 
-import { selectSolutionName } from "../../../features/solution/solutionSlice.js";
+import {
+	selectSolutionId,
+	selectSolutionName,
+	selectSolutionBoxes,
+	deselectBoxes,
+	setSolutionById,
+	reset,
+} from "../../../features/solution/solutionSlice.js";
 import { selectIsLoading } from "../../../features/projects/projectsSlice.js";
 
 const VIEW_EXPLANATION_TEXT = `Container:
@@ -93,22 +102,20 @@ const ViewButton = ({ deselectBoxes, setEdit, validateBoxesLocation }) => {
 };
 
 export const View = () => {
+	const dispatch = useDispatch();
 	const { edit, setEdit } = useEdit();
 
+	const projectBoxes = useSelector(selectProjectBoxes);
+	const solutions = useSelector(selectProjectSolutions);
+	const currentSolutionId = useSelector(selectSolutionId);
 	let container = useSelector(selectProjectContainer);
-	container = Object.values(container);
+	const boxes = useSelector(selectSolutionBoxes);
+	const inBoxes = boxes.filter((box) => box.isIn === true);
+	const outBoxes = boxes.filter((box) => box.isIn === false);
 
-	const {
-		inBoxes,
-		outBoxes,
-		getNextSolution,
-		getPreviousSolution,
-		saveSolution,
-		deselectBoxes,
-		setSolutionId,
-		improveSolutionInView,
-		toggleIsIn,
-	} = useProject();
+	container = [container.width, container.height, container.length];
+
+	const { saveSolution, improveSolutionInView, toggleIsIn } = useProject();
 	const isLoading = useSelector(selectIsLoading);
 
 	const projectName = useSelector(selectProjectName);
@@ -200,7 +207,24 @@ export const View = () => {
 			>
 				{edit ? null : (
 					<Button
-						onClick={getPreviousSolution}
+						onClick={() => {
+							const solutionIndex = solutions.findIndex(
+								(solution) => solution._id === currentSolutionId
+							);
+							const newIndex =
+								(solutionIndex - 1 + solutions.length) %
+								solutions.length;
+							console.log(newIndex);
+
+							const solutionId = solutions[newIndex]._id;
+							dispatch(
+								setSolutionById({
+									solutionId,
+									solutions,
+									projectBoxes,
+								})
+							);
+						}}
 						className="position-absolute d-flex"
 						style={{ top: 380, left: 10, zIndex: 1 }}
 					>
@@ -244,7 +268,22 @@ export const View = () => {
 
 				{edit ? null : (
 					<Button
-						onClick={getNextSolution}
+						onClick={() => {
+							const solutionIndex = solutions.findIndex(
+								(solution) => solution._id === currentSolutionId
+							);
+							const newIndex =
+								(solutionIndex + 1) % solutions.length;
+							console.log(newIndex);
+							const solutionId = solutions[newIndex]._id;
+							dispatch(
+								setSolutionById({
+									solutionId,
+									solutions,
+									projectBoxes,
+								})
+							);
+						}}
 						className="position-absolute d-flex"
 						style={{ top: 380, right: 10, zIndex: 1 }}
 					>
@@ -274,7 +313,7 @@ export const View = () => {
 							<>
 								<Col className="d-flex justify-content-center">
 									<EditButton
-										onClick={(e) => setSolutionId(null)}
+										onClick={(e) => dispatch(reset())}
 										text={"Back"}
 									></EditButton>
 								</Col>

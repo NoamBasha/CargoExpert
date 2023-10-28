@@ -88,13 +88,11 @@ export const solutionSlice = createSlice({
 			for (const projectBox of projectBoxes) {
 				for (const solutionBox of solution.boxes) {
 					if (projectBox._id === solutionBox.boxId) {
-						// Merge the projectBox and solutionBox into a single object
 						const joinedBox = { ...projectBox, ...solutionBox };
 						joinedBoxes.push(joinedBox);
 					}
 				}
 			}
-
 			/*
 				projectBox: 
 				order,
@@ -147,7 +145,7 @@ export const solutionSlice = createSlice({
 			const axis = action.payload;
 			state.boxes = state.boxes.map((box) => {
 				if (state.selectedBoxes.includes(box._id)) {
-					const newRotation = 0;
+					let newRotation = 0;
 					if (axis === "x") {
 						if (box.rotation === 0) newRotation = 4;
 						if (box.rotation === 1) newRotation = 3;
@@ -190,6 +188,17 @@ export const solutionSlice = createSlice({
 				}
 			});
 		},
+		changeBoxIndices: (state, action) => {
+			const { id } = action.payload;
+			console.log(id);
+			if (state.selectedBoxes.includes(id)) {
+				state.selectedBoxes = state.selectedBoxes.filter(
+					(id) => id !== id
+				);
+			} else {
+				state.selectedBoxes = [...state.selectedBoxes, id];
+			}
+		},
 		selectBox: (state, action) => {
 			const id = action.payload;
 			if (!state.selectedBoxes.includes(id)) {
@@ -201,6 +210,15 @@ export const solutionSlice = createSlice({
 			state.selectedBoxes = state.selectedBoxes.filter(
 				(selectedId) => selectedId !== id
 			);
+		},
+		deselectBoxes: (state) => {
+			state.selectedBoxes = [];
+		},
+		removeBoxes: (state) => {
+			state.boxes = state.boxes.map((box) => ({
+				...box,
+				isIn: state.selectedBoxes.includes(box._id) ? false : box.isIn,
+			}));
 		},
 		reset: (state) => initialState,
 	},
@@ -222,7 +240,10 @@ export const {
 	changeBoxById,
 	selectBox,
 	deselectBox,
+	deselectBoxes,
 	reset,
+	changeBoxIndices,
+	removeBoxes,
 } = solutionSlice.actions;
 
 export default solutionSlice.reducer;

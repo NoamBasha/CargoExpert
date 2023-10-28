@@ -1,5 +1,4 @@
 import { Button } from "@mui/material";
-import { useProject } from "../ProjectProvider.js";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import ArrowForwardOutlinedIcon from "@mui/icons-material/ArrowForwardOutlined";
 import ThreeSixtyOutlinedIcon from "@mui/icons-material/ThreeSixtyOutlined";
@@ -7,6 +6,14 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import IconButton from "@mui/material/IconButton";
 import { useState, useEffect } from "react";
 import { Slider } from "@mui/material";
+import {
+	moveBox,
+	rotateBox,
+	resetBoxes,
+	deselectBoxes,
+	removeBoxes,
+} from "../../../features/solution/solutionSlice.js";
+import { useDispatch } from "react-redux";
 
 const BoxesButton = ({ text, onClick }) => {
 	return <Button onClick={() => onClick()}>{text}</Button>;
@@ -27,8 +34,7 @@ const MovementIconButton = ({ icon, arg, onClick, bgColor }) => {
 };
 
 export const EditPanel = ({ maxStepSize }) => {
-	const { moveBox, rotateBox, resetBoxes, deselectBoxes, removeBoxes } =
-		useProject();
+	const dispatch = useDispatch();
 	const [stepSize, setStepSize] = useState(1);
 	const [unitsStepSize, setUnitsStepSize] = useState(1);
 	const [tenthsStepSize, setTenthsStepSize] = useState(0);
@@ -66,7 +72,9 @@ export const EditPanel = ({ maxStepSize }) => {
 										<ArrowBackOutlinedIcon size="small" />
 									}
 									arg={args[0]}
-									onClick={moveBox}
+									onClick={() => {
+										dispatch(moveBox(args[0]));
+									}}
 									bgColor={args[3]}
 								/>
 								<MovementIconButton
@@ -74,7 +82,9 @@ export const EditPanel = ({ maxStepSize }) => {
 										<ThreeSixtyOutlinedIcon size="small" />
 									}
 									arg={args[1]}
-									onClick={rotateBox}
+									onClick={() => {
+										dispatch(rotateBox(args[1]));
+									}}
 									bgColor={args[3]}
 								/>
 								<MovementIconButton
@@ -82,7 +92,9 @@ export const EditPanel = ({ maxStepSize }) => {
 										<ArrowForwardOutlinedIcon size="small" />
 									}
 									arg={args[2]}
-									onClick={moveBox}
+									onClick={() => {
+										dispatch(moveBox(args[2]));
+									}}
 									bgColor={args[3]}
 								/>
 							</ButtonGroup>
@@ -92,15 +104,21 @@ export const EditPanel = ({ maxStepSize }) => {
 				<div className="d-flex flex-column">
 					<BoxesButton
 						text="Remove"
-						onClick={removeBoxes}
+						onClick={() => {
+							dispatch(removeBoxes());
+						}}
 					/>
 					<BoxesButton
 						text="Reset"
-						onClick={resetBoxes}
+						onClick={() => {
+							dispatch(resetBoxes());
+						}}
 					/>
 					<BoxesButton
 						text="Deselect"
-						onClick={deselectBoxes}
+						onClick={() => {
+							dispatch(deselectBoxes());
+						}}
 					/>
 				</div>
 			</div>

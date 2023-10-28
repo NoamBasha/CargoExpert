@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { setSolutionById } from "../solution/solutionSlice.js";
 import { logout } from "../auth/authSlice.js";
 
 const initialState = {
@@ -29,7 +30,6 @@ export const projectSlice = createSlice({
 			state.boxes = project.boxes;
 			state.solutions = project.solutions;
 		},
-
 		reset: (state) => initialState,
 	},
 	extraReducers: (builder) => {

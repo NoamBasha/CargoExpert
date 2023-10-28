@@ -1,9 +1,17 @@
 import { useRef, useState, useEffect } from "react";
 import { useHelper } from "@react-three/drei";
 import { BoxHelper } from "three";
-import { useProject } from "../ProjectProvider.js";
 import { BoxText } from "./BoxText.js";
 import { useEdit } from "./EditProvider.js";
+import {
+	changeBoxById,
+	changeBoxIndices,
+	selectSolutionId,
+	useSelectedBoxes,
+	selectSolutionSelectedBoxes,
+} from "../../../features/solution/solutionSlice.js";
+
+import { useDispatch, useSelector } from "react-redux";
 
 export const Box = ({
 	id,
@@ -15,8 +23,9 @@ export const Box = ({
 	isIn,
 	rotation,
 }) => {
-	const { changeBoxById, changeBoxIndices, solutionId, boxIndices } =
-		useProject();
+	const dispatch = useDispatch();
+	const solutionId = useSelector(selectSolutionId);
+	const boxIndices = useSelector(selectSolutionSelectedBoxes);
 	const { edit } = useEdit();
 	const [boxColor, setBoxColor] = useState(color);
 	const eps = 0.0001;
@@ -103,21 +112,24 @@ export const Box = ({
 	return (
 		<>
 			<mesh
-				onClick={(e) => {
+				onClick={async (e) => {
 					if (edit) {
 						e.stopPropagation();
 						toggleColor();
-						changeBoxIndices(id);
-						changeBoxById(id, {
-							id: id,
-							order: order,
-							position: position,
-							type: type,
-							color: color,
-							size: size,
-							isIn: isIn,
-							rotation: rotation,
-						});
+						console.log(id);
+						await dispatch(changeBoxIndices({ id }));
+						await dispatch(
+							changeBoxById(id, {
+								_id: id,
+								order: order,
+								position: position,
+								type: type,
+								color: color,
+								size: size,
+								isIn: isIn,
+								rotation: rotation,
+							})
+						);
 					}
 				}}
 				ref={mesh}
