@@ -3,9 +3,10 @@ import Solution from "../models/solutionModel.js";
 import Project from "../models/projectModel.js";
 
 export const createSolution = asyncHandler(async (req, res) => {
+	console.log("Creating solution...");
 	const projectId = req.params.projectId;
-
 	const { solutionData } = req.body;
+	console.log(solutionData);
 
 	const solution = await Solution.create(solutionData);
 

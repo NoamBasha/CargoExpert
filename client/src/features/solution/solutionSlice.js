@@ -17,12 +17,16 @@ const initialState = {
 
 export const createSolution = createAsyncThunk(
 	"solution/createSolution",
-	async (solutionData, thunkAPI) => {
+	async (solutionId, thunkAPI) => {
 		try {
 			const token = thunkAPI.getState().auth.user.token;
-			const userId = thunkAPI.getState().auth.user._id;
+			const projectId = thunkAPI.getState().project.projectId;
+			const solutions = thunkAPI.getState().project.solutions;
+			const solutionData = solutions.find(
+				(solution) => solution._id === solutionId
+			);
 			const response = await solutionService.createSolution(
-				userId,
+				projectId,
 				solutionData,
 				token
 			);
@@ -192,7 +196,7 @@ export const solutionSlice = createSlice({
 			const { id } = action.payload;
 			if (state.selectedBoxes.includes(id)) {
 				state.selectedBoxes = state.selectedBoxes.filter(
-					(id) => id !== id
+					(inId) => inId !== id
 				);
 			} else {
 				state.selectedBoxes = [...state.selectedBoxes, id];

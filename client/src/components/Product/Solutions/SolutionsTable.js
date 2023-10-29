@@ -254,9 +254,9 @@ export const SolutionsTable = ({ title }) => {
 										) : (
 											<IconButton
 												onClick={() => {
-													duplicateSolution(
-														projectId,
-														row._id
+													console.log("0");
+													dispatch(
+														createSolution(row._id)
 													);
 													toast.success(
 														`Duplicated solution`

@@ -89,11 +89,12 @@ const EditButton = ({ onClick, text, style }) => {
 };
 
 const ViewButton = ({ deselectBoxes, setEdit, validateBoxesLocation }) => {
+	const dispatch = useDispatch();
 	return (
 		<Button
 			onClick={() => {
 				if (validateBoxesLocation()) {
-					deselectBoxes();
+					dispatch(deselectBoxes());
 					setEdit();
 				}
 			}}
@@ -114,6 +115,7 @@ export const View = () => {
 	const boxes = useSelector(selectSolutionBoxes);
 	const inBoxes = boxes.filter((box) => box.isIn === true);
 	const outBoxes = boxes.filter((box) => box.isIn === false);
+	const containerObject = useSelector(selectProjectContainer);
 
 	container = [container.width, container.height, container.length];
 
@@ -125,12 +127,66 @@ export const View = () => {
 	const solutionDetails = `${projectName} - ${solutionName}`;
 
 	const validateBoxesLocation = (inBoxes, container) => {
+		const getBoxRotatedSize = (box) => {
+			let rotatedSize = box.size;
+			if (box.rotation === 0) {
+				rotatedSize = {
+					width: box.size.width,
+					height: box.size.height,
+					length: box.size.length,
+				};
+			} else if (box.rotation === 1) {
+				rotatedSize = {
+					width: box.size.length,
+					height: box.size.height,
+					length: box.size.width,
+				};
+			} else if (box.rotation === 2) {
+				rotatedSize = {
+					width: box.size.height,
+					height: box.size.length,
+					length: box.size.width,
+				};
+			} else if (box.rotation === 3) {
+				rotatedSize = {
+					width: box.size.length,
+					height: box.size.width,
+					length: box.size.height,
+				};
+			} else if (box.rotation === 4) {
+				rotatedSize = {
+					width: box.size.width,
+					height: box.size.length,
+					length: box.size.height,
+				};
+			} else if (box.rotation === 5) {
+				rotatedSize = {
+					width: box.size.height,
+					height: box.size.width,
+					length: box.size.length,
+				};
+			}
+			return rotatedSize;
+		};
+
+		const setBoxesRotatedSize = (boxes) => {
+			return boxes.map((box) => {
+				return {
+					...box,
+					size: getBoxRotatedSize(box),
+				};
+			});
+		};
+
+		const rotatedBoxes = setBoxesRotatedSize(inBoxes);
+
 		return () => {
-			if (isBoxesOutOfBounds(inBoxes, container)) {
+			//TODO set all boxes to size AFTER rotation!
+			if (isBoxesOutOfBounds(rotatedBoxes, container)) {
 				toast.error("Not all of the boxes are inside the container");
-			} else if (isBoxesOverlapping(inBoxes, container)) {
+			} else if (isBoxesOverlapping(rotatedBoxes, container)) {
 				toast.error("There are boxes overlapping");
-			} else if (isBoxesHovering(inBoxes)) {
+			} else if (isBoxesHovering(rotatedBoxes)) {
 				toast.error("There are boxes hovering");
 			} else {
 				return true;
@@ -308,7 +364,7 @@ export const View = () => {
 								setEdit={() => setEdit(false)}
 								validateBoxesLocation={validateBoxesLocation(
 									inBoxes,
-									container
+									containerObject
 								)}
 							/>
 						) : (

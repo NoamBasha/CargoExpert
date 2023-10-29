@@ -1,22 +1,28 @@
 // returns true if there is a box that is out of bounds
 // return false if everything is ok
 const isBoxesOutOfBounds = (inBoxes, container) => {
-	if (!inBoxes || !container || container.length !== 3) {
+	if (!inBoxes || !container) {
 		return true;
 	}
 
 	const isOutOfBounds = inBoxes.some((box) => {
-		const x_condiction =
-			box.position[0] + 0.5 * box.size[0] > container[0] ||
-			box.position[0] - 0.5 * box.size[0] < 0;
-		const y_condiction =
-			box.position[1] + 0.5 * box.size[1] > container[1] ||
-			box.position[1] - 0.5 * box.size[1] < 0;
-		const z_condiction =
-			box.position[2] + 0.5 * box.size[2] > container[2] ||
-			box.position[2] - 0.5 * box.size[2] < 0;
-		return x_condiction || y_condiction || z_condiction;
+		const x_condition =
+			box.position.x + 0.5 * box.size.width > container.width ||
+			box.position.x - 0.5 * box.size.width < 0;
+		console.log(x_condition);
+		const y_condition =
+			box.position.y + 0.5 * box.size.height > container.height ||
+			box.position.y - 0.5 * box.size.height < 0;
+		console.log(y_condition);
+
+		const z_condition =
+			box.position.z + 0.5 * box.size.length > container.length ||
+			box.position.z - 0.5 * box.size.length < 0;
+		console.log(z_condition);
+		console.log(box);
+		return x_condition || y_condition || z_condition;
 	});
+	console.log(isOutOfBounds);
 	return isOutOfBounds;
 };
 
@@ -26,29 +32,29 @@ const isTwoBoxesOverLapping = (box1, box2) => {
 		return true;
 	}
 
-	const box1xMin = box1.position[0] - box1.size[0] / 2;
-	const box1xMax = box1.position[0] + box1.size[0] / 2;
-	const box2xMin = box2.position[0] - box2.size[0] / 2;
-	const box2xMax = box2.position[0] + box2.size[0] / 2;
+	const box1xMin = box1.position.x - box1.size.width / 2;
+	const box1xMax = box1.position.x + box1.size.width / 2;
+	const box2xMin = box2.position.x - box2.size.width / 2;
+	const box2xMax = box2.position.x + box2.size.width / 2;
 
 	// Check if boxes are separated along x axis
 	if (box1xMax <= box2xMin || box2xMax <= box1xMin) {
 		return false;
 	}
 
-	const box1yMin = box1.position[1] - box1.size[1] / 2;
-	const box1yMax = box1.position[1] + box1.size[1] / 2;
-	const box2yMin = box2.position[1] - box2.size[1] / 2;
-	const box2yMax = box2.position[1] + box2.size[1] / 2;
+	const box1yMin = box1.position.y - box1.size.height / 2;
+	const box1yMax = box1.position.y + box1.size.height / 2;
+	const box2yMin = box2.position.y - box2.size.height / 2;
+	const box2yMax = box2.position.y + box2.size.height / 2;
 
 	if (box1yMax <= box2yMin || box2yMax <= box1yMin) {
 		return false;
 	}
 
-	const box1zMin = box1.position[2] - box1.size[2] / 2;
-	const box1zMax = box1.position[2] + box1.size[2] / 2;
-	const box2zMin = box2.position[2] - box2.size[2] / 2;
-	const box2zMax = box2.position[2] + box2.size[2] / 2;
+	const box1zMin = box1.position.z - box1.size.length / 2;
+	const box1zMax = box1.position.z + box1.size.length / 2;
+	const box2zMin = box2.position.z - box2.size.length / 2;
+	const box2zMax = box2.position.z + box2.size.length / 2;
 
 	if (box1zMax <= box2zMin || box2zMax <= box1zMin) {
 		return false;
@@ -71,11 +77,11 @@ const isBoxesOverlapping = (inBoxes) => {
 };
 
 const isBoxesHovering = (inBoxes) => {
-	const getXs = (box, otherBox, i) => {
+	const getXs = (box, otherBox) => {
 		const boxMin = box.flb.x;
-		const boxMax = box.flb.x + box.size[i];
+		const boxMax = box.flb.x + box.size.width;
 		const otherBoxMin = otherBox.flb.x;
-		const otherBoxMax = otherBox.flb.x + otherBox.size[i];
+		const otherBoxMax = otherBox.flb.x + otherBox.size.width;
 
 		// Check if boxes are separated along x axis
 		if (boxMax <= otherBoxMin || otherBoxMax <= boxMin) {
@@ -98,11 +104,11 @@ const isBoxesHovering = (inBoxes) => {
 		return max - min;
 	};
 
-	const getZs = (box, otherBox, i) => {
+	const getZs = (box, otherBox) => {
 		const boxMin = box.flb.z;
-		const boxMax = box.flb.z + box.size[i];
+		const boxMax = box.flb.z + box.size.length;
 		const otherBoxMin = otherBox.flb.z;
-		const otherBoxMax = otherBox.flb.z + otherBox.size[i];
+		const otherBoxMax = otherBox.flb.z + otherBox.size.length;
 
 		// Check if boxes are separated along x axis
 		if (boxMax <= otherBoxMin || otherBoxMax <= boxMin) {
@@ -126,21 +132,21 @@ const isBoxesHovering = (inBoxes) => {
 	};
 
 	const getCoverage = (box, otherBox) => {
-		if (box.flb.y !== otherBox.flb.y + otherBox.size[1]) {
+		if (box.flb.y !== otherBox.flb.y + otherBox.size.height) {
 			return 0;
 		}
 
-		let x_intersection = getXs(box, otherBox, 0);
-		let z_intersection = getZs(box, otherBox, 2);
+		let x_intersection = getXs(box, otherBox);
+		let z_intersection = getZs(box, otherBox);
 
 		return x_intersection * z_intersection;
 	};
 
 	const boxes_with_flb = inBoxes.map((box) => {
 		let flb = {
-			x: box.position[0] - box.size[0] / 2,
-			y: box.position[1] - box.size[1] / 2,
-			z: box.position[2] - box.size[2] / 2,
+			x: box.position.x - box.size.width / 2,
+			y: box.position.y - box.size.height / 2,
+			z: box.position.z - box.size.length / 2,
 		};
 		return { ...box, flb: flb };
 	});
@@ -151,7 +157,7 @@ const isBoxesHovering = (inBoxes) => {
 			continue;
 		}
 		let overall_coverage = 0;
-		const area = box.size[0] * box.size[2];
+		const area = box.size.width * box.size.length;
 		for (let j = 0; j < boxes_with_flb.length; j++) {
 			if (j === i) {
 				continue;
