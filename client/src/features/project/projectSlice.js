@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { setSolutionById } from "../solution/solutionSlice.js";
 import { logout } from "../auth/authSlice.js";
+import { createSolution, updateSolution } from "../solution/solutionSlice.js";
 
 const initialState = {
 	projectId: null,
@@ -33,9 +33,20 @@ export const projectSlice = createSlice({
 		reset: (state) => initialState,
 	},
 	extraReducers: (builder) => {
-		builder.addCase(logout, () => {
-			return initialState;
-		});
+		builder
+			.addCase(logout, () => {
+				return initialState;
+			})
+			.addCase(createSolution.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.solutions = action.payload.solutions;
+			})
+			.addCase(updateSolution.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.solutions = action.payload.solutions;
+			});
 	},
 });
 

@@ -18,8 +18,28 @@ const createSolution = async (projectId, solutionData, token) => {
 	return response.data;
 };
 
+const updateSolution = async (
+	{ solutionId, newSolution, projectId },
+	token
+) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	const response = await axios.put(
+		API_URL + projectId + "/" + solutionId,
+		{ newSolution: newSolution },
+		config
+	);
+
+	return response.data;
+};
+
 const solutionService = {
 	createSolution,
+	updateSolution,
 };
 
 export default solutionService;

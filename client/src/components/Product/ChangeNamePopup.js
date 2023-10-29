@@ -11,7 +11,6 @@ import { toast } from "react-toastify";
 
 export const ChangeNamePopup = ({ text, id, onSubmit, onClose }) => {
 	const [name, setName] = useState("");
-
 	const handleSubmit = () => {
 		if (name && name.trim().length !== 0) {
 			onSubmit(id, name);

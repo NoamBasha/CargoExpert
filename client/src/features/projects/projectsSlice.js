@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import projectsService from "./projectsService.js";
+import { createSolution, updateSolution } from "../solution/solutionSlice.js";
+
 import { logout } from "../auth/authSlice.js";
 
 const initialState = {
@@ -135,6 +137,46 @@ export const projectsSlice = createSlice({
 			})
 			.addCase(logout, () => {
 				return initialState;
+			})
+			.addCase(createSolution.pending, (state, action) => {
+				state.isLoading = true;
+			})
+			.addCase(createSolution.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				const projectIdToReplace = action.payload._id;
+				state.projects = state.projects.map((project) => {
+					if (project._id === projectIdToReplace) {
+						return action.payload;
+					} else {
+						return project;
+					}
+				});
+			})
+			.addCase(createSolution.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+			})
+			.addCase(updateSolution.pending, (state, action) => {
+				state.isLoading = true;
+			})
+			.addCase(updateSolution.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				const projectIdToReplace = action.payload._id;
+				state.projects = state.projects.map((project) => {
+					if (project._id === projectIdToReplace) {
+						return action.payload;
+					} else {
+						return project;
+					}
+				});
+			})
+			.addCase(updateSolution.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
 			});
 	},
 });

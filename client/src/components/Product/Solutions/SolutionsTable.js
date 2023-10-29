@@ -70,7 +70,7 @@ export const SolutionsTable = ({ title }) => {
 	const message = useSelector(selectMessage);
 
 	//TODO: create those as thunks?
-	const { duplicateSolution, updateSolutionName } = useUserData();
+	const { updateSolutionName } = useUserData();
 
 	const [tableSolutionId, setTableSolutionId] = useState(null);
 	const [showChangeNamePopup, setShowChangeNamePopup] = useState(false);
@@ -113,14 +113,17 @@ export const SolutionsTable = ({ title }) => {
 		return null;
 	};
 
-	const handleChangeName = (id, name) => {
-		const solution = getSolutionById(id);
+	const handleChangeName = (solutionId, name) => {
+		const solution = solutions.find(
+			(solution) => solution._id === solutionId
+		);
 		if (solution !== null) {
 			const newSolution = {
 				...solution,
 				name: name,
 			};
-			updateSolutionName(projectId, newSolution);
+			dispatch(updateSolution({ solutionId, newSolution }));
+			//TODO handle errors
 			toast.info(`Changed name to ${name}`);
 		}
 	};

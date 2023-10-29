@@ -39,11 +39,12 @@ export const createSolution = createAsyncThunk(
 
 export const updateSolution = createAsyncThunk(
 	"solution/updateSolution",
-	async ({ solutionId, solutionData }, thunkAPI) => {
+	async ({ solutionId, newSolution }, thunkAPI) => {
 		try {
+			const projectId = thunkAPI.getState().project.projectId;
 			const token = thunkAPI.getState().auth.user.token;
 			return await solutionService.updateSolution(
-				{ solutionId, solutionData },
+				{ solutionId, newSolution, projectId },
 				token
 			);
 		} catch (error) {
