@@ -4,6 +4,7 @@ import {
 	createSolution,
 	updateSolution,
 	deleteSolution,
+	improveSolution,
 } from "../solution/solutionSlice.js";
 
 const initialState = {
@@ -55,6 +56,11 @@ export const projectSlice = createSlice({
 				state.isLoading = false;
 				state.isSuccess = true;
 				state.solutions = action.payload.solutions;
+			})
+			.addCase(improveSolution.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.solutions = action.payload.project.solutions;
 			});
 	},
 });

@@ -8,7 +8,6 @@ const createSolution = async (projectId, solutionData, token) => {
 			Authorization: `Bearer ${token}`,
 		},
 	};
-	console.log(solutionData);
 	const response = await axios.post(
 		API_URL + projectId,
 		{ solutionData: solutionData },
@@ -52,10 +51,34 @@ const deleteSolution = async ({ solutionId, projectId }, token) => {
 	return response.data;
 };
 
+const improveSolution = async (
+	{ solutionId, projectId, boxes, container },
+	token
+) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	console.log("Improving 3...");
+
+	const response = await axios.post(
+		API_URL + "improve/" + projectId + "/" + solutionId,
+		{ boxes, container },
+		config
+	);
+
+	console.log("Improving 4...");
+
+	return response.data;
+};
+
 const solutionService = {
 	createSolution,
 	updateSolution,
 	deleteSolution,
+	improveSolution,
 };
 
 export default solutionService;

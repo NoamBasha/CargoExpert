@@ -24,6 +24,7 @@ import {
 
 import { useSelector, useDispatch } from "react-redux";
 import {
+	selectProjectId,
 	selectProjectName,
 	selectProjectContainer,
 	selectProjectBoxes,
@@ -37,6 +38,8 @@ import {
 	deselectBoxes,
 	setSolutionById,
 	reset,
+	updateSolution,
+	improveSolution,
 } from "../../../features/solution/solutionSlice.js";
 import { selectIsLoading } from "../../../features/projects/projectsSlice.js";
 
@@ -116,6 +119,8 @@ export const View = () => {
 	const inBoxes = boxes.filter((box) => box.isIn === true);
 	const outBoxes = boxes.filter((box) => box.isIn === false);
 	const containerObject = useSelector(selectProjectContainer);
+	const projectId = useSelector(selectProjectId);
+	const solutionId = useSelector(selectSolutionId);
 
 	container = [container.width, container.height, container.length];
 
@@ -196,7 +201,23 @@ export const View = () => {
 	};
 
 	const handleSaveSolution = () => {
-		saveSolution();
+		let newSolution = solutions.find(
+			(solution) => solution._id === solutionId
+		);
+		if (newSolution !== null) {
+			newSolution = {
+				...newSolution,
+				boxes: boxes,
+			};
+			dispatch(updateSolution({ solutionId, newSolution }));
+			//TODO handle errors
+		}
+	};
+
+	const handleImproveSolution = async () => {
+		console.log("Improving...");
+		await dispatch(improveSolution({ solutionId }));
+		//TODO handle errors
 	};
 
 	const downloadSolutionAsCSV = () => {
@@ -411,7 +432,7 @@ export const View = () => {
 									) : (
 										<EditButton
 											onClick={() =>
-												improveSolutionInView()
+												handleImproveSolution()
 											}
 											text={"Improve"}
 										></EditButton>

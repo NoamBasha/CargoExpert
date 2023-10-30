@@ -11,7 +11,6 @@ const getBestPoint = (pp, box, container, solutionBoxes) => {
 
 	pp.forEach((p) => {
 		let score = getScore(box, p, solutionBoxes, container);
-
 		if (
 			score[0] > bestScore[0] ||
 			(score[0] === bestScore[0] && score[1] > bestScore[1])
@@ -59,7 +58,6 @@ export const handleBox = (
 	isRetry
 ) => {
 	const bestPoint = getBestPoint(pp, box, container, solutionBoxes);
-
 	addBoxToSolution(
 		bestPoint,
 		box,
@@ -140,6 +138,7 @@ const getSolutions = (algorithmTime, boxes, container, isQuantity) => {
 	let solutionList = {};
 	let counter = 0;
 	const endTime = Date.now() + algorithmTime;
+
 	while (Date.now() < endTime) {
 		let boxesCopy = [...boxes];
 		// For non-deterministic algorithm - rotating and perturbating the boxes.

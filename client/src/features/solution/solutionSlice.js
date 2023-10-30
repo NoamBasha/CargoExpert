@@ -73,8 +73,16 @@ export const improveSolution = createAsyncThunk(
 	"solution/improveSolution",
 	async ({ solutionId }, thunkAPI) => {
 		try {
+			console.log("Improving 21...");
+			const projectId = thunkAPI.getState().project.projectId;
+			const container = thunkAPI.getState().project.container;
+			const boxes = thunkAPI.getState().solution.boxes;
 			const token = thunkAPI.getState().auth.user.token;
-			return await solutionService.improveSolution(solutionId, token);
+			console.log("Improving 22...");
+			return await solutionService.improveSolution(
+				{ solutionId, projectId, boxes, container },
+				token
+			);
 		} catch (error) {
 			return thunkAPI.rejectWithValue(error.message);
 		}
@@ -122,6 +130,7 @@ export const solutionSlice = createSlice({
 			state.boxes = joinedBoxes;
 			state.previousBoxes = joinedBoxes;
 			state.data = solution.data;
+			console.log("Solution set");
 		},
 		setBoxes: (state, action) => {
 			state.boxes = action.payload;
@@ -241,9 +250,40 @@ export const solutionSlice = createSlice({
 		reset: (state) => initialState,
 	},
 	extraReducers: (builder) => {
-		builder.addCase(logout, () => {
-			return initialState;
-		});
+		builder
+			.addCase(logout, () => {
+				return initialState;
+			})
+			.addCase(improveSolution.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+
+				const solutionId = state.solutionId;
+				const solutions = action.payload.project.solutions;
+				const projectBoxes = action.payload.project.boxes;
+
+				const solution = solutions.find(
+					(solution) => solution._id === solutionId
+				);
+
+				const joinedBoxes = [];
+
+				for (const projectBox of projectBoxes) {
+					for (const solutionBox of solution.boxes) {
+						if (projectBox._id === solutionBox.boxId) {
+							const joinedBox = { ...projectBox, ...solutionBox };
+							joinedBoxes.push(joinedBox);
+						}
+					}
+				}
+
+				state.solutionId = solutionId;
+				state.name = solution.name;
+				state.boxes = joinedBoxes;
+				state.previousBoxes = joinedBoxes;
+				state.data = solution.data;
+				console.log("Solution set 2");
+			});
 	},
 });
 

@@ -4,6 +4,7 @@ import {
 	createSolution,
 	updateSolution,
 	deleteSolution,
+	improveSolution,
 } from "../solution/solutionSlice.js";
 
 import { logout } from "../auth/authSlice.js";
@@ -198,6 +199,26 @@ export const projectsSlice = createSlice({
 				});
 			})
 			.addCase(deleteSolution.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+			})
+			.addCase(improveSolution.pending, (state, action) => {
+				state.isLoading = true;
+			})
+			.addCase(improveSolution.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				const projectIdToReplace = action.payload.project._id;
+				state.projects = state.projects.map((project) => {
+					if (project._id === projectIdToReplace) {
+						return action.payload.project;
+					} else {
+						return project;
+					}
+				});
+			})
+			.addCase(improveSolution.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;

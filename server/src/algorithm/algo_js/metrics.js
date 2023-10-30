@@ -39,7 +39,7 @@ export const orderMetric = (solutionBoxes, container) => {
 		return 0;
 	}
 
-	if (!container || Object.keys(container).length !== 3) {
+	if (!container) {
 		return 0;
 	}
 
@@ -50,7 +50,9 @@ export const orderMetric = (solutionBoxes, container) => {
 	}
 
 	const orderList = normalize(inBoxes.map((box) => box.order));
+
 	const zList = normalize(inBoxes.map((box) => container.length - box.FLB.z));
+
 	// const zList = normalizeByContainer(
 	// 	inBoxes.map((box) => box.FLB.z),
 	// 	container
@@ -137,7 +139,7 @@ export const overallMetric = (projectBoxes, container, data, isQuantity) => {
 		return 0;
 	}
 
-	if (!container || Object.keys(container).length !== 3) {
+	if (!container) {
 		return 0;
 	}
 

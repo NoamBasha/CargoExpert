@@ -1,7 +1,7 @@
 import { getSize } from "./box.js";
 
 const isBoxOutOfBounds = (box, container) => {
-	if (!box || !container || Object.keys(container).length !== 3) {
+	if (!box || !container) {
 		return true;
 	}
 
@@ -169,11 +169,11 @@ const isBoxesHovering = (inBoxes) => {
 
 export const validateBoxesLocation = (box, boxes, container) => {
 	const boxesWithBox = [...boxes, box];
-	if (
-		isBoxOutOfBounds(box, container) ||
-		isBoxOverLapping(box, boxes) ||
-		isBoxesHovering(boxesWithBox)
-	) {
+	const c1 = isBoxOutOfBounds(box, container);
+	const c2 = isBoxOverLapping(box, boxes);
+	const c3 = isBoxesHovering(boxesWithBox);
+
+	if (c1 || c2 || c3) {
 		return false;
 	}
 	return true;

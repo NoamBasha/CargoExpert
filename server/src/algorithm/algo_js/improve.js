@@ -5,7 +5,8 @@ import { rotation, perturbation } from "./boxMotion.js";
 import { orderMetric, overallMetric } from "./metrics.js";
 import { handleBox } from "./algo.js";
 
-const IMPROVE_TIME = 10000;
+// TODO change back to 10000
+const IMPROVE_TIME = 3000;
 const IMPROVE_MAX_ITERATIONS = 1000000;
 
 const improvePacking = (inBoxes, outBoxes, container) => {
@@ -27,11 +28,11 @@ const improvePacking = (inBoxes, outBoxes, container) => {
 	let solutionBoxes = [];
 	let retryList = [];
 
-	let solution_data = {
-		number_of_items: 0,
+	let solutionData = {
+		numberOfItems: 0,
 		capacity: 0,
-		order_score: 0,
-		overall_score: 0,
+		orderScore: 0,
+		overallScore: 0,
 	};
 
 	// Finding pps from inBoxes.
@@ -50,8 +51,8 @@ const improvePacking = (inBoxes, outBoxes, container) => {
 		pp.add(pRight);
 		updatePps(box, pRight, pp, container);
 		solutionBoxes.push(box);
-		solution_data["number_of_items"] += 1;
-		solution_data["capacity"] += box.volume;
+		solutionData["numberOfItems"] += 1;
+		solutionData["capacity"] += box.volume;
 	});
 
 	// Adding each box in outBoxes to the container
@@ -61,7 +62,7 @@ const improvePacking = (inBoxes, outBoxes, container) => {
 			pp,
 			container,
 			solutionBoxes,
-			solution_data,
+			solutionData,
 			retryList,
 			false
 		);
@@ -73,44 +74,34 @@ const improvePacking = (inBoxes, outBoxes, container) => {
 			pp,
 			container,
 			solutionBoxes,
-			solution_data,
+			solutionData,
 			retryList,
 			true
 		);
 	});
 
 	const boxes = [...inBoxes, ...outBoxes];
-	solution_data.order_score = parseFloat(
-		orderMetric(solutionBoxes, container)
+
+	solutionData.orderScore = parseFloat(orderMetric(solutionBoxes, container));
+	solutionData.overallScore = parseFloat(
+		overallMetric(boxes, container, solutionData, true)
 	);
-	solution_data.overall_score = parseFloat(
-		overallMetric(boxes, container, solution_data, 1)
-	);
-	return [solutionBoxes, solution_data];
+	return [solutionBoxes, solutionData];
 };
 
 const initImproveBox = (box) => {
 	return {
 		...box,
-		width: box.size[0],
-		height: box.size[1],
-		length: box.size[2],
-		volume: box.size[0] * box.size[1] * box.size[2],
-		rotation: Rotation.WHL,
-		size: {
-			width: box.size[0],
-			height: box.size[1],
-			length: box.size[2],
-		},
-		center: {
-			x: box.position[0],
-			y: box.position[1],
-			z: box.position[2],
-		},
+		width: box.size.width,
+		height: box.size.height,
+		length: box.size.length,
+		volume: box.size.width * box.size.height * box.size.length,
+		rotation: box.rotation,
+		center: box.position,
 		FLB: {
-			x: box.position[0] - 0.5 * box.size[0],
-			y: box.position[1] - 0.5 * box.size[1],
-			z: box.position[2] - 0.5 * box.size[2],
+			x: box.position.x - 0.5 * box.size.width,
+			y: box.position.y - 0.5 * box.size.height,
+			z: box.position.z - 0.5 * box.size.length,
 		},
 	};
 };
@@ -119,24 +110,24 @@ const initImproveBox = (box) => {
 const getImproveBox = (box) => {
 	return {
 		...box,
-		size: Object.values(getSize(box)),
-		position: Object.values(box.center),
+		//TODO: change back? - does not matter because I use the original size with the rotation
+		// size: getSize(box),
+		position: box.center,
 	};
 };
 
-export const improve = (boxes, container) => {
-	console.log(data);
-
+export const improve = (boxes, container, name, id) => {
 	boxes = boxes.map((box) => {
 		return initImproveBox(box);
 	});
 
 	// Splitting to two lists
 	const inBoxes = boxes.filter((box) => {
-		return box.isIn == 1;
+		return box.isIn == true;
 	});
+
 	const outBoxes = boxes.filter((box) => {
-		return box.isIn == 0;
+		return box.isIn == false;
 	});
 
 	// Sort isIn's by y coordinate and z coordinate
@@ -152,8 +143,8 @@ export const improve = (boxes, container) => {
 
 	const endTime = Date.now() + IMPROVE_TIME;
 	while (Date.now() < endTime) {
-		inBoxesCopy = [...inBoxes];
-		outBoxesCopy = [...outBoxes];
+		let inBoxesCopy = [...inBoxes];
+		let outBoxesCopy = [...outBoxes];
 
 		outBoxesCopy = rotation(outBoxesCopy);
 		outBoxesCopy = perturbation(outBoxesCopy);
@@ -163,16 +154,17 @@ export const improve = (boxes, container) => {
 			continue;
 		}
 
-		let [boxesInSolution, solution_data] = solution;
-		if (boxesInSolution !== null && solution_data !== null) {
+		let [boxesInSolution, solutionData] = solution;
+		if (boxesInSolution !== null && solutionData !== null) {
 			let counterString = counter.toString();
 			solutionList[counterString] = {
-				name: "solution " + counterString,
-				id: counter,
+				_id: id,
+				name: name,
+				// id: counter,
 				boxes: boxesInSolution.map((box) => {
 					return getImproveBox(box);
 				}),
-				solution_data: solution_data,
+				data: solutionData,
 			};
 			counter += 1;
 		}
@@ -183,8 +175,7 @@ export const improve = (boxes, container) => {
 
 	// The best solution is the one with the most boxes in it.
 	const bestSolution = Object.values(solutionList).sort(
-		(a, b) =>
-			b.solution_data.number_of_items - a.solution_data.number_of_items
+		(a, b) => b.data.numberOfItems - a.data.numberOfItems
 	)[0];
 
 	return bestSolution;

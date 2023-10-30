@@ -1,6 +1,49 @@
 import asyncHandler from "express-async-handler";
 import Solution from "../models/solutionModel.js";
 import Project from "../models/projectModel.js";
+import { improve } from "../algorithm/algo_js/improve.js";
+import { orderMetric, overallMetric } from "../algorithm/algo_js/metrics.js";
+// import { getSize } from "../algorithm/algo_js/box.js";
+
+const getSolutionData = (boxes, container) => {
+	let data = {
+		numberOfItems: 0,
+		capacity: 0,
+		orderScore: 0,
+		overallScore: 0,
+	};
+
+	// const boxesWithRealSize = boxes.map((box) => {
+	// 	return {
+	// 		...box,
+	// 		size: getSize(box),
+	// 	};
+	// });
+
+	const boxesWithFLB = boxes.map((box) => {
+		if (box.isIn === true) {
+			data.numberOfItems += 1;
+			data.capacity += box.size.width * box.size.height * box.size.length;
+		}
+
+		return {
+			...box,
+			FLB: {
+				x: box.position.x - 0.5 * box.size.width,
+				y: box.position.y - 0.5 * box.size.height,
+				z: box.position.z - 0.5 * box.size.length,
+			},
+		};
+	});
+
+	const inBoxesWithFLB = boxesWithFLB.filter((box) => box.isIn == true);
+	data.orderScore = parseFloat(orderMetric(inBoxesWithFLB, container));
+	data.overallScore = parseFloat(
+		overallMetric(boxesWithFLB, container, data, true)
+	);
+
+	return data;
+};
 
 const removeIds = (obj) => {
 	if (typeof obj === "object") {
@@ -70,8 +113,7 @@ export const updateSolution = asyncHandler(async (req, res) => {
 	const projectId = req.params.projectId;
 	const solutionId = req.params.solutionId;
 	const { newSolution } = req.body;
-	console.log(newSolution);
-	console.log(projectId, solutionId);
+
 	// Find the project by its ID
 	const project = await Project.findById(projectId);
 
@@ -79,11 +121,17 @@ export const updateSolution = asyncHandler(async (req, res) => {
 		res.status(404);
 		throw new Error("Project not found");
 	}
-	console.log(project);
+
+	const boxes = newSolution.boxes;
+	const container = project.container;
+	console.log(newSolution.data);
+	const newData = getSolutionData(boxes, container);
+	console.log(newData);
+
 	project.solutions = project.solutions.map((solution) => {
 		//TODO == because one is a string and the other is an object
 		if (solution._id == solutionId) {
-			return newSolution;
+			return { ...newSolution, data: newData };
 		} else {
 			return solution;
 		}
@@ -91,4 +139,49 @@ export const updateSolution = asyncHandler(async (req, res) => {
 	await project.save();
 
 	res.status(200).json(project);
+});
+
+export const improveSolution = asyncHandler(async (req, res) => {
+	const projectId = req.params.projectId;
+	const solutionId = req.params.solutionId;
+	console.log(solutionId);
+	const { boxes, container } = req.body;
+	// Find the project by its ID
+	const project = await Project.findById(projectId);
+
+	if (!project) {
+		res.status(404);
+		throw new Error("Project not found");
+	}
+
+	const currentSolution = project.solutions.find((solution) => {
+		return solution._id == solutionId;
+	});
+
+	console.log(currentSolution.data);
+	// console.log(boxes);
+
+	const improvedSolution = improve(
+		boxes,
+		container,
+		currentSolution.name,
+		currentSolution._id
+	);
+
+	console.log(improvedSolution.data);
+	// console.log(improvedSolution.boxes);
+
+	project.solutions = project.solutions.map((solution) => {
+		//TODO == because one is a string and the other is an object
+		if (solution._id == solutionId) {
+			console.log("Updated improved solution");
+			return improvedSolution;
+		} else {
+			return solution;
+		}
+	});
+
+	await project.save();
+
+	res.status(200).json({ project, solutionId });
 });
