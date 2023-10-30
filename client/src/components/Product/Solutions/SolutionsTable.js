@@ -128,12 +128,8 @@ export const SolutionsTable = ({ title }) => {
 		}
 	};
 
-	const handleDelete = (id) => {
-		const deleteSpecificSolution = deleteSolution(projectId);
-		deleteSpecificSolution(id);
-		if (!isError) {
-			toast.success(`Deleted Solution successfully`);
-		}
+	const handleDelete = (solutionId) => {
+		dispatch(deleteSolution({ solutionId }));
 	};
 
 	const sortByColumn = (column, isAscending, setIsAscending) => {

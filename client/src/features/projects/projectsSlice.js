@@ -1,6 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import projectsService from "./projectsService.js";
-import { createSolution, updateSolution } from "../solution/solutionSlice.js";
+import {
+	createSolution,
+	updateSolution,
+	deleteSolution,
+} from "../solution/solutionSlice.js";
 
 import { logout } from "../auth/authSlice.js";
 
@@ -174,6 +178,26 @@ export const projectsSlice = createSlice({
 				});
 			})
 			.addCase(updateSolution.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+			})
+			.addCase(deleteSolution.pending, (state, action) => {
+				state.isLoading = true;
+			})
+			.addCase(deleteSolution.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				const projectIdToReplace = action.payload._id;
+				state.projects = state.projects.map((project) => {
+					if (project._id === projectIdToReplace) {
+						return action.payload;
+					} else {
+						return project;
+					}
+				});
+			})
+			.addCase(deleteSolution.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;

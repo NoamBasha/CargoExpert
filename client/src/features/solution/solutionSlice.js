@@ -55,10 +55,14 @@ export const updateSolution = createAsyncThunk(
 
 export const deleteSolution = createAsyncThunk(
 	"solution/deleteSolution",
-	async (solutionId, thunkAPI) => {
+	async ({ solutionId }, thunkAPI) => {
 		try {
+			const projectId = thunkAPI.getState().project.projectId;
 			const token = thunkAPI.getState().auth.user.token;
-			return await solutionService.deleteSolution(solutionId, token);
+			return await solutionService.deleteSolution(
+				{ solutionId, projectId },
+				token
+			);
 		} catch (error) {
 			return thunkAPI.rejectWithValue(error.message);
 		}

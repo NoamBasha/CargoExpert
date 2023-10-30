@@ -55,20 +55,12 @@ export const deleteSolution = asyncHandler(async (req, res) => {
 		throw new Error("Project not found");
 	}
 
-	const solutionIndex = project.solutions.findIndex(
-		(id) => id.toString() === solutionId
-	);
-
-	if (solutionIndex === -1) {
-		res.status(404);
-		throw new Error("Solution not found within the project");
-	}
-
-	project.solutions.splice(solutionIndex, 1);
+	project.solutions = project.solutions.filter((solution) => {
+		//TODO != because one is a string and the other is an object
+		return solution._id != solutionId;
+	});
 
 	await project.save();
-
-	//await Solution.findByIdAndDelete(solutionId);
 
 	res.status(200).send(project);
 });

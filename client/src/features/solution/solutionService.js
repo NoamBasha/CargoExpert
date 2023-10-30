@@ -37,9 +37,25 @@ const updateSolution = async (
 	return response.data;
 };
 
+const deleteSolution = async ({ solutionId, projectId }, token) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	const response = await axios.delete(
+		API_URL + projectId + "/" + solutionId,
+		config
+	);
+
+	return response.data;
+};
+
 const solutionService = {
 	createSolution,
 	updateSolution,
+	deleteSolution,
 };
 
 export default solutionService;
