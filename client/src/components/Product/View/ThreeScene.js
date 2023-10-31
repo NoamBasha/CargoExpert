@@ -13,13 +13,13 @@ export const ThreeScene = ({ container, children }) => {
 	const boxes = useSelector(selectSolutionBoxes);
 	const inBoxes = boxes.filter((box) => box.isIn === true);
 
-	const camera_position = container.map((n) => n * 2);
-	const axes_length = Math.max(...container) * 1.5;
+	const cameraPosition = Object.values(container).map((n) => n * 2);
+	const axesLength = Math.max(...Object.values(container)) * 1.5;
 
 	return (
 		<div className="h-100 w-100 d-flex flex-row justify-content-center align-items-center">
 			{children}
-			<Canvas camera={{ fov: 75, position: camera_position }}>
+			<Canvas camera={{ fov: 75, position: cameraPosition }}>
 				<Container size={container} />
 				{inBoxes.map(
 					({
@@ -48,7 +48,7 @@ export const ThreeScene = ({ container, children }) => {
 					}
 				)}
 				<OrbitControls />
-				{edit ? <axesHelper args={[axes_length]} /> : null}
+				{edit ? <axesHelper args={[axesLength]} /> : null}
 			</Canvas>
 		</div>
 	);

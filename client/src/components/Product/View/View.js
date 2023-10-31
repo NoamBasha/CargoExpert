@@ -113,19 +113,12 @@ export const View = () => {
 	const projectBoxes = useSelector(selectProjectBoxes);
 	const solutions = useSelector(selectProjectSolutions);
 	const currentSolutionId = useSelector(selectSolutionId);
-	let container = useSelector(selectProjectContainer);
+	const container = useSelector(selectProjectContainer);
 	const boxes = useSelector(selectSolutionBoxes);
 	const inBoxes = boxes.filter((box) => box.isIn === true);
 	const outBoxes = boxes.filter((box) => box.isIn === false);
-	const containerObject = useSelector(selectProjectContainer);
-	const projectId = useSelector(selectProjectId);
 	const solutionId = useSelector(selectSolutionId);
-
-	//TODO: container - change to object!
-	container = [container.width, container.height, container.length];
-
 	const isLoading = useSelector(selectIsLoading);
-
 	const projectName = useSelector(selectProjectName);
 	const solutionName = useSelector(selectSolutionName);
 	const solutionDetails = `${projectName} - ${solutionName}`;
@@ -183,12 +176,11 @@ export const View = () => {
 		};
 
 		const rotatedBoxes = setBoxesRotatedSize(inBoxes);
-
 		return () => {
 			//TODO set all boxes to size AFTER rotation!
 			if (isBoxesOutOfBounds(rotatedBoxes, container)) {
 				toast.error("Not all of the boxes are inside the container");
-			} else if (isBoxesOverlapping(rotatedBoxes, container)) {
+			} else if (isBoxesOverlapping(rotatedBoxes)) {
 				toast.error("There are boxes overlapping");
 			} else if (isBoxesHovering(rotatedBoxes)) {
 				toast.error("There are boxes hovering");
@@ -256,7 +248,7 @@ export const View = () => {
 
 		const downloadCSV = (fileName) => {
 			const headerCSV = `order,x,y,z,width,height,length,isIn`;
-			const containerAsCSV = `container,-,-,-,${container[0]}, ${container[1]}, ${container[2]},-`;
+			const containerAsCSV = `container,-,-,-,${container.width}, ${container.height}, ${container.length},-`;
 			const inBoxesAsCSV = convertToCSV(inBoxes, true);
 			const outBoxesAsCSV = convertToCSV(outBoxes, false);
 			const finalCSV =
@@ -331,7 +323,7 @@ export const View = () => {
 							style={{ top: 30, right: 100, zIndex: 1 }}
 						>
 							<EditPanel
-								maxStepSize={Math.max(...container) / 2}
+								maxStepSize={Math.max(...Object.values(container)) / 2}
 							/>
 						</div>
 					) : null}
@@ -394,7 +386,7 @@ export const View = () => {
 								setEdit={() => setEdit(false)}
 								validateBoxesLocation={validateBoxesLocation(
 									inBoxes,
-									containerObject
+									container
 								)}
 							/>
 						) : (

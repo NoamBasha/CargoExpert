@@ -23,8 +23,8 @@ export const DownloadFile = () => {
 			}
 
 			if (response.status === 200) {
-				const res_blob = await response.blob();
-				FileDownload(res_blob, "user_input_example_from_server.csv");
+				const resBlob = await response.blob();
+				FileDownload(resBlob, "user_input_example_from_server.csv");
 			} else {
 				const data = await response.json();
 				toast.error(data.error);

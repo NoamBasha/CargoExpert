@@ -7,16 +7,16 @@ const isBoxOutOfBounds = (box, container) => {
 
 	// Box is out of bounds if one of its sides is out of the container sides.
 	const boxSize = getSize(box);
-	const x_condiction =
+	const xCondiction =
 		box.center.x + 0.5 * boxSize.width > container.width ||
 		box.center.x - 0.5 * boxSize.width < 0;
-	const y_condiction =
+	const yCondiction =
 		box.center.y + 0.5 * boxSize.height > container.height ||
 		box.center.y - 0.5 * boxSize.height < 0;
-	const z_condiction =
+	const zCondiction =
 		box.center.z + 0.5 * boxSize.length > container.length ||
 		box.center.z - 0.5 * boxSize.length < 0;
-	return x_condiction || y_condiction || z_condiction;
+	return xCondiction || yCondiction || zCondiction;
 };
 
 const isTwoBoxesOverLapping = (box1, box2) => {
@@ -137,10 +137,10 @@ const isBoxesHovering = (inBoxes) => {
 			return 0;
 		}
 
-		let x_intersection = getXs(box, otherBox);
-		let z_intersection = getZs(box, otherBox);
+		let xIntersection = getXs(box, otherBox);
+		let zIntersection = getZs(box, otherBox);
 
-		return x_intersection * z_intersection;
+		return xIntersection * zIntersection;
 	};
 
 	// For each box going over all of the other boxes and check if it is covered completely.
@@ -150,17 +150,17 @@ const isBoxesHovering = (inBoxes) => {
 		if (box.FLB.y === 0) {
 			continue;
 		}
-		let overall_coverage = 0;
+		let overallCoverage = 0;
 		const area = boxSize.width * boxSize.length;
 		for (let j = 0; j < inBoxes.length; j++) {
 			if (j === i) {
 				continue;
 			}
 			const otherBox = inBoxes[j];
-			let current_coverage = getCoverage(box, otherBox);
-			overall_coverage += current_coverage;
+			let overallCoverage = getCoverage(box, otherBox);
+			overallCoverage += currentCoverage;
 		}
-		if (overall_coverage !== area) {
+		if (overallCoverage !== area) {
 			return true;
 		}
 	}

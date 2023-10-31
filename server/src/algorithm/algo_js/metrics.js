@@ -13,7 +13,7 @@ export const volumeMetric = (solutionBoxes) => {
 		return 0;
 	}
 
-	let volumes_sum = 0;
+	let volumesSum = 0;
 	const inBoxes = solutionBoxes.filter((box) => box.isIn);
 
 	const notValidVolumes = inBoxes.filter((box) => {
@@ -29,9 +29,9 @@ export const volumeMetric = (solutionBoxes) => {
 	);
 
 	for (const volume of volumes) {
-		volumes_sum += volume;
+		volumesSum += volume;
 	}
-	return volumes_sum;
+	return volumesSum;
 };
 
 export const orderMetric = (solutionBoxes, container) => {

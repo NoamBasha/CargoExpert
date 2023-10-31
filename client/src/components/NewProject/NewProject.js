@@ -92,7 +92,7 @@ export const NewProject = () => {
 			toast.error("Problem with boxes");
 		} else {
 			setOpenModal(true);
-			let project_boxes = boxes.map((box) => {
+			let projectBoxes = boxes.map((box) => {
 				return {
 					...box,
 					size: {
@@ -113,7 +113,7 @@ export const NewProject = () => {
 						isQuantity: orderQuantity === "Quantity" ? true : false,
 						isQuality: timeQuality === "Quality" ? true : false,
 						container,
-						boxes: project_boxes,
+						boxes: projectBoxes,
 					})
 				);
 

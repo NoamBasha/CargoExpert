@@ -26,53 +26,53 @@ export const FileUpload = ({ setNewStage, setContainer, setBoxes }) => {
 
 	const parseData = (data) => {
 		try {
-			let numeric_data = [];
+			let numericData = [];
 			for (let i = 0; i < data.length; i++) {
-				let numberic_object = {};
+				let numericObject = {};
 				for (let property in data[i]) {
 					const value = data[i][property];
 					if (value && value.trim().length !== 0 && !isNaN(value)) {
-						numberic_object[property] = parseFloat(value);
+						numericObject[property] = parseFloat(value);
 					} else {
-						numberic_object[property] = value.trim();
+						numericObject[property] = value.trim();
 					}
 				}
-				numberic_object = {
+				numericObject = {
 					id: i,
-					...numberic_object,
+					...numericObject,
 					color: "",
 					isIn: false,
 				};
 				if (
-					Object.values(numberic_object).includes(null) ||
-					Object.values(numberic_object).includes(undefined)
+					Object.values(numericObject).includes(null) ||
+					Object.values(numericObject).includes(undefined)
 				) {
 					toast.error(BOXES_ERROR);
 					return;
 				}
-				numeric_data.push(numberic_object);
+				numericData.push(numericObject);
 			}
 
-			let container_data = {
-				width: numeric_data[0]["width"],
-				height: numeric_data[0]["height"],
-				length: numeric_data[0]["length"],
+			let containerData = {
+				width: numericData[0]["width"],
+				height: numericData[0]["height"],
+				length: numericData[0]["length"],
 			};
 
 			if (
-				container_data.height == null ||
-				container_data.width == null ||
-				container_data.length == null
+				containerData.height == null ||
+				containerData.width == null ||
+				containerData.length == null
 			) {
 				toast.error(CONTAINER_ERROR);
 				return;
 			}
 
 			let boxes = [];
-			for (let i = 1; i < numeric_data.length; i++) {
-				boxes.push(numeric_data[i]);
+			for (let i = 1; i < numericData.length; i++) {
+				boxes.push(numericData[i]);
 			}
-			setContainer(container_data);
+			setContainer(containerData);
 			setBoxes(boxes);
 		} catch (err) {
 			toast.error(FILE_ERROR);

@@ -6,17 +6,16 @@ const isBoxesOutOfBounds = (inBoxes, container) => {
 	}
 
 	const isOutOfBounds = inBoxes.some((box) => {
-		const x_condition =
+		const xCondition =
 			box.position.x + 0.5 * box.size.width > container.width ||
 			box.position.x - 0.5 * box.size.width < 0;
-		const y_condition =
+		const yCondition =
 			box.position.y + 0.5 * box.size.height > container.height ||
 			box.position.y - 0.5 * box.size.height < 0;
-
-		const z_condition =
+		const zCondition =
 			box.position.z + 0.5 * box.size.length > container.length ||
 			box.position.z - 0.5 * box.size.length < 0;
-		return x_condition || y_condition || z_condition;
+		return xCondition || yCondition || zCondition;
 	});
 	return isOutOfBounds;
 };
@@ -131,13 +130,13 @@ const isBoxesHovering = (inBoxes) => {
 			return 0;
 		}
 
-		let x_intersection = getXs(box, otherBox);
-		let z_intersection = getZs(box, otherBox);
+		let xIntersection = getXs(box, otherBox);
+		let zIntersection = getZs(box, otherBox);
 
-		return x_intersection * z_intersection;
+		return xIntersection * zIntersection;
 	};
 
-	const boxes_with_flb = inBoxes.map((box) => {
+	const boxesWithFlb = inBoxes.map((box) => {
 		let flb = {
 			x: box.position.x - box.size.width / 2,
 			y: box.position.y - box.size.height / 2,
@@ -146,22 +145,22 @@ const isBoxesHovering = (inBoxes) => {
 		return { ...box, flb: flb };
 	});
 
-	for (let i = 0; i < boxes_with_flb.length; i++) {
-		const box = boxes_with_flb[i];
+	for (let i = 0; i < boxesWithFlb.length; i++) {
+		const box = boxesWithFlb[i];
 		if (box.flb.y === 0) {
 			continue;
 		}
-		let overall_coverage = 0;
+		let overallCoverage = 0;
 		const area = box.size.width * box.size.length;
-		for (let j = 0; j < boxes_with_flb.length; j++) {
+		for (let j = 0; j < boxesWithFlb.length; j++) {
 			if (j === i) {
 				continue;
 			}
-			const otherBox = boxes_with_flb[j];
-			let current_coverage = getCoverage(box, otherBox);
-			overall_coverage += current_coverage;
+			const otherBox = boxesWithFlb[j];
+			let currentCoverage = getCoverage(box, otherBox);
+			overallCoverage += currentCoverage;
 		}
-		if (overall_coverage !== area) {
+		if (overallCoverage !== area) {
 			return true;
 		}
 	}

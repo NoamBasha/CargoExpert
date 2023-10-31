@@ -77,6 +77,13 @@ export default projectSlice.reducer;
 
 export const selectProjectId = (state) => state.project.projectId;
 export const selectProjectName = (state) => state.project.name;
-export const selectProjectContainer = (state) => state.project.container;
+export const selectProjectContainer = (state) => {
+	const container = state.project.container
+	return {
+	width: container.width,
+	height: container.height,
+	length: container.length
+}
+};
 export const selectProjectBoxes = (state) => state.project.boxes;
 export const selectProjectSolutions = (state) => state.project.solutions;
