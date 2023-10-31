@@ -1,9 +1,7 @@
 import Papa from "papaparse";
-import path from "path";
 import fs from "fs";
 import { algo } from "../../algorithm/algo_js/algo.js";
 
-const scriptPath = path.join(__dirname, "../../algorithm/algo_js/algo.py");
 const files_list = [
 	"asi.csv",
 	"big_numbers_little_boxes.csv",
