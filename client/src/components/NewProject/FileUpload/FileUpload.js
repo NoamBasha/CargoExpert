@@ -15,7 +15,7 @@ export const FileUpload = ({ setNewStage, setContainer, setBoxes }) => {
 	const [fileName, setFileName] = useState(null);
 
 	const handleDelete = useCallback(() => {
-		setContainer([]);
+		setContainer(null);
 		setBoxes([]);
 		setFileName(null);
 	}, [setContainer, setBoxes, setFileName]);
@@ -72,7 +72,7 @@ export const FileUpload = ({ setNewStage, setContainer, setBoxes }) => {
 			for (let i = 1; i < numeric_data.length; i++) {
 				boxes.push(numeric_data[i]);
 			}
-			setContainer(Object.values(container_data));
+			setContainer(container_data);
 			setBoxes(boxes);
 		} catch (err) {
 			toast.error(FILE_ERROR);

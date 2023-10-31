@@ -121,6 +121,7 @@ export const View = () => {
 	const projectId = useSelector(selectProjectId);
 	const solutionId = useSelector(selectSolutionId);
 
+	//TODO: container - change to object!
 	container = [container.width, container.height, container.length];
 
 	const isLoading = useSelector(selectIsLoading);

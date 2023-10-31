@@ -60,7 +60,7 @@ const validateNumberProperty = (property) => {
 };
 
 export const NewProject = () => {
-	const [container, setContainer] = useState([0, 0, 0]);
+	const [container, setContainer] = useState(null);
 	const [boxes, setBoxes] = useState([]);
 	const [name, setName] = useState("");
 	const [stage, setStage] = useState(0);
@@ -106,16 +106,13 @@ export const NewProject = () => {
 			});
 
 			try {
+				console.log(container)
 				await dispatch(
 					createProject({
 						name: name,
 						isQuantity: orderQuantity === "Quantity" ? true : false,
 						isQuality: timeQuality === "Quality" ? true : false,
-						container: {
-							width: container[0],
-							height: container[1],
-							length: container[2],
-						},
+						container,
 						boxes: project_boxes,
 					})
 				);

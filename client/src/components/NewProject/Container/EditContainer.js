@@ -4,7 +4,7 @@ import { StandardContainers } from "./StandardContainers";
 import { toast } from "react-toastify";
 
 export const EditContainer = ({ setNewStage, container, setContainer }) => {
-	const [width, height, length] = container;
+	const {width, height, length} = container;
 
 	const [formWidth, setFormWidth] = useState(width);
 	const [formHeight, setFormHeight] = useState(height);
@@ -22,21 +22,21 @@ export const EditContainer = ({ setNewStage, container, setContainer }) => {
 
 	const handleEditContainer = () => {
 		if (validateContainer()) {
-			setContainer([
-				parseInt(formWidth),
-				parseInt(formHeight),
-				parseInt(formLength),
-			]);
+			setContainer({
+				width: parseInt(formWidth),
+				height: parseInt(formHeight),
+				length: parseInt(formLength),
+			});
 			setNewStage(1);
 		} else {
 			toast.error("Problem with container");
 		}
 	};
 
-	const setStandardContainer = (w, h, l) => {
-		setFormWidth(w);
-		setFormHeight(h);
-		setFormLength(l);
+	const setStandardContainer = (size) => {
+		setFormWidth(size.width);
+		setFormHeight(size.height);
+		setFormLength(size.length);
 	};
 
 	return (

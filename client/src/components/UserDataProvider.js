@@ -1,10 +1,5 @@
 import { useState, createContext, useContext } from "react";
-import {
-	numOfItemsMetric,
-	volumeMetric,
-	orderMetric,
-	overallMetric,
-} from "./metrics.js";
+
 
 const DEV = true;
 
@@ -456,20 +451,20 @@ export const UserDataProvider = ({ children }) => {
 
 		const solutionBoxes = inBoxes.concat(outBoxes);
 		let updatedSolutionData = {
-			capacity: volumeMetric(solutionBoxes),
-			number_of_items: numOfItemsMetric(solutionBoxes),
-			order_score: orderMetric(solutionBoxes, container),
-			overall_score: 0,
+			// capacity: volumeMetric(solutionBoxes),
+			// number_of_items: numOfItemsMetric(solutionBoxes),
+			// order_score: orderMetric(solutionBoxes, container),
+			// overall_score: 0,
 		};
 
 		let updatedSolutionDataWithOverall = {
 			...updatedSolutionData,
-			overall_score: overallMetric(
-				solutionBoxes,
-				container,
-				updatedSolutionData,
-				isQuantity
-			),
+			// overall_score: overallMetric(
+			// 	solutionBoxes,
+			// 	container,
+			// 	updatedSolutionData,
+			// 	isQuantity
+			// ),
 		};
 
 		let new_projects = projects.map((current_project) => {
