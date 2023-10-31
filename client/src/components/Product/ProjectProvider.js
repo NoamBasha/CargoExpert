@@ -46,10 +46,10 @@ export const ProjectProvider = ({ children }) => {
 			);
 
 			const isInBoxes = solution.boxes.filter((box) => {
-				return box.isIn === 1;
+				return box.isIn === true;
 			});
 			const isOutBoxes = solution.boxes.filter((box) => {
-				return box.isIn === 0;
+				return box.isIn === false;
 			});
 
 			setBoxes(solution.boxes);
@@ -147,7 +147,7 @@ export const ProjectProvider = ({ children }) => {
 
 		allBoxes = allBoxes.map((box) => {
 			if (boxIndices.includes(box.id)) {
-				return { ...box, isIn: 0 };
+				return { ...box, isIn: false };
 			} else {
 				return box;
 			}
@@ -155,7 +155,7 @@ export const ProjectProvider = ({ children }) => {
 
 		const { newInBoxes, newOutBoxes } = allBoxes.reduce(
 			(acc, box) => {
-				if (box.isIn === 1) {
+				if (box.isIn === true) {
 					acc.newInBoxes.push(box);
 				} else {
 					acc.newOutBoxes.push(box);
@@ -173,7 +173,7 @@ export const ProjectProvider = ({ children }) => {
 		let allBoxes = inBoxes.concat(outBoxes);
 		allBoxes = allBoxes.map((box) => {
 			if (box.id === id) {
-				return { ...box, isIn: box.isIn === 1 ? 0 : 1 };
+				return { ...box, isIn: box.isIn ? false : true };
 			} else {
 				return box;
 			}
@@ -181,7 +181,7 @@ export const ProjectProvider = ({ children }) => {
 
 		const { newInBoxes, newOutBoxes } = allBoxes.reduce(
 			(acc, box) => {
-				if (box.isIn === 1) {
+				if (box.isIn) {
 					acc.newInBoxes.push(box);
 				} else {
 					acc.newOutBoxes.push(box);

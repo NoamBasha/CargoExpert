@@ -36,7 +36,7 @@ const getSolutionData = (boxes, container) => {
 		};
 	});
 
-	const inBoxesWithFLB = boxesWithFLB.filter((box) => box.isIn == true);
+	const inBoxesWithFLB = boxesWithFLB.filter((box) => box.isIn === true);
 	data.orderScore = parseFloat(orderMetric(inBoxesWithFLB, container));
 	data.overallScore = parseFloat(
 		overallMetric(boxesWithFLB, container, data, true)

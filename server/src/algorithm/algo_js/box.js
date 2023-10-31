@@ -82,7 +82,7 @@ export const setPosition = (box, p) => {
 		y: box.FLB.y + boxSize.height / 2,
 		z: box.FLB.z + boxSize.length / 2,
 	};
-	box.isIn = 1;
+	box.isIn = true;
 };
 
 export const unsetPosition = (box) => {
@@ -97,7 +97,7 @@ export const unsetPosition = (box) => {
 		y: 0,
 		z: 0,
 	};
-	box.isIn = 0;
+	box.isIn = false;
 };
 
 // Returns the box with the correct size.

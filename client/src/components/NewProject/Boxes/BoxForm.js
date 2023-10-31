@@ -109,7 +109,7 @@ export const BoxForm = ({
 			width: formWidth,
 			height: formHeight,
 			length: formLength,
-			isIn: 0,
+			isIn: false,
 		};
 		const newBoxes = [...boxes, newBox];
 		setBoxes(newBoxes);

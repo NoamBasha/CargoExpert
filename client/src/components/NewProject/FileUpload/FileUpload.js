@@ -41,7 +41,7 @@ export const FileUpload = ({ setNewStage, setContainer, setBoxes }) => {
 					id: i,
 					...numberic_object,
 					color: "",
-					isIn: 0,
+					isIn: false,
 				};
 				if (
 					Object.values(numberic_object).includes(null) ||

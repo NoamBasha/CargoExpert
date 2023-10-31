@@ -101,7 +101,7 @@ export const NewProject = () => {
 						length: box.length,
 					},
 					color: stringToColour(box.type),
-					isIn: 0,
+					isIn: false,
 				};
 			});
 

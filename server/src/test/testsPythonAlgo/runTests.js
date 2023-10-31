@@ -81,7 +81,7 @@ const parseData = (data) => {
 				id: i,
 				...numberic_object,
 				color: "",
-				isIn: 0,
+				isIn: false,
 			};
 			if (
 				Object.values(numberic_object).includes(null) ||
@@ -176,7 +176,7 @@ const handleFile = (err, data) => {
 	}
 	handleDrop(data);
 	let project_boxes = parsed_file.map((box) => {
-		return { ...box, color: stringToColour(box.type), isIn: 0 };
+		return { ...box, color: stringToColour(box.type), isIn: false };
 	});
 
 	input = {

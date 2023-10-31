@@ -49,7 +49,7 @@ export const createProject = asyncHandler(async (req, res) => {
 			width: box.size.width,
 			height: box.size.height,
 			length: box.size.length,
-			isIn: 0,
+			isIn: false,
 		};
 	});
 
