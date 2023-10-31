@@ -39,6 +39,7 @@ import {
 	createSolution,
 	deleteSolution,
 	updateSolution,
+	duplicateSolution
 } from "../../../features/solution/solutionSlice.js";
 
 import { setSolutionById } from "../../../features/solution/solutionSlice.js";
@@ -250,7 +251,7 @@ export const SolutionsTable = ({ title }) => {
 											<IconButton
 												onClick={() => {
 													dispatch(
-														createSolution(row._id)
+														duplicateSolution(row._id)
 													);
 													toast.success(
 														`Duplicated solution`

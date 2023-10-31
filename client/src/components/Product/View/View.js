@@ -224,12 +224,25 @@ export const View = () => {
 			// Add data rows
 			for (const item of array) {
 				const order = item.order;
-				const size = item.size;
+				const size = [
+								item.size.width,
+								item.size.height,
+								item.size.length
+							]
 				const position = isIn
-					? item.position.map((axis, i) => {
-							return axis - 0.5 * size[i];
-					  })
+					? 
+					[
+						//TODO here should be getSize!
+						item.position.x - 0.5 * item.size.width,
+						item.position.y - 0.5 * item.size.height,
+						item.position.z - 0.5 * item.size.length
+					]
 					: ["-", "-", "-"];
+				// const position = isIn
+				// 	? item.position.map((axis, i) => {
+				// 			return axis - 0.5 * size[i];
+				// 	  })
+				// 	: ["-", "-", "-"];
 
 				const boxIsIn = item.isIn;
 				const values = [order, ...position, ...size, boxIsIn];

@@ -5,6 +5,7 @@ import {
 	updateSolution,
 	deleteSolution,
 	improveSolution,
+	duplicateSolution
 } from "../solution/solutionSlice.js";
 
 const initialState = {
@@ -43,6 +44,11 @@ export const projectSlice = createSlice({
 				return initialState;
 			})
 			.addCase(createSolution.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.solutions = action.payload.solutions;
+			})
+			.addCase(duplicateSolution.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.isSuccess = true;
 				state.solutions = action.payload.solutions;

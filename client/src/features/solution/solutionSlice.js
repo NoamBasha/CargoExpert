@@ -37,6 +37,34 @@ export const createSolution = createAsyncThunk(
 	}
 );
 
+export const duplicateSolution = createAsyncThunk(
+	"solution/duplicateSolution",
+	async (solutionId, thunkAPI) => {
+		try {
+			const token = thunkAPI.getState().auth.user.token;
+			const projectId = thunkAPI.getState().project.projectId;
+			const solutions = thunkAPI.getState().project.solutions;
+			let solutionData = solutions.find(
+				(solution) => solution._id === solutionId
+			);
+
+			solutionData = {
+				...solutionData,
+				name: solutionData.name + " duplicated"
+			}
+
+			const response = await solutionService.createSolution(
+				projectId,
+				solutionData,
+				token
+			);
+			return response;
+		} catch (error) {
+			return thunkAPI.rejectWithValue(error.message);
+		}
+	}
+);
+
 export const updateSolution = createAsyncThunk(
 	"solution/updateSolution",
 	async ({ solutionId, newSolution }, thunkAPI) => {
