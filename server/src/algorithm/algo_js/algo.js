@@ -122,8 +122,7 @@ const constructivePacking = (boxes, container, isQuantity) => {
 };
 
 const handleData = (boxes, container, isQuantity, isQuality) => {
-	// TODO : change from 2000 to 15000
-	const algorithmTime = isQuality ? 60000 : 2000; // miliseconds
+	const algorithmTime = isQuality ? 60000 : 15000; // miliseconds
 
 	const initBoxes = boxes.map((box) => {
 		return initBox(box);
@@ -222,7 +221,7 @@ export const algo = (
 		clientIsQuantity,
 		clientIsQuality
 	);
-	console.log(boxes[0]);
+
 	let solutionList = getSolutions(
 		algorithmTime,
 		boxes,
@@ -235,8 +234,6 @@ export const algo = (
 	solutionList = solutionList.map((solution, index) => {
 		return { ...solution, name: `solution ${index + 1}` };
 	});
-
-	console.log(solutionList[0].boxes[0]);
 
 	let solutionDict = dictSolutionsFromList(solutionList);
 

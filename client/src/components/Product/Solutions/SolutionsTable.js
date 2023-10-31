@@ -1,5 +1,4 @@
 import { Button } from "@mui/material";
-import { useUserData } from "../../UserDataProvider.js";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
@@ -68,9 +67,6 @@ export const SolutionsTable = ({ title }) => {
 	const isLoading = useSelector(selectIsLoading);
 	const isError = useSelector(selectIsError);
 	const message = useSelector(selectMessage);
-
-	//TODO: create those as thunks?
-	const { updateSolutionName } = useUserData();
 
 	const [tableSolutionId, setTableSolutionId] = useState(null);
 	const [showChangeNamePopup, setShowChangeNamePopup] = useState(false);
@@ -253,7 +249,6 @@ export const SolutionsTable = ({ title }) => {
 										) : (
 											<IconButton
 												onClick={() => {
-													console.log("0");
 													dispatch(
 														createSolution(row._id)
 													);

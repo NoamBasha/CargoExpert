@@ -59,7 +59,6 @@ const removeIds = (obj) => {
 };
 
 export const createSolution = asyncHandler(async (req, res) => {
-	console.log("Creating solution...");
 	const projectId = req.params.projectId;
 	let { solutionData } = req.body;
 	solutionData = removeIds(solutionData);
@@ -108,7 +107,6 @@ export const deleteSolution = asyncHandler(async (req, res) => {
 	res.status(200).send(project);
 });
 
-// TODO: fix this.
 export const updateSolution = asyncHandler(async (req, res) => {
 	const projectId = req.params.projectId;
 	const solutionId = req.params.solutionId;
@@ -124,9 +122,7 @@ export const updateSolution = asyncHandler(async (req, res) => {
 
 	const boxes = newSolution.boxes;
 	const container = project.container;
-	console.log(newSolution.data);
 	const newData = getSolutionData(boxes, container);
-	console.log(newData);
 
 	project.solutions = project.solutions.map((solution) => {
 		//TODO == because one is a string and the other is an object
@@ -144,7 +140,6 @@ export const updateSolution = asyncHandler(async (req, res) => {
 export const improveSolution = asyncHandler(async (req, res) => {
 	const projectId = req.params.projectId;
 	const solutionId = req.params.solutionId;
-	console.log(solutionId);
 	const { boxes, container } = req.body;
 	// Find the project by its ID
 	const project = await Project.findById(projectId);
@@ -158,9 +153,6 @@ export const improveSolution = asyncHandler(async (req, res) => {
 		return solution._id == solutionId;
 	});
 
-	console.log(currentSolution.data);
-	// console.log(boxes);
-
 	const improvedSolution = improve(
 		boxes,
 		container,
@@ -168,13 +160,9 @@ export const improveSolution = asyncHandler(async (req, res) => {
 		currentSolution._id
 	);
 
-	console.log(improvedSolution.data);
-	// console.log(improvedSolution.boxes);
-
 	project.solutions = project.solutions.map((solution) => {
 		//TODO == because one is a string and the other is an object
 		if (solution._id == solutionId) {
-			console.log("Updated improved solution");
 			return improvedSolution;
 		} else {
 			return solution;

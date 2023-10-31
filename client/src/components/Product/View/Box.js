@@ -116,7 +116,6 @@ export const Box = ({
 					if (edit) {
 						e.stopPropagation();
 						toggleColor();
-						console.log(id);
 						await dispatch(changeBoxIndices({ id }));
 						await dispatch(
 							changeBoxById(id, {

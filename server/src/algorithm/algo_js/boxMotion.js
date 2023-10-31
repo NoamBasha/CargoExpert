@@ -1,13 +1,5 @@
 import { getSize } from "./box.js";
-
-export const Rotation = {
-	WHL: 0,
-	LHW: 1,
-	HLW: 2,
-	LWH: 3,
-	WLH: 4,
-	HWL: 5,
-};
+import { Rotation } from "./utils.js";
 
 const rotateEachBox = (boxes) => {
 	const numOfRotations = Object.values(Rotation).length;

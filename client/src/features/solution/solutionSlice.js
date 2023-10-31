@@ -73,12 +73,10 @@ export const improveSolution = createAsyncThunk(
 	"solution/improveSolution",
 	async ({ solutionId }, thunkAPI) => {
 		try {
-			console.log("Improving 21...");
 			const projectId = thunkAPI.getState().project.projectId;
 			const container = thunkAPI.getState().project.container;
 			const boxes = thunkAPI.getState().solution.boxes;
 			const token = thunkAPI.getState().auth.user.token;
-			console.log("Improving 22...");
 			return await solutionService.improveSolution(
 				{ solutionId, projectId, boxes, container },
 				token
@@ -130,7 +128,6 @@ export const solutionSlice = createSlice({
 			state.boxes = joinedBoxes;
 			state.previousBoxes = joinedBoxes;
 			state.data = solution.data;
-			console.log("Solution set");
 		},
 		setBoxes: (state, action) => {
 			state.boxes = action.payload;
@@ -282,7 +279,6 @@ export const solutionSlice = createSlice({
 				state.boxes = joinedBoxes;
 				state.previousBoxes = joinedBoxes;
 				state.data = solution.data;
-				console.log("Solution set 2");
 			});
 	},
 });

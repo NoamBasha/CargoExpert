@@ -1,5 +1,4 @@
 import { ThreeScene } from "./ThreeScene.js";
-import { useProject } from "../ProjectProvider.js";
 import { Button } from "@mui/material";
 import { EditPanel } from "./EditPanel.js";
 import { useEdit } from "./EditProvider.js";
@@ -124,7 +123,6 @@ export const View = () => {
 
 	container = [container.width, container.height, container.length];
 
-	const { saveSolution, improveSolutionInView } = useProject();
 	const isLoading = useSelector(selectIsLoading);
 
 	const projectName = useSelector(selectProjectName);
@@ -215,7 +213,6 @@ export const View = () => {
 	};
 
 	const handleImproveSolution = async () => {
-		console.log("Improving...");
 		await dispatch(improveSolution({ solutionId }));
 		//TODO handle errors
 	};
@@ -293,7 +290,6 @@ export const View = () => {
 							const newIndex =
 								(solutionIndex - 1 + solutions.length) %
 								solutions.length;
-							console.log(newIndex);
 
 							const solutionId = solutions[newIndex]._id;
 							dispatch(
@@ -353,7 +349,6 @@ export const View = () => {
 							);
 							const newIndex =
 								(solutionIndex + 1) % solutions.length;
-							console.log(newIndex);
 							const solutionId = solutions[newIndex]._id;
 							dispatch(
 								setSolutionById({

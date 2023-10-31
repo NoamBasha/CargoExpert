@@ -9,20 +9,15 @@ const isBoxesOutOfBounds = (inBoxes, container) => {
 		const x_condition =
 			box.position.x + 0.5 * box.size.width > container.width ||
 			box.position.x - 0.5 * box.size.width < 0;
-		console.log(x_condition);
 		const y_condition =
 			box.position.y + 0.5 * box.size.height > container.height ||
 			box.position.y - 0.5 * box.size.height < 0;
-		console.log(y_condition);
 
 		const z_condition =
 			box.position.z + 0.5 * box.size.length > container.length ||
 			box.position.z - 0.5 * box.size.length < 0;
-		console.log(z_condition);
-		console.log(box);
 		return x_condition || y_condition || z_condition;
 	});
-	console.log(isOutOfBounds);
 	return isOutOfBounds;
 };
 

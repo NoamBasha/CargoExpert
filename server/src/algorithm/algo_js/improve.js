@@ -1,12 +1,10 @@
-import { Rotation } from "./boxMotion.js";
 import { getSize } from "./box.js";
 import { updatePps } from "./container.js";
 import { rotation, perturbation } from "./boxMotion.js";
 import { orderMetric, overallMetric } from "./metrics.js";
 import { handleBox } from "./algo.js";
 
-// TODO change back to 10000
-const IMPROVE_TIME = 3000;
+const IMPROVE_TIME = 10000;
 const IMPROVE_MAX_ITERATIONS = 1000000;
 
 const improvePacking = (inBoxes, outBoxes, container) => {

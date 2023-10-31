@@ -1,9 +1,6 @@
 import asyncHandler from "express-async-handler";
 import { algo } from "../algorithm/algo_js/algo.js";
-import User from "../models/userModel.js";
 import Project from "../models/projectModel.js";
-import Solution from "../models/solutionModel.js";
-import Box from "../models/boxModel.js";
 
 export const getProjects = asyncHandler(async (req, res) => {
 	const id = req.params.userId;
@@ -92,11 +89,7 @@ export const createProject = asyncHandler(async (req, res) => {
 export const deleteProject = asyncHandler(async (req, res) => {
 	const projectId = req.params.projectId;
 
-	console.log("1");
-
 	const project = await Project.findById(projectId);
-
-	console.log("2");
 
 	if (!project) {
 		res.status(400);
@@ -113,38 +106,29 @@ export const deleteProject = asyncHandler(async (req, res) => {
 	// 	await Solution.deleteMany(solutions);
 	// }
 
-	console.log("3");
-
 	// Delete the project itself
 	await Project.findByIdAndDelete(projectId);
-
-	console.log("4");
 
 	res.status(200).send(projectId);
 });
 
 export const updateProject = asyncHandler(async (req, res) => {
-	console.log(req.params);
 	const projectId = req.params.projectId;
-
-	console.log("1");
 	const { name } = req.body;
-	console.log(req.body);
-	console.log("2");
+
 	// Find the project by its ID
-	console.log(projectId);
 	const project = await Project.findById(projectId);
-	console.log("3");
+
 	if (!project) {
 		res.status(404);
 		throw new Error("Project not found");
 	}
-	console.log("4");
+
 	// Update the project properties
 	if (name) project.name = name;
-	console.log("5");
+
 	// Save the updated project
 	const updatedProject = await project.save();
-	console.log("6");
+
 	res.status(200).json(updatedProject);
 });

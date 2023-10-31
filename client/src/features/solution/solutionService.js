@@ -61,15 +61,11 @@ const improveSolution = async (
 		},
 	};
 
-	console.log("Improving 3...");
-
 	const response = await axios.post(
 		API_URL + "improve/" + projectId + "/" + solutionId,
 		{ boxes, container },
 		config
 	);
-
-	console.log("Improving 4...");
 
 	return response.data;
 };

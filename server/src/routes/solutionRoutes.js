@@ -1,6 +1,5 @@
 import express from "express";
 import { protect } from "../middleware/authMiddleware.js";
-import { improveSolutionMiddleware } from "../middleware/solutionMiddleware.js";
 
 import {
 	createSolution,
