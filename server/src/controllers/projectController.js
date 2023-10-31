@@ -24,8 +24,8 @@ export const createProject = asyncHandler(async (req, res) => {
 		container: container,
 		boxes: boxes,
 		data: {
-			isQuantity: isQuantity == 1 ? true : false,
-			isQuality: isQuality == 1 ? true : false,
+			isQuantity,
+			isQuality,
 		},
 	});
 

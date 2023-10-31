@@ -109,8 +109,8 @@ export const NewProject = () => {
 				await dispatch(
 					createProject({
 						name: name,
-						isQuantity: orderQuantity === "Quantity" ? 1 : 0,
-						isQuality: timeQuality === "Quality" ? 1 : 0,
+						isQuantity: orderQuantity === "Quantity" ? true : false,
+						isQuality: timeQuality === "Quality" ? true : false,
 						container: {
 							width: container[0],
 							height: container[1],
