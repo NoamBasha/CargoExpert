@@ -98,11 +98,6 @@ const initImproveBox = (box) => {
 		volume: box.size.width * box.size.height * box.size.length,
 		rotation: box.rotation,
 		center: box.position,
-		FLB: {
-			x: box.position.x - 0.5 * box.size.width,
-			y: box.position.y - 0.5 * box.size.height,
-			z: box.position.z - 0.5 * box.size.length,
-		},
 	};
 };
 
@@ -119,6 +114,18 @@ const getImproveBox = (box) => {
 export const improve = (boxes, container, name, id) => {
 	boxes = boxes.map((box) => {
 		return initImproveBox(box);
+	});
+
+	boxes = boxes.map((box) => {
+		const rotatedSize = getSize(box);
+		return {
+			...box,
+			FLB: {
+				x: box.position.x - 0.5 * rotatedSize.width,
+				y: box.position.y - 0.5 * rotatedSize.height,
+				z: box.position.z - 0.5 * rotatedSize.length,
+			},
+		};
 	});
 
 	// Splitting to two lists

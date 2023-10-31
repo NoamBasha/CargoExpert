@@ -222,7 +222,7 @@ export const algo = (
 		clientIsQuantity,
 		clientIsQuality
 	);
-
+	console.log(boxes[0]);
 	let solutionList = getSolutions(
 		algorithmTime,
 		boxes,
@@ -235,6 +235,8 @@ export const algo = (
 	solutionList = solutionList.map((solution, index) => {
 		return { ...solution, name: `solution ${index + 1}` };
 	});
+
+	console.log(solutionList[0].boxes[0]);
 
 	let solutionDict = dictSolutionsFromList(solutionList);
 
