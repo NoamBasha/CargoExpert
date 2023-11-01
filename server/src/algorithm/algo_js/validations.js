@@ -157,7 +157,7 @@ const isBoxesHovering = (inBoxes) => {
 				continue;
 			}
 			const otherBox = inBoxes[j];
-			let overallCoverage = getCoverage(box, otherBox);
+			let currentCoverage = getCoverage(box, otherBox);
 			overallCoverage += currentCoverage;
 		}
 		if (overallCoverage !== area) {

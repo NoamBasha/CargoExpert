@@ -13,6 +13,9 @@ import {
 
 import { useDispatch, useSelector } from "react-redux";
 
+import { getBoxRotatedSize } from "../../../utils.js"
+
+
 export const Box = ({
 	id,
 	order,
@@ -30,36 +33,10 @@ export const Box = ({
 	const [boxColor, setBoxColor] = useState(color);
 	const eps = 0.0001;
 
-	/*
-		const Rotation = {
-			WHL: 0,
-			LHW: 1,
-			HLW: 2,
-			LWH: 3,
-			WLH: 4,
-			HWL: 5,
-		};
-	*/
-	//TODO: understand how the size and position comes.
-	// let rotatedSize = [size[0], size[1], size[2]];
+	let rotatedSize = getBoxRotatedSize({size, rotation});
 
-	let rotatedSize = [];
-	if (rotation === 0) {
-		rotatedSize = [size[0], size[1], size[2]];
-	} else if (rotation === 1) {
-		rotatedSize = [size[2], size[1], size[0]];
-	} else if (rotation === 2) {
-		rotatedSize = [size[1], size[2], size[0]];
-	} else if (rotation === 3) {
-		rotatedSize = [size[2], size[0], size[1]];
-	} else if (rotation === 4) {
-		rotatedSize = [size[0], size[2], size[1]];
-	} else if (rotation === 5) {
-		rotatedSize = [size[1], size[0], size[2]];
-	}
-	const [w, h, l] = rotatedSize;
-	position = [position[0], position[1], position[2]];
-	const [x, y, z] = position;
+	const {width, height, length} = rotatedSize;
+	const {x, y, z} = position;
 
 	const mesh = useRef();
 	const outlineColor = "#303030";
@@ -79,28 +56,28 @@ export const Box = ({
 	const boxTexts = [
 		{
 			rotation: [0, Math.PI / 2, 0],
-			position: [x + w / 2 + eps, y, z],
+			position: [x + width / 2 + eps, y, z],
 			type: type,
 		},
 		{
 			rotation: [-Math.PI / 2, 0, Math.PI / 2],
-			position: [x, y + h / 2 + eps, z],
+			position: [x, y + height / 2 + eps, z],
 			type: type,
 		},
-		{ rotation: [0, 0, 0], position: [x, y, z + l / 2 + eps], type: type },
+		{ rotation: [0, 0, 0], position: [x, y, z + length / 2 + eps], type: type },
 		{
 			rotation: [0, -Math.PI / 2, 0],
-			position: [x - w / 2 - eps, y, z],
+			position: [x - width / 2 - eps, y, z],
 			type: type,
 		},
 		{
 			rotation: [Math.PI / 2, 0, -Math.PI / 2],
-			position: [x, y - h / 2 - eps, z],
+			position: [x, y - height / 2 - eps, z],
 			type: type,
 		},
 		{
 			rotation: [0, -Math.PI, 0],
-			position: [x, y, z - l / 2 - eps],
+			position: [x, y, z - length / 2 - eps],
 			type: type,
 		},
 	];
@@ -132,9 +109,9 @@ export const Box = ({
 					}
 				}}
 				ref={mesh}
-				position={position}
+				position={Object.values(position)}
 			>
-				<boxGeometry args={rotatedSize} />
+				<boxGeometry args={Object.values(rotatedSize)} />
 				<meshBasicMaterial
 					color={edit ? boxColor : color}
 					opacity={edit ? 0.9 : 1}

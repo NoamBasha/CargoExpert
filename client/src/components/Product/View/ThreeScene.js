@@ -37,11 +37,11 @@ export const ThreeScene = ({ container, children }) => {
 								key={_id}
 								id={_id}
 								order={order}
-								size={Object.values(size)}
+								size={size}
 								color={color}
 								type={type}
 								isIn={isIn}
-								position={Object.values(position)}
+								position={position}
 								rotation={rotation}
 							/>
 						);

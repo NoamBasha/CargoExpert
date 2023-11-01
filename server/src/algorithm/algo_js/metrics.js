@@ -8,31 +8,31 @@ export const numOfItemsMetric = (solutionBoxes) => {
 	return inBoxes.length;
 };
 
-export const volumeMetric = (solutionBoxes) => {
-	if (!solutionBoxes || solutionBoxes.length === 0) {
-		return 0;
-	}
+// export const volumeMetric = (solutionBoxes) => {
+// 	if (!solutionBoxes || solutionBoxes.length === 0) {
+// 		return 0;
+// 	}
 
-	let volumesSum = 0;
-	const inBoxes = solutionBoxes.filter((box) => box.isIn);
+// 	let volumesSum = 0;
+// 	const inBoxes = solutionBoxes.filter((box) => box.isIn);
 
-	const notValidVolumes = inBoxes.filter((box) => {
-		return box.size[0] * box.size[1] * box.size[2] <= 0;
-	});
+// 	const notValidVolumes = inBoxes.filter((box) => {
+// 		return box.size[0] * box.size[1] * box.size[2] <= 0;
+// 	});
 
-	if (notValidVolumes.length !== 0) {
-		return 0;
-	}
+// 	if (notValidVolumes.length !== 0) {
+// 		return 0;
+// 	}
 
-	const volumes = inBoxes.map(
-		(box) => box.size[0] * box.size[1] * box.size[2]
-	);
+// 	const volumes = inBoxes.map(
+// 		(box) => box.size[0] * box.size[1] * box.size[2]
+// 	);
 
-	for (const volume of volumes) {
-		volumesSum += volume;
-	}
-	return volumesSum;
-};
+// 	for (const volume of volumes) {
+// 		volumesSum += volume;
+// 	}
+// 	return volumesSum;
+// };
 
 export const orderMetric = (solutionBoxes, container) => {
 	if (!solutionBoxes || solutionBoxes.length === 0) {
