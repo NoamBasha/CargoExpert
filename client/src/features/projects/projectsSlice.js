@@ -84,6 +84,9 @@ export const projectsSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder
+			.addCase(logout, () => {
+				return initialState;
+			})
 			.addCase(getProjects.pending, (state) => {
 				state.isLoading = true;
 			})
@@ -140,9 +143,6 @@ export const projectsSlice = createSlice({
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;
-			})
-			.addCase(logout, () => {
-				return initialState;
 			})
 			.addCase(createSolution.pending, (state, action) => {
 				state.isLoading = true;
@@ -254,6 +254,3 @@ export const selectProjects = (state) => state.projects.projects;
 export const selectIsLoading = (state) => state.projects.isLoading;
 export const selectIsError = (state) => state.projects.isError;
 export const selectMessage = (state) => state.projects.message;
-// export const selectProjectById = (state, projectId) => {
-// 	return state.projects.projects.find((project) => project.id === projectId);
-// };

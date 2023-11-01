@@ -6,8 +6,8 @@ import { useState } from "react";
 import { Wizard } from "./Wizard";
 import { useNavigate } from "react-router-dom";
 import { Modal, Box, Typography, LinearProgress } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { createProject } from "../../features/projects/projectsSlice.js";
+import { useDispatch, useSelector } from "react-redux";
+import { createProject, selectIsError, selectIsLoading , selectMessage} from "../../features/projects/projectsSlice.js";
 import { toast } from "react-toastify";
 
 const CREATE_PROJECT_MODAL_TEXT =
@@ -71,6 +71,10 @@ export const NewProject = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
+	const isError = useSelector(selectIsError);
+	const isLoading = useSelector(selectIsLoading);
+	const message = useSelector(selectMessage);
+
 	const setNewStage = (dir) => {
 		// setError("");
 		setStage((prevStage) => prevStage + dir * 1);
@@ -106,7 +110,6 @@ export const NewProject = () => {
 			});
 
 			try {
-				console.log(container)
 				await dispatch(
 					createProject({
 						name: name,
@@ -116,7 +119,6 @@ export const NewProject = () => {
 						boxes: projectBoxes,
 					})
 				);
-
 				navigate("/home");
 			} catch (err) {
 				toast.error(err);

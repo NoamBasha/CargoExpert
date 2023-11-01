@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { logout } from "../auth/authSlice.js";
 import {
 	createSolution,
@@ -14,10 +14,6 @@ const initialState = {
 	container: null,
 	boxes: [],
 	solutions: [],
-	isError: false,
-	isSuccess: false,
-	isLoading: false,
-	message: "",
 };
 
 export const projectSlice = createSlice({
@@ -26,7 +22,6 @@ export const projectSlice = createSlice({
 	reducers: {
 		setProjectById: (state, action) => {
 			const { projects, projectId } = action.payload;
-
 			const project = projects.find(
 				(project) => project._id === projectId
 			);
@@ -44,28 +39,18 @@ export const projectSlice = createSlice({
 				return initialState;
 			})
 			.addCase(createSolution.fulfilled, (state, action) => {
-				state.isLoading = false;
-				state.isSuccess = true;
 				state.solutions = action.payload.solutions;
 			})
 			.addCase(duplicateSolution.fulfilled, (state, action) => {
-				state.isLoading = false;
-				state.isSuccess = true;
 				state.solutions = action.payload.solutions;
 			})
 			.addCase(updateSolution.fulfilled, (state, action) => {
-				state.isLoading = false;
-				state.isSuccess = true;
 				state.solutions = action.payload.solutions;
 			})
 			.addCase(deleteSolution.fulfilled, (state, action) => {
-				state.isLoading = false;
-				state.isSuccess = true;
 				state.solutions = action.payload.solutions;
 			})
 			.addCase(improveSolution.fulfilled, (state, action) => {
-				state.isLoading = false;
-				state.isSuccess = true;
 				state.solutions = action.payload.project.solutions;
 			});
 	},

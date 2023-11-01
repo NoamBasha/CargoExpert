@@ -2,6 +2,19 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import solutionService from "./solutionService.js";
 import { logout } from "../auth/authSlice.js";
 
+const joinArrays = (firstArray, secondArray, firstField, secondField) => {
+	const joinedArrays = [];
+	for (const firstItem of firstArray) {
+		for (const secondItem of secondArray) {
+			if (firstItem[firstField] === secondItem[secondField]) {
+				const joinedItem = { ...firstItem, ...secondItem };
+				joinedArrays.push(joinedItem);
+			}
+		}
+	}
+	return joinedArrays
+}
+
 const initialState = {
 	solutionId: null,
 	name: "",
@@ -9,10 +22,6 @@ const initialState = {
 	boxes: [],
 	previousBoxes: [],
 	selectedBoxes: [],
-	isError: false,
-	isSuccess: false,
-	isLoading: false,
-	message: "",
 };
 
 export const createSolution = createAsyncThunk(
@@ -126,16 +135,8 @@ export const solutionSlice = createSlice({
 				(solution) => solution._id === solutionId
 			);
 
-			const joinedBoxes = [];
+			const joinedBoxes = joinArrays(projectBoxes, solution.boxes, "_id", "boxId")
 
-			for (const projectBox of projectBoxes) {
-				for (const solutionBox of solution.boxes) {
-					if (projectBox._id === solutionBox.boxId) {
-						const joinedBox = { ...projectBox, ...solutionBox };
-						joinedBoxes.push(joinedBox);
-					}
-				}
-			}
 			/*
 				projectBox: 
 				order,
@@ -151,6 +152,7 @@ export const solutionSlice = createSlice({
 				rotation,
 				_id (of the solutionBox)
 			*/
+
 			state.solutionId = solutionId;
 			state.name = solution.name;
 			state.boxes = joinedBoxes;
@@ -280,9 +282,6 @@ export const solutionSlice = createSlice({
 				return initialState;
 			})
 			.addCase(improveSolution.fulfilled, (state, action) => {
-				state.isLoading = false;
-				state.isSuccess = true;
-
 				const solutionId = state.solutionId;
 				const solutions = action.payload.project.solutions;
 				const projectBoxes = action.payload.project.boxes;
@@ -291,16 +290,7 @@ export const solutionSlice = createSlice({
 					(solution) => solution._id === solutionId
 				);
 
-				const joinedBoxes = [];
-
-				for (const projectBox of projectBoxes) {
-					for (const solutionBox of solution.boxes) {
-						if (projectBox._id === solutionBox.boxId) {
-							const joinedBox = { ...projectBox, ...solutionBox };
-							joinedBoxes.push(joinedBox);
-						}
-					}
-				}
+				const joinedBoxes = joinArrays(projectBoxes, solution.boxes, "_id", "boxId")
 
 				state.solutionId = solutionId;
 				state.name = solution.name;
