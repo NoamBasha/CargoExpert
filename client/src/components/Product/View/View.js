@@ -180,7 +180,7 @@ export const View = () => {
 					: ["-", "-", "-"];
 
 				const boxIsIn = item.isIn;
-				const values = [order, ...position, ...rotatedSize, boxIsIn];
+				const values = [order, ...position, ...Object.values(rotatedSize), boxIsIn];
 				csvRows.push(values.join(","));
 			}
 
