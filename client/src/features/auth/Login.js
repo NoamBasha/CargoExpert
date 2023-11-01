@@ -5,6 +5,8 @@ import { setCredentials } from "./authSlice.js";
 import { useLoginMutation } from "./authApiSlice.js";
 import { getProjects } from "../projects/projectsSlice.js";
 import { toast } from "react-toastify";
+import { Button, TextField, CircularProgress } from "@mui/material";
+
 
 const Login = () => {
 	const emailRef = useRef();
@@ -48,37 +50,51 @@ const Login = () => {
 	const handleEmailInput = (e) => setEmail(e.target.value);
 	const handlePwdInput = (e) => setPwd(e.target.value);
 
-	const content = isLoading ? (
-		<h1>Loading...</h1>
-	) : (
-		<div>
-			<h1>Login</h1>
-
-			<form onSubmit={handleSubmit}>
-				<label>Email:</label>
-				<input
-					type="text"
+	 return <div className="text-center">
+			<h1 className="m-0 p-5 display-1 mt-5">Cargo Expert</h1>
+			<form
+				style={{ width: "20%" }}
+				className="d-flex flex-column mx-auto align-items-center"
+				onSubmit={handleSubmit}
+			>
+				<TextField
 					id="email"
+					label="Email"
 					ref={emailRef}
+					variant="outlined"
 					value={email}
+					type="text"
+					placeholder="Email..."
+					required
 					onChange={handleEmailInput}
-					required
+					fullWidth
 				/>
-
-				<label htmlFor="password">Password:</label>
-				<input
-					type="password"
+				<TextField
+					className="mt-4"
 					id="password"
-					onChange={handlePwdInput}
+					label="Password"
+					variant="outlined"
 					value={pwd}
+					type="password"
+					placeholder="Password..."
 					required
+					onChange={handlePwdInput}
+					fullWidth
 				/>
-				<button>Sign In</button>
+				{isLoading ? (
+					<CircularProgress className="mt-2" />
+				) : (
+					<Button
+						type="submit"
+						className="mt-3 px-3"
+						color="primary"
+						variant="outlined"
+					>
+						Sign in
+					</Button>
+				)}
 			</form>
 		</div>
-	);
-
-	return content;
 };
 
 export default Login;

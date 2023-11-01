@@ -1,11 +1,9 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-// import { Login } from "./components/Auth/Login";
-// import { Register } from "./components/Auth/Register";
+//TODO replace all { Component} to just compoenent using the export default
 import { Home } from "./components/Home";
 import { Product } from "./components/Product/Product";
 import { NewProject } from "./components/NewProject/NewProject";
-import { UserDataProvider } from "./components/UserDataProvider";
 import { Header } from "./components/Header";
 
 import Login from "./features/auth/Login.js";
@@ -69,9 +67,7 @@ const Screen = () => {
 const App = () => {
 	return (
 		<div className="App ">
-			<UserDataProvider>
 				<Screen />
-			</UserDataProvider>
 		</div>
 	);
 };
