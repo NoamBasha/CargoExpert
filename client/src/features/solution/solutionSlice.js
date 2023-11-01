@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import solutionService from "./solutionService.js";
 import { logout } from "../auth/authSlice.js";
+import { getRotatedSizeBoxes } from "../../utils.js";
 
 const joinArrays = (firstArray, secondArray, firstField, secondField) => {
 	const joinedArrays = [];
@@ -80,6 +81,12 @@ export const updateSolution = createAsyncThunk(
 		try {
 			const projectId = thunkAPI.getState().project.projectId;
 			const token = thunkAPI.getState().auth.user.token;
+			const projectBoxes = thunkAPI.getState().project.boxes;
+
+			const joinedBoxes = joinArrays(projectBoxes, newSolution.boxes, "_id", "boxId")
+			const rotatedJoinedBoxes = getRotatedSizeBoxes(joinedBoxes)
+			newSolution.boxes = rotatedJoinedBoxes;
+
 			return await solutionService.updateSolution(
 				{ solutionId, newSolution, projectId },
 				token
