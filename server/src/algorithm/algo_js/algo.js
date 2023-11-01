@@ -122,7 +122,8 @@ const constructivePacking = (boxes, container, isQuantity) => {
 };
 
 const handleData = (boxes, container, isQuantity, isQuality) => {
-	const algorithmTime = isQuality ? 60000 : 15000; // miliseconds
+	//TODO : change 5000 to 15000
+	const algorithmTime = isQuality ? 60000 : 5000; // miliseconds
 
 	const initBoxes = boxes.map((box) => {
 		return initBox(box);
@@ -142,8 +143,8 @@ const getSolutions = (algorithmTime, boxes, container, isQuantity) => {
 		let boxesCopy = [...boxes];
 		// For non-deterministic algorithm - rotating and perturbating the boxes.
 		boxesCopy = rotation(boxesCopy);
-
 		boxesCopy = perturbation(boxesCopy);
+		
 		let solution = constructivePacking(boxesCopy, container, isQuantity);
 
 		if (solution === null) {
@@ -235,7 +236,6 @@ export const algo = (
 		return { ...solution, name: `solution ${index + 1}` };
 	});
 
-	let solutionDict = dictSolutionsFromList(solutionList);
+	return solutionList
 
-	return solutionDict;
 };

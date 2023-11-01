@@ -35,29 +35,27 @@ export const createProject = asyncHandler(async (req, res) => {
 	}
 	const createdBoxes = createdProject.boxes;
 
-	const createdBoxesAndWHL = createdBoxes.map((box) => {
+	const boxesForAlgo = createdBoxes.map((box) => {
 		return {
 			id: box._id,
 			type: box.type,
 			color: box.color,
-			size: {
-				width: box.size.width,
-				height: box.size.height,
-				length: box.size.length,
-			},
+			size: box.size,
 			order: box.order,
+			// TODO: isIn needed?
 			isIn: false,
 		};
 	});
 
 	const solutionsData = algo(
-		createdBoxesAndWHL,
+		boxesForAlgo,
 		container,
 		isQuantity,
 		isQuality
 	);
 	
-	const solutionsToInsert = Object.values(solutionsData).map((solution) => {
+
+	const solutionsToInsert = solutionsData.map((solution) => {
 		return {
 			boxes: solution.boxes.map((box) => {
 				return {

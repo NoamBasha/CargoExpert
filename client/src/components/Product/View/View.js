@@ -44,7 +44,7 @@ import { selectIsLoading } from "../../../features/projects/projectsSlice.js";
 
 import { toggleIsIn } from "../../../features/solution/solutionSlice.js";
 
-import { getRotatedSizeBoxes } from "../../../utils.js"
+import { getBoxRotatedSize, getRotatedSizeBoxes } from "../../../utils.js"
 
 const VIEW_EXPLANATION_TEXT = `Container:
 - You can use your left and right mouse buttons to change the angle you see the container.
@@ -169,28 +169,18 @@ export const View = () => {
 			// Add data rows
 			for (const item of array) {
 				const order = item.order;
-				const size = [
-								item.size.width,
-								item.size.height,
-								item.size.length
-							]
+				const rotatedSize = getBoxRotatedSize(item)
 				const position = isIn
 					? 
 					[
-						//TODO here should be getSize!
-						item.position.x - 0.5 * item.size.width,
-						item.position.y - 0.5 * item.size.height,
-						item.position.z - 0.5 * item.size.length
+						item.position.x - 0.5 * rotatedSize.width,
+						item.position.y - 0.5 * rotatedSize.height,
+						item.position.z - 0.5 * rotatedSize.length
 					]
 					: ["-", "-", "-"];
-				// const position = isIn
-				// 	? item.position.map((axis, i) => {
-				// 			return axis - 0.5 * size[i];
-				// 	  })
-				// 	: ["-", "-", "-"];
 
 				const boxIsIn = item.isIn;
-				const values = [order, ...position, ...size, boxIsIn];
+				const values = [order, ...position, ...rotatedSize, boxIsIn];
 				csvRows.push(values.join(","));
 			}
 
