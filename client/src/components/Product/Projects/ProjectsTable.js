@@ -70,7 +70,9 @@ export const ProjectsTable = () => {
 
 	const handleDelete = async (id) => {
 		await dispatch(deleteProject(id));
-		if (isError === "") {
+		if (isError) {
+			toast.error(message);
+		} else {
 			toast.success(`Deleted Project successfully`);
 		}
 	};
