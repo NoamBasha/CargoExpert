@@ -1,4 +1,4 @@
-import { getSize } from "./box.js";
+import { getBoxRotatedSize } from "./box.js";
 import { Rotation } from "./utils.js";
 
 const rotateEachBox = (boxes) => {
@@ -19,7 +19,7 @@ const rotateSubset = (boxes) => {
 
 	// Group boxes by size
 	const sameSizeDict = boxes.reduce((dict, box) => {
-		const boxSizeString = JSON.stringify(getSize(box));
+		const boxSizeString = JSON.stringify(getBoxRotatedSize(box));
 		if (!dict[boxSizeString]) {
 			dict[boxSizeString] = [];
 		}
@@ -41,7 +41,7 @@ const rotateSubset = (boxes) => {
 
 	// Assign rotation to boxes
 	return boxes.map((box) => {
-		const boxSizeString = JSON.stringify(getSize(box));
+		const boxSizeString = JSON.stringify(getBoxRotatedSize(box));
 		const rotation = rotations[boxSizeString];
 		return { ...box, rotation: rotation };
 	});

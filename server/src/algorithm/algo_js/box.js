@@ -3,7 +3,7 @@ import { Rotation } from "./utils.js";
 export const initBox = (box) => {
 	return {
 		...box,
-		volume: box.width * box.height * box.length,
+		volume: box.size.width * box.size.height * box.size.length,
 		rotation: Rotation.WHL,
 		center: {
 			x: 0,
@@ -18,50 +18,50 @@ export const initBox = (box) => {
 	};
 };
 
-export const getSize = (box) => {
+export const getBoxRotatedSize = (box) => {
 	switch (box.rotation) {
 		case Rotation.WHL:
 			return {
-				width: box.width,
-				height: box.height,
-				length: box.length,
-			};
+			width: box.size.width,
+			height: box.size.height,
+			length: box.size.length,
+		};
 		case Rotation.LHW:
 			return {
-				width: box.length,
-				height: box.height,
-				length: box.width,
+				width: box.size.length,
+				height: box.size.height,
+				length: box.size.width,
 			};
-		case Rotation.HLW:
+		case Rotation.HLW:		
 			return {
-				width: box.height,
-				height: box.length,
-				length: box.width,
+				width: box.size.height,
+				height: box.size.length,
+				length: box.size.width,
 			};
-		case Rotation.LWH:
+		case Rotation.LWH:		
 			return {
-				width: box.length,
-				height: box.width,
-				length: box.height,
+				width: box.size.length,
+				height: box.size.width,
+				length: box.size.height,
 			};
-		case Rotation.WLH:
+		case Rotation.WLH:		
 			return {
-				width: box.width,
-				height: box.length,
-				length: box.height,
+				width: box.size.width,
+				height: box.size.length,
+				length: box.size.height,
 			};
-		case Rotation.HWL:
+		case Rotation.HWL:		
 			return {
-				width: box.height,
-				height: box.width,
-				length: box.length,
+				width: box.size.height,
+				height: box.size.width,
+				length: box.size.length,
 			};
 	}
 };
 
 export const setPosition = (box, p) => {
 	// set center, FLB and isIn
-	const boxSize = getSize(box);
+	const boxSize = getBoxRotatedSize(box);
 
 	if (p.dir == 1) {
 		box.FLB = {
@@ -104,8 +104,6 @@ export const unsetPosition = (box) => {
 export const getBox = (box) => {
 	return {
 		...box,
-		//TODO: change back? - does not matter because I use the original size with the rotation
-		size: Object.values(getSize(box)),
-		position: Object.values(box.center),
+		position: box.center,
 	};
 };

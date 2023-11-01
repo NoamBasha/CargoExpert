@@ -46,9 +46,6 @@ export const createProject = asyncHandler(async (req, res) => {
 				length: box.size.length,
 			},
 			order: box.order,
-			width: box.size.width,
-			height: box.size.height,
-			length: box.size.length,
 			isIn: false,
 		};
 	});
@@ -59,18 +56,14 @@ export const createProject = asyncHandler(async (req, res) => {
 		isQuantity,
 		isQuality
 	);
-
+	
 	const solutionsToInsert = Object.values(solutionsData).map((solution) => {
 		return {
 			boxes: solution.boxes.map((box) => {
 				return {
 					boxId: box.id,
 					isIn: box.isIn,
-					position: {
-						x: box.position[0],
-						y: box.position[1],
-						z: box.position[2],
-					},
+					position: box.position,
 					rotation: box.rotation,
 				};
 			}),

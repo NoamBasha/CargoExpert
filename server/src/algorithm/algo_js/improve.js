@@ -1,4 +1,4 @@
-import { getSize } from "./box.js";
+import { getBoxRotatedSize } from "./box.js";
 import { updatePps } from "./container.js";
 import { rotation, perturbation } from "./boxMotion.js";
 import { orderMetric, overallMetric } from "./metrics.js";
@@ -90,9 +90,9 @@ const improvePacking = (inBoxes, outBoxes, container) => {
 const initImproveBox = (box) => {
 	return {
 		...box,
-		width: box.size.width,
-		height: box.size.height,
-		length: box.size.length,
+		// width: box.size.width,
+		// height: box.size.height,
+		// length: box.size.length,
 		volume: box.size.width * box.size.height * box.size.length,
 		rotation: box.rotation,
 		center: box.position,
@@ -103,8 +103,6 @@ const initImproveBox = (box) => {
 const getImproveBox = (box) => {
 	return {
 		...box,
-		//TODO: change back? - does not matter because I use the original size with the rotation
-		// size: getSize(box),
 		position: box.center,
 	};
 };
@@ -115,7 +113,7 @@ export const improve = (boxes, container, name, id) => {
 	});
 
 	boxes = boxes.map((box) => {
-		const rotatedSize = getSize(box);
+		const rotatedSize = getBoxRotatedSize(box);
 		return {
 			...box,
 			FLB: {

@@ -1,4 +1,4 @@
-import { setPosition, unsetPosition, getSize } from "./box.js";
+import { setPosition, unsetPosition, getBoxRotatedSize } from "./box.js";
 import { validateBoxesLocation } from "./validations.js";
 
 export const getScore = (box, p, boxes, container) => {
@@ -22,7 +22,7 @@ export const getScore = (box, p, boxes, container) => {
 export const updatePps = (box, p, pp, container) => {
 	pp.delete(p);
 
-	const boxSize = getSize(box);
+	const boxSize = getBoxRotatedSize(box);
 
 	if (boxSize.height + p.y < container.height) {
 		pp.add({

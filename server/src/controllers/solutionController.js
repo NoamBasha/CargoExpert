@@ -3,7 +3,6 @@ import Solution from "../models/solutionModel.js";
 import Project from "../models/projectModel.js";
 import { improve } from "../algorithm/algo_js/improve.js";
 import { orderMetric, overallMetric } from "../algorithm/algo_js/metrics.js";
-// import { getSize } from "../algorithm/algo_js/box.js";
 
 const getSolutionData = (boxes, container) => {
 	let data = {
@@ -12,14 +11,7 @@ const getSolutionData = (boxes, container) => {
 		orderScore: 0,
 		overallScore: 0,
 	};
-
-	// const boxesWithRealSize = boxes.map((box) => {
-	// 	return {
-	// 		...box,
-	// 		size: getSize(box),
-	// 	};
-	// });
-
+	
 	const boxesWithFLB = boxes.map((box) => {
 		if (box.isIn === true) {
 			data.numberOfItems += 1;

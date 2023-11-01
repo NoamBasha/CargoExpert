@@ -1,4 +1,4 @@
-import { getSize } from "./box.js";
+import { getBoxRotatedSize } from "./box.js";
 
 const isBoxOutOfBounds = (box, container) => {
 	if (!box || !container) {
@@ -6,7 +6,7 @@ const isBoxOutOfBounds = (box, container) => {
 	}
 
 	// Box is out of bounds if one of its sides is out of the container sides.
-	const boxSize = getSize(box);
+	const boxSize = getBoxRotatedSize(box);
 	const xCondiction =
 		box.center.x + 0.5 * boxSize.width > container.width ||
 		box.center.x - 0.5 * boxSize.width < 0;
@@ -25,8 +25,8 @@ const isTwoBoxesOverLapping = (box1, box2) => {
 	}
 
 	// Two boxes are overlapping iff the overlap in all three axes.
-	const box1Size = getSize(box1);
-	const box2Size = getSize(box2);
+	const box1Size = getBoxRotatedSize(box1);
+	const box2Size = getBoxRotatedSize(box2);
 
 	const box1xMin = box1.center.x - box1Size.width / 2;
 	const box1xMax = box1.center.x + box1Size.width / 2;
@@ -72,8 +72,8 @@ const isBoxOverLapping = (box, boxes) => {
 const isBoxesHovering = (inBoxes) => {
 	// Getting the length of the intersection of both boxes on the x axis.
 	const getXs = (box, otherBox) => {
-		const boxSize = getSize(box);
-		const otherBoxSize = getSize(otherBox);
+		const boxSize = getBoxRotatedSize(box);
+		const otherBoxSize = getBoxRotatedSize(otherBox);
 		const boxMin = box.FLB.x;
 		const boxMax = box.FLB.x + boxSize.width;
 		const otherBoxMin = otherBox.FLB.x;
@@ -102,8 +102,8 @@ const isBoxesHovering = (inBoxes) => {
 
 	// Getting the length of the intersection of both boxes on the z axis.
 	const getZs = (box, otherBox) => {
-		const boxSize = getSize(box);
-		const otherBoxSize = getSize(otherBox);
+		const boxSize = getBoxRotatedSize(box);
+		const otherBoxSize = getBoxRotatedSize(otherBox);
 		const boxMin = box.FLB.z;
 		const boxMax = box.FLB.z + boxSize.length;
 		const otherBoxMin = otherBox.FLB.z;
@@ -132,7 +132,7 @@ const isBoxesHovering = (inBoxes) => {
 
 	// Returns the surface coverage of box by otherBox
 	const getCoverage = (box, otherBox) => {
-		const otherBoxSize = getSize(otherBox);
+		const otherBoxSize = getBoxRotatedSize(otherBox);
 		if (box.FLB.y !== otherBox.FLB.y + otherBoxSize.height) {
 			return 0;
 		}
@@ -146,7 +146,7 @@ const isBoxesHovering = (inBoxes) => {
 	// For each box going over all of the other boxes and check if it is covered completely.
 	for (let i = 0; i < inBoxes.length; i++) {
 		const box = inBoxes[i];
-		const boxSize = getSize(box);
+		const boxSize = getBoxRotatedSize(box);
 		if (box.FLB.y === 0) {
 			continue;
 		}

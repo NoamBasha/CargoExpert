@@ -8,45 +8,44 @@ export const Rotation = {
 };
 
 export const getBoxRotatedSize = (box) => {
-	let rotatedSize = box.size;
-	if (box.rotation === Rotation.WHL) {
-		rotatedSize = {
+	switch (box.rotation) {
+		case Rotation.WHL:
+			return {
 			width: box.size.width,
 			height: box.size.height,
 			length: box.size.length,
 		};
-	} else if (box.rotation === Rotation.LHW) {
-		rotatedSize = {
-			width: box.size.length,
-			height: box.size.height,
-			length: box.size.width,
-		};
-	} else if (box.rotation === Rotation.HLW) {
-		rotatedSize = {
-			width: box.size.height,
-			height: box.size.length,
-			length: box.size.width,
-		};
-	} else if (box.rotation === Rotation.LWH) {
-		rotatedSize = {
-			width: box.size.length,
-			height: box.size.width,
-			length: box.size.height,
-		};
-	} else if (box.rotation === Rotation.WLH) {
-		rotatedSize = {
-			width: box.size.width,
-			height: box.size.length,
-			length: box.size.height,
-		};
-	} else if (box.rotation === Rotation.HWL) {
-		rotatedSize = {
-			width: box.size.height,
-			height: box.size.width,
-			length: box.size.length,
-		};
+		case Rotation.LHW:
+			return {
+				width: box.size.length,
+				height: box.size.height,
+				length: box.size.width,
+			};
+		case Rotation.HLW:		
+			return {
+				width: box.size.height,
+				height: box.size.length,
+				length: box.size.width,
+			};
+		case Rotation.LWH:		
+			return {
+				width: box.size.length,
+				height: box.size.width,
+				length: box.size.height,
+			};
+		case Rotation.WLH:		
+			return {
+				width: box.size.width,
+				height: box.size.length,
+				length: box.size.height,
+			};
+		case Rotation.HWL:		
+			return {
+				width: box.size.height,
+				height: box.size.width,
+				length: box.size.length,
+			};
 	}
-	return rotatedSize;
 };
 
 export const getRotatedSizeBoxes = (boxes) => {
