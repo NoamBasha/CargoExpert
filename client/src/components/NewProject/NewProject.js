@@ -7,7 +7,12 @@ import { Wizard } from "./Wizard";
 import { useNavigate } from "react-router-dom";
 import { Modal, Box, Typography, LinearProgress } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { createProject, selectIsError, selectIsLoading , selectMessage} from "../../features/projects/projectsSlice.js";
+import {
+	createProject,
+	selectIsError,
+	selectIsLoading,
+	selectMessage,
+} from "../../features/projects/projectsSlice.js";
 import { toast } from "react-toastify";
 
 const CREATE_PROJECT_MODAL_TEXT =

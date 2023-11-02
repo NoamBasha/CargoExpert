@@ -7,7 +7,6 @@ import { getProjects } from "../projects/projectsSlice.js";
 import { toast } from "react-toastify";
 import { Button, TextField, CircularProgress } from "@mui/material";
 
-
 const Login = () => {
 	const emailRef = useRef();
 	const [email, setEmail] = useState("");
@@ -31,26 +30,17 @@ const Login = () => {
 			await dispatch(
 				setCredentials({ user: userData, token: userData.token })
 			);
-			await dispatch(getProjects());
+			await dispatch(getProjects()).unwrap();
 		} catch (err) {
-			let errMsg = "";
-			if (!err?.originalStatus) {
-				errMsg = "No Server Response";
-			} else if (err.originalStatus === 400) {
-				errMsg = "Missing email or password";
-			} else if (err.originalStatus === 401) {
-				errMsg = "Unauthorized";
-			} else {
-				errMsg = "Login Failed";
-			}
-			toast.error(errMsg);
+			toast.error(err.data.message);
 		}
 	};
 
 	const handleEmailInput = (e) => setEmail(e.target.value);
 	const handlePwdInput = (e) => setPwd(e.target.value);
 
-	 return <div className="text-center">
+	return (
+		<div className="text-center">
 			<h1 className="m-0 p-5 display-1 mt-5">Cargo Expert</h1>
 			<form
 				style={{ width: "20%" }}
@@ -95,6 +85,7 @@ const Login = () => {
 				)}
 			</form>
 		</div>
+	);
 };
 
 export default Login;

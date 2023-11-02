@@ -44,7 +44,7 @@ import { selectIsLoading } from "../../../features/projects/projectsSlice.js";
 
 import { toggleIsIn } from "../../../features/solution/solutionSlice.js";
 
-import { getBoxRotatedSize, getRotatedSizeBoxes } from "../../../utils.js"
+import { getBoxRotatedSize, getRotatedSizeBoxes } from "../../../utils.js";
 
 const VIEW_EXPLANATION_TEXT = `Container:
 - You can use your left and right mouse buttons to change the angle you see the container.
@@ -108,8 +108,6 @@ const ViewButton = ({ deselectBoxes, setEdit, validateBoxesLocation }) => {
 	);
 };
 
-
-
 export const View = () => {
 	const dispatch = useDispatch();
 	const { edit, setEdit } = useEdit();
@@ -143,23 +141,32 @@ export const View = () => {
 		};
 	};
 
-	const handleSaveSolution = () => {
+	const handleSaveSolution = async () => {
 		let newSolution = solutions.find(
 			(solution) => solution._id === solutionId
 		);
-		if (newSolution !== null) {
-			newSolution = {
-				...newSolution,
-				boxes: boxes,
-			};
-			dispatch(updateSolution({ solutionId, newSolution }));
-			//TODO handle errors
+		if (!newSolution) return;
+
+		newSolution = {
+			...newSolution,
+			boxes: boxes,
+		};
+
+		try {
+			await dispatch(
+				updateSolution({ solutionId, newSolution })
+			).unwrap();
+		} catch (error) {
+			toast.error(error);
 		}
 	};
 
 	const handleImproveSolution = async () => {
-		await dispatch(improveSolution({ solutionId }));
-		//TODO handle errors
+		try {
+			await dispatch(improveSolution({ solutionId })).unwrap();
+		} catch (error) {
+			toast.error(error);
+		}
 	};
 
 	const downloadSolutionAsCSV = () => {
@@ -169,18 +176,22 @@ export const View = () => {
 			// Add data rows
 			for (const item of array) {
 				const order = item.order;
-				const rotatedSize = getBoxRotatedSize(item)
+				const rotatedSize = getBoxRotatedSize(item);
 				const position = isIn
-					? 
-					[
-						item.position.x - 0.5 * rotatedSize.width,
-						item.position.y - 0.5 * rotatedSize.height,
-						item.position.z - 0.5 * rotatedSize.length
-					]
+					? [
+							item.position.x - 0.5 * rotatedSize.width,
+							item.position.y - 0.5 * rotatedSize.height,
+							item.position.z - 0.5 * rotatedSize.length,
+					  ]
 					: ["-", "-", "-"];
 
 				const boxIsIn = item.isIn;
-				const values = [order, ...position, ...Object.values(rotatedSize), boxIsIn];
+				const values = [
+					order,
+					...position,
+					...Object.values(rotatedSize),
+					boxIsIn,
+				];
 				csvRows.push(values.join(","));
 			}
 
@@ -265,7 +276,9 @@ export const View = () => {
 							style={{ top: 30, right: 100, zIndex: 1 }}
 						>
 							<EditPanel
-								maxStepSize={Math.max(...Object.values(container)) / 2}
+								maxStepSize={
+									Math.max(...Object.values(container)) / 2
+								}
 							/>
 						</div>
 					) : null}
