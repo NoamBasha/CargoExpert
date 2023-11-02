@@ -17,9 +17,7 @@ import { IconButton } from "@mui/material";
 import { CircularProgress } from "@mui/material";
 import {
 	selectProjects,
-	selectIsError,
 	selectIsLoading,
-	selectMessage,
 	deleteProject,
 	updateProject,
 } from "../../../features/projects/projectsSlice.js";
@@ -31,9 +29,7 @@ import { toast } from "react-toastify";
 
 export const ProjectsTable = () => {
 	const projects = useSelector(selectProjects);
-	const isError = useSelector(selectIsError);
 	const isLoading = useSelector(selectIsLoading);
-	const message = useSelector(selectMessage);
 
 	const [tableProjectId, setTableProjectId] = useState(null);
 	const [showChangeNamePopup, setShowChangeNamePopup] = useState(false);
@@ -41,8 +37,12 @@ export const ProjectsTable = () => {
 
 	const dispatch = useDispatch();
 
-	const handleClick = (projectId) => {
-		dispatch(setProjectById({ projects, projectId }));
+	const handleClick = async (projectId) => {
+		try {
+			await dispatch(setProjectById({ projects, projectId })).unwrap();
+		} catch (error) {
+			toast.error(error);
+		}
 	};
 
 	const tableData = projects.map((project) => {
@@ -70,11 +70,11 @@ export const ProjectsTable = () => {
 	};
 
 	const handleDelete = async (id) => {
-		await dispatch(deleteProject(id));
-		if (isError) {
-			toast.error(message);
-		} else {
+		try {
+			await dispatch(deleteProject(id)).unwrap();
 			toast.success(`Deleted Project successfully`);
+		} catch (error) {
+			toast.error(error);
 		}
 	};
 

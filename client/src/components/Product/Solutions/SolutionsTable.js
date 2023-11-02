@@ -25,24 +25,17 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	selectProjectSolutions,
-	selectProjectId,
 	selectProjectBoxes,
 } from "../../../features/project/projectSlice.js";
 
-import {
-	selectIsLoading,
-	selectIsError,
-	selectMessage,
-} from "../../../features/projects/projectsSlice.js";
+import { selectIsLoading } from "../../../features/projects/projectsSlice.js";
 
 import {
-	createSolution,
 	deleteSolution,
 	updateSolution,
-	duplicateSolution
+	duplicateSolution,
+	setSolutionById,
 } from "../../../features/solution/solutionSlice.js";
-
-import { setSolutionById } from "../../../features/solution/solutionSlice.js";
 
 const SortIcon = ({ column, sortByColumn }) => {
 	const [isAscending, setIsAscending] = useState("asc");
@@ -62,12 +55,9 @@ const SortIcon = ({ column, sortByColumn }) => {
 export const SolutionsTable = ({ title }) => {
 	const dispatch = useDispatch();
 
-	const projectId = useSelector(selectProjectId);
 	const solutions = useSelector(selectProjectSolutions);
 	const projectBoxes = useSelector(selectProjectBoxes);
 	const isLoading = useSelector(selectIsLoading);
-	const isError = useSelector(selectIsError);
-	const message = useSelector(selectMessage);
 
 	const [tableSolutionId, setTableSolutionId] = useState(null);
 	const [showChangeNamePopup, setShowChangeNamePopup] = useState(false);
@@ -97,36 +87,54 @@ export const SolutionsTable = ({ title }) => {
 		return <h3>There are no solutions, please create a new project</h3>;
 	}
 
-	const handleClick = (solutionId) => {
-		dispatch(setSolutionById({ solutionId, solutions, projectBoxes }));
-	};
-
-	const getSolutionById = (id) => {
-		for (let i = 0; i < solutions.length; i++) {
-			if (solutions[i]._id === id) {
-				return solutions[i];
-			}
+	const handleClick = async (solutionId) => {
+		try {
+			await dispatch(
+				setSolutionById({ solutionId, solutions, projectBoxes })
+			).unwrap();
+		} catch (error) {
+			toast.error(error);
 		}
-		return null;
 	};
 
-	const handleChangeName = (solutionId, name) => {
+	const handleChangeName = async (solutionId, name) => {
 		const solution = solutions.find(
 			(solution) => solution._id === solutionId
 		);
-		if (solution !== null) {
-			const newSolution = {
-				...solution,
-				name: name,
-			};
-			dispatch(updateSolution({ solutionId, newSolution }));
-			//TODO handle errors
-			toast.info(`Changed name to ${name}`);
+
+		if (!solution) return;
+
+		const newSolution = {
+			...solution,
+			name: name,
+		};
+
+		try {
+			await dispatch(
+				updateSolution({ solutionId, newSolution })
+			).unwrap();
+			toast.success(`Changed name to ${name}`);
+		} catch (error) {
+			toast.error(error);
 		}
 	};
 
-	const handleDelete = (solutionId) => {
-		dispatch(deleteSolution({ solutionId }));
+	const handleDelete = async (solutionId) => {
+		try {
+			await dispatch(deleteSolution({ solutionId })).unwrap();
+			toast.success(`Deleted solution successfully`);
+		} catch (error) {
+			toast.error(error);
+		}
+	};
+
+	const handleDuplicateSolution = async (solutionId) => {
+		try {
+			await dispatch(duplicateSolution(solutionId)).unwrap();
+			toast.success(`Duplicated solution successfully`);
+		} catch (error) {
+			toast.error(error);
+		}
 	};
 
 	const sortByColumn = (column, isAscending, setIsAscending) => {
@@ -250,11 +258,8 @@ export const SolutionsTable = ({ title }) => {
 										) : (
 											<IconButton
 												onClick={() => {
-													dispatch(
-														duplicateSolution(row._id)
-													);
-													toast.success(
-														`Duplicated solution`
+													handleDuplicateSolution(
+														row._id
 													);
 												}}
 											>
