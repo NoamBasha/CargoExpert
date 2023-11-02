@@ -34,10 +34,6 @@ const updateProject = async ({ projectId, newProject }, token) => {
 
 	const response = await axios.put(API_URL + projectId, newProject, config);
 
-	if (299 < response.status || response.status < 200) {
-		throw new Error(response.message);
-	}
-
 	return response.data;
 };
 

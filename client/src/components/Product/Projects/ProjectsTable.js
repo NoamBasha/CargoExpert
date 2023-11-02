@@ -64,8 +64,8 @@ export const ProjectsTable = () => {
 		try {
 			await dispatch(updateProject({ projectId, newProject })).unwrap();
 			toast.success(`Changed name to ${name}`);
-		} catch (err) {
-			toast.error(err);
+		} catch (error) {
+			toast.error(error);
 		}
 	};
 

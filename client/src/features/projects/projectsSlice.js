@@ -26,7 +26,7 @@ export const getProjects = createAsyncThunk(
 			const userId = thunkAPI.getState().auth.user._id;
 			return await projectsService.getProjects(userId, token);
 		} catch (error) {
-			return thunkAPI.rejectWithValue(error.message);
+			return thunkAPI.rejectWithValue(error.response.data.message);
 		}
 	}
 );
@@ -44,7 +44,7 @@ export const createProject = createAsyncThunk(
 			);
 			return response;
 		} catch (error) {
-			return thunkAPI.rejectWithValue(error.message);
+			return thunkAPI.rejectWithValue(error.response.data.message);
 		}
 	}
 );
@@ -71,7 +71,7 @@ export const deleteProject = createAsyncThunk(
 			const token = thunkAPI.getState().auth.user.token;
 			return await projectsService.deleteProject(projectId, token);
 		} catch (error) {
-			return thunkAPI.rejectWithValue(error.message);
+			return thunkAPI.rejectWithValue(error.response.data.message);
 		}
 	}
 );
@@ -128,7 +128,6 @@ export const projectsSlice = createSlice({
 			.addCase(updateProject.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
-				console.log(action);
 				state.message = action.payload;
 			})
 			.addCase(deleteProject.pending, (state, action) => {

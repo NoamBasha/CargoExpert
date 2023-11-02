@@ -13,8 +13,8 @@ const joinArrays = (firstArray, secondArray, firstField, secondField) => {
 			}
 		}
 	}
-	return joinedArrays
-}
+	return joinedArrays;
+};
 
 const initialState = {
 	solutionId: null,
@@ -42,7 +42,7 @@ export const createSolution = createAsyncThunk(
 			);
 			return response;
 		} catch (error) {
-			return thunkAPI.rejectWithValue(error.message);
+			return thunkAPI.rejectWithValue(error.response.data.message);
 		}
 	}
 );
@@ -60,8 +60,8 @@ export const duplicateSolution = createAsyncThunk(
 
 			solutionData = {
 				...solutionData,
-				name: solutionData.name + " duplicated"
-			}
+				name: solutionData.name + " duplicated",
+			};
 
 			const response = await solutionService.createSolution(
 				projectId,
@@ -70,7 +70,7 @@ export const duplicateSolution = createAsyncThunk(
 			);
 			return response;
 		} catch (error) {
-			return thunkAPI.rejectWithValue(error.message);
+			return thunkAPI.rejectWithValue(error.response.data.message);
 		}
 	}
 );
@@ -83,8 +83,13 @@ export const updateSolution = createAsyncThunk(
 			const token = thunkAPI.getState().auth.user.token;
 			const projectBoxes = thunkAPI.getState().project.boxes;
 
-			const joinedBoxes = joinArrays(projectBoxes, newSolution.boxes, "_id", "boxId")
-			const rotatedJoinedBoxes = getRotatedSizeBoxes(joinedBoxes)
+			const joinedBoxes = joinArrays(
+				projectBoxes,
+				newSolution.boxes,
+				"_id",
+				"boxId"
+			);
+			const rotatedJoinedBoxes = getRotatedSizeBoxes(joinedBoxes);
 			newSolution.boxes = rotatedJoinedBoxes;
 
 			return await solutionService.updateSolution(
@@ -92,7 +97,7 @@ export const updateSolution = createAsyncThunk(
 				token
 			);
 		} catch (error) {
-			return thunkAPI.rejectWithValue(error.message);
+			return thunkAPI.rejectWithValue(error.response.data.message);
 		}
 	}
 );
@@ -108,7 +113,7 @@ export const deleteSolution = createAsyncThunk(
 				token
 			);
 		} catch (error) {
-			return thunkAPI.rejectWithValue(error.message);
+			return thunkAPI.rejectWithValue(error.response.data.message);
 		}
 	}
 );
@@ -126,7 +131,7 @@ export const improveSolution = createAsyncThunk(
 				token
 			);
 		} catch (error) {
-			return thunkAPI.rejectWithValue(error.message);
+			return thunkAPI.rejectWithValue(error.response.data.message);
 		}
 	}
 );
@@ -142,7 +147,12 @@ export const solutionSlice = createSlice({
 				(solution) => solution._id === solutionId
 			);
 
-			const joinedBoxes = joinArrays(projectBoxes, solution.boxes, "_id", "boxId")
+			const joinedBoxes = joinArrays(
+				projectBoxes,
+				solution.boxes,
+				"_id",
+				"boxId"
+			);
 
 			/*
 				projectBox: 
@@ -297,7 +307,12 @@ export const solutionSlice = createSlice({
 					(solution) => solution._id === solutionId
 				);
 
-				const joinedBoxes = joinArrays(projectBoxes, solution.boxes, "_id", "boxId")
+				const joinedBoxes = joinArrays(
+					projectBoxes,
+					solution.boxes,
+					"_id",
+					"boxId"
+				);
 
 				state.solutionId = solutionId;
 				state.name = solution.name;
