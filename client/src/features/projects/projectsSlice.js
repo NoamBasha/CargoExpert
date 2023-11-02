@@ -5,7 +5,7 @@ import {
 	updateSolution,
 	deleteSolution,
 	improveSolution,
-	duplicateSolution
+	duplicateSolution,
 } from "../solution/solutionSlice.js";
 
 import { logout } from "../auth/authSlice.js";
@@ -59,7 +59,7 @@ export const updateProject = createAsyncThunk(
 				token
 			);
 		} catch (error) {
-			return thunkAPI.rejectWithValue(error.message);
+			return thunkAPI.rejectWithValue(error.response.data.message);
 		}
 	}
 );
@@ -128,6 +128,7 @@ export const projectsSlice = createSlice({
 			.addCase(updateProject.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
+				console.log(action);
 				state.message = action.payload;
 			})
 			.addCase(deleteProject.pending, (state, action) => {

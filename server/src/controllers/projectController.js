@@ -47,13 +47,7 @@ export const createProject = asyncHandler(async (req, res) => {
 		};
 	});
 
-	const solutionsData = algo(
-		boxesForAlgo,
-		container,
-		isQuantity,
-		isQuality
-	);
-	
+	const solutionsData = algo(boxesForAlgo, container, isQuantity, isQuality);
 
 	const solutionsToInsert = solutionsData.map((solution) => {
 		return {

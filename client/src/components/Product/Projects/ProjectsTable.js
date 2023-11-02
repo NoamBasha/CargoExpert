@@ -54,17 +54,18 @@ export const ProjectsTable = () => {
 
 	const handleChangeName = async (projectId, name) => {
 		const project = projects.find((project) => project._id === projectId);
-		if (project != null) {
-			const newProject = {
-				...project,
-				name: name,
-			};
-			await dispatch(updateProject({ projectId, newProject }));
-			if (isError) {
-				toast.error(message);
-			} else {
-				toast.success(`Changed name to ${name}`);
-			}
+
+		if (!project) return;
+
+		const newProject = {
+			...project,
+			name: name,
+		};
+		try {
+			await dispatch(updateProject({ projectId, newProject })).unwrap();
+			toast.success(`Changed name to ${name}`);
+		} catch (err) {
+			toast.error(err);
 		}
 	};
 
