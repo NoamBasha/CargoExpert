@@ -35,17 +35,7 @@ const Register = () => {
 			setName("");
 			navigate("/home");
 		} catch (err) {
-			let errMsg = "";
-			if (!err?.originalStatus) {
-				errMsg = "No Server Response";
-			} else if (err.originalStatus === 400) {
-				errMsg = "Missing email or password or name";
-			} else if (err.originalStatus === 401) {
-				errMsg = "Unauthorized";
-			} else {
-				errMsg = "Login Failed";
-			}
-			toast.error(errMsg);
+			toast.error(err.data.message);
 		}
 	};
 
