@@ -45,6 +45,8 @@ export const getBoxRotatedSize = (box) => {
 				height: box.size.width,
 				length: box.size.length,
 			};
+		default:
+			return box.size;
 	}
 };
 

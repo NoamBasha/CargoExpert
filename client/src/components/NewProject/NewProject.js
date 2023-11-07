@@ -6,12 +6,9 @@ import { useState } from "react";
 import { Wizard } from "./Wizard";
 import { useNavigate } from "react-router-dom";
 import { Modal, Box, Typography, LinearProgress } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
 	createProject,
-	selectIsError,
-	selectIsLoading,
-	selectMessage,
 } from "../../features/projects/projectsSlice.js";
 import { toast } from "react-toastify";
 
@@ -75,10 +72,6 @@ export const NewProject = () => {
 
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-
-	const isError = useSelector(selectIsError);
-	const isLoading = useSelector(selectIsLoading);
-	const message = useSelector(selectMessage);
 
 	const setNewStage = (dir) => {
 		// setError("");

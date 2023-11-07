@@ -23,7 +23,6 @@ import {
 
 import { useSelector, useDispatch } from "react-redux";
 import {
-	selectProjectId,
 	selectProjectName,
 	selectProjectContainer,
 	selectProjectBoxes,

@@ -106,7 +106,7 @@ const Register = () => {
 				color="primary"
 				variant="outlined"
 			>
-				Sign in
+				Register
 			</Button>
 		)}
 	</form>

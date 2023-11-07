@@ -7,7 +7,6 @@ import {
 	changeBoxById,
 	changeBoxIndices,
 	selectSolutionId,
-	useSelectedBoxes,
 	selectSolutionSelectedBoxes,
 } from "../../../features/solution/solutionSlice.js";
 

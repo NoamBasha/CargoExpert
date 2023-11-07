@@ -15,26 +15,19 @@ import { useDispatch } from "react-redux";
 
 export const BoxesViewTableImproved = ({ isEdit, boxes, toggleIsIn, isIn }) => {
 	const dispatch = useDispatch();
-	// const rows = useMemo(
-	// 	() =>
-	// 		boxes.map((box) => ({
-	// 			_id: box._id,
-	// 			order: box.order,
-	// 			width: box.size.width,
-	// 			height: box.size.height,
-	// 			length: box.size.length,
-	// 			type: box.type,
-	// 		})),
-	// 	[boxes]
-	// );
-	const rows = boxes.map((box) => ({
-		_id: box._id,
-		order: box.order,
-		width: box.size.width,
-		height: box.size.height,
-		length: box.size.length,
-		type: box.type,
-	}));
+
+	const rows = useMemo(
+		() =>
+		boxes.map((box) => ({
+			_id: box._id,
+			order: box.order,
+			width: box.size.width,
+			height: box.size.height,
+			length: box.size.length,
+			type: box.type,
+		})),
+		[boxes]
+	);
 
 	return (
 		<>
