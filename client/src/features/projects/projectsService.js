@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_URL = "http://localhost:1337/api/projects/";
 
-const getProjects = async (userId, token) => {
+const getProjects = async ({userId}, token) => {
 	const config = {
 		headers: {
 			Authorization: `Bearer ${token}`,
@@ -13,7 +13,7 @@ const getProjects = async (userId, token) => {
 	return response.data;
 };
 
-const createProject = async (userId, projectData, token) => {
+const createProject = async ({userId, projectData}, token) => {
 	const config = {
 		headers: {
 			Authorization: `Bearer ${token}`,
@@ -37,7 +37,7 @@ const updateProject = async ({ projectId, newProject }, token) => {
 	return response.data;
 };
 
-const deleteProject = async (projectId, token) => {
+const deleteProject = async ({projectId}, token) => {
 	const config = {
 		headers: {
 			Authorization: `Bearer ${token}`,

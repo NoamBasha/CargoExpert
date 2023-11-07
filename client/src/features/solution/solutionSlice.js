@@ -25,31 +25,9 @@ const initialState = {
 	selectedBoxes: [],
 };
 
-export const createSolution = createAsyncThunk(
-	"solution/createSolution",
-	async (solutionId, thunkAPI) => {
-		try {
-			const token = thunkAPI.getState().auth.user.token;
-			const projectId = thunkAPI.getState().project.projectId;
-			const solutions = thunkAPI.getState().project.solutions;
-			const solutionData = solutions.find(
-				(solution) => solution._id === solutionId
-			);
-			const response = await solutionService.createSolution(
-				projectId,
-				solutionData,
-				token
-			);
-			return response;
-		} catch (error) {
-			return thunkAPI.rejectWithValue(error.response.data.message);
-		}
-	}
-);
-
 export const duplicateSolution = createAsyncThunk(
 	"solution/duplicateSolution",
-	async (solutionId, thunkAPI) => {
+	async ({solutionId}, thunkAPI) => {
 		try {
 			const token = thunkAPI.getState().auth.user.token;
 			const projectId = thunkAPI.getState().project.projectId;
@@ -64,8 +42,7 @@ export const duplicateSolution = createAsyncThunk(
 			};
 
 			const response = await solutionService.createSolution(
-				projectId,
-				solutionData,
+				{projectId, solutionData},
 				token
 			);
 			return response;

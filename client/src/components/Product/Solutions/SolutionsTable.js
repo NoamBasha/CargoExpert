@@ -130,7 +130,7 @@ export const SolutionsTable = ({ title }) => {
 
 	const handleDuplicateSolution = async (solutionId) => {
 		try {
-			await dispatch(duplicateSolution(solutionId)).unwrap();
+			await dispatch(duplicateSolution({solutionId})).unwrap();
 			toast.success(`Duplicated solution successfully`);
 		} catch (error) {
 			toast.error(error);

@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_URL = "http://localhost:1337/api/solutions/";
 
-const createSolution = async (projectId, solutionData, token) => {
+const createSolution = async ({projectId, solutionData}, token) => {
 	const config = {
 		headers: {
 			Authorization: `Bearer ${token}`,

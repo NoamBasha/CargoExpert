@@ -108,14 +108,15 @@ export const NewProject = () => {
 			});
 
 			try {
+				const projectData = {
+					name: name,
+					isQuantity: orderQuantity === "Quantity" ? true : false,
+					isQuality: timeQuality === "Quality" ? true : false,
+					container,
+					boxes: projectBoxes,
+				}
 				await dispatch(
-					createProject({
-						name: name,
-						isQuantity: orderQuantity === "Quantity" ? true : false,
-						isQuality: timeQuality === "Quality" ? true : false,
-						container,
-						boxes: projectBoxes,
-					})
+					createProject({ projectData })
 				);
 				navigate("/home");
 			} catch (err) {

@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { logout } from "../auth/authSlice.js";
 import {
-	createSolution,
 	updateSolution,
 	deleteSolution,
 	improveSolution,
@@ -37,9 +36,6 @@ export const projectSlice = createSlice({
 		builder
 			.addCase(logout, () => {
 				return initialState;
-			})
-			.addCase(createSolution.fulfilled, (state, action) => {
-				state.solutions = action.payload.solutions;
 			})
 			.addCase(duplicateSolution.fulfilled, (state, action) => {
 				state.solutions = action.payload.solutions;

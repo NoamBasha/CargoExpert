@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import projectsService from "./projectsService.js";
 import {
-	createSolution,
 	updateSolution,
 	deleteSolution,
 	improveSolution,
@@ -24,7 +23,7 @@ export const getProjects = createAsyncThunk(
 		try {
 			const token = thunkAPI.getState().auth.user.token;
 			const userId = thunkAPI.getState().auth.user._id;
-			return await projectsService.getProjects(userId, token);
+			return await projectsService.getProjects({userId}, token);
 		} catch (error) {
 			return thunkAPI.rejectWithValue(error.response.data.message);
 		}
@@ -33,13 +32,12 @@ export const getProjects = createAsyncThunk(
 
 export const createProject = createAsyncThunk(
 	"projects/createProject",
-	async (projectData, thunkAPI) => {
+	async ({projectData}, thunkAPI) => {
 		try {
 			const token = thunkAPI.getState().auth.user.token;
 			const userId = thunkAPI.getState().auth.user._id;
 			const response = await projectsService.createProject(
-				userId,
-				projectData,
+				{userId, projectData}, 
 				token
 			);
 			return response;
@@ -66,10 +64,10 @@ export const updateProject = createAsyncThunk(
 
 export const deleteProject = createAsyncThunk(
 	"projects/deleteProject",
-	async (projectId, thunkAPI) => {
+	async ({projectId}, thunkAPI) => {
 		try {
 			const token = thunkAPI.getState().auth.user.token;
-			return await projectsService.deleteProject(projectId, token);
+			return await projectsService.deleteProject({projectId}, token);
 		} catch (error) {
 			return thunkAPI.rejectWithValue(error.response.data.message);
 		}
@@ -140,26 +138,6 @@ export const projectsSlice = createSlice({
 				);
 			})
 			.addCase(deleteProject.rejected, (state, action) => {
-				state.isLoading = false;
-				state.isError = true;
-				state.message = action.payload;
-			})
-			.addCase(createSolution.pending, (state, action) => {
-				state.isLoading = true;
-			})
-			.addCase(createSolution.fulfilled, (state, action) => {
-				state.isLoading = false;
-				state.isSuccess = true;
-				const projectIdToReplace = action.payload._id;
-				state.projects = state.projects.map((project) => {
-					if (project._id === projectIdToReplace) {
-						return action.payload;
-					} else {
-						return project;
-					}
-				});
-			})
-			.addCase(createSolution.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;
