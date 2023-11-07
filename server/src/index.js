@@ -1,4 +1,4 @@
-import { userInputExample } from "./middlewares.js";
+import { userInputExample } from "./routes/filesRoutes.js";
 
 import express from "express";
 import dotenv from "dotenv";

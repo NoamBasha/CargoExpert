@@ -6,9 +6,6 @@ import { orderMetric, overallMetric } from "../algorithm/algo_js/metrics.js";
 
 const getSolutionData = (boxes, container) => {
 
-	console.log(boxes[0])
-	console.log(container)
-
 	let data = {
 		numberOfItems: 0,
 		capacity: 0,

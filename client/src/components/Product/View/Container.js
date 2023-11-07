@@ -1,6 +1,7 @@
 import { Plane } from "./Plane.js";
-export const Container = (container) => {
-	const {width, height, length} = container;
+export const Container = ({size}) => {
+	const {width, height, length} = size;
+
 	return (
 		<>
 			<Plane
