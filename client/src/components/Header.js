@@ -14,7 +14,7 @@ import {
 import { logout } from "../features/auth/authSlice.js";
 import { useDispatch } from "react-redux";
 
-export const Header = () => {
+const Header = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
@@ -87,3 +87,5 @@ export const Header = () => {
 		</div>
 	);
 };
+
+export default Header;

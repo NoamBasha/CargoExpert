@@ -13,7 +13,7 @@ const BigChoiceButton = ({ text, onClick }) => {
 	);
 };
 
-export const Home = () => {
+const Home = () => {
 	const navigate = useNavigate();
 
 	return (
@@ -32,3 +32,5 @@ export const Home = () => {
 		</div>
 	);
 };
+
+export default Home;

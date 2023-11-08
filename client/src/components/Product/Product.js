@@ -1,9 +1,11 @@
 import { Project } from "./Project";
 
-export const Product = () => {
+const Product = () => {
 	return (
 		<div>
 			<Project />
 		</div>
 	);
 };
+
+export default Product

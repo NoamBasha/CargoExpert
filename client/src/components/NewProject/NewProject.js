@@ -61,7 +61,7 @@ const validateNumberProperty = (property) => {
 	return true;
 };
 
-export const NewProject = () => {
+const NewProject = () => {
 	const [container, setContainer] = useState(null);
 	const [boxes, setBoxes] = useState([]);
 	const [name, setName] = useState("");
@@ -208,3 +208,5 @@ export const NewProject = () => {
 		</>
 	);
 };
+
+export default NewProject;

@@ -42,7 +42,6 @@ export const createProject = asyncHandler(async (req, res) => {
 			color: box.color,
 			size: box.size,
 			order: box.order,
-			// TODO: isIn needed?
 			isIn: false,
 		};
 	});

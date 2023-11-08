@@ -75,7 +75,6 @@ export const createSolution = asyncHandler(async (req, res) => {
 
 	await project.save();
 
-	// TODO send project or solution?
 	res.status(201).json(project);
 });
 
@@ -91,8 +90,7 @@ export const deleteSolution = asyncHandler(async (req, res) => {
 	}
 
 	project.solutions = project.solutions.filter((solution) => {
-		//TODO != because one is a string and the other is an object
-		return solution._id != solutionId;
+		return solution._id.toString() !== solutionId;
 	});
 
 	await project.save();
@@ -118,8 +116,7 @@ export const updateSolution = asyncHandler(async (req, res) => {
 	const newData = getSolutionData(boxes, container);
 
 	project.solutions = project.solutions.map((solution) => {
-		//TODO == because one is a string and the other is an object
-		if (solution._id == solutionId) {
+		if (solution._id.toString() === solutionId) {
 			return { ...newSolution, data: newData };
 		} else {
 			return solution;
@@ -135,6 +132,7 @@ export const improveSolution = asyncHandler(async (req, res) => {
 	const solutionId = req.params.solutionId;
 	const { boxes, container } = req.body;
 	// Find the project by its ID
+
 	const project = await Project.findById(projectId);
 
 	if (!project) {
@@ -143,8 +141,7 @@ export const improveSolution = asyncHandler(async (req, res) => {
 	}
 
 	const currentSolution = project.solutions.find((solution) => {
-		//TODO why is it == and not ===?
-		return solution._id == solutionId;
+		return solution._id.toString() === solutionId;
 	});
 
 	const improvedSolution = improve(
@@ -155,8 +152,7 @@ export const improveSolution = asyncHandler(async (req, res) => {
 	);
 
 	project.solutions = project.solutions.map((solution) => {
-		//TODO == because one is a string and the other is an object
-		if (solution._id == solutionId) {
+		if (solution._id.toString() === solutionId) {
 			return improvedSolution;
 		} else {
 			return solution;

@@ -1,10 +1,9 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-//TODO replace all { Component} to just compoenent using the export default
-import { Home } from "./components/Home";
-import { Product } from "./components/Product/Product";
-import { NewProject } from "./components/NewProject/NewProject";
-import { Header } from "./components/Header";
+import Home from "./components/Home";
+import Product from "./components/Product/Product";
+import NewProject from "./components/NewProject/NewProject";
+import Header from "./components/Header";
 
 import Login from "./features/auth/Login.js";
 import Register from "./features/auth/Register.js";
