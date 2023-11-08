@@ -3,105 +3,112 @@ import { algo } from "../algorithm/algo_js/algo.js";
 import Project from "../models/projectModel.js";
 
 export const getProjects = asyncHandler(async (req, res) => {
-	const id = req.params.userId;
+    const id = req.params.userId;
 
-	const projects = await Project.find({ user: id });
+    const projects = await Project.find({ user: id });
 
-	if (!projects) {
-		res.status(400);
-		throw new Error("Projects not found");
-	}
+    if (!projects) {
+        res.status(400);
+        throw new Error("Projects not found");
+    }
 
-	res.status(200).json(projects);
+    res.status(200).json(projects);
 });
 
 export const createProject = asyncHandler(async (req, res) => {
-	const { name, boxes, container, isQuantity, isQuality } = req.body;
+    const { name, boxes, container, isQuantity, isQuality } = req.body;
 
-	const createdProject = await Project.create({
-		user: req.params.userId,
-		name: name,
-		container: container,
-		boxes: boxes,
-		data: {
-			isQuantity,
-			isQuality,
-		},
-	});
+    const createdProject = await Project.create({
+        user: req.params.userId,
+        name: name,
+        container: container,
+        boxes: boxes,
+        data: {
+            isQuantity,
+            isQuality,
+        },
+    });
 
-	if (!createdProject) {
-		res.status(400);
-		throw new Error("Couldn't create project");
-	}
-	const createdBoxes = createdProject.boxes;
+    if (!createdProject) {
+        res.status(400);
+        throw new Error("Couldn't create project");
+    }
 
-	const boxesForAlgo = createdBoxes.map((box) => {
-		return {
-			id: box._id,
-			type: box.type,
-			color: box.color,
-			size: box.size,
-			order: box.order,
-			isIn: false,
-		};
-	});
+    const createdBoxes = createdProject.boxes;
 
-	const solutionsData = algo(boxesForAlgo, container, isQuantity, isQuality);
+    const boxesForAlgo = createdBoxes.map((box) => {
+        return {
+            id: box._id,
+            type: box.type,
+            color: box.color,
+            size: box.size,
+            order: box.order,
+            isIn: false,
+        };
+    });
 
-	const solutionsToInsert = solutionsData.map((solution) => {
-		return {
-			boxes: solution.boxes.map((box) => {
-				return {
-					boxId: box.id,
-					isIn: box.isIn,
-					position: box.position,
-					rotation: box.rotation,
-				};
-			}),
-			name: solution.name,
-			data: solution.data,
-		};
-	});
+    const solutionsData = algo(boxesForAlgo, container, isQuantity, isQuality);
 
-	createdProject.solutions = solutionsToInsert;
+    if (!solutionsData.length) {
+        await createdProject.delete();
+        res.status(400);
+        throw new Error("Couldn't create project");
+    }
 
-	createdProject.save();
+    const solutionsToInsert = solutionsData.map((solution) => {
+        return {
+            boxes: solution.boxes.map((box) => {
+                return {
+                    boxId: box.id,
+                    isIn: box.isIn,
+                    position: box.position,
+                    rotation: box.rotation,
+                };
+            }),
+            name: solution.name,
+            data: solution.data,
+        };
+    });
 
-	res.status(201).json(createdProject);
+    createdProject.solutions = solutionsToInsert;
+
+    await createdProject.save();
+
+    res.status(201).json(createdProject);
 });
 
 export const deleteProject = asyncHandler(async (req, res) => {
-	const projectId = req.params.projectId;
+    const projectId = req.params.projectId;
 
-	const project = await Project.findById(projectId);
+    const project = await Project.findById(projectId);
 
-	if (!project) {
-		res.status(400);
-		throw new Error("Project not found");
-	}
+    if (!project) {
+        res.status(400);
+        throw new Error("Project not found");
+    }
 
-	await Project.findByIdAndDelete(projectId);
+    await Project.findByIdAndDelete(projectId);
 
-	res.status(200).send(projectId);
+    res.status(200).send(projectId);
 });
 
 export const updateProject = asyncHandler(async (req, res) => {
-	const projectId = req.params.projectId;
-	const { name } = req.body;
+    const projectId = req.params.projectId;
+    const { name } = req.body;
 
-	// Find the project by its ID
-	const project = await Project.findById(projectId);
+    // Find the project by its ID
+    const project = await Project.findById(projectId);
 
-	if (!project) {
-		res.status(404);
-		throw new Error("Project not found");
-	}
+    if (!project) {
+        res.status(404);
+        throw new Error("Project not found");
+    }
 
-	// Update the project properties
-	if (name) project.name = name;
+    // Update the project properties
+    if (name) project.name = name;
 
-	// Save the updated project
-	const updatedProject = await project.save();
+    // Save the updated project
+    const updatedProject = await project.save();
 
-	res.status(200).json(updatedProject);
+    res.status(200).json(updatedProject);
 });
