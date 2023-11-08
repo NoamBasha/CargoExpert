@@ -127,11 +127,11 @@ export const improve = (boxes, container, name, id) => {
 
 	// Splitting to two lists
 	const inBoxes = boxes.filter((box) => {
-		return box.isIn == true;
+		return box.isIn === true;
 	});
 
 	const outBoxes = boxes.filter((box) => {
-		return box.isIn == false;
+		return box.isIn === false;
 	});
 
 	// Sort isIn's by y coordinate and z coordinate

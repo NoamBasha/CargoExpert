@@ -143,6 +143,7 @@ export const improveSolution = asyncHandler(async (req, res) => {
 	}
 
 	const currentSolution = project.solutions.find((solution) => {
+		//TODO why is it == and not ===?
 		return solution._id == solutionId;
 	});
 

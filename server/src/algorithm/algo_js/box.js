@@ -63,7 +63,7 @@ export const setPosition = (box, p) => {
 	// set center, FLB and isIn
 	const boxSize = getBoxRotatedSize(box);
 
-	if (p.dir == 1) {
+	if (p.dir === 1) {
 		box.FLB = {
 			x: p.x,
 			y: p.y,

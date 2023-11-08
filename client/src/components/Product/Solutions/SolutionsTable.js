@@ -83,7 +83,7 @@ export const SolutionsTable = ({ title }) => {
 		}
 	}, [solutions]);
 
-	if (solutions == null || solutions.length === 0) {
+	if (solutions === null || solutions.length === 0) {
 		return <h3>There are no solutions, please create a new project</h3>;
 	}
 

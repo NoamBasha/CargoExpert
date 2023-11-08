@@ -31,7 +31,7 @@ export const updatePps = (box, p, pp, container) => {
 		});
 	}
 
-	if (p.dir == 1) {
+	if (p.dir === 1) {
 		if (p.x + boxSize.width < container.width) {
 			pp.add({
 				...p,

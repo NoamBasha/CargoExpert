@@ -78,7 +78,7 @@ export const ProjectsTable = () => {
 		}
 	};
 
-	if (projects == null || projects.length === 0) {
+	if (projects === null || projects.length === 0) {
 		return (
 			<div
 				style={{ height: "90vh" }}

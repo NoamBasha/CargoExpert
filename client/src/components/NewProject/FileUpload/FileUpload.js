@@ -60,6 +60,7 @@ export const FileUpload = ({ setNewStage, setContainer, setBoxes }) => {
 			};
 
 			if (
+				//TODO == or ===?
 				containerData.height == null ||
 				containerData.width == null ||
 				containerData.length == null
