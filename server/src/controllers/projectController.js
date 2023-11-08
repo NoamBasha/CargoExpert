@@ -80,17 +80,6 @@ export const deleteProject = asyncHandler(async (req, res) => {
 		throw new Error("Project not found");
 	}
 
-	//TODO: delete boxes?
-	//TODO: delete solutions?
-	// TODO: delete Recursively?
-	// Retrieve the list of associated solution IDs
-	// const solutions = project.solutions;
-	// // Delete all solutions with the retrieved IDs
-	// if (solutions.length > 0) {
-	// 	await Solution.deleteMany(solutions);
-	// }
-
-	// Delete the project itself
 	await Project.findByIdAndDelete(projectId);
 
 	res.status(200).send(projectId);

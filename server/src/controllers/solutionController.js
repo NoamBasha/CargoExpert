@@ -1,5 +1,4 @@
 import asyncHandler from "express-async-handler";
-import Solution from "../models/solutionModel.js";
 import Project from "../models/projectModel.js";
 import { improve } from "../algorithm/algo_js/improve.js";
 import { orderMetric, overallMetric } from "../algorithm/algo_js/metrics.js";
@@ -56,14 +55,15 @@ export const createSolution = asyncHandler(async (req, res) => {
 	let { solutionData } = req.body;
 	solutionData = removeIds(solutionData);
 
-	const solution = await Solution.create(solutionData);
+	// Replaced creating a mongodb Solution with using the object.
+	const solution = solutionData
+	// const solution = await Solution.create(solutionData);
 
 	if (!solution) {
 		res.status(400);
 		throw new Error("Couldn't create solution");
 	}
 
-	// Find the project by its ID
 	const project = await Project.findById(projectId);
 
 	if (!project) {
