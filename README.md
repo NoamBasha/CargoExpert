@@ -55,7 +55,7 @@ We welcome contributions from the open-source community to make Cargo Expert eve
 
 ## Support
 
-If you encounter any issues or have any questions or suggestions regarding Cargo Expert, please feel free to contact us yonatanpinchas@hotmail.co.il or noamBa10@gmail.com. We appreciate your feedback and will do our best to assist you.
+If you encounter any issues or have any questions or suggestions regarding Cargo Expert, please feel free to contact us yonatanpinchas@hotmail.co.il or noamba10@gmail.com. We appreciate your feedback and will do our best to assist you.
 
 ## Acknowledgments
 
@@ -72,6 +72,9 @@ We would like to acknowledge the following individuals, organizations, and resou
 
 Thank you to all the individuals and organizations who have played a part in making Cargo Expert possible.
 
+## Demo
+
+Check out the project demonstration video on [YouTube](https://www.youtube.com/watch?v=lCymOymOzpQ).
 
 ---
 
