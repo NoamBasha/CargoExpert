@@ -5,6 +5,7 @@ import Dropzone from "./Dropzone.jsx";
 import { DownloadFile } from "./DownloadFile";
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
+import "./FileUpload.css";
 
 const CONTAINER_ERROR = "There is a problem with the container";
 const BOXES_ERROR = "There is a problem with the boxes";
@@ -103,38 +104,8 @@ export const FileUpload = ({ setNewStage, setContainer, setBoxes }) => {
             <Dropzone
                 handleDrop={handleDrop}
                 fileName={fileName}
-                className="px-4 py-5 text-secondary d-flex align-items-center justify-content-center w-100 border rounded"
+                className="file-upload-dropzone px-4 py-5 text-secondary d-flex align-items-center justify-content-center w-100 rounded"
             />
-            {/* <DropzoneArea
-				dropzoneClass={
-					"px-4 text-secondary d-flex align-items-center w-100"
-				}
-				acceptedFiles={["text/csv"]}
-				dropzoneParagraphClass={fileName ? "fw-bold" : ""}
-				dropzoneText={
-					fileName
-						? `${fileName} was uploaded successfully`
-						: `Drop a CSV file or click to upload your file!`
-				}
-				filesLimit={1}
-				maxFileSize={5000000}
-				showAlerts={false}
-				showPreviews={false}
-				showFileNamesInPreview={false}
-				showPreviewsInDropzone={false}
-				showFileNames={false}
-				getFileAddedMessage={(fileName) => {
-					setFileName(fileName);
-					return `CSV file ${fileName} added`;
-				}}
-				getFileRemovedMessage={(fileName) => {
-					setFileName(null);
-					return `CSV file ${fileName} removed`;
-				}}
-				onDrop={(files) => handleDrop(files)}
-				onDelete={handleDelete}
-				alertSnackbarProps={{}}
-			/> */}
 
             <div className="w-100 d-flex justify-content-between">
                 <Button onClick={() => setNewStage(-1)}>Back</Button>

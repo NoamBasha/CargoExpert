@@ -1,0 +1,8 @@
+.file-upload-dropzone {
+    border: 1px solid rgba(58, 71, 80, 0.2)
+}
+
+.file-upload-dropzone:hover {
+    cursor: pointer;
+}
+
