@@ -1,6 +1,5 @@
 import Papa from "papaparse";
 import { Button } from "@mui/material";
-//TODO add dropzone
 import Dropzone from "./Dropzone.jsx";
 import { DownloadFile } from "./DownloadFile";
 import { useState, useEffect, useCallback } from "react";

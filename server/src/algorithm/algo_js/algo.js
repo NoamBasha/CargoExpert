@@ -122,8 +122,7 @@ const constructivePacking = (boxes, container, isQuantity) => {
 };
 
 const handleData = (boxes, container, isQuantity, isQuality) => {
-    //TODO : change 5000 to 15000
-    const algorithmTime = isQuality ? 60000 : 5000; // miliseconds
+    const algorithmTime = isQuality ? 60000 : 15000; // miliseconds
 
     const initBoxes = boxes.map((box) => {
         return initBox(box);

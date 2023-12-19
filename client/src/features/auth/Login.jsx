@@ -71,14 +71,31 @@ const Login = () => {
                 {isLoading ? (
                     <CircularProgress className="mt-2" />
                 ) : (
-                    <Button
-                        type="submit"
-                        className="mt-3 px-3"
-                        color="primary"
-                        variant="outlined"
-                    >
-                        Sign in
-                    </Button>
+                    <div className="d-flex flex-column">
+                        <Button
+                            type="submit"
+                            className="mt-3 px-3"
+                            color="primary"
+                            variant="outlined"
+                        >
+                            Sign in
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                onSubmit({
+                                    email: "guest@mail.com",
+                                    password: "guest@mail.com",
+                                });
+                            }}
+                            className="px-3"
+                            style={{
+                                fontSize: "12px",
+                            }}
+                            color="primary"
+                        >
+                            Sign In As Guest
+                        </Button>
+                    </div>
                 )}
             </form>
         </div>

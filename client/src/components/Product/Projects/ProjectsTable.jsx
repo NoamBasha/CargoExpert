@@ -21,6 +21,7 @@ import {
     deleteProject,
     updateProject,
 } from "../../../features/projects/projectsSlice.js";
+import { Link } from "react-router-dom";
 
 import { setProjectById } from "../../../features/project/projectSlice.js";
 import { useSelector, useDispatch } from "react-redux";
@@ -85,7 +86,10 @@ export const ProjectsTable = () => {
                 className="d-flex justify-content-center align-items-center"
             >
                 <h2 style={{ color: "#a0a0a0" }} className="pb-5 mb-5">
-                    There are no projects, please create a new project
+                    There are no projects, please create a{" "}
+                    <Link style={{ textDecoration: "none" }} to="/new_project">
+                        new project
+                    </Link>
                 </h2>
             </div>
         );
