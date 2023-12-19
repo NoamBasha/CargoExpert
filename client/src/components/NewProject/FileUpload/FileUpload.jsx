@@ -1,7 +1,7 @@
 import Papa from "papaparse";
 import { Button } from "@mui/material";
 //TODO add dropzone
-// import { DropzoneArea } from "material-ui-dropzone";
+import Dropzone from "./Dropzone.jsx";
 import { DownloadFile } from "./DownloadFile";
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
@@ -25,7 +25,7 @@ export const FileUpload = ({ setNewStage, setContainer, setBoxes }) => {
         handleDelete();
     }, [handleDelete]);
 
-    const parseData = (data) => {
+    const parseData = (data, fileName) => {
         try {
             let numericData = [];
             for (let i = 0; i < data.length; i++) {
@@ -75,18 +75,20 @@ export const FileUpload = ({ setNewStage, setContainer, setBoxes }) => {
             }
             setContainer(containerData);
             setBoxes(boxes);
+            setFileName(fileName);
         } catch (err) {
             toast.error(FILE_ERROR);
         }
     };
 
     const handleDrop = (files) => {
+        setFileName(null);
         try {
             Papa.parse(files[0], {
                 header: true,
                 skipEmptyLines: true,
                 complete: function (results) {
-                    parseData(results.data);
+                    parseData(results.data, files[0].name);
                 },
             });
         } catch (e) {
@@ -98,6 +100,11 @@ export const FileUpload = ({ setNewStage, setContainer, setBoxes }) => {
         <div className="d-flex flex-column align-items-center w-25">
             <p className="mb-0 text-center">{FILE_UPLOAD_PAGE_TEXT}</p>
             <DownloadFile />
+            <Dropzone
+                handleDrop={handleDrop}
+                fileName={fileName}
+                className="px-4 py-5 text-secondary d-flex align-items-center justify-content-center w-100 border rounded"
+            />
             {/* <DropzoneArea
 				dropzoneClass={
 					"px-4 text-secondary d-flex align-items-center w-100"

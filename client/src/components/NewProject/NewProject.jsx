@@ -157,7 +157,11 @@ const NewProject = () => {
                 {stage === 2 ? (
                     <EditContainer
                         setNewStage={setNewStage}
-                        container={container}
+                        container={
+                            container
+                                ? container
+                                : { width: 0, height: 0, length: 0 }
+                        }
                         setContainer={setContainer}
                     />
                 ) : null}
